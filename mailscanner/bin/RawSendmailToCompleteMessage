@@ -1,0 +1,57 @@
+#!/usr/bin/perl
+
+use FileHandle;
+
+# Sort out the filename order from their names
+$qfname = $ARGV[0] if $ARGV[0] =~ /^qf/;
+$qfname = $ARGV[1] if $ARGV[1] =~ /^qf/;
+$dfname = $ARGV[0] if $ARGV[0] =~ /^df/;
+$dfname = $ARGV[1] if $ARGV[1] =~ /^df/;
+
+# Did they just give me a message id with no qf/df on the front?
+if (@ARGV==1 && $ARGV[0] !~ /^[qd]f/) {
+  $qfname = 'qf' . $ARGV[0];
+  $dfname = 'df' . $ARGV[0];
+}
+
+unless ($qfname && $dfname) {
+  print STDERR "\n";
+  print STDERR "Usage: $0 qf-name df-name\n";
+  print STDERR "   Or: $0 df-name qf-name\n";
+  print STDERR "   Or: $0 message-queue-id\n";
+  print STDERR "\n";
+  exit(1);
+}
+
+$qf = new FileHandle;
+$qf->open("< $qfname") or die "Could not find qf filename $qfname";
+$df = new FileHandle;
+$df->open("< $dfname") or die "Could not find df filename $dfname";
+
+my $inheader = 0;
+my $line = '';
+while (defined($line = <$qf>)) {
+  last if $line =~ /^\./;
+  next unless $line =~ /^H/ || $inheader;
+  if ($inheader) {
+    if ($line =~ /^\s/) {
+      print $line;
+      next;
+    }
+    $inheader = 0;
+  }
+  if ($line =~ s/^H\?[^?]*\?//) {
+    print $line;
+    $inheader = 1;
+  }
+}
+
+print "\n";
+
+while (defined($line = <$df>)) {
+  print $line;
+}
+
+$df->close;
+$qf->close;
+

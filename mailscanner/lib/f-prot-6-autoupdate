@@ -1,0 +1,149 @@
+#!/usr/bin/perl
+#
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2002  Julian Field
+#
+#   $Id: f-prot-6-autoupdate 1958 2003-09-26 08:42:17Z jkf $
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+
+use Sys::Syslog;
+use FileHandle;
+use IO::File;
+# Stop syslogd from needing external access (or -r)
+eval { Sys::Syslog::setlogsock('unix'); };
+
+####################################
+#
+# You can set your HTTP proxy server / web-cache here if you want to,
+# otherwise you will have to set it in the environment or wget's
+# startup file.
+# If you don't want to specify it here, comment out the next line.
+#
+#$Proxy  = 'www-cache.soton.ac.uk:3128';
+#$ProxyUsername = '';
+#$ProxyPassword = '';
+#
+####################################
+
+$PackageDir = shift || "/opt/f-prot";
+$LockFile = "/var/spool/MailScanner/incoming/Locks/f-prot-6Busy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+$FProtIsLocked = 0;
+
+BailOut("Installation dir \"$PackageDir\" does not exist!")
+  unless -e $PackageDir;
+
+#
+# Download update information from the update server
+#
+$command = "$PackageDir/fpupdate";
+$command .= " --proxy $Proxy --proxy-username $ProxyUsername --proxy-password $ProxyPassword" if $Proxy;
+my $logfile = "/tmp/f-prot-6-update-$$";
+$command .= " >$logfile 2>&1";
+
+#
+# Lock out all other users of F-Prot until update is complete.
+#
+# Timeout prevention
+$SIG{ALRM} = sub { die "timeout"};
+
+#
+# Now read and compare checksums of the files on the update server and
+# the local def files.
+#
+eval {
+  alarm 600;
+  &LockFProt();
+  unlink "/tmp/fpavdef.lock";
+  print STDERR "About to $command\n";
+  unlink $logfile;
+  $result = system($command);
+  print STDERR "Update completed.\n";
+  # Clean up and exit.
+  alarm 0;
+};
+
+if ($@) {
+  if ($@ =~ /timeout/) {
+    # We timed out!
+    alarm 0;
+    Sys::Syslog::openlog("F-Prot-6 autoupdate", 'pid, nowait', 'mail');
+    Sys::Syslog::syslog('info', "F-Prot-6 auto-updater failed and timed out!");
+  }
+} else {
+  alarm 0;
+  Sys::Syslog::openlog("F-Prot-6 autoupdate", 'pid, nowait', 'mail');
+  my $fh;
+  if (defined($fh = new FileHandle("< $logfile"))) {
+    my $in = <$fh>;
+    if ($in =~ /^Downloading update/) {
+      Sys::Syslog::syslog('info', "F-Prot-6 updated");
+    } else {
+      Sys::Syslog::syslog('info', "F-Prot-6 did not need updating");
+    }
+  } else {
+    Sys::Syslog::syslog('info', "F-Prot-6 auto-updater completed abnormally!");
+  }
+}
+
+# Clean up and exit nicely
+&UnlockFProt();
+unlink $logfile;
+Sys::Syslog::closelog();
+exit 0;
+
+#########################################################################
+
+sub BailOut {
+	&UnlockFProt();
+	Sys::Syslog::openlog("F-Prot-6 autoupdate", 'pid, nowait', 'mail');
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_\n";
+	chdir $PackageDir or die "Cannot cd $PackageDir, $!";
+	exit 1;
+}
+
+sub LockFProt {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating F-Prot-6 signature files by $$\n";
+	$FProtIsLocked = 1;
+}
+
+sub UnlockFProt {
+	return unless $FProtIsLocked;
+	print LOCK "Unlocked after updating F-Prot-6 signature files by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+

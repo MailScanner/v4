@@ -1,0 +1,18 @@
+El nostre detector creu que l'annex a aquest missatge que us ha estat enviat:
+
+       De: $from
+ Assumpte: $subject
+
+és un missatge de correu comercial no sol·licitat (SPAM).
+
+Us aconsellem que destruiu aquest missatge sense obrir-lo, a no ser que
+estigueu segurs de que no es tracte de SPAM.
+
+El fet d'obrir un missatge que és SPAM, pot indicar a l'emisor que la vostra
+adreça d'email és correcte, i per tant obrir una via per rebre'n de nous.
+
+Si creieu que el missatge annex ha estat marcat com a SPAM incorrectament,
+si us plau, reenvieu aquest missatge complet incloent l'annex a:
+$localpostmaster.
+
+$longspamreport

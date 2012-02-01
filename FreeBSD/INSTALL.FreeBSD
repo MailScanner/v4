@@ -1,0 +1,53 @@
+JKF 26/12/2002
+
+Installation instructions for FreeBSD
+=====================================
+
+1. Unpack the distribution into /opt and make a link to the new version
+
+   cd /opt
+   tar xvf MailScanner-4.20-1.tar
+   ln -s MailScanner-4.20-1 MailScanner
+
+2. Replace the link /opt/MailScanner/bin/tnef
+
+   cd /opt/MailScanner/bin
+   rm tnef
+   ln -s tnef.linux tnef
+
+3. Edit /opt/MailScanner/etc/MailScanner.conf
+
+   Replace /usr/lib/sendmail with /usr/sbin/sendmail for Sendmail & Sendmail2
+
+4. Create MailScanner spool directories
+
+   mkdir -p /var/spool/MailScanner/incoming
+   mkdir -p /var/spool/MailScanner/quarantine
+
+   Note: if you create links here to the real directories, please put the
+         *real* location into the configuration options in MailScanner.conf
+
+5. Edit /etc/rc.conf
+
+   Add the following text to the end of the file
+
+   # MailScanner starts here
+   mta_start_script="/opt/MailScanner/bin/rc.MailScanner"
+   MailScanner_incoming_queue="/var/spool/mqueue.in"
+   MailScanner_queue_time="15m"
+   MailScanner_check="/opt/MailScanner/bin/check_mailscanner"
+   MailScanner_pidfile="/opt/MailScanner/var/MailScanner.pid"
+   # MailScanner ends here
+
+6. Download /opt/MailScanner/bin/rc.MailScanner
+
+   Fetch the file from
+   http://www.sng.ecs.soton.ac.uk/mailscanner/files/4/freebsd/rc.MailScanner
+   chmod a=rx /opt/MailScanner/bin/rc.MailScanner
+
+MailScanner should now be started when the system boots.
+To start and stop MailScanner manually, use
+   /opt/MailScanner/bin/rc.MailScanner start
+and
+   /opt/MailScanner/bin/rc.MailScanner stop
+

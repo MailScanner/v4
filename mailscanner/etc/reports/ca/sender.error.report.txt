@@ -1,0 +1,30 @@
+From: "$postmastername" <$localpostmaster>
+To: $from
+Subject: Atenció: Error detectat a l'e-mail
+X-%org-name%-MailScanner: generated
+MIME-Version: 1.0
+Content-type: text/plain; charset=ISO-8859-1
+Content-transfer-encoding: Quoted-Printable
+
+El nostre detector de virus no ha pogut analitzar completament un missatge
+que heu enviat
+  A: $to
+  Assumpte: $subject
+  Data: $date
+
+Les parts del missatge que no hagin pogut ser analitzades no seran lliurades.
+
+Si esteu utilitzant Microsoft Outlook, us recomanem que canvieu el format
+dels missatges sortints de "Format de Text Enriquit (RTF)" a "HTML" o bé
+a "Text sense format".
+
+El detector de virus ha dit el següent quant el missatge:
+Informe: $report
+
+-- 
+MailScanner
+Protecció contra Virus d'E-mail
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

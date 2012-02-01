@@ -1,0 +1,98 @@
+#
+# Put in here all the settings for your particular mail system so that
+# MailScanner's init.d script can run it all for you.
+#
+
+#
+# Are you running Postfix, sendmail, Exim or ZMailer?
+#
+# Don't set it by hand, we now auto-detect it from MailScanner.conf
+# MTA=sendmail
+# MTA=postfix
+# MTA=exim
+# Extract setting for MTA from MailScanner.conf
+#MTA=`perl -n -e 'print "$_" if chomp && s/^\s*MTA\s*=\s*([a-zA-Z]+).*$/$1/ && ($_=lc($_))' /etc/MailScanner/MailScanner.conf`
+MTA=`/usr/sbin/Quick.Peek MTA /etc/MailScanner/MailScanner.conf`
+
+#
+# MailScanner Settings
+#
+
+#
+# Cron job update_virus_scanners settings
+#
+UPDATEMAXDELAY=600 # Maximum delay before running cron job to avoid server peaks
+
+#
+# Cron job update_spamassassin settings
+# Moved to /etc/sysconfig/update_spamassassin
+#
+#MSSAUPDATE=/usr/sbin/update_spamassassin
+#SAUPDATE=/usr/bin/sa-update
+#SACOMPILE=/usr/bin/sa-compile
+#SAUPDATEARGS=""
+
+#
+# where does MailScanner unpack messages for scanning?
+# normal sites use "/var/spool/MailScanner/incoming".
+#
+# Extract settings for Incoming Work Dir & Incoming Queue Dir
+MAILSCANNER_WORKDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Incoming\s*Work\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /etc/MailScanner/MailScanner.conf`
+MAILSCANNER_INQDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Incoming\s*Queue\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /etc/MailScanner/MailScanner.conf`
+MAILSCANNER_WORKDIR=`/usr/sbin/Quick.Peek IncomingWorkDir /etc/MailScanner/MailScanner.conf`
+MAILSCANNER_INQDIR=`/usr/sbin/Quick.Peek IncomingQueueDir /etc/MailScanner/MailScanner.conf`
+
+#perl -e 'print "***WORKDIR='$MAILSCANNER_WORKDIR'***\n***INQDIR='$MAILSCANNER_INQDIR'***\n";'
+
+#
+# How long does the init script wait between the "stop" and the "start"
+# when doing a "restart"
+#
+RESTART_DELAY=10
+
+#
+# Postfix Settings
+#
+POSTFIX=/usr/sbin/postfix
+POSTFIXINCF=/etc/postfix.in
+POSTFIXOUTCF=/etc/postfix
+
+#
+# Sendmail Settings
+#
+
+#
+# where does the incoming sendmail deposit messages, so that
+# MailScanner can collect and scan them?
+# normal sites use "/var/spool/mqueue.in".
+#
+# Set above automatically now. MAILSCANNER_INQDIR=/var/spool/mqueue.in
+
+#
+# where is the main sendmail binary?
+# Configurable in case you use a non-RPM local build of sendmail
+#
+SENDMAIL=/usr/sbin/sendmail
+
+#
+# with what parameters should the incoming sendmail be started?
+# this is used to provide SMTP service and queue mail into
+# /var/spool/mqueue.in, ready for scanning by MailScanner.
+# normal sites use "-bd -om".
+#
+SENDMAIL_IN_ARGS="-L sendmail-in -Am -bd -om"
+
+#
+# with what parameters should the outgoing sendmail be started?
+# this is used to deliver mail that has been scanned by MailScanner.
+# normal sites use "-q30m -om".
+#
+SENDMAIL_OUT_ARGS="-L sendmail-out -Am -q30m -om"
+
+#
+# Exim Settings - These are set up for SuSE's Exim distribution
+#
+EXIM=/usr/sbin/exim
+EXIMINCF=/etc/exim/exim.conf       # Incoming configuration file
+EXIMOUTCF=/etc/exim/exim_send.conf # Outgoing configuration file
+

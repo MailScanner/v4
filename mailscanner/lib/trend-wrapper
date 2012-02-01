@@ -1,0 +1,19 @@
+#!/bin/sh
+
+#
+# Trend Micro vscan wrapper
+#
+
+PackageDir=$1
+shift
+prog=vscan
+
+LD_LIBRARY_PATH=$PackageDir/lib
+export LD_LIBRARY_PATH
+
+if [ "x$1" = "x-IsItInstalled" ]; then
+  [ -x ${PackageDir}/bin/$prog ] && exit 0
+  exit 1
+fi
+
+exec $PackageDir/bin/$prog "$@"

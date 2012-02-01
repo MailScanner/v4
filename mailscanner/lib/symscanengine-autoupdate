@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+ 
+use Sys::Syslog;
+ 
+$PackageDir = shift || "/opt/SYMCScan";
+ 
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/symscanengineBusy.lock";
+ 
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+ 
+Sys::Syslog::openlog("SymScanEngine-autoupdate", 'pid, nowait', 'mail');
+ 
+# Symantec updates are completely handled by their own system, there is no
+# longer any command-line updater.
+Sys::Syslog::syslog('info', "SymScanEngine autoupdating handled by Symantec system, no action taken");
+Sys::Syslog::closelog();
+exit 0;
+
+#########################################################################
+# NO CODE EXECUTED BEYOND THIS POINT
+#########################################################################
+
+BailOut("Installation dir \"$PackageDir\" does not exist!")
+  unless $PackageDir ne "" && -d $PackageDir;
+ 
+&LockSymantec();
+ 
+# Need to add code to dymanically locate the java binary
+# SuSE has some info in /etc/java, is this a standard location for info?
+$JavaDir="/usr/lib/j2sdk1.4.2_03/jre/bin/";
+ 
+$ENV{'PATH'} .= ":$JavaDir";
+system("$PackageDir/bin/liveupdate.sh -VIRUSDEFS -URLUPDATES");
+&UnlockSymantec();
+Sys::Syslog::syslog('info', "SymScanEngine updated in $PackageDir");
+Sys::Syslog::closelog();
+exit 0;
+ 
+sub BailOut {
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_, $!";
+	exit 1;
+}
+ 
+sub LockSymantec {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating SymScanEngine patterns by $$\n";
+}
+ 
+sub UnlockSymantec {
+	print LOCK "Unlocked after updating SymScanEngine patterns by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+

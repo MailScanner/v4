@@ -1,0 +1,34 @@
+.TH MailScanner 8 "$Date: 2002-11-29 22:08:55 +0000 (Fri, 29 Nov 2002) $"
+.UC 4
+.SH NAME
+MailScanner \- system service to serve as virus-scanning MTA 
+.SH SYNOPSIS
+.B MailScanner
+[start|stop|restart|reload|status]
+.SH DESCRIPTION
+.I MailScanner
+is a script in the normal System V style to provide a system
+service.  It is intended to serve in place of the normal
+sendmail service, while still using the sendmail daemon,
+ie this service and the sendmail service are mutually exclusive;
+only one can be started at a time.
+
+.PP
+The normal role of
+.I MailScanner
+would be to scan for mail-borne malware (virus et al) which plagues the
+Windows platform.
+
+.PP
+.I MailScanner 
+depends for its virus scanning capability on a separate virus
+scanning package such as F-Secure Anti Virus or Sophos.
+
+.SH FILES
+/etc/MailScanner/MailScanner.conf
+
+.SH SEE ALSO
+iptables (8)
+
+.SH AUTHOR
+Julian Field (mailscanner@ecs.soton.ac.uk)

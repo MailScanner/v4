@@ -1,0 +1,140 @@
+#!/usr/bin/perl
+
+#
+# eTrust updater. Original code by Julian Field. Timeout code by
+# Alessandro Bianchi. Timeout code is not perfect but should be okay.
+#
+
+use Sys::Syslog;
+
+$PackageDir = shift || "/opt/CA/eTrustITM";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/etrustBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("eTrust-autoupdate", 'pid, nowait', 'mail');
+
+# Handle the case where they just put /opt/CA in the virus.scanners.conf file.
+# Can only do this with the new version as I don't have the old one any more.
+if (-x "$PackageDir/SharedComponents/ScanEngine/bin/ITMDist") {
+  $PackageDir .= "/eTrustITM";
+};
+
+if (-x "$PackageDir/../SharedComponents/ScanEngine/bin/ITMDist") {
+  unless (chdir "$PackageDir/../SharedComponents/ScanEngine/bin") {
+    Sys::Syslog::syslog('err', "eTrust installation dir \"$PackageDir\" does not exist!");
+    Sys::Syslog::closelog();
+    exit 1;
+  }
+  $DA0time = (stat('../engine/vet.dat'))[9]; # mtime
+
+} elsif (-x "$PackageDir/ino/config/InoDist") {
+  unless (chdir $PackageDir . '/ino/config') {
+    Sys::Syslog::syslog('err', "eTrust installation dir \"$PackageDir\" does not exist!");
+    Sys::Syslog::closelog();
+    exit 1;
+  }
+
+  $ENV{'CAIGLBL0000'} = $PackageDir;
+  $ENV{'LD_LIBRARY_PATH'} = "$PackageDir/ino/config:$PackageDir/ino/lib";
+
+  $DA0time = (stat('virsig.da0'))[9]; # mtime
+} else {
+  Sys::Syslog::syslog('err', "eTrust updater could not be found, check MailScanner configuration file virus.scanners.conf");
+  Sys::Syslog::closelog();
+  exit 1;
+}
+
+# Latest version of eTrust ITM (Integrated Threat Management) updater
+if (-x 'ITMDist') {
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockAV();
+  eval {
+    alarm 300;
+    $Command = './ITMDist -update InoDist.ini';
+    system($Command)>>8;
+    &UnlockAV();
+    alarm 0;
+  };
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &UnlockAV();
+      alarm 0;
+    }
+  } else {
+    alarm 0;
+    if ($DA0time != (stat('../engine/vet.dat'))[9]) {
+      Sys::Syslog::syslog('info', "eTrust updated");
+    } else {
+      Sys::Syslog::syslog('info', "eTrust did not need updating");
+    }
+  }
+
+} elsif (-x 'InoDist') {
+
+  # Older version of eTrust
+  &LockAV();
+  eval {
+    alarm 300;
+    $Command = './InoDist -cfg InoDist.ini';
+    system($Command)>>8;
+    &UnlockAV();
+    alarm 0;
+  };
+
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockAV();
+  eval {
+    alarm 300;
+    $Command = './InoDist -cfg InoDist.ini';
+    system($Command)>>8;
+    &UnlockAV();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &UnlockAV();
+      alarm 0;
+    }
+  } else {
+    alarm 0;
+    if ($DA0time != (stat('virsig.da0'))[9]) {
+      Sys::Syslog::syslog('info', "eTrust updated");
+    } else {
+      Sys::Syslog::syslog('info', "eTrust did not need updating");
+    }
+  }
+} else {
+  Sys::Syslog::syslog('err', "eTrust updater ITMDist or InoDist cannot be found");
+}
+
+Sys::Syslog::closelog();
+exit 0;
+
+sub LockAV {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating eTrust definitions by $$\n";
+}
+
+sub UnlockAV {
+	print LOCK "Unlocked after updating eTrust definitions by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+

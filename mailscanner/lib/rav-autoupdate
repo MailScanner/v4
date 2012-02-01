@@ -1,0 +1,82 @@
+#!/usr/bin/perl -w
+
+# script to update rav automatically
+# based on sophos update script by jkf
+
+use strict;
+use Sys::Syslog;
+
+
+my($PackageDir, $retval);
+$PackageDir = shift || "/usr/local/rav8";
+my($TimeOut) = 5*60; # 5 minutes
+my($LockFile)  = shift || '/var/spool/MailScanner/incoming/Locks/ravBusy.lock';
+my($ravcommand) = "$PackageDir/bin/ravlin8";
+my($ravupdate) = "$ravcommand --update=engine";
+
+my($LOCK_SH) = 1;
+my($LOCK_EX) = 2;
+my($LOCK_NB) = 4;
+my($LOCK_UN) = 8;
+
+local(*LOCK);
+
+# Stop syslogd from needing external access (or -r)
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("RAV-autoupdate", 'pid, nowait', 'mail');
+
+Sys::Syslog::syslog('err', "Installation dir \"$PackageDir\" does not exist!")
+  unless  -e $PackageDir;
+
+# Fix all the RAV permissions
+system("chmod a+r /dev/console; cd $PackageDir; chmod -R go+rX . ; chmod a+rx rave bin pixmaps rc");
+
+if (-x $ravcommand) {
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockRav();
+  eval {
+    alarm $TimeOut;
+    $retval=system($ravupdate)>>8;
+    &UnlockRav();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      alarm 0;
+      Sys::Syslog::syslog('err', "RAV updater timed out!");
+    }
+  } else {
+    alarm 0;
+    Sys::Syslog::syslog('info', "RAV updater completed");
+    #if ($retval == 0 ) {
+    #  Sys::Syslog::syslog('info', "ClamAV updated");
+    #} elsif ($retval == 1 ) {
+    #  Sys::Syslog::syslog('info', "ClamAV did not need updating");
+    #} else {
+    #if ($retval!=0 && 
+    #  Sys::Syslog::syslog('err', "ClamAV updater failed");
+    #}
+  }
+} else {
+  Sys::Syslog::syslog('err', "RAV updater $ravcommand cannot be run");
+}
+
+&UnlockRav();
+Sys::Syslog::closelog();
+exit 0;
+
+sub LockRav {
+        open(LOCK, ">$LockFile") or return;
+        flock(LOCK, $LOCK_EX);
+        print LOCK "Locked for updating Rav Antivirus engine files by $$\n";
+}
+
+sub UnlockRav {
+        print LOCK "Unlocked after updating Rav Antivirus engine files by $$\n";
+        flock(LOCK, $LOCK_UN);
+        close LOCK;
+}

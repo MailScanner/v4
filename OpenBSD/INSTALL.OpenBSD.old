@@ -1,0 +1,95 @@
+JKF 2002-12-26
+JKE 2004-07-28
+
+First Time Installation Instructions for OpenBSD
+================================================
+
+0. Install all of the required perl modules:
+
+	# You could try install.sh if you don't want to do this, otherwise
+	# For each module:
+	tar -zxvf %ModuleName%.tar.gz
+	cd %ModuleName%
+	perl Makefile.PL
+	make
+	make test
+	sudo make install
+
+1. Create MailScanner spool directories:
+
+	# Note: if you create links here to the real directories, please put the
+	# *real* location into the configuration options in MailScanner.conf
+	mkdir -p /var/spool/MailScanner/incoming
+	mkdir -p /var/spool/MailScanner/quarantine
+
+2. In /etc/rc.conf.local (create the file if it doesn't exist), add:
+
+	sendmail_flags="-bd -OPrivacyOptions=noetrn -ODeliveryMode=queueonly -OQueueDirectory=/var/spool/mqueue.in"
+
+3. Near the top of /etc/rc.local add:
+
+	echo -n ' sendmail'; /usr/sbin/sendmail -q15 >/dev/null 2>&1
+	echo -n ' MailScanner'; /opt/MailScanner/bin/check_mailscanner >/dev/null 2>&1
+
+4. To root's crontab add (sudo crontab -e):
+
+	# Check the status of MailScanner every 10 minutes
+	0,10,20,30,40,50	*	*	*	*	/opt/MailScanner/bin/check_mailscanner -q
+
+5. Unpack the distribution into /opt
+
+	cd /opt
+	tar -xvf MailScanner-%Version%.tar
+	ln -s MailScanner-%Version% MailScanner
+
+6. Edit /opt/MailScanner/etc/MailScanner.conf:
+
+	Sendmail = /usr/sbin/sendmail
+	Sendmail2 = /usr/sbin/sendmail
+	TNEF Expander = internal # Or compile a version for OpenBSD
+	# Make other changes as appropriate
+
+7. Edit /opt/MailScanner/lib/MailScanner/SystemsDefs.pm:
+
+	sed lives in /usr/bin not /bin
+
+8. Start MailScanner:
+
+	sudo /opt/MailScanner/bin/check_mailscanner
+
+
+Upgrade Instructions for OpenBSD
+================================
+
+1. Unpack the distribution into /opt:
+
+	cd /opt
+	tar -zxvf MailScanner-%NewVersion%.tar.gz
+
+2. Update MailScanner.conf:
+
+	cd /opt/MailScanner-%NewVersion%/etc
+	mv MailScanner.conf MailScanner.conf.default
+	../bin/upgrade_MailScanner_conf /opt/MailScanner/etc/MailScanner.conf MailScanner.conf.default > MailScanner.conf
+	# Review changes made and update as necessary
+	diff /opt/MailScanner/etc/MailScanner.conf MailScanner.conf
+
+3. Edit /opt/MailScanner-%Version%/lib/MailScanner/SystemsDefs.pm:
+
+	sed lives in /usr/bin not /bin
+
+4. Kill old version and start new version:
+
+	ps -ax
+	kill %MailScannerPID%
+	cd /opt
+	ln -fhs MailScanner-%NewVersion% MailScanner
+	sudo MailScanner/bin/check_mailscanner
+
+5. If problems occur after upgrading, rollback to previous working version:
+
+	ps -ax
+	kill %MailScannerPID%
+	cd /opt
+	ln -fhs MailScanner-%OldVersion% MailScanner
+	sudo MailScanner/bin/check_mailscanner

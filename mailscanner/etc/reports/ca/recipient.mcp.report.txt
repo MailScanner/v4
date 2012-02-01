@@ -1,0 +1,30 @@
+From: "$postmastername" <$localpostmaster>
+To: $to
+Subject: Contingut prohibit arxivat per ser revisat
+X-%org-name%-MailScanner: generated
+
+Els nostres detectors de contingut han estat activats per un missatge que
+heu rebut:
+   De: $from
+   Assumpte: $subject
+   Data: $date
+
+Aquest missatge ha estat posat en quarentena per ser revisat abans de ser
+enviat.
+
+Si teniu qualsevol dubte sobre tot això, o creieu que heu rebut aquest
+missatge per error, si us plau, contacteu amb els vostres administradors
+del sistema.
+
+Els vostres administradors del sistema necessitaran la següent informació:
+   Nom del servidor: $hostname
+   Identificador del missatge: $id
+   Codi de data: $datenumber
+
+-- 
+MailScanner
+Protecció contra Virus d'E-mail
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

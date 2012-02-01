@@ -1,0 +1,76 @@
+#!/usr/bin/perl
+
+#
+# AntiVir updater. Original code by Julian Field. Timeout code by
+# Alessandro Bianchi.
+#
+
+use Sys::Syslog;
+
+$PackageDir = shift || "/usr/lib/AntiVir";
+
+$AntiVirCommand = "$PackageDir/antivir";
+$AntiVirUpdateCommand = "$AntiVirCommand --update";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/antivirBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("AntiVir-autoupdate", 'pid, nowait', 'mail');
+
+BailOut("Installation dir \"$PackageDir\" does not exist!")
+  unless $PackageDir ne "" && -d $PackageDir;
+
+if (-x "$AntiVirCommand") {
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockAntiVir();
+  eval {
+    alarm 300;
+    $retval=system($AntiVirUpdateCommand)>>8;
+    &UnlockAntiVir();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &UnlockAntiVir();
+      Sys::Syslog::syslog('err', "WARNING AntiVir update timed out");
+      alarm 0;
+    }
+  } else {
+    alarm 0;
+    Sys::Syslog::syslog('info', "AntiVir update finished");
+  }
+} else {
+  Sys::Syslog::syslog('err', "AntiVir updater $AntiVirUpdateCommand cannot be run");
+}
+
+Sys::Syslog::closelog();
+exit 0;
+
+sub BailOut {
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_, $!";
+	exit 1;
+}
+
+sub LockAntiVir {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating AntiVir definitions by $$\n";
+}
+
+sub UnlockAntiVir {
+	print LOCK "Unlocked after updating AntiVir definitions by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+

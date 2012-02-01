@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+
+use Sys::Syslog;
+
+$PackageDir = shift || "/usr/bin";
+
+$UpdateCommand = "$PackageDir/niu";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/normanBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("Norman-autoupdate", 'pid, nowait', 'mail');
+
+if (-x $UpdateCommand) {
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockNorman();
+  eval {
+    alarm 300;
+    $retval=system($UpdateCommand . ' -y -G')>>8;
+    Sys::Syslog::syslog('err', "$!") unless $! =~ /ioctl for device/i;
+    &UnlockNorman();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &UnlockNorman();
+      alarm 0;
+    }
+  } else {
+    alarm 0;
+    if ($retval == 2 ) {
+      Sys::Syslog::syslog('info', "Norman updated");
+    } elsif ($retval == 0 ) {
+      Sys::Syslog::syslog('info', "Norman did not need updating");
+    } else {
+      Sys::Syslog::syslog('err', "Norman updater failed");
+    }
+  }
+} else {
+  Sys::Syslog::syslog('err', "Norman updater $UpdateCommand cannot be run");
+}
+
+Sys::Syslog::closelog();
+exit 0;
+
+sub LockNorman {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating Norman definitions by $$\n";
+}
+
+sub UnlockNorman {
+	print LOCK "Unlocked after updating Norman definitions by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+

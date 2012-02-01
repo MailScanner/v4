@@ -1,0 +1,379 @@
+#!/usr/bin/perl
+#
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2002  Julian Field
+#
+#   $Id: f-prot-autoupdate 4605 2008-12-11 12:17:05Z sysjkf $
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+
+use Sys::Syslog;
+use IO::File;
+# Stop syslogd from needing external access (or -r)
+eval { Sys::Syslog::setlogsock('unix'); };
+
+$PackageDir = shift || "/usr/local/f-prot";
+
+####################################
+#
+# You can set your HTTP proxy server / web-cache here if you want to,
+# otherwise you will have to set it in the environment or wget's
+# startup file.
+# If you don't want to specify it here, comment out the next line.
+#
+#$HttpProxy  = 'www-cache.soton.ac.uk:3128';
+#$FtpProxy   = '';
+#
+####################################
+
+$FProtRoot  = $PackageDir;
+
+# N.B. TempDir DIRECTORY WILL BE CLEARED so
+# you *really* don't want to share it with
+# anything else.
+$TempDir    = "$FProtRoot/tmp";
+$DefDir     = $FProtRoot;
+#$FallbackServer = 'http://updates.f-prot.com/files/';
+$FallbackServer = 'ftp://ftp.f-prot.com/pub/';
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/f-protBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+$cron = 0;
+$quiet = 0;
+$updated = 0;
+$FProtIsLocked = 0;
+$HaveDownloadedSign = 0;
+$TmpFile = "tmp-web";
+$HttpReturn = 10;
+@FilesToCopy = ();
+$File = "";
+
+BailOut("Installation dir \"$PackageDir\" does not exist!")
+  unless -e $PackageDir;
+
+#
+# Check command-line parameters
+#
+foreach (@ARGV) {
+  if (/cron/i) {
+    $cron = 1;
+  } elsif (/quiet/i) {
+    $quiet = 1;
+  } else {
+    BailOut("Invalid command-line option \"$_\"");
+  }
+}
+# If they have specified an http/ftp proxy server / web-cache, then use it
+$ENV{'http_proxy'} = $HttpProxy if $HttpProxy;
+$ENV{'ftp_proxy'}  = $FtpProxy  if $FtpProxy;
+# Set path ready for most OS-es including Solaris.
+$ENV{'PATH'} = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/etc:/usr/local/bin:/usr/sfw/bin";
+
+#
+# Check if TempDir exists and is a directory
+#
+stat($TempDir);
+if (-e _) {
+  BailOut("$TempDir needs to be a directory") if ! -d _;
+} else {
+  mkdir $TempDir, 0700 or BailOut("Could not create $TempDir directory, $!");
+}
+# Check file permissions of TempDir are correct
+chmod 0700, $TempDir
+  or BailOut("Could not set perms of $TempDir. Check you own it");
+CleanTempDir(); # Clean up the contents of TempDir
+
+#
+# Check we can find all the external programs we need
+#
+for $program (qw/cp grep head wget unzip/) {
+  $result = system("$program --version < /dev/null > /dev/null 2>&1");
+  BailOut("Could not find $program on your path. Please install it " .
+          "or fix your path") if $result==127;
+}
+
+#
+# Download update information from the update server
+#
+$result = system("wget --output-document=$TempDir/$TmpFile --tries=3 " .
+                 "'http://updates.f-prot.com/cgi-bin/check-updates?" .
+                 "protocol=1&run_as=check_updates' > /dev/null 2>&1");
+BailOut("wget command failed. You need the latest version installed, $!")
+  if $result==127;
+BailOut("Updates download from http://updates.f-prot.com failed. Suspect server could not be reached, $!")
+  if $result!=0;
+# Get HTTP return value from checking for updates
+open(TEMPFILE, "$TempDir/$TmpFile")
+  or BailOut("Could not read temp file $TmpFile, $!");
+$HttpReturn = <TEMPFILE>;
+chomp $HttpReturn;
+$HttpReturn =~ s/\s*$//g;
+if ($HttpReturn!=2) {
+  BailOut("Invalid parameters used in http URL, exiting, $!") if $HttpReturn==3;
+  BailOut("Invalid protocol used in http URL, exiting, $!")   if $HttpReturn==4;
+  BailOut("Server error on remote machine, exiting, $!")      if $HttpReturn==5;
+  BailOut("Unknown error while downloading update information, " .
+          "do you need to specify your HTTP/FTP proxy / web-cache at " .
+          "the top of this script? Exiting, $!");
+}
+
+#
+# Read the file once to pull out the ftp URL of the update server
+#
+while(<TEMPFILE>) {
+  chomp;
+  next unless s/^S://;
+  # Delete trailing newlines and stuff like that
+  s/\s*$//g;
+  $Server = $_;
+}
+close(TEMPFILE);
+print STDERR "FTP address for retrieving files is $Server\n"
+  unless $quiet || $cron;
+
+#
+# Lock out all other users of F-Prot until update is complete.
+#
+# Timeout prevention
+$SIG{ALRM} = sub { die "timeout"};
+
+#
+# Now read and compare checksums of the files on the update server and
+# the local def files.
+#
+eval {
+  alarm 600;
+  open(TEMPFILE, "$TempDir/$TmpFile");
+  while(<TEMPFILE>) {
+    chomp;
+    s/\s*$//g; # Delete trailing whitespace (^M and such like)
+    next unless /^C/;
+    next unless /DEF=/;
+    s/^[^:]*://; # Delete everything up to and including ":"
+    ($FileToCheck, $RemoteChecksum) = split(/=/, $_, 2);
+
+    $FileChecksum = Checksum("$DefDir/$FileToCheck");
+
+    BailOut("$FProtRoot/checksum was not found. It should be in your " .
+            "F-Prot package, $!") if $FileChecksum==127;
+
+    # Current file different from remote file?
+    if ($FileChecksum ne $RemoteChecksum) {
+      print STDERR "F-Prot signature file update script\n"
+        unless $updated || $quiet;
+      print STDERR "There is a new version of $FileToCheck, starting download.\n"
+        unless $quiet;
+      $updated = 1;
+      # Download it from the server
+      DownloadFile($Server, $FileToCheck);
+
+      # Check we downloaded the file we wanted
+      $FileChecksum = Checksum("$TempDir/$FileToCheck");
+      if ($FileChecksum eq $RemoteChecksum) {
+        # Copy file from temp dir to f-prot dir
+        #system("cp $TempDir/$FileToCheck $FProtRoot");
+        push @FilesToCopy, $FileToCheck;
+        print STDERR "Updated $FileToCheck.\n" unless $quiet;
+      } else {
+        # If not, then try fallback server instead
+        DownloadFile($FallbackServer, $FileToCheck);
+
+        # If that fails too, then error
+        $FileChecksum = Checksum("$TempDir/$FileToCheck");
+        if ($FileChecksum eq $RemoteChecksum) {
+          # Copy file from temp dir to f-prot dir
+          #system("cp $TempDir/$FileToCheck $FProtRoot");
+          push @FilesToCopy, $FileToCheck;
+          print STDERR "Updated $FileToCheck from fallback server.\n"
+            unless $quiet;
+        } else {
+          BailOut("Could not find correct version of $FileToCheck, exiting, $!");
+        }
+      }
+    } else {
+      print STDERR "File $FileToCheck is already up to date.\n"
+        unless $quiet || $cron;
+    }
+  }
+
+  if ($updated) {
+    print STDERR "Update completed.\n" unless $quiet;
+  } else {
+    print STDERR "Nothing to be done.\n" unless $cron;
+  }
+
+  # Clean up and exit.
+  alarm 0;
+};
+
+if ($@) {
+  if ($@ =~ /timeout/) {
+    # We timed out!
+    alarm 0;
+  }
+} else {
+  alarm 0;
+
+  # Copy all the temp files into the real F-Prot direcrtory
+  &LockFProt();
+  foreach $File (@FilesToCopy) {
+    system("cp $TempDir/$File $FProtRoot");
+  }
+
+  Sys::Syslog::openlog("F-Prot autoupdate", 'pid, nowait', 'mail');
+  Sys::Syslog::syslog('info', $updated?"F-Prot successfully updated.":
+                                       "F-Prot did not need updating.");
+}
+
+CleanTempDir();
+&UnlockFProt();
+Sys::Syslog::closelog();
+exit 0;
+
+#########################################################################
+
+#
+# Clean up the contents of TempDir
+#
+sub CleanTempDir {
+  opendir(TEMPDIR, $TempDir)
+    or BailOut("Could not read directory $TempDir, $!");
+  foreach (readdir(TEMPDIR)) {
+    next if /^\.\.?$/; # Skip . and ..
+    unlink "$TempDir/$_";
+  }
+  closedir(TEMPDIR);
+}
+
+# Find the checksum of a given filename
+sub Checksum {
+  my($Filename) = @_;
+  my($FileChecksum, $Result);
+
+  # Catch case where file does not exist
+  return 0 unless -f $Filename;
+
+  if (-x "$FProtRoot/checksum") {
+    $FileChecksum = `$FProtRoot/checksum $Filename 0`;
+    $Result = $?;
+    chomp $FileChecksum;
+    $FileChecksum =~ s/^[^=]*=//; # Chop off up to and including "="
+
+    BailOut("$FProtRoot/checksum was not found. It should be in your " .
+            "F-Prot package, $!") if $Result==127;
+    BailOut("Unknown fatal error calling \"checksum\", exiting, $!") if $Result;
+
+    return $FileChecksum;
+  } else {
+    return create_compare_string_for_defs($Filename);
+  }
+}
+
+# Perl code for new version of checksum
+sub create_compare_string_for_defs
+{
+    my ($filename) = @_;
+
+    if (my $file = new IO::File $filename)
+    {
+        my $buff = '';
+        return undef if ($file->read($buff, 32) != 32);
+
+        # Get file size
+        my @fstat = $file->stat();
+        my $fsize = $fstat[7];
+
+        $file->close();
+        return uc( unpack('H*', $buff) . sprintf("%8.8X", $fsize) );
+    }
+    return undef;
+}
+
+sub DownloadFile {
+  my($host, $file) = @_;
+  my($result);
+
+  if ($file =~ /^SIGN/) {
+    if (!$HaveDownloadedSign) {
+      $HaveDownloadedSign = 1;
+      chdir $TempDir;
+      Fetch($host, 'fp-def.zip');
+      print STDERR "Download completed.\n" unless $quiet;
+      $result = system("unzip -o fp-def.zip </dev/null >/dev/null 2>&1");
+      BailOut("Fatal error while unzipping fp-def.zip, $!") if ($result>>8);
+    }
+  } else {
+    chdir $TempDir;
+    Fetch($host, 'macrdef2.zip');
+    print STDERR "Download completed.\n" unless $quiet;
+    $result = system("unzip -o macrdef2.zip </dev/null >/dev/null 2>&1");
+    BailOut("Fatal error while unzipping macrdef2.zip, $!") if ($result>>8);
+  }
+}
+
+sub Fetch {
+  my($ip, $filename) = @_;
+  my($r);
+  
+  $r = system("wget --passive-ftp --tries=3 $ip$filename > /dev/null 2>&1");
+  if ($r>>8) {
+    # Download failed so try fallback server
+    BailOut("Download of $ip$filename failed, exiting, $!")
+      if $ip eq $FallbackServer;
+    Fetch($FallbackServer, $filename);
+  }
+}
+
+
+
+sub BailOut {
+	&UnlockFProt();
+	Sys::Syslog::openlog("F-Prot autoupdate", 'pid, nowait', 'mail');
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_\n";
+	chdir $FProtRoot or die "Cannot cd $FProtRoot, $!";
+	exit 1;
+}
+
+sub LockFProt {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating F-Prot virus files by $$\n";
+	$FProtIsLocked = 1;
+}
+
+sub UnlockFProt {
+	return unless $FProtIsLocked;
+	print LOCK "Unlocked after updating F-Prot virus files by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}

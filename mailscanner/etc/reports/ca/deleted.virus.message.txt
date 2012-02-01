@@ -1,0 +1,18 @@
+Avís del Servei de Protecció de Virus per Correu Electrònic MailScanner
+-----------------------------------------------------------------------
+L'arxiu annexat original "$filename"
+es considera infectat per un virus informàtic, i ha estat substituït
+per aquest missatge d'avís.
+
+Per una qüestió de privacitat (de caràcter legal en alguns països),
+no hem pogut desar una còpia de l'arxiu annexat original.
+
+En data $date l'analitzador de virus ha trobat:
+$report
+
+-- 
+Postmaster
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

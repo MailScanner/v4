@@ -1,0 +1,97 @@
+#
+# Put in here all the settings for your particular mail system so that
+# MailScanner's init.d script can run it all for you.
+#
+
+#
+# Set-up variables to allow MailScanner functions to be returned
+#
+MSLIB=/usr/lib/MailScanner
+MSCONF=/etc/MailScanner/MailScanner.conf
+CMD="perl -I$MSLIB -MMailScanner::Config"
+
+#
+# Are you running Postfix, sendmail, Exim or ZMailer?
+#
+# Don't set it by hand, we now auto-detect it from MailScanner.conf
+# MTA=sendmail
+# MTA=postfix
+# MTA=exim
+# MTA=zmailer
+# Extract setting for MTA from MailScanner.conf
+#MTA=`perl -n -e 'print "$_" if chomp && s/^\s*MTA\s*=\s*([a-zA-Z]+).*$/$1/ && ($_=lc($_))' /etc/MailScanner/MailScanner.conf`
+#MTA=`/usr/sbin/Quick.Peek MTA /etc/MailScanner/MailScanner.conf`
+MTA=`$CMD -e "print MailScanner::Config::QuickPeek('$MSCONF','MTA')"`
+
+#
+# Cron job update_virus_scanners settings
+#
+UPDATEMAXDELAY=600 # Maximum delay before running cron job to avoid server peaks
+
+#
+# Cron job update_spamassassin settings
+# Moved to /etc/sysconfig/update_spamassassin
+#
+#MSSAUPDATE=/usr/sbin/update_spamassassin
+#SAUPDATE=/usr/bin/sa-update
+#SACOMPILE=/usr/bin/sa-compile
+#SAUPDATEARGS=""
+
+#
+# MailScanner Settings
+#
+#WORKDIR=/var/spool/MailScanner/incoming # Where the temp MailScanner files live
+# Extract settings for "Incoming Work Dir" and "Incoming Queue Dir"
+#WORKDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Incoming\s*Work\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /etc/MailScanner/MailScanner.conf`
+#INQDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Incoming\s*Queue\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /etc/MailScanner/MailScanner.conf`
+#QUARDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Quarantine\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /etc/MailScanner/MailScanner.conf`
+#RUNAS=`perl -n -e 'print "$_" if chomp && s/^\s*Run\s*As\s*User\s*=\s*([^\s#]+).*$/$1/i' /etc/MailScanner/MailScanner.conf`
+#WORKDIR=`/usr/sbin/Quick.Peek IncomingWorkDir /etc/MailScanner/MailScanner.conf`
+#INQDIR=`/usr/sbin/Quick.Peek IncomingQueueDir /etc/MailScanner/MailScanner.conf`
+#QUARDIR=`/usr/sbin/Quick.Peek QuarantineDir /etc/MailScanner/MailScanner.conf`
+#RUNAS=`/usr/sbin/Quick.Peek RunAsUser /etc/MailScanner/MailScanner.conf`
+WORKDIR=`$CMD -e "print MailScanner::Config::QuickPeek('$MSCONF','IncomingWorkDir')"`
+INQDIR=`$CMD -e "print MailScanner::Config::QuickPeek('$MSCONF','IncomingQueueDir')"`
+QUARDIR=`$CMD -e "print MailScanner::Config::QuickPeek('$MSCONF','QuarantineDir')"`
+RUNAS=`$CMD -e "print MailScanner::Config::QuickPeek('$MSCONF','RunAsUser')"`
+RESTART_DELAY=10 # Pause time between stop and start when restarting
+
+#perl -e 'print "***WORKDIR='$WORKDIR'***\n***INQDIR='$INQDIR'***\n";'
+
+#
+# Sendmail Settings
+#
+SENDMAIL=/usr/sbin/sendmail
+QUEUETIME=15m
+#INQDIR=/var/spool/mqueue.in
+INPID=/var/run/sendmail.in.pid
+OUTPID=/var/run/sendmail.out.pid
+SMPID=/var/run/sm-client.pid
+MSPUSER=smmsp  # User for mail submission queue runner
+MSPGROUP=smmsp # Group for mail submission queue runner
+
+#
+# Postfix settings
+#
+POSTFIX=/usr/sbin/postfix
+POSTFIXINCF=/etc/postfix.in   # Directory containing incoming configuration
+POSTFIXOUTCF=/etc/postfix     # Directory containing outgoing configuration
+if [ "x$RUNAS" = "x" ]; then
+  RUNAS=postfix
+fi
+POSTFIXWORKOWNER=$RUNAS
+POSTFIXQUAROWNER=$RUNAS
+
+#
+# Exim settings
+#
+EXIM=/usr/local/exim/bin/exim
+EXIMINCF=/usr/local/exim/configure         # Incoming configuration file
+EXIMSENDCF=/usr/local/exim/exim_send.conf  # Outgoing configuration file
+
+#
+# ZMailer settings
+#
+ZMAILER=/usr/lib/zmailer/zmailer
+ZMAILERCF=/etc/zmailer/zmailer.conf	# Configuration file
+

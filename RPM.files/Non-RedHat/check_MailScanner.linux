@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2002  Julian Field
+#
+#   $Id: check_MailScanner.linux 957 2002-10-06 19:48:00Z jkf $
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+
+# Check that the virus scanner is still running.
+# Re-start it if necessary.
+# This can also be used from the init script to start it in the first
+# place.
+
+process=mailscanner
+virusdir=/opt/MailScanner/bin
+config=/opt/MailScanner/etc/mailscanner.conf
+
+pid=`/bin/ps axww |
+     /bin/grep '[ ]'$virusdir/$process |
+     /bin/awk '{ print $1 }'`
+if [ "$pid" = "" ]; then
+  # Restart it
+  PATH=${virusdir}:$PATH
+  echo Starting virus scanner...
+  cd $virusdir
+  perl -I$virusdir -T $process $config
+else
+  echo Running with pid $pid
+fi
+

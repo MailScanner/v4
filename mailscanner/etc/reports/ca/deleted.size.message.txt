@@ -1,0 +1,19 @@
+Avís del Servei de Protecció de Virus per Correu Electrònic MailScanner
+-----------------------------------------------------------------------
+La mida del vostre correu electrònic original era massa gran i ha estat
+suprimit.
+
+Hauríeu de provar de comprimir alguns o tots els fitxers adjunts abans
+d'enviar el correu electrònic.
+
+Per una qüestió de privacitat (de caràcter legal en alguns països),
+no hem pogut desar una còpia de l'arxiu annexat original.
+
+Els filtres de contingut han trobat:
+$report
+-- 
+Postmaster
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

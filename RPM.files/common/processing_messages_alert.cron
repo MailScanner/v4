@@ -1,0 +1,5 @@
+#!/bin/bash
+
+[ -x /usr/sbin/processing_messages_alert ] || exit 0
+exec /usr/sbin/processing_messages_alert > /dev/null 2>&1
+exit 0

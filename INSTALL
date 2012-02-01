@@ -1,0 +1,24 @@
+Quick Start Installation Instructions
+=====================================
+
+The paths used within MailScanner assume, by default, that it is installed
+into /opt/MailScanner, except on Linux systems where you will find the
+configuration files in /etc/MailScanner.
+
+Once you have run the ./install.sh file in the distribution, if you are
+using sendmail you can just start it up and it will run with a sensible
+set of default settings.
+
+First thing to add to it is ClamAV (free virus scanner engine) and
+SpamAssassin (free anti-spam engine) which you can install by using the
+easy-to-install ClamAV and SpamAssassin package you can download from the
+MailScanner web site at www.mailscanner.info/downloads.html. This package
+really is worth using rather than doing it all yourself, it installs all
+the other packages required, edits the configuration files so they actually
+work, installs all the automatic update mechanisms, all sorts of things
+like that to make your life easier.
+
+But if you are a true martyr and insist on doing everything by hand, have
+fun doing all the hard work yourself but don't come running to me when you
+can't make it work! :-)
+

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+Disabled=no
+if [ "x$Disabled" = "xyes" ]; then
+  exit 0
+fi
+
+# Insert a random delay up to this value, to spread virus updates round
+# the clock. 1800 seconds = 30 minutes.
+# Set this to 0 to disable it.
+UPDATEMAXDELAY=600
+if [ -f /etc/sysconfig/MailScanner ] ; then
+        . /etc/sysconfig/MailScanner
+fi
+export UPDATEMAXDELAY
+
+[ -x /usr/sbin/update_virus_scanners ] || exit 0
+if [ "x$UPDATEMAXDELAY" = "x0" ]; then
+  :
+else
+  logger -p mail.info -t update.virus.scanners Delaying cron job up to $UPDATEMAXDELAY seconds
+  perl -e "sleep int(rand($UPDATEMAXDELAY));"
+fi
+exec /usr/sbin/update_virus_scanners
+exit 0

@@ -1,0 +1,18 @@
+From: $to
+To: $from
+Subject: E-mail no sol·licitat rebutjat
+X-%org-name%-MailScanner: generated
+
+Ens heu enviat un missatge que no havia estat sol·licitat i per això ha estat rebutjat. Si us plau, no envieu més correus electrònics a aquesta adreça:
+  A: $to
+  Assumpte: $subject
+  Data: $date
+
+Si teniu qualsevol dubte sobre to això, o creieu que heu rebut aquest missatge
+per error, si us plau, contacteu amb els vostres administradors del sistema.
+
+-- 
+MailScanner
+Protecció contra Virus d'E-mail
+%org-long-name%
+%web-site%

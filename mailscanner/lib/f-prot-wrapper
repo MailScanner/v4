@@ -1,0 +1,94 @@
+#!/bin/sh
+
+# f-protwrapper --	invoke F-Secure AV for use with
+# 			mailscanner
+#
+# nwp, 14/12/01
+#
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2001  Julian Field
+#
+#   $Id: f-prot-wrapper 1805 2003-08-09 11:04:02Z jkf $
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+#
+
+
+# You may want to check this script for bash-isms
+
+PackageDir=$1		# This may vary depending on your OS
+shift
+Scanner=f-prot
+RamDisk=yes # Set this to yes if you are running in ramdisk or tmpfs
+
+# f-prot (in the copy I have at least) is
+# statically linked.
+#
+#LD_LIBRARY_PATH=$PackageDir
+#export LD_LIBRARY_PATH
+
+# I'm only listing ones which we may find useful...
+#
+# The *required* options are passed to us by mailscanner.
+# currently these are "-old -auto -dumb -archive" (2/1/02) -- nwp
+#
+ScanOptions=""
+#ScanOptions="$ScanOptions -old"		# don't complain about old sigs
+#ScanOptions="$ScanOptions -archive"		# scan archives
+#ScanOptions="$ScanOptions -dumb"		# don't try to be smart about file types
+#ScanOptions="$ScanOptions -auto"		# no prompts
+
+#ScanOptions="$ScanOptions -ai"			# use neural network
+#ScanOptions="$ScanOptions -noheur"		# no heuristics
+#ScanOptions="$ScanOptions -saferemove"		# remove all macros from docs when known virus found
+#ScanOptions="$ScanOptions -removeall"		# remove all macros from all docs
+#ScanOptions="$ScanOptions -removenew"		# remove all macros from infected docs
+# No, I don't know what the difference between removenew and saferemove is.
+# maybe it has something to do with how the virus was detected (heuristics/
+# signatures)?
+
+if [ "x$1" = "x-IsItInstalled" ]; then
+  [ -x ${PackageDir}/$Scanner ] && exit 0
+  exit 1
+fi
+
+if [ "x$RamDisk" = "xyes" ]; then
+  # On a ramdisk, so have to list all files on command line to the scanner.
+  # Directory to use as base dir is last argument on command line, so pull
+  # all previous command line args off into ScanOptions.
+  while [ $# -gt 1 ];
+  do
+    ScanOptions="$ScanOptions $1"
+    shift
+  done
+  ScanDir=$1
+  shift
+  find $ScanDir -type f -print0 | xargs -0 ${PackageDir}/$Scanner $ScanOptions
+  exit 0
+else
+  exec ${PackageDir}/$Scanner $ScanOptions "$@" $ScanMe
+fi
+

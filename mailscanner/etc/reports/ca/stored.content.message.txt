@@ -1,0 +1,27 @@
+Avís del Servei de Protecció de Virus per Correu Electrònic MailScanner
+-----------------------------------------------------------------------
+El missatge de correu electrònic original tenia contingut potencialment
+perillós que ha estat suprimit per la vostra seguretat.
+
+El contingut és perillós ja que sovint és utilitzat per distribuir
+virus o aconseguir accés a informació personal i/o confidencial, 
+com ara, claus d'accés o números de targetes de crèdit.
+
+Si desitjeu rebre una còpia del missatge original, si us plau, envieu un
+correu electrònic al Departament de Suport incloent aquest missatge.
+També podeu trucar a aquest departament tenint el contingut d'aquest
+missatge a mà.
+
+En data $date els filtres de contingut han trobat el següent:
+$report
+
+Nota pel Departament de Suport:
+Revisar a $hostname a
+$quarantinedir/$datenumber (missatge $id).
+
+-- 
+Postmaster
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

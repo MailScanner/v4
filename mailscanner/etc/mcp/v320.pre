@@ -1,0 +1,4 @@
+# Check - Provides main check functionality
+#
+loadplugin Mail::SpamAssassin::Plugin::Check
+

@@ -1,0 +1,34 @@
+From: "$postmastername" <$localpostmaster>
+To: $from
+Subject: Missatge potencialment perillós rebutjat
+X-%org-name%-MailScanner: generated
+MIME-Version: 1.0
+Content-type: text/plain; charset=ISO-8859-1
+Content-transfer-encoding: Quoted-Printable
+
+Els nostres filtres de contingut de correu electrònic han estat activats
+per un missatge que heu enviat:
+  A: $to
+  Assumpte: $subject
+  Data: $date
+
+Aquest missatge ha estat rebutjat. L'informe dels filtres és:
+$report.
+
+Aquest missatge de correu electrònic tenia contingut potencialment perillós
+que ha estat suprimit.
+
+Si estàveu intentant enviar una pàgina web, si us plau, intenteu desar la
+pàgina en un fitxer i després annexar-lo al missatge.
+
+Si teniu qualsevol dubte sobre tot això, o creieu que heu rebut aquest
+missatge per error, si us plau, contacteu amb els vostres administradors
+del sistema.
+
+-- 
+MailScanner
+Protecció contra Virus d'E-mail
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

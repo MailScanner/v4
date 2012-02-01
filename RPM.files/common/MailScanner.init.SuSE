@@ -1,0 +1,276 @@
+#!/bin/bash
+#
+# mailscanner   This shell script takes care of starting and stopping
+#               MailScanner, and its associated copies of sendmail.
+#
+### BEGIN INIT INFO
+# Provides:          MailScanner
+# Required-Start:    $syslog $remote_fs
+# X-UnitedLinux-Should-Start: $time $network $named ypbind
+# Required-Stop:     
+# X-UnitedLinux-Should-Stop: 
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: MailScanner and sendmail daemons
+# Description:       Start sendmail and MailScanner to provide
+#       SMTP service with virus, dangerous contents and spam scanning.
+### END INIT INFO
+
+# Check for missing binaries (stale symlinks should not happen)
+MAILSCANNER_BIN=/usr/sbin/check_MailScanner
+test -x $MAILSCANNER_BIN   || exit 5
+
+#
+# Set the default values.
+# DON'T EDIT THESE, EDIT /etc/sysconfig/MailScanner INSTEAD!
+#
+export HOSTNAME
+MTA=sendmail
+POSTFIX=/usr/sbin/postfix
+POSTFIXINCF=/etc/postfix.in
+POSTFIXOUTCF=/etc/postfix
+POSTFIXWORKOWNER=postfix
+POSTFIXQUAROWNER=postfix
+MAILSCANNER_WORKDIR="/var/spool/MailScanner/incoming"
+MAILSCANNER_INQDIR="/var/spool/mqueue.in"
+MAILSCANNER_RUNAS=root
+SENDMAIL_IN_ARGS="-L sendmail-in -Am -bd -om"
+SENDMAIL_CLIENT_ARGS="-L sendmail-client -Ac -q30m"
+SENDMAIL_OUT_ARGS="-L sendmail-out -Am -q30m -om"
+SENDMAIL="/usr/sbin/sendmail"
+RESTART_DELAY=10
+
+# Check for existence of needed config files and read them
+test -s /etc/sysconfig/mail && \
+      . /etc/sysconfig/mail
+
+test -s /etc/sysconfig/sendmail && \
+      . /etc/sysconfig/sendmail
+
+test -s /etc/sysconfig/MailScanner && \
+      . /etc/sysconfig/MailScanner
+
+
+msppid=/var/spool/clientmqueue/sm-client.pid
+srvpid=/var/run/sendmail.pid
+srvoutpid=/var/run/sendmail-out.pid
+mspid=/var/run/MailScanner.pid 
+
+if test "$SMTPD_LISTEN_REMOTE" != "yes" ; then
+	SENDMAIL_IN_ARGS="-O DaemonPortOptions=Addr=127.0.0.1 $SENDMAIL_IN_ARGS"
+fi
+if test "$MTA" = "sendmail" ; then
+	test -x $SENDMAIL || exit 5
+fi
+SENDMAIL_IN_ARGS="-OPrivacyOptions=noetrn -ODeliveryMode=queueonly -OQueueDirectory=$MAILSCANNER_INQDIR -OPidFile=$srvpid $SENDMAIL_IN_ARGS"
+SENDMAIL_CLIENT_ARGS="-OPidFile=$msppid $SENDMAIL_CLIENT_ARGS"
+SENDMAIL_OUT_ARGS="-OPidFile=$srvoutpid $SENDMAIL_OUT_ARGS"
+
+StartInSendmail() {
+	echo -n "Initializing incoming $MTA"
+	if [ $MTA = 'postfix' ]; then
+          if test -x $POSTFIX ; then
+            if [ -f $POSTFIXINCF/main.cf ]; then
+	      $POSTFIX -c $POSTFIXINCF start 2> /dev/null
+              rc_status -v
+            fi
+          else
+            echo
+            echo "Assuming you are using a single Postfix instance (hold queue method)"
+          fi
+	elif [ $MTA = 'sendmail' ]; then
+          startproc    -p $srvpid $SENDMAIL $SENDMAIL_IN_ARGS
+          startproc -f -p $msppid $SENDMAIL $SENDMAIL_CLIENT_ARGS
+          rc_status -v
+	elif [ $MTA = 'exim' ]; then
+	  startproc -p $srvpid $EXIM -C $EXIMINCF -bd 2> /dev/null
+	  rc_status -v
+	fi
+}
+
+StartOutSendmail() {
+	echo -n "Initializing outgoing $MTA"
+	if [ $MTA = 'postfix' ]; then
+	  if test -x $POSTFIX -a -f $POSTFIXOUTCF/main.cf ; then
+	    $POSTFIX -c $POSTFIXOUTCF start 2> /dev/null
+	    rc_status -v
+	  else
+	    echo
+	    echo "Error: Could not find Postfix installation, see /etc/sysconfig/MailScanner"
+	  fi
+	elif [ $MTA = 'sendmail' ]; then
+          startproc -f -p $srvoutpid $SENDMAIL $SENDMAIL_OUT_ARGS
+          rc_status
+	elif [ $MTA = 'exim' ]; then
+	  startproc -p $srvpid $EXIM -C $EXIMOUTCF -bd 2> /dev/null
+	  rc_status
+	fi
+        rc_status -v
+}
+
+. /etc/rc.status
+rc_reset
+case "$1" in
+    startin)
+	StartInSendmail
+        ;;
+    startout)
+	StartOutSendmail
+	;;
+    start)
+	StartInSendmail
+	StartOutSendmail
+
+        echo -n "Initializing MailScanner"
+	if [ $MTA = 'postfix' ]; then
+	  :> $mspid
+	  chown $MAILSCANNER_RUNAS $mspid
+	  chown $POSTFIXWORKOWNER $MAILSCANNER_WORKDIR
+	  #chown $POSTFIXQUAROWNER $MAILSCANNER_QUARDIR
+	fi
+	startproc -f -p $mspid /usr/sbin/check_MailScanner >/dev/null
+        # This didn't work as expected: rc_status -v
+        rm -f /var/lock/subsys/MailScanner.off >/dev/null 2>&1
+        echo
+        ;;
+    stopms)
+	killproc -p $mspid -TERM MailScanner
+	rc_status -v
+	rm -f $mspid
+        # Clear out the old incoming dirs
+        cd $MAILSCANNER_WORKDIR && ls | egrep '^[0123456789]+$' | xargs /bin/rm -rf 2>/dev/null
+        touch /var/lock/subsys/MailScanner.off >/dev/null 2>&1
+        ;;
+    stop)
+        echo -n "Shutting down $MTA and MailScanner"
+	if [ $MTA = 'postfix' ]; then
+          if [ -f $POSTFIXINCF/main.cf ]; then
+	    $POSTFIX -c $POSTFIXINCF stop 2>/dev/null
+            rc_status
+          fi
+	  $POSTFIX -c $POSTFIXOUTCF stop 2>/dev/null
+	  rc_status
+	elif [ $MTA = 'exim' ]; then
+	  killproc -p $srvpid -TERM $EXIM
+	  rc_status
+	  killproc -p $srvoutpid -TERM $EXIM
+	  rc_status
+	elif [ $MTA = 'sendmail' ]; then
+          killproc -p $msppid -TERM $SENDMAIL
+          rc_status
+          killproc -p $srvpid -TERM $SENDMAIL
+	  rc_status
+          killproc -p $srvoutpid -TERM $SENDMAIL
+	  rc_status
+	fi
+        # Patch courtesy of Peter Peters
+	killproc -p $mspid -TERM MailScanner
+        rc_status -v
+        # Clear out all the old pid files
+        rm -f $mspid
+        # Clear out the old incoming dirs
+        cd $MAILSCANNER_WORKDIR && ls | egrep '^[0123456789]+$' | xargs /bin/rm -rf 2>/dev/null
+        touch /var/lock/subsys/MailScanner.off >/dev/null 2>&1
+        ;;
+    try-restart)
+        $0 stop && sleep $RESTART_DELAY && $0 start
+        rc_status
+        ;;
+    restart)
+        $0 stop
+        #sleep $RESTART_DELAY
+        echo -n 'Waiting for MailScanner to die gracefully '
+        COUNT=0
+        while ( ps ax | grep -q '[M]ailScanner:' )
+        do
+          COUNT=`expr $COUNT + 1`
+          if ( echo $COUNT | grep -q '5$' ) ; then
+            echo -n '5';
+          elif ( echo $COUNT | grep -q '0$' ) ; then
+            echo -n '0';
+            killproc -p $mspid -TERM MailScanner >/dev/null 2>&1
+          else
+            echo -n .
+          fi
+          sleep 1
+        done
+        echo ' dead.'
+        sleep 1
+        $0 start
+        rc_status
+        ;;
+    reload|force-reload)
+        echo -n "Reload service MailScanner"
+        killproc -p $mspid -HUP MailScanner
+        rc_status -v
+        ;;
+    status)
+        echo -n "Checking for service MailScanner: "
+	if [ $MTA = 'postfix' ]; then
+          if [ -f $POSTFIXINCF/main.cf ]; then
+	    $POSTFIX -c $POSTFIXINCF status
+          fi
+	  $POSTFIX -c $POSTFIXOUTCF status
+	elif [ $MTA = 'exim' ]; then
+	  checkproc -p $srvpid $EXIM
+	  rc_status
+	  checkproc -p $srvoutpid $EXIM
+	  rc_status
+	elif [ $MTA = 'sendmail' ]; then
+          checkproc -p $msppid $SENDMAIL
+          rc_status
+          checkproc -p $srvpid $SENDMAIL
+	  rc_status
+          checkproc -p $srvoutpid $SENDMAIL
+	  rc_status
+	fi
+	checkproc -p $mspid /usr/sbin/MailScanner
+        rc_status -v
+        ;;
+    probe)
+        test /etc/sendmail.cf -nt $srvpid -o /etc/mail/submit.cf -nt $msppid \
+        -o /etc/MailScanner/MailScanner.conf -nt $mspid && echo reload
+        ;;
+    restartms)
+	# Just kill MailScanner itself
+	killproc -p $mspid -TERM MailScanner
+	rc_status -v
+	rm -f $mspid
+        # Clear out the old incoming dirs
+        cd $MAILSCANNER_WORKDIR && ls | egrep '^[0123456789]+$' | xargs /bin/rm -rf 2>/dev/null
+        touch /var/lock/subsys/MailScanner.off >/dev/null 2>&1
+        echo -n 'Waiting for MailScanner to die gracefully '
+        COUNT=0
+        while ( ps ax | grep -q '[M]ailScanner:' )
+        do
+          COUNT=`expr $COUNT + 1`
+          if ( echo $COUNT | grep -q '5$' ) ; then
+            echo -n '5';
+          elif ( echo $COUNT | grep -q '0$' ) ; then
+            echo -n '0';
+            killproc -p $mspid -TERM MailScanner >/dev/null 2>&1
+          else
+            echo -n .
+          fi
+          sleep 1
+        done
+        echo ' dead.'
+        sleep 1
+        echo -n "Initializing MailScanner"
+	if [ $MTA = 'postfix' ]; then
+	  :> $mspid
+	  chown $MAILSCANNER_RUNAS $mspid
+	  chown $POSTFIXWORKOWNER $MAILSCANNER_WORKDIR
+	  #chown $POSTFIXQUAROWNER $MAILSCANNER_QUARDIR
+	fi
+	startproc -f -p $mspid /usr/sbin/check_MailScanner >/dev/null
+        # This didn't work as expected: rc_status -v
+        rm -f /var/lock/subsys/MailScanner.off >/dev/null 2>&1
+        echo
+	;;
+    *)
+        echo "Usage: $0 {start|stop|status|try-restart|restart|restartms|force-reload|reload|probe|startin|startout|stopms}"
+        exit 1
+esac
+rc_exit
+

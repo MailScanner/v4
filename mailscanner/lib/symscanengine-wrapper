@@ -1,0 +1,34 @@
+#!/bin/sh
+
+#
+# Symantec Scan Engine wrapper
+#
+PackageDir=$1
+shift
+prog=ssecls/ssecls
+
+if [ "x$1" = "x-IsItInstalled" ]; then
+  [ -x ${PackageDir}/$prog ] && exit 0
+  exit 1
+fi
+
+ScanOptions=""
+# Defaults to server 127.0.0.1:1344.
+# Multiple servers can be specified for load balancing
+#ScanOptions="$ScanOptions  -server 127.0.0.1:7777"
+# Defaults to the Scan Engine's scan policy.
+#ScanOptions="$ScanOptions -mode scanrepair"
+# Display file name and infection status for every file scanned.
+#ScanOptions="$ScanOptions -verbose"
+# Display detailed infection information for infected files.
+#ScanOptions="$ScanOptions -details"
+# Display the total time required to scan the file.
+#ScanOptions="$ScanOptions -timing"
+# Recurse through directories.
+#ScanOptions="$ScanOptions -recurse"
+# Defaults to delete infected file when error occurs replacing the file.
+#ScanOptions="$ScanOptions -onerror <leave|delete>"
+
+# Join all the output lines into one big line
+exec $PackageDir/$prog $ScanOptions "$@"
+

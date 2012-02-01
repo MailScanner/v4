@@ -1,0 +1,18 @@
+#
+# Put in here all the settings for your particular mail system so that
+# update_spamassassin can run.
+#
+
+#
+# Cron job update_virus_scanners settings
+#
+UPDATEMAXDELAY=600 # Maximum delay before running cron job to avoid server peaks
+
+#
+# Cron job update_spamassassin settings
+#
+MSSAUPDATE=/usr/sbin/update_spamassassin
+SAUPDATE=/usr/bin/sa-update
+SACOMPILE=/usr/bin/sa-compile
+SAUPDATEARGS=""
+

@@ -1,0 +1,5 @@
+Atenció: Aquest missatge tenia annexes que han estat suprimits.
+Atenció: ($filename).
+Atenció: Si us plau, llegiu l'annex "$viruswarningname" per més informació.
+
+

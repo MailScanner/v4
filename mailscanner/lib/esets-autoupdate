@@ -1,0 +1,105 @@
+#!/usr/bin/perl
+
+use Sys::Syslog;
+
+$esetsRoot  = shift || "/usr/local/esets";
+
+$esetsAuth  = "esets.auth";
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/esetsBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+Sys::Syslog::openlog("esets-autoupdate", 'pid, nowait', 'mail');
+
+# Check the auth file exists and has a username/password in it
+if ($esetsRoot eq '/usr/sbin' && -f '/etc/esets/esets.cfg') {
+  $esetsAuth = undef;
+  $Update = "$esetsRoot/esets_update";
+} elsif ($esetsRoot eq '/usr/sbin' && -f "/etc/esets/$esetsAuth") {
+  $esetsAuth = undef;
+  $Update = "$esetsRoot/esets_update";
+} else {
+  $esetsAuth = "$esetsRoot/$esetsAuth";
+  $Update = "$esetsRoot/esets_update";
+}
+
+if (-x $Update) {
+
+  mkdir "$esetsRoot/mirror", 0755 if $esetsAuth;
+
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  # Do the actual update
+  &Lock();
+  eval {
+    alarm 300;
+
+    $result = &Updateesets($Update); # system($Command)>>8;
+
+    &Unlock();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &Unlock();
+      Sys::Syslog::syslog('err', "WARNING esets update timed out");
+      alarm 0;
+    }
+  } else {
+    alarm 0;
+    if ($result==0) {
+      Sys::Syslog::syslog('info', "esets updated");
+    } elsif ($result==1) {
+      Sys::Syslog::syslog('info', "esets internal error");
+    } elsif ($result==2) {
+      Sys::Syslog::syslog('info', "esets mirror error");
+    } elsif ($result==3) {
+      Sys::Syslog::syslog('info', "esets compile error");
+    } elsif ($result==4) {
+      Sys::Syslog::syslog('info', "esets already up to date");
+    }
+    Sys::Syslog::closelog();
+  }
+}
+
+exit 0;
+
+sub BailOut {
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_, $!";
+	exit 1;
+}
+
+sub Lock {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating virus definitions by $$\n";
+}
+
+sub Unlock {
+	print LOCK "Unlocked after updating virus definitions by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+
+sub Updateesets {
+  my($cmd) = @_;
+
+  open(CMD, "$cmd 2>&1 |") or return $?;
+  $result = $?;
+
+  while(<CMD>) {
+    chomp;
+    $result = 4 if /Your ESET Security system is already up-to-date/i;
+  }
+  close CMD;
+
+  return $result;
+}

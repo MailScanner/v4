@@ -1,0 +1,134 @@
+#!/bin/sh
+#
+# mailscanner   This shell script takes care of starting and stopping
+#               MailScanner, and its associated copies of sendmail.
+#
+# chkconfig: 2345 80 30
+# description: MailScanner is an open-source E-Mail Gateway Virus Scanner.
+# processname: mailscanner
+# config: /usr/local/MailScanner/etc/mailscanner.conf
+# pidfile: /usr/local/MailScanner/var/virus.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Source mailscanner configureation.
+if [ -f /etc/sysconfig/MailScanner ] ; then
+        . /etc/sysconfig/MailScanner
+else
+        QUEUETIME=15m
+        PIDDIR=/opt/MailScanner/var
+        export QUEUETIME
+        export PIDDIR
+fi
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+[ -f /opt/MailScanner/bin/check_mailscanner ] || exit 0
+[ -f /usr/sbin/sendmail ] || exit 0
+
+# Get a string of all the PIDs of MailScanner
+#MailScannerPids() {
+#	cd $PIDDIR || return 1
+#	PIDLIST=`ls | grep '^MailScanner.' | sed -e 's/MailScanner.//g'`
+#	echo PIDLIST
+#	return 0
+#}
+
+# Start both the sendmail processes
+StartInSendmail() {
+        /usr/bin/newaliases > /dev/null 2>&1
+        if test -x /usr/bin/make -a -f /etc/mail/Makefile ; then
+            make -C /etc/mail -q
+        else
+            for i in virtusertable access domaintable mailertable ; do
+                if [ -f /etc/mail/$i ] ; then
+                    makemap hash /etc/mail/$i < /etc/mail/$i
+                fi
+            done
+        fi
+        /usr/sbin/sendmail -bd -ODeliveryMode=queueonly \
+                           -OQueueDirectory=/var/spool/mqueue.in
+        success
+        echo
+}
+StartOutSendmail() {
+        /usr/sbin/sendmail $([ -n "$QUEUETIME" ] && echo -q$QUEUETIME)
+        success
+        echo
+}
+
+RETVAL=0
+
+# See how we were called.
+case "$1" in
+  start)
+	# Start daemons.
+	echo 'Starting MailScanner daemons:'
+        echo -n '         incoming sendmail: '
+	StartInSendmail
+        echo -n '         outgoing sendmail: '
+	StartOutSendmail
+	echo -n '         MailScanner:       '
+	/opt/MailScanner/bin/check_mailscanner >/dev/null
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/mailscanner
+	success
+	echo
+	;;
+  stop)
+	# Stop daemons.
+	echo    'Shutting down MailScanner daemons:'
+	echo -n '         MailScanner:       '
+	killproc mailscanner
+	echo
+	echo -n '         incoming sendmail: '
+	killproc sendmail 2>/dev/null
+	echo
+	echo -n '         outgoing sendmail: '
+	killproc /usr/sbin/sendmail 2>/dev/null
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/MailScanner
+	;;
+  status)
+        # Work out if all of MailScanner is running
+	echo    'Checking MailScanner daemons:'
+        echo -n '         MailScanner:       '
+        pid=`pidofproc mailscanner`
+        if [ -z "$pid" ] ; then failure; else success; fi
+        echo
+        # Now the incoming sendmail
+        echo -n '         incoming sendmail: '
+        pid=`ps ax | grep 'sendmai[l]: accepting connections'`
+        if [ -z "$pid" ] ; then failure; else success; fi
+        echo
+        # Now the outgoing sendmail
+        echo -n '         outgoing sendmail: '
+        # More complex regexp to handle other RedHats
+        pid=`ps ax | egrep '\[sendmail\]|sendmai[l] -q[0-9]*[mhd]'`
+        if [ -z "$pid" ] ; then failure; else success; fi
+        echo
+        ;;
+  restart)
+	$0 stop
+	sleep 2
+	$0 start
+	RETVAL=$?
+	;;
+  reload)
+	echo -n 'Reloading MailScanner:      '
+        pid=`pidofproc mailscanner`
+        if [ -z "$pid" ] ; then failure; echo
+        else success; echo; kill -HUP $pid; fi
+	;;
+  *)
+	echo "Usage: mailscanner {start|stop|status|restart|reload}"
+	exit 1
+esac
+
+exit $RETVAL

@@ -1,0 +1,8 @@
+#
+# Put in here the time between runs for the outgoing sendmail mqueue
+# if you don't want the default of 15 minutes (15m).
+# Put in there the location of the PID files
+# if you don't want the default of /opt/MailScanner/var.
+#
+QUEUETIME=15m
+PIDDIR=/opt/MailScanner/var

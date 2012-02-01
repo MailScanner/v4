@@ -1,0 +1,74 @@
+#!/bin/sh
+
+A=`hostname -s`
+#if [ "$A" != "tinker" ]; then
+#  echo You should be on tinker
+#  exit 1
+#fi
+
+echo Good, you are on tinker.
+echo
+
+echo Edit all version number files...
+read a
+
+vi mailscanner/bin/mailscanner.sbin www/ChangeLog www/index.html www/downloads.html Build.tarball RPM.files/Perl8.0/MailScanner4.spec RPM.files/Perl8.0/Build.tarball RPM.files/SuSE8.1/SuSE-MailScanner4.spec RPM.files/SuSE8.1/Build.tarball
+
+echo Please tell me the version number:
+read MSVERSION
+echo And the build number
+read MSBUILD
+
+echo Building MailScanner.conf index
+/root/v4/NEWSTABLE/config.index/make.sh
+echo 'Okay?'
+read a
+
+svn commit
+
+echo Fetching latest phishing.bad.sites.conf file
+cd mailscanner/etc
+rm -f phishing.bad.sites.conf
+wget http://www.mailscanner.eu/phishing.bad.sites.conf
+cd ../..
+
+echo Building tar distribution
+sleep 2
+./Build.tarball
+echo 'Okay?'
+read a
+
+echo Building SuSE distribution
+sleep 2
+cd /root/v4/NEWSTABLE/RPM.files/SuSE8.1
+./Build.tarball
+echo 'Okay?'
+read a
+
+echo Building RPM distribution
+sleep 2
+cd /root/v4/NEWSTABLE/RPM.files/Perl8.0
+./Build.tarball
+echo 'Okay?'
+read a
+
+echo 'Copying distributions:'
+sleep 2
+cd /root/build/tar
+scp MailScanner-install-${MSVERSION}-${MSBUILD}.tar.gz admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/tar/
+cd /root/v4/NEWSTABLE/RPM.files/SuSE8.1
+scp MailScanner-${MSVERSION}-${MSBUILD}.suse.tar.gz admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/suse/
+cd /root/v4/NEWSTABLE/RPM.files/Perl8.0
+scp MailScanner-${MSVERSION}-${MSBUILD}.rpm.tar.gz admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/rpm/
+cd /usr/src/redhat/SRPMS
+#echo 'Pausing...'
+#sleep 5
+scp mailscanner-${MSVERSION}-${MSBUILD}.src.rpm admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/
+
+echo
+echo 'Copy the docs?'
+read a
+cd /root/v4/NEWSTABLE/www
+scp ChangeLog index.html downloads.html MailScanner.conf.index.html admin@server.jules.fm:domains/mailscanner.info/public_html/
+scp /root/v4/NEWSTABLE/mailscanner/etc/phishing.safe.sites.conf admin@server.jules.fm:domains/mailscanner.info/public_html/phishing.safe.sites.conf.master
+

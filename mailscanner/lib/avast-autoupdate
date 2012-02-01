@@ -1,0 +1,84 @@
+#!/usr/bin/perl
+
+#
+# Avast updater. Original code by Julian Field. Timeout code by
+# Alessandro Bianchi. Timeout code is not perfect but should be okay.
+#
+
+use Sys::Syslog;
+
+# If you have a web proxy or cache server, put its value in the next line
+# in the syntax "full.host.name:port".
+$HTTPproxy = "";
+
+$PackageDir = shift || "/usr";
+
+$AvastUpdateCommand = "$PackageDir/bin/avastvpsupdate.sh";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/avastBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("Avast-autoupdate", 'pid, nowait', 'mail');
+
+if (-x $AvastUpdateCommand) {
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockAvast();
+  eval {
+    alarm 300;
+    $retval = system($AvastUpdateCommand)>>8;
+    &UnlockAvast();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &UnlockAvast();
+      Sys::Syslog::syslog('err', "WARNING Avast update timed out");
+      alarm 0;
+    }
+  } else {
+    alarm 0;
+    Sys::Syslog::syslog('info', "Avast updated");
+  }
+} else {
+  Sys::Syslog::syslog('err', "Avast updater $AvastUpdateCommand cannot be run");
+}
+
+Sys::Syslog::closelog();
+exit 0;
+
+sub LockAvast {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating Avast definitions by $$\n";
+}
+
+sub UnlockAvast {
+	print LOCK "Unlocked after updating Avast definitions by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+
+sub UpdateAvast {
+  my($cmd) = @_;
+
+  open(CMD, "$cmd 2>&1 |") or return $?;
+
+  while(<CMD>) {
+    chomp;
+    Sys::Syslog::syslog('err', "Avast update warning: $_")
+      if /warning|error|fatal/i;
+  }
+  close CMD;
+
+  return $?>>8;
+}
+

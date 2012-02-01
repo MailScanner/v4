@@ -1,0 +1,68 @@
+#!/bin/sh
+
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2001  Julian Field
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+
+# JKF Wrapper Sophos programs with the correct LD_LIBRARY_PATH
+# Modified for solaris by CJG
+# Then tweaked for heron by JKF again
+# Then tweaked for McAfee by JKF
+# Modified (badly!) by SEP398 to work with the update script
+#
+# MJMM Copied as mcafee6-wrapper for handle uvscan v6.0+
+# MJMM Updated to detect v6 (different output parsing required)
+
+PackageDir=$1
+shift
+prog=uvscan # `basename $0`
+datDIR=$PackageDir
+
+LD_LIBRARY_PATH=$PackageDir
+export LD_LIBRARY_PATH
+
+if [ "x$1" = "x-IsItInstalled" ]; then
+
+  #first check if the excutable exists...
+  [ -x ${PackageDir}/$prog ] || exit 1
+
+  #second check if it is v6 (using different output string)
+  ${PackageDir}/$prog --version | grep "Dat set version: " > /dev/null
+  [ $? = 0 ] && exit 0
+  
+  exit 1
+fi
+
+if [ -f ${PackageDir}/datfiles/current/extra.dat ]; then
+  exec ${PackageDir}/$prog -d $datDIR --extra ${PackageDir}/datfiles/current/extra.dat "$@"
+else
+  if [ -f ${PackageDir}/extra.dat ]; then
+    exec ${PackageDir}/$prog -d $datDIR --extra ${PackageDir}/extra.dat "$@"
+  fi
+  exec ${PackageDir}/$prog -d $datDIR "$@"
+fi
+

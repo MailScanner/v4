@@ -1,0 +1,26 @@
+Avís del Servei de Protecció de Virus per Correu Electrònic MailScanner
+-----------------------------------------------------------------------
+La mida del correu electrònic original, o un adjunt que hi contenia era
+massa gran i ha estat suprimit.
+
+Hauríeu de provar de comprimir alguns o tots els fitxers adjunts abans
+d'enviar el correu electrònic.
+
+Si desitjeu rebre una còpia del correu electrònic original, si us plau,
+envieu un correu electrònic al Departament de Suport incloent aquest
+missatge. També podeu trucar a aquest departament tenint el contingut
+d'aquest missatge a mà.
+
+En data $date els filtres de contingut han trobat el següent:
+$report
+
+Nota pel Departament de Suport:
+Revisar a $hostname a
+$quarantinedir/$datenumber (missatge $id).
+
+-- 
+Postmaster
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

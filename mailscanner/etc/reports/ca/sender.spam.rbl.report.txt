@@ -1,0 +1,32 @@
+From: "$postmastername" <$localpostmaster>
+To: $from
+Subject: E-mail comercial no sol·licitat rebutjat
+X-%org-name%-MailScanner: generated
+MIME-Version: 1.0
+Content-type: text/plain; charset=ISO-8859-1
+Content-transfer-encoding: Quoted-Printable
+
+Els nostres detectors de correu electrònic no sol·licitat (UCE/spam)
+han estat activats per un missatge que heu enviat:
+   A: $to
+   Assumpte: $subject
+   Data: $date
+
+Aquest missatge ha estat destruït. Els detectors que l'han activat són:
+$spamreport.
+
+El servidor que va enviar el missatge al nostre servidor, està dins d'una
+llista negre pública (RBL), perque està mal configurat o perque utilitza
+de manera incorrecte els sistemes de correu electrònic.
+
+Si teniu qualsevol dubte sobre tot això, o creieu que heu rebut aquest
+missatge per error, si us plau, contacteu amb els vostres administradors
+del sistema.
+
+-- 
+MailScanner
+Protecció contra Virus d'E-mail
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

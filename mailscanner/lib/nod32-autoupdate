@@ -1,0 +1,71 @@
+#!/usr/bin/perl
+
+use Sys::Syslog;
+
+$Nod32Root  = shift || "/usr/local/nod32";
+
+$Nod32Auth  = "nod32.auth";
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/nod32Busy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+Sys::Syslog::openlog("Nod32-autoupdate", 'pid, nowait', 'mail');
+
+# Check the auth file exists and has a username/password in it
+if ($Nod32Root eq '/usr/sbin' && -f "/etc/nod32/$Nod32Auth") {
+  $Nod32Auth = undef;
+  $Update = "$Nod32Root/nod32_update";
+} else {
+  $Nod32Auth = "$Nod32Root/$Nod32Auth";
+  $Update = "$Nod32Root/update";
+}
+
+if ($Nod32Auth) {
+  open(AUTH, $Nod32Auth) or 
+    &BailOut("Authentication file $Nod32Auth does not exist");
+  $password = "";
+  $username = "";
+  while(<AUTH>) {
+    chomp;
+    ($key, $value) = split(/\s*=\s*/, $_, 2);
+    $password = $value if $key eq "password";
+    $username = $value if $key eq "username";
+  }
+  close(AUTH);
+  &BailOut("Authentication file $Nod32Auth does not contain Nod32 username" .
+           " and password") if $password eq "" || $username eq "";
+}
+
+# Do the actual update
+&Lock();
+
+mkdir "$Nod32Root/mirror", 0755 if $Nod32Auth;
+$result = system($Update) >>8;
+
+&Unlock();
+
+Sys::Syslog::syslog('info', $result==1?"Nod32 already up to date":"Nod32 updated");
+Sys::Syslog::closelog();
+exit 0;
+
+sub BailOut {
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_, $!";
+	exit 1;
+}
+
+sub Lock {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating virus definitions by $$\n";
+}
+
+sub Unlock {
+	print LOCK "Unlocked after updating virus definitions by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}

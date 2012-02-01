@@ -1,0 +1,125 @@
+# same section with parameters for objects
+[Object]
+#Names=*/home;*/tmp;*/var/tmp;/usr/src;/mnt/cdrom
+Names=*.
+Memory=No
+Sectors=No
+ScanAllSectors=No
+Files=Yes
+FileMask=2
+#UserMask=*.tar.gz
+ExcludeFiles=0
+#ExcludeMask=*.txt *.cmd 
+ExcludeDir=
+Packed=Yes
+Archives=Yes
+SelfExtArchives=Yes
+MailBases=Yes
+MailPlain=Yes
+Embedded=Yes
+#InfectedAction=1
+# JKF Next line needed a 0 adding
+InfectedAction=0
+BackupInfected=No
+# UNDOCUMENTED!
+IfDisinfImpossible=0
+Warnings=Yes
+#CodeAnalyser=Yes
+RedundantScan=No
+SubDirectories=Yes
+#CrossFs=Yes
+
+# global(common) options sections
+[Options]
+ScanRemovable=No
+ScanSubDirAtEnd=No
+ParallelScan=No
+LimitForProcess=16
+EndlesslyScan=No
+ScanDelay=-1
+Symlinks=1
+
+[Report]
+#Report=Yes
+Report=No
+#UseSysLog=No
+UseSysLog=Yes
+#ReportFileName=~kavscan.rpt
+Append=Yes
+ReportFileLimit=No
+ReportFileSize=500
+ExtReport=Yes
+RepCreateFlag=600
+UseCR=No
+RepForEachDisk=Yes
+LongStrings=Yes
+UserReport=No
+UserReportName=~userreport.log
+# Showing objects
+#ShowOK=Yes
+ShowPack=Yes
+ShowPassworded=Yes
+ShowSuspision=Yes
+ShowWarning=Yes
+ShowCorrupted=Yes
+ShowUnknown=Yes
+
+# Action with infected files
+[ActionWithInfected]
+InfectedCopy=No
+InfectedFolder=infected
+CopyWithPath=Yes
+# Action with same infection file
+ChangeExt=None
+NewExtension=Virs
+ChownTo=None
+ChModTo=No
+
+# Action with suspicion files
+[ActionWithSuspicion]
+SuspiciousCopy=No
+SuspiciousFolder=suspicious
+CopyWithPath=Yes
+# Action with same suspicious file
+ChangeExt=None
+NewExtension=Susp
+ChownTo=None
+ChModTo=No
+
+# Action with corrupted files
+[ActionWithCorrupted]
+CorruptedCopy=No
+CorruptedFolder=corrupted
+CopyWithPath=Yes
+# Action with same corrupted file
+ChangeExt=None
+NewExtension=Corr
+ChownTo=None
+ChModTo=No
+
+[TempFiles]
+UseMemoryFiles=Yes
+LimitForMemFiles=6000
+MemFilesMaxSize=20000
+TempPath=/tmp
+
+[Priority]
+Father=0
+Child=0
+
+[Mail]
+SendMail=No
+SendOnEach=Yes
+SendAtEnd=Yes
+SendTo=root
+CC=
+
+[Customize]
+Sound=No
+#UpdateCheck=Yes
+UpdateInterval=90
+OtherMessages=Yes
+RedundantMessage=Yes
+DeleteAllMessage=Yes
+ExitOnBadBases=Yes
+UseExtendedExitCode=Yes

@@ -1,0 +1,38 @@
+From: "$postmastername" <$localpostmaster>
+To: $to
+Subject: {SPAM no lliurat} $subject
+X-%org-name%-MailScanner: generated
+
+Els nostres detectors de correu electrònic no sol·licitat (UCE/spam)
+han estat activats per un missatge que heu rebut:
+   De: $from
+   Assumpte: $subject
+   Data: $date
+
+Aquest missatge no ha estat lliurat. Els detectors que han estat activats
+són:
+$spamreport.
+
+El missatge que se us ha enviat ha estat identificat com spam basant-se en
+el seu contingut, en el servidor de correu que li ha enviat, o per ambdues
+causes.
+
+No acceptem correu electrònic comercial no sol·licitat (spam) i treballem
+activament per aturar-lo.
+
+Si teniu qualsevol dubte sobre tot això, o creieu que heu rebut aquest
+missatge per error, si us plau, contacteu amb els vostres administradors
+del sistema.
+
+Els vostres administradors del sistema necessitaran la següent informació:
+   Nom del servidor: $hostname
+   Identificador del missatge: $id
+   Codi de data: $datenumber
+
+-- 
+MailScanner
+Protecció contra Virus d'E-mail
+%org-long-name%
+%web-site%
+
+For all your IT requirements visit: http://www.transtec.co.uk

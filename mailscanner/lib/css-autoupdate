@@ -1,0 +1,69 @@
+#!/usr/bin/perl
+
+use Sys::Syslog;
+
+$CSSDir = shift || "/opt/SYMCScan";
+$CSSUpdateCommand="$CSSDir/bin/liveupdate.sh";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/cssBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("css-autoupdate", 'pid, nowait', 'mail');
+
+BailOut("Installation dir \"$CSSDir/bin\" does not exist!")
+  unless $CSSDir ne "" && -d "$CSSDir/bin";
+
+if (-x $CSSUpdateCommand) {
+  # Timeout prevention
+  $SIG{ALRM} = sub { die "timeout"};
+
+  &LockCSS();
+  eval {
+    alarm 300;
+    $retval=system($CSSUpdateCommand)>>8;
+    &UnlockCSS();
+    alarm 0;
+  };
+
+  if ($@) {
+    if ($@ =~ /timeout/) {
+      # We timed out!
+      &UnlockCSS();
+      alarm 0;
+      Sys::Syslog::syslog('err', "WARNING: CSS LiveUpdate timed out");
+    }
+  } else {
+    alarm 0;
+    Sys::Syslog::syslog('info', "CSS LiveUpdate Completed");
+  }
+} else {
+  Sys::Syslog::syslog('err', "CSS updater $CSSUpdateCommand cannot be run");
+}
+
+exit 0;
+
+sub BailOut {
+	Sys::Syslog::syslog('err', @_);
+	Sys::Syslog::closelog();
+	warn "@_, $!";
+	exit 1;
+}
+
+sub LockCSS {
+	open(LOCK, ">$LockFile") or return;
+	flock(LOCK, $LOCK_EX);
+	print LOCK "Locked for updating CSS patterns by $$\n";
+}
+
+sub UnlockCSS {
+	print LOCK "Unlocked after updating CSS patterns by $$\n";
+	flock(LOCK, $LOCK_UN);
+	close LOCK;
+}
+
+

@@ -1,0 +1,110 @@
+#!/bin/sh
+#
+#  check_mailscanner
+#
+#  $Id: check_mailscanner.in 1375 2003-02-01 12:27:16Z jkf $
+#
+#  Script to check whether mailscanner process is running, and
+#  start it up if not.
+#
+#  Copyright (C) 2002  Julian Field, Nick Phillips
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+
+# Check that the virus scanner is still running.
+# Re-start it if necessary.
+# This can also be used from the init script to
+# start it in the first place.
+
+process=MailScanner
+msbindir=@sbindir@
+config=@sysconfdir@/MailScanner.conf
+
+# These seem to get put all over the shop...
+PERL=@PERL@
+AWK=@AWKPATH@
+GREP=@GREP@
+FGREP=/bin/fgrep # This should be set by autoconf
+
+#TAINTWARN='-Tw'
+TAINTWARN=
+
+# ...but surely everyone has these in /bin?
+PS=/bin/ps
+UNAME='/bin/uname -a'
+
+# If this does not work on your system, please don't
+# just send us a version that does, please please please
+# send example output that demonstrates *why* it doesn't
+# work, what version of what system you are running etc.
+# If you do this then I *will* make this work right for
+# everybody.
+# -- Nick Phillips <nwp@lemon-computing.com>
+
+if $UNAME | $FGREP -q "SunOS" ; then
+    # Version for Solaris/SysV systems:
+    pid=`/usr/bin/ps -e -o pid -o args |
+         /usr/bin/fgrep $msbindir/$process |
+         /usr/bin/grep -v grep |
+         /usr/bin/sed -e 's/^  *//' -e 's/ .*//'`
+elif $UNAME | $FGREP -q "HP" ; then
+    # Version for HP-UX
+    pid=`/usr/bin/ps -efx |
+         /usr/bin/fgrep $msbindir/$process |
+         /usr/bin/fgrep -v /usr/bin/fgrep |
+         /bin/awk '{print $2}'`
+elif $UNAME | $FGREP -q "SCO" ; then
+    pid=`/bin/ps -e -o pid -o args |
+         /usr/bin/fgrep $msbindir/$process |
+         /bin/grep -v grep |
+         /bin/sed -e 's/^  *//' -e 's/ .*//'`
+elif $UNAME | $FGREP -q "Linux" ; then
+    pid=`/bin/ps axww |
+         /bin/grep '[ ]'$msbindir/$process |
+         /bin/awk '{ print $1 }'`
+elif $UNAME | $FGREP -q "BSD" ; then
+    pid=`$PS -axww |
+         $GREP '[ ]'$msbindir/$process |
+         $AWK '{print $1}'`
+else
+    # not BSD; everything else seems to do POSIX
+    pid=`COLUMNS=500 $PS -ef |
+         $GREP '[ ]'$msbindir/$process |
+         $AWK '{print $2}'`
+fi
+
+if [ "x$pid" = "x" ]; then
+  # Quietly try to raise the open_files limit
+  ulimit -n 2000 >/dev/null 2>&1
+  # Restart it
+  PATH=${msbindir}:$PATH
+  echo Starting MailScanner...
+  cd $msbindir
+  $process $config
+else
+  echo MailScanner running with pid $pid
+fi
+

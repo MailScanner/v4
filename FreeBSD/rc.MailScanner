@@ -1,0 +1,164 @@
+#!/bin/sh
+
+# This script is used by /etc/rc at boot time to start MailScanner.  It
+# is meant to be sendmail specific and not a generic script for all
+# MTAs.  It is only called by /etc/rc if the rc.conf mta_start_script is
+# set to /opt/MailScanner/bin/rc.MailScanner.  This provides the opportunity
+# for other MTAs to provide their own startup script.
+
+if [ -r /etc/defaults/rc.conf ]; then
+	. /etc/defaults/rc.conf
+	source_rc_confs
+elif [ -r /etc/rc.conf ]; then
+	. /etc/rc.conf
+fi
+
+# MailScanner settings
+MailScanner_queue_time=${MailScanner_queue_time:-15m}
+MailScanner_incoming_queue=${MailScanner_incoming_queue:-/var/spool/mqueue.in}
+MailScanner_check=${MailScanner_check:-/opt/MailScanner/bin/check_mailscanner}
+MailScanner_pidfile=${MailScanner_pidfile:-/opt/MailScanner/var/MailScanner.pid}
+
+# Want to get sendmail_flags without the queue running option
+sendmail_flags=`echo ${sendmail_flags} | sed -e 's/-q[^ ]*//'`
+
+# The sendmail binary
+sendmail_program=${sendmail_program:-/usr/sbin/sendmail}
+
+# The pid is used to stop and restart the running daemon(s).
+sendmail_pidfile=${sendmail_pidfile:-/var/run/sendmail.pid}
+sendmail_mspq_pidfile=${sendmail_mspq_pidfile:-/var/spool/clientmqueue/sm-client.pid}
+
+start_mta()
+{
+	case ${sendmail_enable} in
+	[Nn][Oo][Nn][Ee])
+		;;
+	[Yy][Ee][Ss])
+		echo -n ' sendmail'
+		echo -n ' incoming'
+		${sendmail_program} -OPrivacyOptions=noetrn \
+		             -OQueueDirectory=${MailScanner_incoming_queue} \
+		             -ODeliveryMode=queueonly ${sendmail_flags}
+		echo -n ' outgoing'
+		${sendmail_program} -q${MailScanner_queue_time}
+		echo -n ' MailScanner '
+		${MailScanner_check}
+		;;
+	*)
+		case ${sendmail_submit_enable} in
+		[Yy][Ee][Ss])
+			echo -n ' sendmail-submit'
+			${sendmail_program} ${sendmail_submit_flags}
+			;;
+		*)
+			case ${sendmail_outbound_enable} in
+			[Yy][Ee][Ss])
+				echo -n ' sendmail-outbound'
+				${sendmail_program} ${sendmail_outbound_flags}
+				;;
+			esac
+			;;
+		esac
+		;;
+	esac
+}
+
+stop_mta()
+{
+	echo -n ' sendmail'
+	kill -TERM `head -1 ${sendmail_pidfile}` 2>/dev/null
+	kill -TERM `ps ax | grep '[s]endmail' | awk '{print $1}'` 2>/dev/null
+	echo -n ' MailScanner'
+	/bin/kill -TERM -- -`cat ${MailScanner_pidfile}` 2>/dev/null
+	sleep 5 # Useful if doing a quick re-start
+}
+
+restart_mta()
+{
+	stop_mta
+	start_mta
+}
+
+start_mspq()
+{
+	case ${sendmail_enable} in
+	[Nn][Oo][Nn][Ee])
+		;;
+	*)
+		if [ -r /etc/mail/submit.cf ]; then
+			case ${sendmail_msp_queue_enable} in
+			[Yy][Ee][Ss])
+				echo -n ' sendmail-clientmqueue'
+				${sendmail_program} ${sendmail_msp_queue_flags}
+				;;
+			esac
+		fi
+		;;
+	esac
+}
+
+stop_mspq()
+{
+	echo -n ' sendmail-clientmqueue'
+	kill -TERM `head -1 ${sendmail_mspq_pidfile}` 2>/dev/null
+}
+
+restart_mspq()
+{
+	stop_mspq
+	start_mspq
+}
+
+# If no argument is given, assume we are being called at boot time.
+_action=${1:-start}
+
+case ${_action} in
+start)
+	start_mta
+	start_mspq
+	;;
+
+stop)
+	stop_mta
+	stop_mspq
+	;;
+
+restart)
+	restart_mta
+	restart_mspq
+	;;
+
+start-mta)
+	start_mta
+	;;
+
+stop-mta)
+	stop_mta
+	;;
+
+restart-mta)
+	restart_mta
+	;;
+
+start-mspq)
+	start_mspq
+	;;
+
+stop-mspq)
+	stop_mspq
+	;;
+
+restart-mspq)
+	restart_mspq
+	;;
+
+*)
+	echo "Usage: `basename $0` {start|stop|restart}" >&2
+	echo "       `basename $0` {start-mta|stop-mta|restart-mta}" >&2
+	echo "       `basename $0` {start-mspq|stop-mspq|restart-mspq}" >&2
+	exit 64
+	;;
+
+esac
+exit 0

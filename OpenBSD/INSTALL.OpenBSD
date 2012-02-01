@@ -1,0 +1,72 @@
+JKF 2002-12-26
+JKE 2006-09-11
+
+First Time Installation Instructions for OpenBSD
+================================================
+
+1. Install MailScanner:
+
+    tar zxf MailScanner-install-%VERSION%.tar.gz
+    cd MailScanner-install-%VERSION%
+    sudo install.sh
+
+2. In /etc/rc.conf.local (create the file if it doesn't exist), add:
+
+	sendmail_flags="-bd -OPrivacyOptions=noetrn -ODeliveryMode=queueonly -OQueueDirectory=/var/spool/mqueue.in -OPidFile=/var/run/sendmail_in.pid"
+
+3. In /etc/rc.local add:
+
+	echo -n ' sendmail'; /usr/sbin/sendmail -q15 >/dev/null 2>&1
+	echo -n ' MailScanner'; /opt/MailScanner/bin/check_mailscanner >/dev/null 2>&1
+
+4. Add link to sed so change to SystemsDefs.pm isn't required:
+
+	sudo ln -s /usr/bin/sed /bin/sed
+
+5. Edit /opt/MailScanner/etc/MailScanner.conf:
+
+	Sendmail = /usr/sbin/sendmail
+	Sendmail2 = /usr/sbin/sendmail
+	# Make other changes as appropriate
+
+6. Start MailScanner:
+
+	sudo /opt/MailScanner/bin/check_mailscanner
+    
+7. Add cron jobs as recommended by install.sh:
+
+    sudo crontab -e
+
+
+Upgrade Instructions for OpenBSD
+================================
+
+1. Install New MailScanner Version
+
+    sudo tar zxf MailScanner-install-%NEW_VERSION%.tar.gz
+    cd MailScanner-install-%NEW_VERSION%
+    sudo install.sh
+
+2. Update MailScanner.conf:
+
+	cd /opt/MailScanner-%NEW_VERSION%/etc
+	mv MailScanner.conf MailScanner.conf.default
+	../bin/upgrade_MailScanner_conf /opt/MailScanner/etc/MailScanner.conf MailScanner.conf.default > MailScanner.conf
+    
+    cd reports/%LANGUAGE%
+    mv languages.conf languages.conf.default
+    ../../../bin/upgrade_languages_conf /opt/MailScanner/etc/reports/%LANGUAGE%/languages.conf languages.conf.default > languages.conf
+    
+    # Copy any other configuration files (e.g. filename.rules.conf, rules/*, reports/%LANGUAGE%/*)
+
+3. Kill old version and start new version:
+
+	sudo pkill -f MailScanner
+	sudo ln -fhs /opt/MailScanner-%NEW_VERSION% /opt/MailScanner
+	sudo /opt/MailScanner/bin/check_mailscanner
+
+4. If problems occur after upgrading, rollback to previous working version:
+
+	sudo pkill -f MailScanner
+	sudo ln -fhs /opt/MailScanner-%OLD_VERSION% /opt/MailScanner
+	sudo /opt/MailScanner/bin/check_mailscanner

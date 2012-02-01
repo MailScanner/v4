@@ -1,0 +1,64 @@
+#!/bin/sh
+
+SCANNERSCONF=/opt/MailScanner/etc/virus.scanners.conf
+#LOCKDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Lock\s*file\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /opt/MailScanner/etc/MailScanner.conf`
+#RUNASU=`perl -n -e 'print "$_" if chomp && s/^\s*Run\s*As\s*User\s*=\s*([^\s#]+).*$/$1/i' /opt/MailScanner/etc/MailScanner.conf`
+#RUNASG=`perl -n -e 'print "$_" if chomp && s/^\s*Run\s*As\s*Group\s*=\s*([^\s#]+).*$/$1/i' /opt/MailScanner/etc/MailScanner.conf`
+LOCKDIR=`/opt/MailScanner/bin/Quick.Peek lockfiledir /opt/MailScanner/etc/MailScanner.conf`
+RUNASU=`/opt/MailScanner/bin/Quick.Peek runasuser /opt/MailScanner/etc/MailScanner.conf`
+RUNASG=`/opt/MailScanner/bin/Quick.Peek runasgroup /opt/MailScanner/etc/MailScanner.conf`
+
+Disabled=no
+if [ "x$Disabled" = "xyes" ]; then
+  exit 0
+fi
+
+LOCKFILE=/tmp/MailScanner.autoupdate.lock
+[ x`perl -e 'print "link" if -l "'$LOCKFILE'"'` = "xlink" ] && rm -f $LOCKFILE
+
+# the lockfile is not meant to be perfect, it's just in case the
+# two cron scripts get run close to each other to keep them from
+# stepping on each other's toes.
+[ x`perl -e 'print "young" if -f "'$LOCKFILE'" && -M "'$LOCKFILE'"<0.042'` = "xyoung" ] && exit 0
+#[ -f $LOCKFILE ] && [ "`find $LOCKFILE -type f -mmin +60 -print`" = "" ] && exit 0
+trap "rm -f $LOCKFILE" EXIT
+touch $LOCKFILE
+
+# Set umask so user mail can read (and share-lock) the Busy.lock files
+umask 022
+
+# Solaris requires xpg4 not normal grep for "-e" option
+OS=`uname`
+if [ "$OS" = "SunOS" ]; then
+  GREP=/usr/xpg4/bin/grep
+else
+  GREP=grep
+fi
+
+[ -x /opt/MailScanner/bin/mailscanner_create_locks ] && \
+/opt/MailScanner/bin/mailscanner_create_locks "$LOCKDIR" "$RUNASU" "$RUNASG"
+
+cat ${SCANNERSCONF} | sed -e 's/#.*$//' | ${GREP} -e -wrapper | \
+while read NAME WRAPPER PACKAGEDIR
+do
+  #echo String is $NAME $WRAPPER $PACKAGEDIR
+  UPDATER=`echo $WRAPPER | sed -e 's/wrapper$/autoupdate/g'`
+  LOCK=`echo $WRAPPER | sed -e 's/^.*\///g' -e 's/-wrapper$//'`
+  LOCK="${LOCKDIR}/${LOCK}Busy.lock"
+  if [ -n "${NAME}" -a -n "${WRAPPER}" -a -n "${PACKAGEDIR}" ]
+  then
+    if ${WRAPPER} "${PACKAGEDIR}" -IsItInstalled
+    then
+      #echo Found $NAME installed
+      logger -p mail.info -t update.virus.scanners Found $NAME installed
+      if [ -x ${UPDATER} ]
+      then
+        #echo Updating $NAME
+        logger -p mail.info -t update.virus.scanners Running autoupdate for $NAME
+        ${UPDATER} "${PACKAGEDIR}" "${LOCK}" >/dev/null 2>&1
+      fi
+    fi
+  fi
+done
+
+exit 0

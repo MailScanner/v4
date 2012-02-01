@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#
+# Panda Antivirus Linux PAV.SIG downloading script
+# ------------------------------------------------
+# pavupdate.sh ----------------------- version 1.0
+# 
+# This script takes care of downloading and installing 
+# the antivirus signature file (pav.sig). It is very suitable
+# to be set as a daily cron job on your PAV Linux server.
+# It should not be world/group readable as it contains
+# your update username/password in cleartext. Read the
+# "README" file for more details on dependencies and such.
+#
+# (c) Copyright Daniel Nyström <dny@pcmint.se>, 
+#               PCM International AB, Sweden.
+
+echo "You need to customise this script with your"
+echo "real Panda username and password"
+
+# Configuration section. Set the user and pass variables. You should not
+# need to touch the path var...
+
+USER="<username>"
+PASS="<password>"
+
+PATHTOPAVSIG="/usr/lib/panda/pav.sig"
+
+# Preparing other variables... Do not modify if you don't know what
+# you are doing...
+
+DATE=`date +%m%d`
+GETSTRING="http://updates.pandasoftware.com:8003/software/basevirus/pav$DATE.zip"
+TEMPDIR="/tmp"
+STARTDIR=`pwd`
+
+# Doing it.
+clear
+echo ""
+echo "======= PCM INTERNATIONAL ======="
+echo "================================="
+echo "= Panda Antivirus Linux Updater ="
+echo "================================="
+echo "===================== version 1.0"
+echo ""
+echo "Starting..."
+
+# Changing dir and downloading...
+cd $TEMPDIR
+echo "Downloading..."
+rm -f pav$DATE.zip
+wget --http-user=$USER --http-passwd=$PASS $GETSTRING
+
+
+# Checking for errors... Then unzipping...
+if [ -f pav$DATE.zip ] 
+then
+        echo ""
+        echo "File download successful! unzipping.."
+	rm -f PAV.SIG
+        unzip pav$DATE.zip
+else
+        echo ""
+        echo "File download _not_ successful!"
+        echo "Check your configuration..."
+        exit
+fi
+
+
+# Checking for errors... Then installing...
+if [ -f PAV.SIG ]
+then
+        echo "Unzipping successful! Installing..."
+        rm -f pav$DATE.zip
+        mv PAV.SIG $PATHTOPAVSIG
+else
+        echo "Unzipping _not_ successful!"
+        echo 'Check that your system has the "unzip" util...'
+        exit
+fi
+
+# All the action is over :) 
+
+echo ""
+echo "Update complete. Have a nice day!"
+echo ""
+
+# EOF pavupdate.sh, version 1.0
+#
+# (c) Copyright Daniel Nyström <dny@pcmint.se>, 
+#               PCM International AB, Sweden.

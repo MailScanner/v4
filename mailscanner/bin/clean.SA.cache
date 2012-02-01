@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+use DBI;
+
+unless (eval { require "DBD/SQLite.pm" }) {
+  print STDERR "SQLite not installed\n";
+  exit 0;
+}
+
+#$cachefile = `perl -n -e 'print "$_" if chomp && s/^\s*SpamAssassin\s*Cache\s*Database\s*File\s*=\s*(\S+)/$1/i' /etc/MailScanner/MailScanner.conf`;
+$cachefile = `/opt/MailScanner/bin/Quick.Peek spamassassincachedatabasefile /etc/MailScanner/MailScanner.conf`;
+chomp $cachefile;
+$cachefile = '/var/spool/MailScanner/incoming/SpamAssassin.cache.db' unless $cachefile;
+
+my $dbh = DBI->connect("dbi:SQLite:$cachefile","","",{PrintError=>0});
+unless ($dbh) {
+  print STDERR "DB connection failed\n";
+  exit 0;
+}
+
+CacheExpire();
+$dbh->disconnect;
+
+exit 0;
+
+# Expire records from the cache database
+sub CacheExpire {
+  my $expire1 = shift || 86400; # 1 day
+  my $expire2 = shift || 172800; # 2 days
+
+  my $sth = $dbh->prepare("DELETE FROM cache WHERE ((count=1 AND last<=(strftime('%s','now')-?)) OR (count>1 AND last<=(strftime('%s','now')-?)))");
+  return unless $sth;
+  my $rows = $sth->execute($expire1, $expire2);
+  print STDERR "Expired $rows SpamAssassin cache records\n";
+  $sth->finish;
+}
+

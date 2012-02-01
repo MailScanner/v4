@@ -1,0 +1,123 @@
+#!/usr/bin/perl
+
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2001  Julian Field
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+
+#
+# Vexira updater. Original code by Julian Field. Timeout code by
+# Alessandro Bianchi. Timeout code is not perfect but should be okay.
+#
+
+use Sys::Syslog;
+
+# If you have a web proxy or cache server, put its value in the next line
+# in the syntax "full.host.name:port".
+$HTTPproxy = "";
+
+$PackageDir = shift || "/usr/local/vexira";
+$Signatures    = "vexira8.vdb";
+$SignaturesNew = "vexira8.vdb.new";
+$DownloadPath = "ftp://upd.vexira.com/pub/vexira/vdb.8/vexira8.vdb";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/vexiraBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+eval { Sys::Syslog::setlogsock('unix'); }; # This may fail!
+Sys::Syslog::openlog("Vexira-autoupdate", 'pid, nowait', 'mail');
+
+#
+# Check we can find all the external programs we need
+#
+$result = system("wget --version < /dev/null > /dev/null 2>&1");
+BailOut("Could not find wget on your path. Please install it or fix your path")
+  if $result==127;
+
+#
+# Download update information from the update server
+#
+$SIG{ALRM} = sub { die "timeout" };
+
+eval {
+  # Timeout prevention
+  alarm 300;
+
+  $result = system("wget --output-document=$PackageDir/$SignaturesNew " .
+                   "--tries=3 '$DownloadPath' > /dev/null 2>&1");
+  BailOut("wget command failed. You need the latest version installed, $!")
+    if $result==127;
+  BailOut("Updates download from $DownloadPath failed. " .
+          "Suspect server could not be reached, $!")
+    if $result!=0;
+
+  # Only do this if it succeeded within the timeout
+  &LockVexira;
+  unlink "$PackageDir/$Signatures";
+  rename "$PackageDir/$SignaturesNew", "$PackageDir/$Signatures";
+  &UnlockVexira;
+  alarm 0;
+};
+
+if ($@) {
+  if ($@ =~ /timeout/) {
+    # We timed out!
+    Sys::Syslog::syslog('err', "WARNING: Vexira update timed out");
+    alarm 0;
+    unlink "$PackageDir/$SignaturesNew";
+  } else {
+    Sys::Syslog::syslog('err', "Vexira update cannot be run");
+  }
+} else {
+  Sys::Syslog::syslog('notice', "Vexira update completed");
+}
+
+Sys::Syslog::closelog();
+exit 0;
+
+sub BailOut {
+  Sys::Syslog::syslog('err', @_);
+  Sys::Syslog::closelog();
+  warn "@_, $!";
+  exit 1;
+}
+
+sub LockVexira {
+  open(LOCK, ">$LockFile") or return;
+  flock(LOCK, $LOCK_EX);
+  print LOCK "Locked for updating Vexira definitions by $$\n";
+}
+
+sub UnlockVexira {
+  print LOCK "Unlocked after updating Vexira definitions by $$\n";
+  flock(LOCK, $LOCK_UN);
+  close LOCK;
+}
+

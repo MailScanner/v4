@@ -1,0 +1,437 @@
+#!/usr/bin/perl -w
+
+#
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2001  Julian Field
+#
+#   $Id: panda-wrapper 3963 2007-06-12 09:13:33Z sysjkf $
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+# 
+# This wrapper, and the Panda support in MailScanner itself, is all
+# actually implemented by Rick Cooper <rcooper@dwford.com>.
+# All queries to him please.
+#
+
+# To test from the command line change to the directory you wish to
+# check and issue this command (change paths to reflect your install)
+# "/opt/MailScanner/lib/panda-wrapper /usr -nsb -eng -aex -nso -aut -cmp ."
+# Make sure your testing dir is one directory deep (don't for get the . BTW)
+# example
+# test+
+#     .+ testfiles
+#     .+ moretestfiles
+# execute from directory test and it will scan the testfiles and moretestfiles
+# directories. There should be no sub-dirs below those two, this simulates
+# MailScanner's process-dir->message-dir structure
+
+my $pavcl;
+my $base;
+
+# Just a default in case there is a problem with getting
+# the scanner timeout value - belt and suspenders
+my $CmdTimeOut = '500';
+my $CmdArgv="";
+
+# Set Terminal Rows and Columns
+my $TermRows = 24;
+my $TermCols = 80;
+
+my @VirusStrings;
+my $VirusCount=0;
+
+# Define as global so I don't have to pass private in the
+# vt_scroll function. No need to trap all that license crap
+# that scrolls off the screen when the -aut switch is passed
+# so we will dump everything that scrolls until we find the copyright line
+# that is what $FoundTop is for, It is checked in the vt_scroll sub since
+# that is where the license information will be found
+my $VirtualScreens="";
+my $FoundTop = 0;
+
+$pavcl = shift;
+$pavcl .=  '/bin/pavcl';
+
+if ($ARGV[0] eq '-IsItInstalled') {
+  exit 0 if -x "$pavcl";
+  exit 1;
+}
+
+# If pavcl is not there, and executable, then exit with an error that the
+# panda output parser can do something with
+print_and_exit("Panda:ERROR: Could Not Find $pavcl scanner\n") if !-x "$pavcl";
+
+# Since we must have Term::VT102 let's issue an error warning if we don't
+# find it installed here. The rest are used my MailScanner in many places
+# putting them here prevents wasting time if pavcl is not installed
+print_and_exit("Panda:ERROR: YOU NEED TO INSTALL MODULE Term::VT102 PLEASE!(CPAN?)\n")
+	unless eval { require Term::VT102 };
+
+use Cwd;
+use Cwd 'abs_path';
+use POSIX qw(:signal_h setsid);
+use FileHandle;
+
+
+# We do not want buffering
+$| = 1;
+
+# Get the current working directory and make sure it's
+# not a symlink
+#$base = cwd();
+$base = abs_path();
+chomp $base;
+
+# Get the last entry in @ARGV
+
+pop @ARGV;
+
+# Need to get the value of ScannerTimeOut from the
+# argument list, and remove it from the list as well
+foreach  $c_arg (@ARGV){
+	if ($c_arg =~ /\-t:(\d+)/){
+		$CmdTimeOut = $1;
+	}else{
+		$CmdArgv .= "$c_arg ";
+	}
+}
+
+#There will be a trailing space so let's remove it.
+$CmdArgv =~ s/\s+$//;
+
+my @MessageDirs;
+
+# Now read in any message directories under the current
+# process directory
+my @DirList = <$base/*>;
+$VirusCount =0;
+
+# Scan the process directory for any message directories
+# there will be files in here as well but they are not scanned
+# since they should only be header files
+foreach $dir (@DirList){
+	my $temp;
+	# If this is a directory then split the directory name
+	# from the full path (which includes the process directory)
+	# Scan this entire directory in one pass, process and continue
+	if (-d $dir){
+		$dir =~ s/^.+\/(.+)$/$1/;
+		$temp = scan_virus($dir,$base);
+		if ($temp =~ /\t\tFOUND:/){
+			$VirusStrings[$VirusCount]= $temp;
+			$VirusCount++;
+    		}
+	}
+}
+
+# If no virus was found print string to tell parser no viruses were
+# found, otherwise print our report and exit
+print "Virus: 0\n" unless $VirusCount;
+
+foreach $outline (@VirusStrings){
+	print "$outline\n";
+}
+exit 0;
+
+sub scan_virus{
+	# Make sure our Virtual Screen is clean when called.
+	$VirtualScreens = "";
+
+	# Setup our scan variables
+	# Make sure they are free of newlines
+	my ($DirName,$ProcessDir) = @_;
+	$DirName =~ s/\n//g;
+	my @TLast;
+
+	# Now make sure our current msg dir is free from any parts of the
+	# base process dir
+	$DirName =~ s/^.*?\/(.*)$/$1/g;
+
+	# Exit with an error the output parser can understand and log if
+	# we cannot change to the message directory
+	print_and_exit("Panda:ERROR: Could not change to message dir - > $DirName\n") if !chdir($DirName);
+
+	# Intialize our virus name and string vars
+	my $VName;
+    my $Str;
+
+	# Set up the scan command to scan the current directory
+    my $Cmd = "$pavcl './' $CmdArgv 2>&1";
+
+	# We need to track the previous line, with all processing completed
+	# because that is where the file name will be when/if we find a virus.
+	# We also track the last archive file (filename.ext[filename] formated)
+	# so when we find an infected file from inside an archive (name will end
+	# with a ]) we can add the archive_name-> string before the file name
+
+	my $LastLine = "";
+	my $LastArchive = "";
+
+	# We need to check our return string to see if we have already found
+	# this file. pavcl will return an archived file as the bare name as well
+	# as the archive_name[file_name] format and we don't want to show the
+	# same file twice.
+	# Also initialize the return string var
+
+	my $TestString = "";
+	my $TestString2 = "";
+    my $rc = "";
+    my $StrIdx=0;
+	# We are going to use SafePipe, with a the configured scanner time out
+	# Exit with error if the command times out
+
+    my $PipeOut = SafePipe($Cmd,$CmdTimeOut);
+
+	print_and_exit("Panda:ERROR: $pavcl timed out!\n")
+	if $PipeOut eq "COMMAND_TIMED_OUT";
+
+	# Now we intialize our VT102 object.It will process
+	# the output into a virtual screen which we can then deal with
+	# easily
+    my $vt = Term::VT102->new ('cols' => $TermCols, 'rows' => $TermRows);
+
+	# We have to watch for a screen scroll if there are more than
+	# four infections found so we set the callback for scroll_down
+	# to a function that will grab the line that is being scrolled off
+
+	$vt->callback_set ('SCROLL_DOWN', \&vt_scroll);
+
+	# Now process the command output, if there is a scroll_down callback
+	# $VirtualScreens will be intialized with what ever lines are being
+	# scrolled off the screen
+	$vt->process ($PipeOut);
+
+	# This section is for the current, last screen. The last screen's out
+	# put will only hold four infections at a time, anything prior to
+	# that was handled in vt_scroll. If there was no scrolling then
+	# we will will need to process the current and/or only screen here
+	for($StrIdx=0;$StrIdx <= $TermRows;$StrIdx++){
+		# if we call for a value out of our virtual screen's column/row
+		# it will return undef so we don't want to attempt a .= on an
+		# undefined error, it's so messy. We don't worry about
+		# the license information here because it's alreay gone.
+
+		$VirtualScreens.= $vt->row_plaintext($StrIdx)."\n"
+		if defined($vt->row_text($StrIdx));
+	}
+
+
+	# Now we split our VT102 output on the newlines and feed each line
+	# into the parse loop to look for any viruses
+
+	@CurrentScreen = split(/\n/,$VirtualScreens);
+	foreach $Str (@CurrentScreen){
+		# Patch next line from Rick Cooper
+		$Str =~ s/\s+file can not be modified//i;
+		# Depending on the version of panda one is using there is a difference
+		# in the wording of the virus found string
+
+		if ($Str =~ /(found virus|virus encontrado|encontrado virus|virus found)\s+:\s?(.*?)$/i) {
+			# Don't want leading and trailing spaces in the virus name
+			$VName = $2;
+			$VName =~ s/^\s+|\s+$//g;
+
+			# Now build the return string containing the virus name,
+			# the infected file, the message dir and process/base dir
+			# We get the file name from the line just before the one that
+			# triggered the virus found logic. Since we may encounter
+			# multiple viruses we will continue to join the "found strings"
+			# until the entire output is processed
+
+			$LastLine =~ s/\n|^\s+|\s+$//g;
+
+			# Now we build the test strings to find duplicates. We need to
+			# check for bare name only and archive_name->file_name
+			# Cannot really do that with a | because we have to quote all
+			# special characters in each string and the ($ArchiveName->)?
+			# would get escaped and never match \($ArchiveName->\)\?
+
+			$TestString = "FOUND:$VName##::##$LastLine##::##$DirName##::##$ProcessDir";
+			$TestString =~ s/(\/|\.|\^|\$|\*|\+|\?|\{|\}|\[|\]|\(|\))/\\$1/g;
+
+   			$TestString2 = "FOUND:$VName##::##$LastArchive->$LastLine##::##$DirName##::##$ProcessDir";
+			$TestString2 = "FOUND:$VName##::##$LastLine##::##$DirName##::##$ProcessDir"
+			if $LastLine =~ /.\-\>./mg;
+			$TestString2 =~ s/(\/|\.|\^|\$|\*|\+|\?|\{|\}|\[|\]|\(|\))/\\$1/g;
+
+			# Append the current virus information, if we have not already
+			# reported this virus
+			$rc .= "\t\tFOUND:$VName##::##$LastLine##::##$DirName##::##$ProcessDir\n"
+			if $rc !~ /$TestString/mg and $rc !~ /$TestString2/mg;
+
+		}# End of found a virus
+
+            # We get the file name from the line preceeding the virus found
+			# string. The file name can appear in two formats
+			# If there is only one file in the archive the entire
+			# archive_name[file_name] is returned and we want to
+			# change this so the reports look more like the other scanners
+			# in the format of my.zip->my.file.
+
+            $LastLine = $Str;
+			$LastArchive = $LastLine if $LastLine =~ /^.+\[.*?\].*$/;
+			$LastArchive =~ s/^(.+)\[.*?\]/$1/ if $LastLine =~ /^.+\[.*?\]/;
+            $LastArchive =~ s/^.+\/(.+)$/$1/g;
+			$LastArchive =~ s/^\s+|\s+$//g;
+
+			$LastLine = "$1->$2" if $LastLine =~ /^(.+)\[(.+)\]/;
+			$LastLine =~ s/^.+\/(.+)$/$1/g;
+			$LastLine =~ s/^\s+|\s+$//g;
+	}
+
+	# Pull off any terminating new line here. Return OK if no virus found
+	# or our report string if there was.
+	chomp($rc);
+	print_and_exit("Panda:ERROR: Could not return from message dir - > $DirName\n") if !chdir("../");
+	return "OK" if $rc eq "";
+	return $rc;
+}
+
+
+# This is the same SafePipe from MailScanner::Message.pm
+sub SafePipe {
+  my ($Cmd, $TimeOut) = @_;
+
+  my($Kid, $pid, $TimedOut, $Str);
+  $Kid  = new FileHandle;
+  $TimedOut = 0;
+
+  $? = 0; # Make sure there's no junk left in here
+
+  eval {
+    die "Can't fork: $!" unless defined($pid = open($Kid, '-|'));
+    if ($pid) {
+      # In the parent
+
+      # Set up a signal handler and set the alarm time to the timeout
+      # value passed to the function
+
+      local $SIG{ALRM} = sub { $TimedOut = 1; die "Command Timed Out" };
+      alarm $TimeOut;
+
+      # while the command is running we will collect it's output
+      # in the $Str variable. We don't process it in any way here so
+      # whatever called us will get back exactly what they would have
+      # gotten with a system() or backtick call
+
+      while(<$Kid>) {
+        $Str .= $_;
+        #print STDERR "SafePipe : Processing line \"$_\"\n";
+      }
+
+
+      $pid = 0; # 2.54
+      alarm 0;
+      # Workaround for bug in perl shipped with Solaris 9,
+      # it doesn't unblock the SIGALRM after handling it.
+      eval {
+        my $unblockset = POSIX::SigSet->new(SIGALRM);
+        sigprocmask(SIG_UNBLOCK, $unblockset)
+          or die "Could not unblock alarm: $!\n";
+      };
+    } else {
+      # In the child
+      POSIX::setsid();
+
+      # Execute the command via an exec call, bear in mind this will only
+      # capture STDIN so if you need STDERR, or both you have to handle, for
+      # example, 2>&1 as part of the command line just as you would with
+      # system() or backticks
+      #
+      #the line following the
+      # call should *never* be reached unless the call it's self fails
+
+	  # In this instance I need to know what kind of terminal pavcl
+	  # is writting to and every *nix understands vt100 and it's easy
+	  # to parse the output as sent by pavcl to a vt100 terminal
+	  $ENV{TERM}  = 'vt100';
+      my @args = ( "$Cmd" );
+
+	  # Just to be safe let's take control of STDIN and then exec the
+	  # command
+      open STDIN, "< /dev/null";
+
+      exec @args
+        or die "Failed to execute commad in safepipe";
+      exit 1;
+    }
+  };
+  alarm 0; # 2.53
+
+  # Catch failures other than the alarm
+  die "pavcl died with real error $@" if $@ and $@ !~ /Command Timed Out/;
+
+
+  # In which case any failures must be the alarm
+  if ($@ or $pid>0) {
+    # Kill the running child process
+    my($i);
+    kill -15, $pid;
+    # Wait for up to 5 seconds for it to die
+    for ($i=0; $i<5; $i++) {
+      sleep 1;
+      waitpid($pid, &POSIX::WNOHANG);
+      ($pid=0),last unless kill(0, $pid);
+      kill -15, $pid;
+    }
+    # And if it didn't respond to 11 nice kills, we kill -9 it
+    if ($pid) {
+      kill -9, $pid;
+      waitpid $pid, 0; # 2.53
+    }
+  }
+
+  # If the command timed out return the string below, otherwise
+  # return the command output in $Str
+   return $Str unless $TimedOut;
+   return "COMMAND_TIMED_OUT";
+}
+
+
+# This sub is just a way to do a single line error string return and
+# exit with information the output parser would understand
+sub print_and_exit{
+	$ES = $_[0];
+	print $ES;
+	exit 0;
+}
+
+# This sub handles the scroll callbacks so we can keep the lines
+# scrolling up and off the virus display area of the pavcl output
+sub vt_scroll {
+	my ($vtobject, $type, $arg1, $arg2, $private) = @_;
+	my ($i,$ts);
+			$ts = "";
+			# pavcl scrolls one line at a time so we just grab
+			# the line that is leaving and append it to our VirtualScreen
+		    $ts = $vtobject->row_plaintext($arg1)if defined($vtobject->row_plaintext($arg1));
+		    $ts =~ s/\s+$//g if $ts ne "";
+			$FoundTop = 1
+			if $ts =~ /Panda Antivirus Linux,\s+\(c\)\s+Panda Software \d{4}/i;
+
+			$VirtualScreens .= $ts."\n" if $ts ne "" and $FoundTop;
+}
+

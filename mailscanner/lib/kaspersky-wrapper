@@ -1,0 +1,149 @@
+#!/bin/sh
+
+# kaspersky-wrapper --	invoke Kaspersky AV for use with
+# 			mailscanner
+#
+#   MailScanner - SMTP E-Mail Virus Scanner
+#   Copyright (C) 2001  Julian Field
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   The author, Julian Field, can be contacted by email at
+#      Jules@JulianField.net
+#   or by paper mail at
+#      Julian Field
+#      Dept of Electronics & Computer Science
+#      University of Southampton
+#      Southampton
+#      SO17 1BJ
+#      United Kingdom
+#
+# $Id: kaspersky-wrapper 5102 2011-08-20 12:31:59Z sysjkf $
+
+
+# You may want to check this script for bash-isms
+
+PackageDir=$1		# This may vary depending on your OS
+shift
+
+# For KAV4FS 5.5
+Scanner=kav4fs/bin/kav4fs-kavscanner
+if [ -x ${PackageDir}/$Scanner ]; then
+  #Report=/tmp/kavoutput.tmp.$$
+  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
+  ScanOptions="-xp -i0" # Don't report progress, don't attempt to clean
+  if [ "x$1" = "x-IsItInstalled" ]; then
+    exit 0
+  fi
+
+  Args=`echo "$@" | sed -e 's/ -I/ -i/g; s/^-I/-i/g; s/-- / /g;'`
+  rm -f $Report
+  # 29/09/05 JKF Removed -j3 on advice from Kaspersky users
+  ${PackageDir}/$Scanner $ScanOptions -o$Report -q "$@"
+  cat $Report
+  rm -f $Report
+  exit
+fi
+
+# For KAV 5.5.0
+Scanner=kav4unix/bin/kavscanner
+if [ -x ${PackageDir}/$Scanner ]; then
+  #Report=/tmp/kavoutput.tmp.$$
+  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
+  ScanOptions="-xp -i0" # Don't report progress, don't attempt to clean
+  if [ "x$1" = "x-IsItInstalled" ]; then
+    exit 0
+  fi
+
+  Args=`echo "$@" | sed -e 's/ -I/ -i/g; s/^-I/-i/g; s/-- / /g;'`
+  rm -f $Report
+  # 29/09/05 JKF Removed -j3 on advice from Kaspersky users
+  ${PackageDir}/$Scanner $ScanOptions -o$Report -q "$@"
+  cat $Report
+  rm -f $Report
+  exit
+fi
+
+# For KAV 4.5.0
+Scanner=bin/kavscanner
+if [ -x ${PackageDir}/$Scanner ]; then
+  #Report=/tmp/kavoutput.tmp.$$
+  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
+  ScanOptions="-xp -i0" # Don't report progress, don't attempt to clean
+  if [ "x$1" = "x-IsItInstalled" ]; then
+    exit 0
+  fi
+
+  Args=`echo "$@" | sed -e 's/ -I/ -i/g; s/^-I/-i/g; s/-- / /g;'`
+  rm -f $Report
+  # 29/09/05 JKF Removed -j3 on advice from Kaspersky users
+  ${PackageDir}/$Scanner $ScanOptions -o$Report -q "$@"
+  cat $Report
+  rm -f $Report
+  exit
+fi
+
+# Assume still running old version of KAV now
+Scanner=kavscanner
+
+# pass this in from mailscanner's config
+PF=`echo $0 | sed -e 's/kaspersky-wrapper$//'`kaspersky.prf
+
+# kavscanner (in the copy I have at least) is
+# statically linked.
+#
+#LD_LIBRARY_PATH=$PackageDir
+#export LD_LIBRARY_PATH
+
+# I'm only listing ones which we may find useful...
+
+ScanOptions=""
+# This first option seems to make no difference to anything.
+#ScanOptions="$ScanOptions --"		# disinfect ???
+ScanOptions="$ScanOptions -E-"		# don't delete infected files.
+ScanOptions="$ScanOptions -MP"		# to check "plain mail format" files 
+					# -- I wonder whether this knows TNEF?
+ScanOptions="$ScanOptions -MD"		# to check "mail databases"
+					# probably Outlook .pst files
+ScanOptions="$ScanOptions -P"		# don't check MBR
+ScanOptions="$ScanOptions -B"		# don't check boot sectors
+ScanOptions="$ScanOptions -H"		# disable heuristic "code analyser"
+#ScanOptions="$ScanOptions -U"		# disable unpacking of executables
+ScanOptions="$ScanOptions -U-"		# enable unpacking of executables
+#ScanOptions="$ScanOptions -A"		# disable archive extracting
+ScanOptions="$ScanOptions -A-"		# enable archive extracting
+#ScanOptions="$ScanOptions -V"		# enable "redundant scanning" ??
+#ScanOptions="$ScanOptions -R"		# don't recurse
+ScanOptions="$ScanOptions -R-"		# do recurse
+ScanOptions="$ScanOptions -\*"		# scan all files (!!)
+ScanOptions="$ScanOptions -O-"		# report nothing for OK files.
+#ScanOptions="$ScanOptions -I0"		# what do do on infection... 0 is "just report"
+#ScanOptions="$ScanOptions -I2"		# what to do on infection... 2 is "disinfect automatically"
+ScanOptions="$ScanOptions -F=$PF"	# use profile (config file)
+ScanOptions="$ScanOptions -C"		# stay on filesystem
+#ScanOptions="$ScanOptions -LH"		# use symlinks from cmd line
+ScanOptions="$ScanOptions -LP"		# skip all symlinks
+#ScanOptions="$ScanOptions -LL"		# use all symlinks
+ScanOptions="$ScanOptions -W-"		# try to lose cruft
+#ScanOptions="$ScanOptions -Y"		# no confirmations (will need once the rest is right)
+ScanOptions="$ScanOptions -K-"		# do report on archives etc.
+
+if [ "x$1" = "x-IsItInstalled" ]; then
+  [ -x ${PackageDir}/$Scanner ] && exit 0
+  exit 1
+fi
+
+exec ${PackageDir}/$Scanner $ScanOptions "$@"
+

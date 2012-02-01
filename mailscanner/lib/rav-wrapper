@@ -1,0 +1,52 @@
+#!/usr/bin/perl -w
+
+# specify complete path+name for RAV program
+#my $ravprogram = '/usr/local/rav8/bin/ravlin8';
+my $ravprogram;
+$ravprogram = shift;
+$ravprogram .= '/bin/ravav';
+
+my $tmpdir = '/tmp';
+
+if ($ARGV[0] eq '-IsItInstalled') {
+  exit 0 if -x $ravprogram;
+  exit 1;
+}
+
+# Unfortunately Rav Antivirus truncates filenames when writing to STDOUT but
+# preserves them when writing to his report file, so I run the antivirus
+# with --report option and then print the report file to STDOUT and return
+# the original ERRORLEVEL to sweep.pl
+
+# build report filename using the last parameter (basedir)
+my $reportfile = sprintf('%s/report.vir.%s', $tmpdir, $$);
+
+# build command line for rav antivirus program
+# Using /dev/console instead of /dev/tty1 as it exists on RaQs
+# Replace the last lone "." with "./*" if it's there. Rav seems unable to
+# recurse properly.
+$ARGV[$#ARGV] =~ s/^\.\/?$/\.\/\*/;
+unlink $reportfile;
+my $command = sprintf('%s --report=%s %s/ </dev/console >/dev/null', $ravprogram, $reportfile, join(" ", @ARGV));
+
+#print STDERR "Command is $command\n";
+#system("echo $ravprogram --report=$reportfile " . join(" ", @ARGV) . "/ /dev/null >/tmp/report.vir.command");
+
+# run program and store system error
+my $error = system($command);
+
+# if a report is produced...
+if(-f $reportfile) {
+  # open the report...
+  open(RPT, "<".$reportfile);
+  while(<RPT>) {
+    # and print it to standard output...
+    print $_;
+  }
+  close(RPT);
+  # delete report file
+  unlink($reportfile);
+}
+
+# exit using stored system error
+exit($error);

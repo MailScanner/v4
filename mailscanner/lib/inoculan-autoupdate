@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+#
+#Inoculan - Virus Scanner
+#update script of AntiVir adapted by W-Mark Kubacki; wmark@hurrikane.de
+#
+#2003-11-16 : primitive - but effective
+#
+
+use Sys::Syslog;
+
+$InoculanDir = shift || "/usr/local/inoculan";
+
+$LockFile = shift || "/var/spool/MailScanner/incoming/Locks/inoculanBusy.lock";
+
+$LOCK_SH = 1;
+$LOCK_EX = 2;
+$LOCK_NB = 4;
+$LOCK_UN = 8;
+
+Sys::Syslog::openlog("inoculan-autoupdate", 'pid, nowait', 'mail');
+
+BailOut("Installation dir \"$InoculanDir\" does not exist!")
+  unless $InoculanDir ne "" && -d $InoculanDir;
+
+&LockInoculan();
+system("$InoculanDir/update_signature");
+&UnlockInoculan();
+Sys::Syslog::syslog('info', "inoculan updated in $InoculanDir");
+Sys::Syslog::closelog();
+exit 0;
+
+sub BailOut {
+  Sys::Syslog::syslog('err', @_);
+  Sys::Syslog::closelog();
+  warn "@_, $!";
+  exit 1;
+}
+
+sub LockInoculan {
+  open(LOCK, ">$LockFile") or return;
+  flock(LOCK, $LOCK_EX);
+  print LOCK "Locked for updating inoculan patterns by $$\n";
+}
+
+sub UnlockInoculan {
+  print LOCK "Unlocked after updating inoculan patterns by $$\n";
+  flock(LOCK, $LOCK_UN);
+  close LOCK;
+}
+

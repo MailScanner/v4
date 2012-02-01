@@ -1,0 +1,243 @@
+#!/bin/sh -e
+#
+# Update the McAfee data files.
+#
+# $Cambridge: hermes/build/bin/uvscan-update,v 1.38 2003/09/04 12:27:27 fanf2 Exp $
+
+
+# $PREFIX is the directory where the uvscan binary is (NOT a symlink to
+# the binary), which is where it looks for its dat files. You may run
+# uvscan via a symlink to this place (e.g. from /usr/local/bin/uvscan)
+# and it will still look for the dat files here. If uvscan's library
+# dependencies can be found in a standard place (e.g. /usr/local/lib)
+# then you don't need a wrapper script to set LD_LIBRARY_PATH before
+# running it.
+#
+# The dat files are installed in a subdirectory of $DATDIR named
+# according to their version number, with symlinks from $PREFIX into
+# the subdirectory via a current link. The current link is updated
+# without locking on the assumption that this is sufficiently unlikely
+# to cause a problem.
+
+# defaults
+OPTS=""
+PREFIX=/usr/local/uvscan
+FTPDIR=http://download.nai.com/products/datfiles/4.x/nai/
+
+# handle the command line
+usage () {
+        echo "usage: $0 [-dfrtv] [prefix]"
+        echo "  -d      delete old files"
+        echo "  -f      force update"
+        echo "  -r      show README"
+        echo "  -t      timestamp output"
+        echo "  -v      verbose"
+        echo "  prefix  uvscan installation directory"
+        exit 1
+}
+case $# in
+0|1|2)  : ok
+        ;;
+*)      usage
+        ;;
+esac
+for arg in "$@"
+do
+        case $arg in
+        -*)     OPTS=$arg
+                ;;
+        /*)     PREFIX=$arg
+                ;;
+        *)      usage
+                ;;
+        esac
+done
+case $OPTS in
+*[!-dfrtv]*)
+        usage
+esac
+option () {
+        case $OPTS in
+        -*$1*)  eval $2=yes
+                ;;
+        *)      eval $2=no
+                ;;
+        esac
+}
+option d DELETE
+option f FORCE
+option r README
+option t TIME
+option v VERBOSE
+case $FORCE in
+yes)    VERBOSE=yes
+esac
+
+# set up paths
+PATH=$PREFIX:/usr/local/bin:/usr/bin:/bin
+export PATH
+DATDIR=$PREFIX/datfiles
+SUBDIR=datfiles/current
+LINK=$PREFIX/$SUBDIR
+
+# wrapper functions for echo etc.
+timestamp () {
+        case $TIME in
+        yes)    date "+%Y-%m-%d %H:%M:%S "
+        esac
+}
+say () {
+        case $VERBOSE in
+        yes)    echo "`timestamp`$*"
+        esac
+}
+run () {
+        say "> $*"
+        "$@"
+}
+say Starting $0
+say DELETE=$DELETE
+say FORCE=$FORCE
+say README=$README
+say TIME=$TIME
+say VERBOSE=$VERBOSE
+say PREFIX=$PREFIX
+
+if [ ! -h $LINK ]
+then
+        INIT=yes
+        VERBOSE=yes
+        say Initial setup of $0
+        run mkdir -p $DATDIR
+fi
+run cd $DATDIR
+
+# version number pattern
+MATCH="[0-9][0-9][0-9][0-9]"
+
+# work out latest dat version
+CMD="wget --passive-ftp $FTPDIR/update.ini 2>update.err"
+say "> $CMD"
+if eval "$CMD"
+then
+        VERSION=`cat update.ini | sed "/^DATVersion=\($MATCH\).$/!d;s//\1/;q"`
+else
+        cat update.err
+        VERSION=UNKNOWN
+fi
+run rm -f update.*
+
+badversion () {
+        VERBOSE=yes
+        say "Failed to get McAfee datfile update from $FTPDIR"
+        say "FTP version number \"$VERSION\" $*"
+        run exit 1
+}
+
+# check the format of the version number
+case $VERSION in
+$MATCH) : ok
+        ;;
+*)      badversion does not match "$MATCH"
+        ;;
+esac
+
+# already got it?
+if [ -d $VERSION ]
+then
+        case $FORCE in
+        yes)    say Forced removal of $VERSION
+                run rm -rf $VERSION
+                ;;
+        *)      say Already have $VERSION
+                run exit 0
+                ;;
+        esac
+fi
+
+# work out installed dat version
+PREVIOUS=`(ls -d $MATCH 2>/dev/null || echo 0000) | tail -1`
+
+# check new version is actually newer
+if [ $PREVIOUS -gt $VERSION ]
+then
+        badversion older than installed $PREVIOUS
+fi
+
+VERBOSE=yes
+
+say Installed dat file is $PREVIOUS
+say Latest dat file is $VERSION
+
+# protect against failure
+fail () {
+        trap EXIT
+        echo "$OUT"
+        say Fetch or test failed -- removing bad McAfee data files
+        run cd $DATDIR
+        run rm -rf $VERSION
+        run exit 1
+}
+trap fail EXIT
+
+# fetch and extract dat files
+TARFILE=dat-$VERSION.tar
+run mkdir $VERSION
+run cd $VERSION
+run wget --passive-ftp --progress=dot:mega $FTPDIR/$TARFILE
+run tar xvf $TARFILE
+
+# verify the contents
+CMD="uvscan --version --dat ."
+say "> $CMD"
+OUT=`$CMD 2>&1`
+case "$OUT" in
+*"Missing or invalid DAT"* | \
+*"Data file not found"* | \
+*"Removal datafile clean.dat not found"* | \
+*"Unable to remove viruses"* )
+        fail
+esac
+
+# protection not needed now
+trap '' EXIT
+
+echo "$OUT"
+say Update OK
+
+# show information on this update?
+case $README in
+yes)    run sed 's/[[:cntrl:]]//g
+                1,/^====================/d
+                /^====================/,/^NEW VIRUSES DETECTED/d
+                /^UNDERSTANDING VIRUS NAMES/,$d
+                s/^/# /;/@MM/s/$/ <--/' readme.txt
+esac
+# remove some crap
+run rm -f *.diz *.exe *.ini *.lst *.tar *.txt
+
+# do remaining part of initial setup
+case $INIT in
+yes)    for file in *.dat
+        do
+                run rm -f $PREFIX/$file
+                run ln -s $SUBDIR/$file $PREFIX/$file
+        done
+esac
+
+# update the current version link
+run rm -f $LINK
+run ln -s $VERSION $LINK
+
+# maybe delete old dat files
+case $DELETE in
+yes)    run cd $DATDIR
+        run rm -rf $PREVIOUS
+esac
+
+say Completed OK
+run logger -p mail.info "McAfee-autoupdate[]: McAfee updated to version $VERSION" 2>/dev/null
+run exit 0
+
+# done
+
