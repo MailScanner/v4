@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w -I/opt/MailScanner/lib
 
 #
 #   MailScanner - SMTP E-Mail Virus Scanner
@@ -34,22 +34,22 @@
 use strict; 
 use Net::DNS::Resolver;
 use LWP::UserAgent;
-use FileHandle;
 use DirHandle;
+use MailScanner::Config;
 
 # Work out Quarantine Directory from MailScanner.conf
 my $base = '/var/spool/MailScanner/quarantine'; # Default value
-my $msconf = new FileHandle("< /opt/MailScanner/etc/MailScanner.conf") or warn "Cannot open main configuration file /opt/MailScanner/etc/MailScanner.conf";
-while(<$msconf>) {
-  $base = $1 if /^\s*Quarantine\s*Dir\s*=\s*(\S+)/;
+if (-f '/etc/MailScanner/MailScanner.conf') {
+    $base = MailScanner::Config::QuickPeek('/etc/MailScanner/MailScanner.conf', 'QuarantineDir');
+}else{
+    warn "Default configuration file /etc/MailScanner/MailScanner.conf not found";
 }
-close($msconf);
 
 my $current = $base . '/phishingupdate/';
 my $cache = $current . 'cache/';
 my $status = $current . 'status';
-my $urlbase = "http://www.mailscanner.tv/";
-my $target= "/opt/MailScanner/etc/phishing.bad.sites.conf";
+my $urlbase = "http://cdn.mailscanner.info/";
+my $target= "/etc/MailScanner/phishing.bad.sites.conf";
 my $query="msupdate.greylist.bastionmail.com";
 
 my $baseupdated = 0;
