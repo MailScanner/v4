@@ -39,17 +39,17 @@ use MailScanner::Config;
 
 # Work out Quarantine Directory from MailScanner.conf
 my $base = '/var/spool/MailScanner/quarantine'; # Default value
-if (-f '/etc/MailScanner/MailScanner.conf') {
-    $base = MailScanner::Config::QuickPeek('/etc/MailScanner/MailScanner.conf', 'QuarantineDir');
+if (-f '/opt/MailScanner/etc/MailScanner.conf') {
+    $base = MailScanner::Config::QuickPeek('/opt/MailScanner/etc/MailScanner.conf', 'QuarantineDir');
 }else{
-    warn "Default configuration file /etc/MailScanner/MailScanner.conf not found";
+    warn "Default configuration file /opt/MailScanner/etc/MailScanner.conf not found";
 }
 
 my $current = $base . '/phishingupdate/';
 my $cache = $current . 'cache/';
 my $status = $current . 'status';
 my $urlbase = "http://cdn.mailscanner.info/";
-my $target= "/etc/MailScanner/phishing.bad.sites.conf";
+my $target= "/opt/MailScanner/etc/phishing.bad.sites.conf";
 my $query="msupdate.greylist.bastionmail.com";
 
 my $baseupdated = 0;
