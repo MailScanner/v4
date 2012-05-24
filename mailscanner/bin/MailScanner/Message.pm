@@ -6334,6 +6334,10 @@ sub ArchiveToFilesystem {
 sub AppendToMbox {
   my($this, $mbox) = @_;
 
+  #untaint
+  $mbox =~ m|(.*)|;
+  $mbox = $1;
+
   # Find the complete directory name.
   my $dir = $mbox;
   $dir =~ s#^(.*)/[^/]+$#$1#;

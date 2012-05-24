@@ -139,6 +139,10 @@ sub new {
     $parentdir = $realparentdir;
   }
 
+  #untaint
+  $parentdir =~ m|(.*)|;
+  $parentdir = $1;
+
   my $childdir  = "$parentdir/$$";
 
   #print STDERR "Child work dir is $childdir\n";
