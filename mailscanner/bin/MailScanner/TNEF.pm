@@ -229,8 +229,7 @@ sub ExternalDecoder {
 
   # Create the subdir to unpack it into
   #my $unpackdir = "tnef.$$";
-  my ($tmpfh, $unpackdir) = tempfile("tnefXXXXXX", TMPDIR => $dir, UNLINK => 0);
-  $dir =~ s,^.*/,,;
+  my $unpackdir = tempdir("tnefXXXXXX");
   $unpackdir = $message->MakeNameSafe($unpackdir, $dir);
   unless (mkdir "$dir/$unpackdir", 0777) {
     MailScanner::Log::WarnLog("Trying to unpack %s in message %s, could not create subdirectory %s, failed to unpack TNEF message", $tnefname, $message->{id},
