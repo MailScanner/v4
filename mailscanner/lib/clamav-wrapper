@@ -52,7 +52,7 @@
 # You may want to check this script for bash-isms
 
 #TempDir="/tmp/clamav.$$"
-TempDir=$(mktemp) || { echo "$0: Cannot make name for temporary dir" >&2; exit 1; }
+TempDir=$(mktemp -d) || { echo "$0: Cannot make name for temporary dir" >&2; exit 1; }
 ClamUser="clamav"
 ClamGroup="clamav"
 
