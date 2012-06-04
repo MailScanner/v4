@@ -31,7 +31,6 @@ $VERSION = substr q$Revision: 1.1.2.1 $, 10;
 
 my $Debug = 0; # Set to 1 to enable debug output to STDERR
 #my $tmpfilename = "/tmp/MailScanner.$$.conf"; # Temp MS.conf file
-my($tmpfh, $tmpfilename) = tempfile("MailScanner.XXXXXX", TMPDIR => 1, UNLINK => 0);
 
 
 
@@ -60,8 +59,7 @@ sub InitVirusScanning {
   my $option = 'virusscanning'; # External (MailScanner.conf-version)
 
   # Make the temporary 1-line MailScanner.conf file, use it and delete it
-  my $fh = new FileHandle;
-  $fh->open("> $tmpfilename") or die "$!";
+  my($fh, $tmpfilename) = tempfile("MailScanner.XXXXXX", TMPDIR => 1, UNLINK => 0);
   print $fh $option . " = $ruleset\n";
   $fh->close;
 
