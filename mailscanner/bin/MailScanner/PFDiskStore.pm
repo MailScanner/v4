@@ -629,6 +629,9 @@ sub WriteMIMEBody {
 sub CopyEntireMessage {
   my $this = shift;
   my($message, $targetdir, $targetfile, $uid, $gid, $changeowner) = @_;
+  
+  $targetfile =~/([\w\d]{10}\.[\w\d]{5})/;
+  $targetfile = $1;
 
   #print STDERR "Copying to $targetdir $targetfile\n";
   if (MailScanner::Config::Value('storeentireasdfqf')) {
