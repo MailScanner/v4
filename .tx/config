@@ -164,3 +164,8 @@ source_file = mailscanner/etc/reports/en/stored.virus.message.txt
 source_lang = en
 type = TXT
 
+[mailscanner.languages-conf]
+file_filter = mailscanner/etc/reports/<lang>/languages.conf.strings
+source_file = mailscanner/etc/reports/en/languages.conf.strings
+source_lang = en
+type = STRINGS
