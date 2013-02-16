@@ -1,24 +1,23 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: {Bounce} Ongewenste (commerciele) e-mail geweigerd
+Subject: {Bounce} Unsolicited commercial email rejected
 X-%org-name%-MailScanner: generated
 
-Onze spamdetector reageerde op een bericht dat u heeft verzonden:
+Our UCE (spam) detectors have been triggered by a message you sent:-
   To: $to
   Subject: $subject
   Date: $date
-Het bericht is vernietigd. Onze detector was SpamAssassin.
+This message has been rejected. The detector that triggered is
+SpamAssassin.
 
-De inhoud van uw bericht bevat zeer duidelijke kenmerken die normaal
-gesproken alleen bij spam voorkomen. Vandaar dat het bericht is geweigerd.
+The content of your message indicates that it is probably spam e-mail,
+which is why it has been rejected.
 
-Wij accepteren geen ongewenste (commerciele) e-mail (spam) and werken
-actief mee aan het stoppen hiervan.  Als u spam stuurt en van plan bent
-hiermee door te gaan kan uw Internet Service Provider benaderd worden
-en gevraagd worden uw account op te heffen.
+We do not accept unsolicited commercial (spam) e-mail and actively
+work to stop it.
 
-Indien u van mening bent dat deze melding onjuist is raden we u aan om
-contact op te nemen met beheerder.
+If you have any questions about this, or you believe you have received
+this message in error, please contact the site system administrators.
 
 -- 
 MailScanner
@@ -26,4 +25,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-MailScanner bedankt ttec Computers voor hun ondersteuning
+For all your IT requirements visit: http://www.transtec.co.uk

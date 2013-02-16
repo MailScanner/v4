@@ -1,18 +1,19 @@
-Avís del Servei de Protecció de Virus per Correu Electrònic MailScanner
------------------------------------------------------------------------
-L'arxiu annexat original "$filename"
-es considera infectat per un virus informàtic, i ha estat substituït
-per aquest missatge d'avís.
+Missatge del Servei de ProtecciÃ³ de Virus de Correu ElectrÃ²nic de MailScanner
+-----------------------------------------------------------------------------
+El fitxer adjunt original "$filename"
+ha estat considerat que era perillÃ³s i/o infectat per un virus i ha estat
+substituÃ¯t per aquest missatge d'avÃ­s.
 
-Per una qüestió de privacitat (de caràcter legal en alguns països),
-no hem pogut desar una còpia de l'arxiu annexat original.
+Degut a les limitacions imposades per l'Acta de RegulaciÃ³ de Poders
+d'InvestigaciÃ³ del 2000, no podem mantenir una cÃ²pia de l'adjunt original.
+Si us plau demaneu a l'emissor del missatge que desinfecti la seva versiÃ³
+original i us enviÃ¯ una cÃ²pia neta.
 
-En data $date l'analitzador de virus ha trobat:
+A $date l'escÃ ner ha dit:
 $report
-
 -- 
 Postmaster
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

@@ -1,18 +1,18 @@
-Dies ist eine Nachricht vom MailScanner E-Mail-Virus-Schutzdienst
+This is a message from the MailScanner E-Mail Virus Protection Service
 ----------------------------------------------------------------------
-Die ursprüngliche E-Mail-Nachricht enthielt potenziell gefährliche Inhalte,
-die zu Ihrer Sicherheit entfernt wurden.
+The original e-mail message contained potentially dangerous content,
+which has been removed for your safety.
 
-Der ursprüngliche Inhalt ist gefährlich, da er häufig benutzt wird, um
-Viren zu verbreiten oder um persönliche oder vertrauliche Informationen
-wie Passwörter oder Kreditkartennummern von Ihnen zu bekommen.
+The content is dangerous as it is often used to spread viruses or to gain
+personal or confidential information from you, such as passwords or credit
+card numbers.
 
-Aus datenschutzrechtlichen Gründen halten wir keine Kopie des Originalanhangs
-vor.
+Due to limitations placed on us by the Regulation of Investigatory Powers
+Act 2000, we were unable to keep a copy of the original attachment.
 
-Die Nachrichten-Filter fanden folgendes:
+The content filters found this:
 $report
---
+-- 
 Postmaster
 %org-long-name%
 %web-site%

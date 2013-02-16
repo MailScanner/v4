@@ -1,24 +1,7 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: {Bounce} Courriel non =?ISO-8859-1?Q?sollicit=E9?= =?ISO-8859-1?Q?_rejet=E9?=
+Subject: {Bounce} Unsolicited commercial email rejected
 X-%org-name%-MailScanner: generated
-
-(English follows)
-
-Notre détecteur de polluriel n'a pas aimé votre courriel:
-  À: $to
-  Sujet: $subject
-  Date: $date
-Celui-ci a été détruit. Les détecteurs qui ont pris cette décision sont:
-$spamreport.
-
-Le serveur qui envoie ce courriel vers notre site est inscrit sur une
-liste noire de serveurs mal configurés ou mal utilisés.
-
-Si vous avez des questions à ce sujet ou si vous croyez avoir reçu ce
-courriel par erreur, SVP contactez les administrateurs du système.
-
--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 Our UCE (spam) detectors have been triggered by a message you sent:-
   To: $to
@@ -34,8 +17,8 @@ If you have any questions about this, or you believe you have received
 this message in error, please contact the site system administrators.
 
 -- 
-$localpostmaster
 MailScanner
+Email Virus Scanner
 %org-long-name%
 %web-site%
 

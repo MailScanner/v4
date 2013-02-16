@@ -1,19 +1,18 @@
-Dies ist eine Nachricht vom MailScanner E-Mail-Virus-Schutzdienst
--------------------------------------------------------------------------
-Der ursprüngliche Dateianhang "$filename"
-ist von einem Virus verseucht und wurde durch diese Nachricht ersetzt.
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "$filename"
+was believed to be infected by a virus and has been replaced by this warning
+message.
 
-Wenn Sie eine Kopie der Original-Nachricht wünschen, wenden Sie sich bitte
-per Mail oder Telefon an Ihren Systemadministrator. Bitte halten Sie diese
-Meldung bereit.
+If you wish to receive a copy of the *infected* attachment, please
+e-mail helpdesk and include the whole of this message
+in your request. Alternatively, you can call them, with
+the contents of this message to hand when you call.
 
-Am $date meldete der Virenscanner folgendes:
+At $date the virus scanner said:
 $report
-
-Hinweis an den Administrator:
-Datei ist auf Rechner: $hostname im Verzeichnis $quarantinedir/$datenumber (NachrichtenID $id) abgespeichert.
-
---
+Note to Help Desk: Look on $hostname in $quarantinedir/$datenumber (message $id).
+-- 
 Postmaster
 %org-long-name%
 %web-site%

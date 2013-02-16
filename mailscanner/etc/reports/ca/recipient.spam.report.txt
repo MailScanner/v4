@@ -1,38 +1,33 @@
-From: "$postmastername" <$localpostmaster>
-To: $to
-Subject: {SPAM no lliurat} $subject
-X-%org-name%-MailScanner: generated
+De: "$postmastername" <$localpostmaster>
+A: $to
+Assumpte: {Spam no lliurat} $subject
+X-%org-name%-MailScanner: generat
 
-Els nostres detectors de correu electrònic no sol·licitat (UCE/spam)
-han estat activats per un missatge que heu rebut:
-   De: $from
-   Assumpte: $subject
-   Data: $date
-
-Aquest missatge no ha estat lliurat. Els detectors que han estat activats
-són:
+Els nostres detectors d'UCE (spam) han estat activats per un missatge que heu rebut:-
+  De: $from
+  Assumpte: $subject
+  Data: $date
+Aquest missatge no s'ha lliurat. Els detectors que van ser activats sÃ³n
 $spamreport.
 
-El missatge que se us ha enviat ha estat identificat com spam basant-se en
-el seu contingut, en el servidor de correu que li ha enviat, o per ambdues
-causes.
+Teniu un missatge que ha estat detectat com a spam basat o bÃ© en el seu contingut
+o bÃ© en el servidor de correu que ha enviat el missatge, o tots dos.
 
-No acceptem correu electrònic comercial no sol·licitat (spam) i treballem
-activament per aturar-lo.
+No s'accepten correus electrÃ²nics comercials no solÂ·licitats (spam)
+i de manera activa treballem per aturar-los.
 
-Si teniu qualsevol dubte sobre tot això, o creieu que heu rebut aquest
-missatge per error, si us plau, contacteu amb els vostres administradors
-del sistema.
+Si teniu cap pregunta sobre aixÃ² o creieu que heu rebut aquest missatge
+per error, si us plau, contacteu amb els vostres administradors de sistema.
 
-Els vostres administradors del sistema necessitaran la següent informació:
-   Nom del servidor: $hostname
-   Identificador del missatge: $id
-   Codi de data: $datenumber
+Els vostres administradors del sistema necessitaran la informaciÃ³ segÃ¼ent:
+  Nom del servidor: $hostname
+  ID del missatge: $id
+  Data codi: $datenumber
 
 -- 
 MailScanner
-Protecció contra Virus d'E-mail
+L'EscÃ nner de Virus de Correu ElectrÃ²nic
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

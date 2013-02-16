@@ -1,20 +1,19 @@
-Ez egy automata uzenet a MailScanner E-Mail virusvedelmi rendszertol
---------------------------------------------------------------------
-Az Onnek kuldott level "$filename" nevu melleklete nagy
-valoszinuseggel virust tartalmazott ezert le lett cserelve erre a
-figyelmezteto uzenetre.
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "$filename"
+was believed to be infected by a virus and has been replaced by this warning
+message.
 
-Amennyiben szeretne a *fertozott* mellekletbol egy masolatot kapni,
-keresse meg a rendszergazdankat ezen level osszes adataval.
+If you wish to receive a copy of the *infected* attachment, please
+e-mail helpdesk and include the whole of this message
+in your request. Alternatively, you can call them, with
+the contents of this message to hand when you call.
 
-A viruskereses eredmenye, $date idopontban:
+At $date the virus scanner said:
 $report
-
-Azonosito: $hostname $quarantinedir/$datenumber (message $id).
-
+Note to Help Desk: Look on $hostname in $quarantinedir/$datenumber (message $id).
 -- 
-$localpostmaster
-MailScanner - Email Virus Scanner - http://www.mailscanner.info
+Postmaster
 %org-long-name%
 %web-site%
 

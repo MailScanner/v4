@@ -1,26 +1,24 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: ON VIRUST KULDOTT!
+Subject: Warning: E-mail viruses detected
 X-%org-name%-MailScanner: generated
 
-Viruskeresonk az On altal kuldott levelben virusgyanus fajlt talalt:
-Our virus detector has just been triggered by a message you sent:
-  Cimzett: $to
-  Targy  : $subject
-  Datum  : $date
+Our virus detector has just been triggered by a message you sent:-
+  To: $to
+  Subject: $subject
+  Date: $date
+Any infected parts of the message ($filename)
+have not been delivered.
 
-A fertozott reszek kezbesitese nem tortent meg.
+This message is simply to warn you that your computer system may have a
+virus present and should be checked.
 
-Ezen uzenet egy figyelmeztetes arra, hogy az On gepe valoszinuleg virusos
-es ellenorzesre szorul. Tovabbi informaciot az alabbi oldalon talalhat:
-http://www.hunetkft.hu/virus/level
-
-A viruskereses eredmenye, $date idopontban:
-$report
+The virus detector said this about the message:
+Report: $report
 
 -- 
-$localpostmaster
-MailScanner - Email Virus Scanner - http://www.mailscanner.info
+MailScanner
+Email Virus Scanner
 %org-long-name%
 %web-site%
 

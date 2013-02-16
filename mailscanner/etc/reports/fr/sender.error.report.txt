@@ -1,27 +1,29 @@
-From: "Passerelle antivirus $postmastername" <$localpostmaster>
+From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: ALERTE: =?ISO-8859-1?Q?pi=E8ces?= jointes =?ISO-8859-1?Q?intercept=E9es?=
+Subject: Warning: E-mail error detected
 X-%org-name%-MailScanner: generated
 
-Notre passerelle antivirus n'a pu analyser ce courriel que vous avez 
-envoyé:
-  À:     $to
-  Sujet: $subject
-  Date:  $date
+Our virus detector failed to completely analyse a message you sent:-
+  To: $to
+  Subject: $subject
+  Date: $date
+Any parts of the message that could not be analysed will not have been
+delivered.
 
-Les portions du courriel qui n'on pu être analysées ne seront pas
-transmises au destinataire.
+If you are using Microsoft Outlook, we strongly recommend you change your
+outgoing message format from "Rich Text" to "HTML" or "Plain Text".
 
-Si vous utilisez Microsoft Outlook, nous vous suggérons fortement de
-changer le format de message de «Texte enrichi» à «HTML» ou «Texte brut».
+1) Click on the "Tools" menu and choose "Options..."
+2) Go to the "Mail Format" tab
+3) For message format, select "HTML" or "Plain text"
+4) Click OK
 
-Résultats de l'antivirus:
-$report
-
-Contactez $localpostmaster pour plus d'informations.
+The virus detector said this about the message:
+Report: $report
 
 -- 
 MailScanner
+Email Virus Scanner
 %org-long-name%
 %web-site%
 

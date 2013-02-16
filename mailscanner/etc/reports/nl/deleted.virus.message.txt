@@ -1,20 +1,19 @@
-Dit is een bericht van het MailScanner virus beschermingssysteem
-----------------------------------------------------------------
-De oorspronkelijke e-mail bijlage "$filename"
-lijkt te zijn geinfecteerd door een virus. De bijlage is vervangen
-door deze waarschuwing.
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "$filename"
+was believed to be dangerous and/or infected by a virus and has been
+replaced by this warning message.
 
-Op basis van de Wet bescherming persoonsgegevens kunnen we geen
-kopie bewaren van de oorspronkelijke bijlage. Indien u de bijlage
-alsnog wenst te ontvangen raden we u aan de afzender te vragen
-zijn bericht te ontsmetten en u een schone versie te sturen.
+Due to limitations placed on us by the Regulation of Investigatory Powers
+Act 2000, we were unable to keep a copy of the infected attachment. Please
+ask the sender of the message to disinfect their original version and send
+you a clean copy.
 
-Op $date genereerde de virus scanner het volgende:
+At $date the scanner said:
 $report
-
 -- 
 Postmaster
 %org-long-name%
 %web-site%
 
-MailScanner bedankt ttec Computers voor hun ondersteuning
+For all your IT requirements visit: http://www.transtec.co.uk

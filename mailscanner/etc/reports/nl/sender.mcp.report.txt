@@ -1,19 +1,16 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Ongewenste inhoud opgeslagen ter nadere bestudering
+Subject: Banned content stored for review
 X-%org-name%-MailScanner: generated
 
-Onze scanner op de inhoud van berichten is geactiveerd door een bericht
-dat u verzonden heeft:-
+Our message content detectors have been triggered by a message you sent:-
   To: $to
   Subject: $subject
   Date: $date
-Dit bericht is gearchiveerd en de inhoud zal worden gecontroleerd
-vooraleer het afgeleverd zal worden.
+This message has been quarantined for review before delivery.
 
-Mocht u hier nog vragen over hebben, of indien u van mening bent dat dit een
-vergissing betreft, gelieve dan contact op te nemen met de beheerder of
-afdeling systeembeheer.
+If you have any questions about this, or you believe you have received
+this message in error, please contact the site system administrators.
 
 -- 
 MailScanner
@@ -21,4 +18,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-MailScanner bedankt ttec Computers voor hun ondersteuning
+For all your IT requirements visit: http://www.transtec.co.uk

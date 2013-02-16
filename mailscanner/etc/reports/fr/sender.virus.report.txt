@@ -1,26 +1,24 @@
-From: "Passerelle antivirus $postmastername" <$localpostmaster>
+From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: ALERTE: un virus a =?ISO-8859-1?Q?=E9t=E9?= =?ISO-8859-1?Q?_d=E9tect=E9?= dans votre courriel
+Subject: Warning: E-mail viruses detected
+X-%org-name%-MailScanner: generated
 
-Notre passerelle antivirus a détecté un virus dans le courriel que 
-vous venez d'envoyer:
-  À:     $to
-  Sujet: $subject
-  Date:  $date
+Our virus detector has just been triggered by a message you sent:-
+  To: $to
+  Subject: $subject
+  Date: $date
+Any infected parts of the message ($filename)
+have not been delivered.
 
-Les pièces jointes infectées ne seront pas transmises au 
-destinataire.
+This message is simply to warn you that your computer system may have a
+virus present and should be checked.
 
-Ce courriel est pour vous avertir que votre poste de travail est 
-probablement infecté et il serait souhaitable de le faire vérifier.
-
-Résultats de l'antivirus:
-$report
-
-Contactez $localpostmaster pour plus d'informations.
+The virus detector said this about the message:
+Report: $report
 
 -- 
 MailScanner
+Email Virus Scanner
 %org-long-name%
 %web-site%
 

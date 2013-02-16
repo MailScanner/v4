@@ -1,18 +1,15 @@
-El nostre detector creu que l'annex a aquest missatge que us ha estat enviat:
-
-       De: $from
+El nostre MailScanner creu que el fitxer adjunt que se us ha enviat
+   
+    De: $from
  Assumpte: $subject
 
-Ès un missatge de correu comercial no sol∑licitat (SPAM).
+√©s un correu electr√≤nic comercial no sol¬∑licitat (spam). Si penseu que aquest
+missatge ha estat ben considerat com a correu brossa, si us plau suprimiu-lo sense obrir.
+El sols fet d'obrir un missatge de correu brossa podria permetre a l'spammer
+verificar la vostra adre√ßa de correu electr√≤nic.
 
-Us aconsellem que destruiu aquest missatge sense obrir-lo, a no ser que
-estigueu segurs de que no es tracte de SPAM.
+Si creieu que aquest missatge ha estat incorrectament marcat com a correu
+brossa, si us plau reenvieu aquest correu electr√≤nic a $localpostmaster.
 
-El fet d'obrir un missatge que Ès SPAM, pot indicar a l'emisor que la vostra
-adreÁa d'email Ès correcte, i per tant obrir una via per rebre'n de nous.
-
-Si creieu que el missatge annex ha estat marcat com a SPAM incorrectament,
-si us plau, reenvieu aquest missatge complet incloent l'annex a:
-$localpostmaster.
-
+Data: $datenumber
 $longspamreport

@@ -1,32 +1,32 @@
 From: "$postmastername" <$localpostmaster>
 To: $to
-Subject: Spam-Mail nicht ausgeliefert
+Subject: {Spam not delivered} $subject
 X-%org-name%-MailScanner: generated
 
-Unsere Spam-Detektoren wurden durch eine an Sie gesandte Nachricht ausgelöst:
-  Absender: $from
-  Betreff: $subject
-  Datum: $date
-Diese Nachricht wurde nicht ausgeliefert. Die ausgelösten Detektoren sind
+Our UCE (spam) detectors have been triggered by a message you received:-
+  From: $from
+  Subject: $subject
+  Date: $date
+This message has not been delivered. The detectors that were triggered are
 $spamreport.
 
-Die an Sie adressierte Nachricht wurde entweder auf Grund ihrer Inhalte
-oder wegen des sendenden Mail-Servers (oder beiden) als Spam erkannt.
+The message to you has been detected as spam based on either its contents or
+the mail server which sent the message to us, or both.
 
-Wir akzeptieren keine Werbemails (Spam) und arbeiten aktiv daran, sie
-zu stoppen.
+We do not accept unsolicited commercial (spam) e-mail and actively
+work to stop it.
 
-Wenn Sie Fragen haben oder glauben, diese Nachricht zu Unrecht erhalten zu
-haben, kontaktieren Sie bitte die Systemadministratoren.
+If you have any questions about this, or you believe you have received
+this message in error, please contact the site system administrators.
 
-Ihre Administratoren werden die folgenden Informationen benötigen:
-  Servername: $hostname
-  Nachrichten-ID: $id
-  Datum: $datenumber
+Your system administrators will need the following information:
+  Server name: $hostname
+  Message id: $id
+  Date code: $datenumber
 
---
+-- 
 MailScanner
-E-Mail-Virus-Scanner
+Email Virus Scanner
 %org-long-name%
 %web-site%
 
