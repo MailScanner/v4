@@ -1,17 +1,17 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Aviso: Detectado vírus de e-mail
+Subject: Aviso: Detectado vÃ­rus de e-mail
 X-%org-name%-MailScanner: generated
 
-Nosso sistema de detecção de vírus foi acionado ao analisar uma mensagem que
-você enviou:-
+Nosso sistema de detecÃ§Ã£o de vÃ­rus foi acionado ao analisar uma mensagem que
+vocÃª enviou:-
   To: $to
   Subject: $subject
   Date: $date
-Qualquer parte do e-mail que estava infectada não pôde ser entregue.
+Qualquer parte do e-mail que estava infectada nÃ£o pÃ´de ser entregue.
 
-Esta é apenas uma mensagem de aviso para que você verifique a possibilidade
-de haver um vírus em seu sistema e para que você retire-o o mais breve possível.
+Esta Ã© apenas uma mensagem de aviso para que vocÃª verifique a possibilidade
+de haver um vÃ­rus em seu sistema e para que vocÃª retire-o o mais breve possÃ­vel.
 
 Hoje, $date, o anti-virus relatou o seguinte:
 $report

@@ -4,7 +4,7 @@ sy'n Gwarchod rhag Firysau            | E-Mail Virus Protection Service
 
 Mae'r atodiad e-bost gwreiddiol, sef  | The original e-mail attachment
                                   "$filename",
-wedi'i heintio ‚ firws, a rhoddir y   | was believed to be infected by a
+wedi'i heintio √¢ firws, a rhoddir y   | was believed to be infected by a
 rhybudd hwn yn ei le.                 | virus and has been replaced by this
                                       | warning message.
 
@@ -15,7 +15,7 @@ o'r atodiad heintiedig.               | a copy of the infected attachment.
 
 Gofynnwch i anfonwr y neges           | Please ask the sender of the message
 ddiheintio ei fersiwn gwreiddiol      | to disinfect their original version
-ac anfon copi gl‚n atoch.             | and send you a clean copy.
+ac anfon copi gl√¢n atoch.             | and send you a clean copy.
 
 Ar $date,          | At $date,
 dywedodd y sganiwr firysau:           | the virus scanner said:

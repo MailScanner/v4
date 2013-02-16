@@ -1,9 +1,9 @@
-Esta È uma mensagem do serviÁo de proteÁ„o contra vÌrus
+Esta √© uma mensagem do servi√ßo de prote√ß√£o contra v√≠rus
 ----------------------------------------------------------------------
-O anexo "$filename" encontra-se na lista proÌbida de tipos de arquivo,
-e foi substituÌdo por esta mensagem de aviso no e-mail.
+O anexo "$filename" encontra-se na lista pro√≠bida de tipos de arquivo,
+e foi substitu√≠do por esta mensagem de aviso no e-mail.
 
-Nossos sistemas previnem que uma cÛpia do arquivo em quest„o fique
+Nossos sistemas previnem que uma c√≥pia do arquivo em quest√£o fique
 armazenada.
 
 Hoje, $date, o anti-virus relatou o seguinte:

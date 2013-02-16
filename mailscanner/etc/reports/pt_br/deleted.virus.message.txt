@@ -1,11 +1,11 @@
-Esta é uma mensagem do serviço de proteção contra vírus
+Esta Ã© uma mensagem do serviÃ§o de proteÃ§Ã£o contra vÃ­rus
 ----------------------------------------------------------------------
 O arquivo anexo desta mensagem, "$filename", pode estar infectado com
-vírus de computador e foi substituído por esta mensagem. 
+vÃ­rus de computador e foi substituÃ­do por esta mensagem. 
 
-Nossos sistemas previnem que uma cópia do arquivo em questão fique
-armazenada. Por favor, peça por gentileza ao remetente desta
-mensagem que lhe reenvie o arquivo somente após remover o vírus.
+Nossos sistemas previnem que uma cÃ³pia do arquivo em questÃ£o fique
+armazenada. Por favor, peÃ§a por gentileza ao remetente desta
+mensagem que lhe reenvie o arquivo somente apÃ³s remover o vÃ­rus.
 
 Hoje, $date, o anti-virus relatou o seguinte:
 $report

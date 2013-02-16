@@ -1,19 +1,19 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: {Bounce} Skräppost stoppad
+Subject: {Bounce} SkrÃ¤ppost stoppad
 X-%org-name%-MailScanner: generated
 
-Vårt SPAM-skydd har stoppat ett meddelande ni skickat.
+VÃ¥rt SPAM-skydd har stoppat ett meddelande ni skickat.
   Till: $to
   Datum: $date
-Meddelandet har tagits bort. Följande rapport genererades:
+Meddelandet har tagits bort. FÃ¶ljande rapport genererades:
 $spamreport.
 
-Meddelandet mottogs från en server som är svartlistad(RBL) som
-dåligt konfigurerad eller missbrukas för skräppost(SPAM).
+Meddelandet mottogs frÃ¥n en server som Ã¤r svartlistad(RBL) som
+dÃ¥ligt konfigurerad eller missbrukas fÃ¶r skrÃ¤ppost(SPAM).
 
-Om ni har frågor eller tycker att något fel begåtts
-kontakta domänens systemadministratör.
+Om ni har frÃ¥gor eller tycker att nÃ¥got fel begÃ¥tts
+kontakta domÃ¤nens systemadministratÃ¶r.
 
 -- 
 MailScanner

@@ -1,12 +1,12 @@
-Esta é uma mensagem do serviço de proteção contra vírus
+Esta Ã© uma mensagem do serviÃ§o de proteÃ§Ã£o contra vÃ­rus
 ----------------------------------------------------------------------
 O sistema determinou que o anexo "$filename"
-está infectado por um vírus de computador e foi substituido por esta 
+estÃ¡ infectado por um vÃ­rus de computador e foi substituido por esta 
 mensagem de aviso
 
-Se você desejar receber uma cópia dos arquivos originais mesmo assim,
+Se vocÃª desejar receber uma cÃ³pia dos arquivos originais mesmo assim,
 por favor entre em contato com o administrador do sistema e tenha em
-mão as seguintes informações:
+mÃ£o as seguintes informaÃ§Ãµes:
 
 Hoje, $date, o anti-virus relatou o seguinte:
 $report

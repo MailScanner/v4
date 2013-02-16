@@ -1,8 +1,8 @@
-A mensagem que você recebeu recentemente de: "$from" com o
+A mensagem que vocÃª recebeu recentemente de: "$from" com o
 assunto: "$subject"
-continha um ou mais vírus de computador que podia ser removido.
+continha um ou mais vÃ­rus de computador que podia ser removido.
 
-Os vírus de computador foram removídos com êxito e os arquivos
+Os vÃ­rus de computador foram removÃ­dos com Ãªxito e os arquivos
 desinfectados for anexados novamente a esta mensagem.
 
 -- 

@@ -3,7 +3,7 @@ To: $to
 Subject: Ni ddosbarthwyd e-bost masnachol na ofynnwyd amdano / Unsolicited commercial email not delivered
 X-%org-name%-MailScanner: generated
 
-Mae neges yr ydych wedií dderbyn wedi | Our UCE (spam) detectors have been
+Mae neges yr ydych wediÃ­ dderbyn wedi | Our UCE (spam) detectors have been
 rhoi ein canfyddwyr UCE (sbam) ar     | triggered by a message you received:-
 waith:-                               |
 
@@ -26,9 +26,9 @@ ofynnir amdano (sbam), ac rydym yn    | commercial (spam) e-mail and actively
 cymryd camau gweithredol i'w atal.    | work to stop it.
 
 Os oes gennych unrhyw gwestiynau      | If you have any questions about this,
-ynglyn â hyn, neu os ydych yn credu   | or you believe you have received
+ynglyn Ã¢ hyn, neu os ydych yn credu   | or you believe you have received
 eich bod wedi derbyn y neges hon ar   | this message in error, please contact
-gam, cysylltwch â gweinyddwyr system  | the site system administrators.
+gam, cysylltwch Ã¢ gweinyddwyr system  | the site system administrators.
 y safle.
 
 Mi fydd eich gweinyddwyr system angen | Your system administrators will need

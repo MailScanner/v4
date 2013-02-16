@@ -2,7 +2,7 @@ Neges yw hwn gan Wasanaeth Gwarchod   | This is a message from the MailScanner
 rhag Feirws E-bost MailScanner.       | E-Mail Virus Protection Service.
 --------------------------------------|---------------------------------------
                                       |
-Yr oedd y neges e-bost gwreiddiol â   | The original e-mail message contained
+Yr oedd y neges e-bost gwreiddiol Ã¢   | The original e-mail message contained
 chynnwys a allasai fod yn beryglus,   | potentially dangerous content,  which
 ac fe'i symudwyd er diogelwch i chwi. | has been removed for your safety.
                                       |

@@ -1,16 +1,16 @@
-Isto é uma mensagem do Serviço de Proteção contra Vírus
+Isto Ã© uma mensagem do ServiÃ§o de ProteÃ§Ã£o contra VÃ­rus
 ------------------------------------------------------------------------------
-A mensagem original do correio eletrônico continha conteúdo potencialmente perigoso, que foi retirado para sua segurança. 
+A mensagem original do correio eletrÃ´nico continha conteÃºdo potencialmente perigoso, que foi retirado para sua seguranÃ§a. 
 
-O conteúdo é perigoso e freqüentemente é usado para espalhar vírus ou ganhar informação pessoal ou
-confidencial de você, tal como senhas ou números de cartão de crédito. 
+O conteÃºdo Ã© perigoso e freqÃ¼entemente Ã© usado para espalhar vÃ­rus ou ganhar informaÃ§Ã£o pessoal ou
+confidencial de vocÃª, tal como senhas ou nÃºmeros de cartÃ£o de crÃ©dito. 
 
-Se deseja receber uma cópia do email original, por favor envie um email para com o administrador do sistema e incluia esta mensagem em sua soliciação. 
-Alternativamente, você pode contactá-lo com o conteúdo desta mensagem em mãos para que ele possa atende-lo.
+Se deseja receber uma cÃ³pia do email original, por favor envie um email para com o administrador do sistema e incluia esta mensagem em sua soliciaÃ§Ã£o. 
+Alternativamente, vocÃª pode contactÃ¡-lo com o conteÃºdo desta mensagem em mÃ£os para que ele possa atende-lo.
 
 
 
-Hoje, $data os filtros de conteúdo relataram: 
+Hoje, $data os filtros de conteÃºdo relataram: 
 $report 
 Nota ao administrador do sistema: Procurar em $hostname em $quarantinedir/$datenumber (message $id). 
 

@@ -20,14 +20,14 @@ fod yn beryglus, ac fe'i symudwyd.     | dangerous content which has been
                                        | removed.
                                        |
 Os mai ceisio gyrru tudalen we yr      | If you were attempting to send a web
-oeddech, trïwch arbed y dudalen we ar  | page, please try saving the web page
+oeddech, trÃ¯wch arbed y dudalen we ar  | page, please try saving the web page
 ffeil, yna atodi'r ffeil honno i'r     | to a file, and then attach that file
 neges.                                 | to the message instead.
                                        |
 Os oes gennych unrhyw gwestiynau am    | If you have any questions about this,
 hyn, neu os credwch i chwi dderbyn y   |  or you believe you have received
 neges hwn trwy amryfusedd, cysylltwch  | this message in error, please contact
-â gweinyddwyr y system.                | the site system administrators.
+Ã¢ gweinyddwyr y system.                | the site system administrators.
 
 -- 
 MailScanner

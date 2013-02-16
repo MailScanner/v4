@@ -17,7 +17,7 @@ heb gael eu dosbarthu.                |  have not been delivered.
 
 Pwrpas y neges hon, yn syml, yw eich  | This message is simply to warn you
 hysbysu y gall eich system            | that your computer system may have a
-gyfrifiadurol fod â firws yn          | virus present and should be checked.
+gyfrifiadurol fod Ã¢ firws yn          | virus present and should be checked.
 bresennol ac y dylid ei gwirio.
 
 Dyma a ddywedodd y canfyddwr firysau  | The virus detector said this about
