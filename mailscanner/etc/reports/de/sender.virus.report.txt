@@ -1,24 +1,24 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail viruses detected
+Subject: Warnung: E-Mail-Virus festgestellt!
 X-%org-name%-MailScanner: generated
 
-Our virus detector has just been triggered by a message you sent:-
-  To: $to
-  Subject: $subject
-  Date: $date
-Any infected parts of the message ($filename)
-have not been delivered.
+Unser Virenscanner wurde durch eine Nachricht von Ihnen ausgelöst:
+  An: $to
+  Betreff: $subject
+  Datum: $date
+Alle infizierten Teile der Nachricht ($filename)
+wurden entfernt.
 
-This message is simply to warn you that your computer system may have a
-virus present and should be checked.
+Diese Nachricht soll Sie nur warnen, dass Ihr Computer-System
+könnte virenverseucht sein und sollte untersucht werden.
 
-The virus detector said this about the message:
+Zu Ihrer Information die Meldung des Virenscanners:
 Report: $report
 
--- 
+--
 MailScanner
-Email Virus Scanner
+E-Mail-Virus-Scanner
 %org-long-name%
 %web-site%
 

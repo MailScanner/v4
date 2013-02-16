@@ -1,17 +1,18 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail attachment "$filename"
-is on the list of unacceptable attachments for this site and has been
-replaced by this warning message.
+Dit is een bericht van het MailScanner virus beschermingssysteem
+----------------------------------------------------------------
+De oorspronkelijke e-mail bijlage "$filename"
+staat op de lijst met onaanvaardbare bijlagen voor deze site en de
+bijlage is vervangen door deze waarschuwing.
 
-Due to limitations placed on us by the Regulation of Investigatory Powers
-Act 2000, we were unable to keep a copy of the original attachment.
+Op basis van de Wet bescherming persoonsgegevens kunnen we geen
+kopie bewaren van de oorspronkelijke bijlage.
 
-At $date the virus scanner said:
+Op $date genereerde de virus scanner het volgende:
 $report
+
 -- 
 Postmaster
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+MailScanner bedankt ttec Computers voor hun ondersteuning

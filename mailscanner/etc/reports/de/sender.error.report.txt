@@ -1,29 +1,29 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail error detected
+Subject: Warnung: E-Mail-Fehler festgestellt!
 X-%org-name%-MailScanner: generated
 
-Our virus detector failed to completely analyse a message you sent:-
-  To: $to
-  Subject: $subject
-  Date: $date
-Any parts of the message that could not be analysed will not have been
-delivered.
+Unser Virenscanner konnte eine Nachricht von Ihnen nicht komplett untersuchen:
+  An: $to
+  Betreff: $subject
+  Datum: $date
+Die betreffenden Teile der Nachricht wurden nicht an den Empfänger weitergeleitet.
 
-If you are using Microsoft Outlook, we strongly recommend you change your
-outgoing message format from "Rich Text" to "HTML" or "Plain Text".
+Wenn Sie Microsoft Outlook verwenden, empfehlen wir dringend,
+das Format der von Ihnen versendeten Nachrichten von "Rich Text" auf "HTML" oder
+"Plain Text" umzustellen.
 
-1) Click on the "Tools" menu and choose "Options..."
-2) Go to the "Mail Format" tab
-3) For message format, select "HTML" or "Plain text"
-4) Click OK
+1) Klicken Sie auf "Werkzeuge"-Menü und Wählen Sie "Einstellungen..."
+2) Gehen Sie zum "Mail Format"-Tab
+3) Beim Nachrichten-Format wählen Sie "HTML" oder "Plain text"
+4) Klicken Sie OK
 
-The virus detector said this about the message:
+Der Virusscanner meinte zu der Nachricht:
 Report: $report
 
--- 
+--
 MailScanner
-Email Virus Scanner
+E-Mail-Virus-Scanner
 %org-long-name%
 %web-site%
 

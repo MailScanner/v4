@@ -1,20 +1,20 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail attachment "$filename"
-is on the list of unacceptable attachments for this site and has been
-replaced by this warning message.
+Dit is een bericht van het MailScanner virus beschermingssysteem
+----------------------------------------------------------------
+De oorspronkelijke e-mail bijlage "$filename"
+staat op de lijst met onaanvaardbare bijlagen voor deze site en de
+bijlage is vervangen door deze waarschuwing.
 
-If you wish to receive a copy of the original attachment, please
-e-mail helpdesk and include the whole of this message
-in your request. Alternatively, you can call them, with
-the contents of this message to hand when you call.
+Indien u een kopie van de oorspronkelijke bijlage wenst te ontvangen,
+verzoeken we u via e-mail contact op te nemen met de helpdesk. Voor
+een goede afhandeling van uw verzoek hebben we dit complete bericht
+(inclusief alle headers) nodig.
 
-At $date the virus scanner said:
+Op $date de virusscanner meldde:
 $report
-Note to Help Desk: Look on $hostname in $quarantinedir/$datenumber (message $id).
+Bericht voor de helpdesk:
+Kijk op $hostname in $quarantinedir/$datenumber (bericht $id).
+
 -- 
 Postmaster
 %org-long-name%
 %web-site%
-
-For all your IT requirements visit: http://www.transtec.co.uk

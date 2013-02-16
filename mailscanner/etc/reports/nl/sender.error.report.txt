@@ -1,24 +1,21 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail error detected
+Subject: Waarschuwing: E-mail error gedetecteerd
 X-%org-name%-MailScanner: generated
 
-Our virus detector failed to completely analyse a message you sent:-
+Onze virusscanner kon geen complete analyse uitvoeren op een bericht
+dat u stuurde:
   To: $to
   Subject: $subject
   Date: $date
-Any parts of the message that could not be analysed will not have been
-delivered.
+De delen van het bericht die niet geanalyseerd konden worden zijn niet
+doorgestuurd naar de ontvanger.
 
-If you are using Microsoft Outlook, we strongly recommend you change your
-outgoing message format from "Rich Text" to "HTML" or "Plain Text".
+Indien u Microsoft Outlook gebruikt, raden we u ten zeerste aan om
+het formaat van uw uitgaande berichten te wijzigen van "Rich Text"
+naar "Plain Text".
 
-1) Click on the "Tools" menu and choose "Options..."
-2) Go to the "Mail Format" tab
-3) For message format, select "HTML" or "Plain text"
-4) Click OK
-
-The virus detector said this about the message:
+De virusscanner gaf onderstaande melding over uw bericht:
 Report: $report
 
 -- 
@@ -27,4 +24,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+MailScanner bedankt ttec Computers voor hun ondersteuning

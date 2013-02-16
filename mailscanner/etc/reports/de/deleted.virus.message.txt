@@ -1,17 +1,16 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail attachment "$filename"
-was believed to be dangerous and/or infected by a virus and has been
-replaced by this warning message.
+Dies ist eine MailScanner E-Mail Virus Protection Service Nachricht
+-------------------------------------------------------------------
+Der ursprüngliche E-Mail-Anhang "$filename"
+scheint gefährlich und/oder durch einen Virus versucht zu sein
+und wurde durch diese Warnmeldung ersetzt.
 
-Due to limitations placed on us by the Regulation of Investigatory Powers
-Act 2000, we were unable to keep a copy of the infected attachment. Please
-ask the sender of the message to disinfect their original version and send
-you a clean copy.
+Aus datenschutzrechtlichen Gründen halten wir keine Kopie des Originalanhangs
+vor. Bitte bitten Sie den Absender der Nachricht um die Zusendung einer
+virenfreien Datei.
 
-At $date the scanner said:
+Zu Ihrer Information die Meldung des Virenscanners am $date:
 $report
--- 
+--
 Postmaster
 %org-long-name%
 %web-site%

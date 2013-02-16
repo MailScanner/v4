@@ -1,25 +1,26 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail viruses detected
+Subject: Elfogadhatatlan melleklet - Unacceptable attachment
 X-%org-name%-MailScanner: generated
 
-Our e-mail content detector has just been triggered by a message you sent:
-  To: $to
-  Subject: $subject
-  Date: $date
+Viruskeresonk az On altal kuldott levelben elfogadhatatlan kiterjesztesu
+mellekletet talalt ($filename):
+  Cimzett:  $to
+  Targy  :  $subject
+  Datum  :  $date
 
-One or more of the attachments ($filename) are on
-the list of unacceptable attachments for this site and will not have
-been delivered.
+A kerdeses melleklet(ek) kezbesitese nem tortent meg.
+Nevezze at, vagy tomoritse "zip" fajlba az ilyen tipusu uzeneteket
+a kesobbiekben.
 
-Consider renaming the files to avoid this constraint.
+A viruskereses eredmenye, $date idopontban:
+$report
 
-The virus detector said this about the message:
-Report: $report
+Azonosito: $hostname $quarantinedir/$datenumber (message $id).
 
 -- 
-MailScanner
-Email Virus Scanner
+$localpostmaster
+MailScanner - Email Virus Scanner - http://www.mailscanner.info
 %org-long-name%
 %web-site%
 

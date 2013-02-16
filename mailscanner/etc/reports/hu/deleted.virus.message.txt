@@ -1,18 +1,19 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail attachment "$filename"
-was believed to be dangerous and/or infected by a virus and has been
-replaced by this warning message.
+Ez egy automata uzenet a MailScanner E-Mail virusvedelmi rendszertol
+--------------------------------------------------------------------
+Az Onnek kuldott level "$filename" nevu melleklete nagy
+valoszinuseggel virust tartalmazott ezert le lett cserelve erre a
+figyelmezteto uzenetre.
 
-Due to limitations placed on us by the Regulation of Investigatory Powers
-Act 2000, we were unable to keep a copy of the infected attachment. Please
-ask the sender of the message to disinfect their original version and send
-you a clean copy.
+A melleklet a maganszfera vedelme erdekeben nem kerult mentesre.
 
-At $date the scanner said:
+A viruskereses eredmenye, $date idopontban:
 $report
+
+Azonosito: $hostname $quarantinedir/$datenumber (message $id).
+
 -- 
-Postmaster
+$localpostmaster
+MailScanner - Email Virus Scanner - http://www.mailscanner.info
 %org-long-name%
 %web-site%
 
