@@ -1,34 +1,28 @@
-From: "$postmastername" <$localpostmaster>
-To: $from
-Subject: Correu electr�nic sobredimensionat rebutjat
-X-%org-name%-MailScanner: generated
-MIME-Version: 1.0
-Content-type: text/plain; charset=ISO-8859-1
-Content-transfer-encoding: Quoted-Printable
+De: "$postmastername" <$localpostmaster>
+A: $from
+Tema: Correu electrònic sobredimensionat rebutjat
+X-%org-name%-MailScanner: generat
 
-Els nostres detectors de contingut han estat activats per un missatge que
-heu enviat:
+Els nostres filtres de contingut de correu electrònic han estat activats per un missatge que heu enviat:-
   A: $to
   Assumpte: $subject
   Data: $date
-
-Aquest missatge ha estat rebutjat. Els filtres han trobat:
+Aquest missatge ha estat rebutjat. Els filtres han dit això:
 $report.
 
-La mida d'aquest missatge, or un fitxer adjunt que hi contenia era massa gran
-i ha estat suprimit ($size > $maxmessagesize).
+Aquest missatge, o un fitxer adjunt que contenia, era massa gran i ha estat
+suprimit.
+La seva longitud era de $messagesize bytes, i en canvi el màxim permès és de $maxmessagesize.
 
-Si us plau, proveu de comprimir el(s) fitxer(s) adjunt(s) abans d'enviar-los
-dins d'un correu electr�nic.
+Si us plau, proveu de comprimir el fitxer adjunt abans d'enviar-lo.
 
-Si teniu qualsevol dubte sobre tot aix�, o creieu que heu rebut aquest
-missatge per error, si us plau, contacteu amb els vostres administradors
-del sistema.
+Si teniu cap pregunta sobre això o creieu que heu rebut aquest missatge
+per error, si us plau, contacteu amb els vostres administradors de sistema.
 
 -- 
 MailScanner
-Protecci� contra Virus d'E-mail
+L'Escànner de Virus de Correu Electrònic
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

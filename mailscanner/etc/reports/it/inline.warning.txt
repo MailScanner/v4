@@ -1,3 +1,3 @@
-Warning: Questo messaggio presenta un o piu' allegati rimossi in automatico
+Warning: This message has had one or more attachments removed
 Warning: ($filename).
-Warning: Per ulteriori informazioni, consultate l'allegato  "$viruswarningname".
+Warning: Please read the "$viruswarningname" attachment(s) for more information.

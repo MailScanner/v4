@@ -1,30 +1,25 @@
-From: "$postmastername" <$localpostmaster>
-To: $from
-Subject: Atenció : S'ha detectat virus a l'e-mail
-X-%org-name%-MailScanner: generated
-MIME-Version: 1.0
-Content-type: text/plain; charset=ISO-8859-1
-Content-transfer-encoding: Quoted-Printable
+De: "$postmastername" <$localpostmaster>
+A: $from
+Assumpte: AvÃ­s: s'ha detectat un virus de correu electrÃ²nic
+X-%org-name%-MailScanner: generat
 
-El nostre detector de virus ha estat activat per un missatge que heu
-enviat.
+El nostre detector de virus ha estat activat per un missatge que heu enviat:-
   A: $to
   Assumpte: $subject
   Data: $date
+Cap part infectada del missatge ($fitxer)
+no ha estat estat lliurada.
 
-Les parts del missatge que estaven infectades ($filename)
-no han estat lliurades.
+Aquest missatge Ã©s simplement per avisar-vos que el vostre sistema informÃ tic
+pot tenir un virus actiu i s'ha de verificar.
 
-Aquest missatge és només per avisar-vos de que el vostre sistema pot tenir un
-virus i hauríeu de verificar-ho.
-
-El detector de virus ha dit el següent quant el missatge:
+El detector de virus ha dit el segÃ¼ent sobre el missatge:
 Informe: $report
 
 -- 
 MailScanner
-Protecció contra Virus d'E-mail
+L'EscÃ nner de Virus de Correu ElectrÃ²nic
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

@@ -1,30 +1,26 @@
-From: "$postmastername" <$localpostmaster>
-To: $from
-Subject: Atenció : S'han detectat virus a l'e-mail
-MIME-Version: 1.0
-Content-type: text/plain; charset=ISO-8859-1
-Content-transfer-encoding: Quoted-Printable
-X-%org-name%-MailScanner: generated
+De: "$postmastername" <$localpostmaster>
+A: $from
+Assumpte: AvÃ­s: s'ha detectat un virus de correu electrÃ²nic
+X-%org-name%-MailScanner: generat
 
-El nostre detector de virus ha estat activat per un missatge que heu
-enviat.
+El nostre detector de contingut de correu electrÃ²nic ha estat activat per un missatge que heu enviat:
   A: $to
   Assumpte: $subject
   Data: $date
 
-Un o més dels annexes ($filename) són a la llista de fitxers no acceptats
-per nosaltres i no seran lliurats.
+Un o mÃ©s dels fitxers adjunts ($filename) sÃ³n a la llista
+de fitxers adjunts inacceptables per a aquest lloc i no
+s'han lliurat.
 
-Considereu canviar de nom dels fitxers o bé comprimir-los en un arxiu ".zip"
-per evitar aquesta restricció.
+Penseu en la possibilitat de canviar el nom d'els arxius per evitar aquesta limitaciÃ³.
 
-El detector de virus ha dit el següent quant el missatge:
+El detector de virus ha dit el segÃ¼ent sobre el missatge:
 Informe: $report
 
 -- 
 MailScanner
-Protecció contra Virus d'E-mail
+L'EscÃ nner de Virus de Correu ElectrÃ²nic
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

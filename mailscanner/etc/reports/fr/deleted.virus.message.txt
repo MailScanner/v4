@@ -1,21 +1,18 @@
-Avertissement de la passerelle antivirus MailScanner
-----------------------------------------------------
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "$filename"
+was believed to be dangerous and/or infected by a virus and has been
+replaced by this warning message.
 
-La pièce jointe «$filename»
-contient probablement un virus.  Elle a été remplacée par cet avertissement.
+Due to limitations placed on us by the Regulation of Investigatory Powers
+Act 2000, we were unable to keep a copy of the infected attachment. Please
+ask the sender of the message to disinfect their original version and send
+you a clean copy.
 
-La pièce jointe n'a pas été conservée sur la passerelle.
-
-Si vous voulez recevoir la pièce jointe désinfectée, demandez-la à
-l'émetteur du courriel.
-
-Résultats de l'antivirus:
+At $date the scanner said:
 $report
-
-Contactez $localpostmaster pour plus d'informations.
-
 -- 
-MailScanner
+Postmaster
 %org-long-name%
 %web-site%
 

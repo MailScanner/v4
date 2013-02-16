@@ -1,14 +1,15 @@
-Unser MailScanner denkt, dass der Anhang dieser Nachricht
+Our MailScanner believes that the attachment to this message sent to you
+   
+    From: $from
+ Subject: $subject
 
- Absender: $from
-  Betreff: $subject
+is Unsolicited Commercial Email (spam). Unless you are sure that this message
+is incorrectly thought to be spam, please delete this message without opening
+it. Opening spam messages might allow the spammer to verify your email
+address.
 
-eine Werbemail (Spam) ist. Bitte löschen Sie die angehängte Nachricht ohne sie
-zu öffnen, es sei denn, Sie sind sich sicher, dass diese Nachricht
-fälschlicherweise als Spam identifiziert wurde. Das Öffnen von Spam-Nachrichten
-könnte Spammern erlauben, Ihre E-Mail-Adresse zu verifizieren.
+If you believe that this message has been incorrectly marked as spam, please
+forward this email to $localpostmaster.
 
-Wenn Sie Fragen haben oder glauben, diese Nachricht zu Unrecht erhalten zu
-haben, kontaktieren Sie bitte die Systemadministratoren.
-
+Date: $datenumber
 $longspamreport

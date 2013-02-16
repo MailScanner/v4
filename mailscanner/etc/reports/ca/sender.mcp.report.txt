@@ -1,28 +1,21 @@
-From: "$postmastername" <$localpostmaster>
-To: $from
-Subject: Contingut prohibit arxivat per ser revisat
-X-%org-name%-MailScanner: generated
-MIME-Version: 1.0
-Content-type: text/plain; charset=ISO-8859-1
-Content-transfer-encoding: Quoted-Printable
+De: "$postmastername" <$localpostmaster>
+A: $from
+Assumpte: El contingut prohibit s'ha emmagatzemat per a revisió
+X-%org-name%-MailScanner: generat
 
-Els nostres detectors de contingut han estat activats per un missatge que
-heu enviat:
+Els nostres detectors de contingut de missatge han estat activats per un missatge que heu enviat:-
   A: $to
   Assumpte: $subject
   Data: $date
+Aquest missatge ha estat posat en quarantena per a revisar-lo abans del lliurament.
 
-Aquest missatge ha estat posat en quarentena per ser revisat abans de ser
-enviat.
-
-Si teniu qualsevol dubte sobre tot aix�, o creieu que heu rebut aquest
-missatge per error, si us plau, contacteu amb els vostres administradors
-del sistema.
+Si teniu cap pregunta sobre això o creieu que heu rebut aquest missatge
+per error, si us plau, contacteu amb els vostres administradors de sistema.
 
 -- 
 MailScanner
-Protecci� contra Virus d'E-mail
+L'Escànner de Virus de Correu Electrònic
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

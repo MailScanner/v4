@@ -1,5 +1,4 @@
 -- 
-Aquest missatge ha estat analitzat per MailScanner
-a la cerca de virus i d'altres continguts perillosos,
-i es considera que est� net.
-For all your IT requirements visit: http://www.transtec.co.uk
+Aquest missatge ha estat escanejat per trobar-hi virus i
+contingut perillós per MailScanner i es
+considera que és net.

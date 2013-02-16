@@ -1,23 +1,21 @@
-Dies ist eine Nachricht vom MailScanner E-Mail-Virus-Schutzdienst
+This is a message from the MailScanner E-Mail Virus Protection Service
 ----------------------------------------------------------------------
-Die ursprüngliche E-Mail-Nachricht enthielt potenziell gefährliche Inhalte,
-die zu Ihrer Sicherheit entfernt wurden.
+The original e-mail message contained potentially dangerous content,
+which has been removed for your safety.
 
-Der ursprüngliche Inhalt ist gefährlich, da er häufig benutzt wird, um
-Viren zu verbreiten oder um persönliche oder vertrauliche Informationen
-wie Passwörter oder Kreditkartennummern von Ihnen zu bekommen.
+The content is dangerous as it is often used to spread viruses or to gain
+personal or confidential information from you, such as passwords or credit
+card numbers.
 
-Wenn Sie eine Kopie der Original-Nachricht wünschen, wenden Sie sich bitte
-per Mail oder Telefon an Ihren Systemadministrator. Bitte halten Sie diese
-Meldung bereit.
+If you wish to receive a copy of the original email, please
+e-mail helpdesk and include the whole of this message
+in your request. Alternatively, you can call them, with
+the contents of this message to hand when you call.
 
-Am $date gaben die Nachrichten-Filter folgendes aus:
+At $date the content filters said:
 $report
-
-Hinweis an den Administrator:
-Datei: $hostname in $quarantinedir/$datenumber (Nachricht $id).
-
---
+Note to Help Desk: Look on $hostname in $quarantinedir/$datenumber (message $id).
+-- 
 Postmaster
 %org-long-name%
 %web-site%
