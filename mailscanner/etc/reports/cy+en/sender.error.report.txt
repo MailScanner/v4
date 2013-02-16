@@ -3,7 +3,7 @@ To: $from
 Subject: Rhybudd: Gwall e-bost wedi'i ganfod./Warning: E-mail error detected
 X-%org-name%-MailScanner: generated
 
-Methodd ein canfyddwr firysau â llwyr | Our virus detector failed to analyse
+Methodd ein canfyddwr firysau Ã¢ llwyr | Our virus detector failed to analyse
  ddadansoddi neges a anfonasoch:-     | completely a message you sent:-
 
   To: $to

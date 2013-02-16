@@ -15,7 +15,7 @@ Mae'r neges hon wedi'i dinistrio.     | This message has been destroyed. The
 Dyma'r canfyddwyr a roddwyd ar waith: | detector that triggered is:
                                SpamAssassin.
 
-Yn ôl cynnwys eich neges, mae'n fwy na| The content of your message indicates
+Yn Ã´l cynnwys eich neges, mae'n fwy na| The content of your message indicates
 thebyg mai e-bost sbam ydyw - dyna'r  | that it is probably spam e-mail,
 rheswm iddi gael ei gwrthod.          | which is why it has been rejected.
 
@@ -24,14 +24,14 @@ ofynnir amdano (sbam), ac rydym yn    | commercial (spam) e-mail and actively
 cymryd camau gweithredol i'w atal. Os | work to stop it. If you are sending
 ydych rn anfon sbam - ac yn parhau i  | spam and continue to do so, your
 wneud hynny - mae'n bosibl y          | Internet Service Provider may be
-cysylltir â'ch Darparwr Gwasanaeth    | contacted and requested to close your
+cysylltir Ã¢'ch Darparwr Gwasanaeth    | contacted and requested to close your
 Rhyngrwyd a gofyn iddo gau eich       | account.
 cyfrif.                               |
 
 Os oes gennych unrhyw gwestiynau      | If you have any questions about this,
-ynglyn â hyn, neu os ydych yn credu   | or you believe you have received
+ynglyn Ã¢ hyn, neu os ydych yn credu   | or you believe you have received
 eich bod wedi derbyn y neges hon ar   | this message in error, please contact
-gam, cysylltwch â gweinyddwyr system  | the site system administrators.
+gam, cysylltwch Ã¢ gweinyddwyr system  | the site system administrators.
 y safle.
 
 -- 

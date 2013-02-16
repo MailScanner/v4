@@ -1,26 +1,26 @@
 From: "$postmastername" <$localpostmaster>
 To: $to
-Subject: O email comercial n„o solicitado n„o foi entregue
+Subject: O email comercial n√£o solicitado n√£o foi entregue
 X-%org-name%-MailScanner: generated
 
-Nossos detetores de emails comerciais n„o solicitados(spam) foram
+Nossos detetores de emails comerciais n√£o solicitados(spam) foram
 ativados por uma mensagem que voce recebeu:-
   From: $from
   Subject: $subject
   Date: $date
-Esta mensagem n„o foi entregue. Os detetores que foram ativados s„o
+Esta mensagem n√£o foi entregue. Os detetores que foram ativados s√£o
 $spamreport.
 
 A mensagem destinada para voce foi classificada como SPAM com base nestas
 regras ou no servidor que enviou a mensagem para voce, ou em ambos.
 
-Nos n„o iremos  aceitar emails comerciais n„o solicitados (spam)
+Nos n√£o iremos  aceitar emails comerciais n√£o solicitados (spam)
 e trabalharemos ativamente para bloquea-los.
 
-Se voce tiver alguma d˙vida a respeito, ou acredita que voce recebeu esta
+Se voce tiver alguma d√∫vida a respeito, ou acredita que voce recebeu esta
 mensagem por erro, por favor contate o administrador do sistema.
 
-O seu administrador de sistema necessitar· das seguintes informaÁıes:
+O seu administrador de sistema necessitar√° das seguintes informa√ß√µes:
   Server name: $hostname
   Message id: $id
   Date code: $datenumber

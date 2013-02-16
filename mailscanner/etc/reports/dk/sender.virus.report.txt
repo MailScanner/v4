@@ -13,7 +13,7 @@ Alt hvad der er inficeret med virus er ikke blevet sendt til modtageren.
 Denne meddelelse er udelukkende sendt til dig, for at advare dig om, at 
 din computer muligvis er inficeret med virus og skal kontroleres.
 
-Virusskanneren skrev følgende:
+Virusskanneren skrev fÃ¸lgende:
 $report
 
 -- 

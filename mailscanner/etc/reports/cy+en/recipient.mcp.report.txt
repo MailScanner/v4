@@ -15,9 +15,9 @@ Mae'r neges hwn wedi ei gadw er mwyn  | This message has been quarantined
 ei adolygu cyn ei ddosbarthu.         | for review before delivery.
 
 Os oes gennych unrhyw gwestiynau      | If you have any questions about this,
-ynglyn â hyn, neu os ydych yn credu   | or you believe you have received
+ynglyn Ã¢ hyn, neu os ydych yn credu   | or you believe you have received
 eich bod wedi derbyn y neges hon ar   | this message in error, please contact
-gam, cysylltwch â gweinyddwyr system  | the site system administrators.
+gam, cysylltwch Ã¢ gweinyddwyr system  | the site system administrators.
 y safle.
 
 Mi fydd eich gweinyddwyr system angen | Your system administrators will need
