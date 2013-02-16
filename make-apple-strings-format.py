@@ -21,8 +21,12 @@
 upload to Transfex
 """
 import os
+import re
 
 from optparse import OptionParser
+
+
+TRANSLATION_RE = re.compile(r'^(.+)\s+=\s+(.+)$', re.U)
 
 
 if __name__ == '__main__':
@@ -43,6 +47,6 @@ if __name__ == '__main__':
         for line in infile:
             if line.startswith('#'):
                 print '/* %s */' % line.strip()
-            if '=' in line:
+            if TRANSLATION_RE.match(line.strip()):
                 tmp = line.strip().split('=')
                 print '"%s" = "%s";' % (tmp[0].strip(), tmp[1].strip())
