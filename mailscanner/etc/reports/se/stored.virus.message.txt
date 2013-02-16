@@ -1,20 +1,20 @@
-Meddelande från MailScanner Email Virus Protection Service
+Meddelande frÃ¥n MailScanner Email Virus Protection Service
 ----------------------------------------------------------------
 
 Original bilagan "$filename"
-i meddelandet är av en typ som inte godkänns för den här domänen
-och har blivit ersatt med följande varningstext.
+i meddelandet Ã¤r av en typ som inte godkÃ¤nns fÃ¶r den hÃ¤r domÃ¤nen
+och har blivit ersatt med fÃ¶ljande varningstext.
 
-Om ni önskar få en kopia skickad till er, vidarebefordra e-brevet
-i sin helhet till supporten för ytterliggare hjälp.
-Vid telefonkontakt var vänlig ha meddelandet tillgängligt för 
-snabbare hantering av ärendet.
+Om ni Ã¶nskar fÃ¥ en kopia skickad till er, vidarebefordra e-brevet
+i sin helhet till supporten fÃ¶r ytterliggare hjÃ¤lp.
+Vid telefonkontakt var vÃ¤nlig ha meddelandet tillgÃ¤ngligt fÃ¶r 
+snabbare hantering av Ã¤rendet.
 
-Den $date genererades följande rapport:
+Den $date genererades fÃ¶ljande rapport:
 $report
 
 Information till supporten:
-Kontrollera på $hostname i
+Kontrollera pÃ¥ $hostname i
 $quarantinedir/$datenumber (meddelande $id)
 
 -- 

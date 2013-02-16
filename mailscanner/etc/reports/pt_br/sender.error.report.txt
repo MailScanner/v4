@@ -3,18 +3,18 @@ To: $from
 Subject: Aviso: Erro de e-mail detectado
 X-%org-name%-MailScanner: generated
 
-Nosso sistema de detecção de vírus falhou ao analisar uma mensagem que
-você enviou:-
+Nosso sistema de detecÃ§Ã£o de vÃ­rus falhou ao analisar uma mensagem que
+vocÃª enviou:-
   To: $to
   Subject: $subject
   Date: $date
-Qualquer parte da mensagem que não puder ser analisada, não será entregue.
+Qualquer parte da mensagem que nÃ£o puder ser analisada, nÃ£o serÃ¡ entregue.
 
-Se você está utilizando o Microsoft Outlook, sugerimos que você mude o 
+Se vocÃª estÃ¡ utilizando o Microsoft Outlook, sugerimos que vocÃª mude o 
 formato de mensagens, de "Rich Text" para "HTML" ou "Plain Text".
 
 Nosso sistema de anti-virus relatou o seguinte a respeito da sua mensagem:
-Relatório: $report
+RelatÃ³rio: $report
 
 -- 
 Postmaster

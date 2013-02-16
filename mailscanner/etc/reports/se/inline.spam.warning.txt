@@ -1,18 +1,18 @@
-MailScanner har klassat följande meddelande
+MailScanner har klassat fÃ¶ljande meddelande
  
-          Från: $from
-          Ämne: $subject
+          FrÃ¥n: $from
+          Ã„mne: $subject
 
-som skräppost (spam) och har konverterat det till en bilaga.
+som skrÃ¤ppost (spam) och har konverterat det till en bilaga.
 
-Såvida du inte är säker att det är ett legitimt meddelande bör du
-slänga det utan att öppna det.
+SÃ¥vida du inte Ã¤r sÃ¤ker att det Ã¤r ett legitimt meddelande bÃ¶r du
+slÃ¤nga det utan att Ã¶ppna det.
 
-Genom att läsa skräppost finns en möjlighet för avsändaren att
-verifiera din e-postadress, vilket ökar chansen för mer skräppost
+Genom att lÃ¤sa skrÃ¤ppost finns en mÃ¶jlighet fÃ¶r avsÃ¤ndaren att
+verifiera din e-postadress, vilket Ã¶kar chansen fÃ¶r mer skrÃ¤ppost
 i framtiden.
 
-Om du är säker på att meddelandet felaktigt klassats som skräppost,
-var vänlig vidarebefordra det till $localpostmaster.
+Om du Ã¤r sÃ¤ker pÃ¥ att meddelandet felaktigt klassats som skrÃ¤ppost,
+var vÃ¤nlig vidarebefordra det till $localpostmaster.
 
 $longspamreport

@@ -1,18 +1,18 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Varning, ej godkänd bilaga meddelandet
+Subject: Varning, ej godkÃ¤nd bilaga meddelandet
 X-%org-name%-MailScanner: generated
 
-Vårt virusskydd har stoppat ett meddelande ni skickat:
+VÃ¥rt virusskydd har stoppat ett meddelande ni skickat:
   Till: $to
-  Ämne: $subject
+  Ã„mne: $subject
   Datum: $date
 
-En eller flera bilagor är inte av en typ som domänen godkänner
-och har blivit ersatt med den här varningstexten.
-Döp om eller zippa filen för att undvika ovanstående problem.
+En eller flera bilagor Ã¤r inte av en typ som domÃ¤nen godkÃ¤nner
+och har blivit ersatt med den hÃ¤r varningstexten.
+DÃ¶p om eller zippa filen fÃ¶r att undvika ovanstÃ¥ende problem.
 
-Följande meddelande har genererats:
+FÃ¶ljande meddelande har genererats:
 $report
 
 -- 
