@@ -1,28 +1,28 @@
 From: "$postmastername" <$localpostmaster>
 To: $to
-Subject: {Spam not delivered} $subject
+Subject: Ongewenste (commerciele) e-mail geweigerd
 X-%org-name%-MailScanner: generated
 
-Our UCE (spam) detectors have been triggered by a message you received:-
+Onze spamdetector reageerde op een bericht dat aan u is verzonden:
   From: $from
   Subject: $subject
   Date: $date
-This message has not been delivered. The detectors that were triggered are
+Het bericht is vernietigd. De punten waarop onze detector reageerde was
 $spamreport.
 
-The message to you has been detected as spam based on either its contents or
-the mail server which sent the message to us, or both.
+Op uw bericht is gereageerd op basis van de inhoud en/of de machine waar
+vandaan de e-mail was verstuurd.
 
-We do not accept unsolicited commercial (spam) e-mail and actively
-work to stop it.
+Wij accepteren geen ongewenste (commerciele) e-mail (spam) and werken
+actief mee aan het stoppen hiervan.
 
-If you have any questions about this, or you believe you have received
-this message in error, please contact the site system administrators.
+Indien u van mening bent dat deze melding onjuist is raden we u aan om
+contact op te nemen met beheerder.
 
-Your system administrators will need the following information:
-  Server name: $hostname
+Uw beheerder heeft de volgende informatie nodig:
+  Server: $hostname
   Message id: $id
-  Date code: $datenumber
+  Datum code: $datenumber
 
 -- 
 MailScanner
@@ -30,4 +30,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+MailScanner bedankt ttec Computers voor hun ondersteuning

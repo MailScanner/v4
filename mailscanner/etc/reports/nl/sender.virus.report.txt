@@ -1,20 +1,19 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail viruses detected
+Subject: Waarschuwing: E-mail virus ontdekt
 X-%org-name%-MailScanner: generated
 
-Our virus detector has just been triggered by a message you sent:-
+Onze virusscanner reageerde op een bericht dat u verstuurde:
   To: $to
   Subject: $subject
   Date: $date
-Any infected parts of the message ($filename)
-have not been delivered.
+Besmette bijlagen zijn niet afgeleverd bij de ontvanger.
 
-This message is simply to warn you that your computer system may have a
-virus present and should be checked.
+We zenden u dit bericht om u te waarschuwen dat uw systeem waarschijnlijk
+is besmet en gecontroleerd zou moeten worden.
 
-The virus detector said this about the message:
-Report: $report
+De virusscanner gaf onderstaande melding:
+$report
 
 -- 
 MailScanner
@@ -22,4 +21,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+MailScanner bedankt ttec Computers voor hun ondersteuning

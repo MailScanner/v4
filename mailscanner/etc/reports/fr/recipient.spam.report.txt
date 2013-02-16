@@ -1,28 +1,30 @@
 From: "$postmastername" <$localpostmaster>
 To: $to
-Subject: {Spam not delivered} $subject
+Subject: Polluriel non livré
 X-%org-name%-MailScanner: generated
 
-Our UCE (spam) detectors have been triggered by a message you received:-
-  From: $from
-  Subject: $subject
+Notre détecteur de polluriel (spam) a été déclanché par un message que
+vous avez reçu:-
+  De: $from
+  Objet: $subject
   Date: $date
-This message has not been delivered. The detectors that were triggered are
+Ce message ne vous a pas été livré.  Le rapport du détecteur est:
 $spamreport.
 
-The message to you has been detected as spam based on either its contents or
-the mail server which sent the message to us, or both.
+Ce message vous étant destiné a été détecté comme un polluriel, basé sur
+le serveur de courrier d'origine, son contenu, ou les deux.
 
-We do not accept unsolicited commercial (spam) e-mail and actively
-work to stop it.
+Nous n'acceptons pas de polluriels (spam) et nous travaillons pour
+arrêter ce fléau.
 
-If you have any questions about this, or you believe you have received
-this message in error, please contact the site system administrators.
+Si vous avez des questions à ce sujet, ou si vous croyez avoir reçu ce
+message par erreur, veuillez contacter les administrateurs de système
+de votre site.
 
-Your system administrators will need the following information:
-  Server name: $hostname
-  Message id: $id
-  Date code: $datenumber
+Vos administrateurs de système auront besoin de l'information suivante:
+  Nom du serveur: $hostname
+  Numéro d'identification du message: $id
+  Code de date: $datenumber
 
 -- 
 MailScanner
