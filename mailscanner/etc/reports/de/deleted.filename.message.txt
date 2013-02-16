@@ -1,15 +1,15 @@
-Dies ist eine MailScanner E-Mail Virus Protection Service Nachricht
--------------------------------------------------------------------
-Der ursprüngliche E-Mail-Anhang "$filename"
-ist auf der Liste der unerwünschten Dateianhänge für diese Domain und wurde
-durch diese Warnmeldung ersetzt.
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "$filename"
+is on the list of unacceptable attachments for this site and has been
+replaced by this warning message.
 
-Aus datenschutzrechtlichen Gründen halten wir keine Kopie des Originalanhangs
-vor.
+Due to limitations placed on us by the Regulation of Investigatory Powers
+Act 2000, we were unable to keep a copy of the original attachment.
 
-Zu Ihrer Information die Meldung des Virenscanners am $date:
+At $date the virus scanner said:
 $report
---
+-- 
 Postmaster
 %org-long-name%
 %web-site%

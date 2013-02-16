@@ -1,30 +1,30 @@
-From: "$postmastername" <$localpostmaster>
-To: $from
-Subject: AtenciÛ: Error detectat a l'e-mail
-X-%org-name%-MailScanner: generated
-MIME-Version: 1.0
-Content-type: text/plain; charset=ISO-8859-1
-Content-transfer-encoding: Quoted-Printable
+De: "$postmastername" <$localpostmaster>
+A: $from
+Assumpte: Av√≠s: s'ha detectat errors al correu electr√≤nic
+X-%org-name%-MailScanner: generat
 
-El nostre detector de virus no ha pogut analitzar completament un missatge
-que heu enviat
+El nostre detector de virus no ha pogut analitzar completament un missatge que heu enviat:-
   A: $to
   Assumpte: $subject
   Data: $date
+Les parts del missatge que no han pogut ser analitzades no han estat
+lliurades.
 
-Les parts del missatge que no hagin pogut ser analitzades no seran lliurades.
+Si esteu fent servir Microsoft Outlook, us recomanem canviar el vostre
+format del missatge sortint de "Rich Text" a "HTML" o "Text net".
 
-Si esteu utilitzant Microsoft Outlook, us recomanem que canvieu el format
-dels missatges sortints de "Format de Text Enriquit (RTF)" a "HTML" o bÈ
-a "Text sense format".
+1) Feu clic al men√∫ "Eines" i escolliu "Opcions..."
+2) Aneu a la pestanya de "Format de correu"
+3) A format del missatge, seleccioneu "HTML" o "Text net"
+4) Feu clic a D'acord
 
-El detector de virus ha dit el seg¸ent quant el missatge:
-Informe: $report
+El detector de virus ha dit el seg√ºent sobre el missatge:
+L'informe: $report
 
 -- 
 MailScanner
-ProtecciÛ contra Virus d'E-mail
+L'Esc√†nner de Virus de Correu Electr√≤nic
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk

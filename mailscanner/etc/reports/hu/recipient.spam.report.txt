@@ -1,6 +1,6 @@
 From: "$postmastername" <$localpostmaster>
 To: $to
-Subject: Unsolicited commercial email not delivered
+Subject: {Spam not delivered} $subject
 X-%org-name%-MailScanner: generated
 
 Our UCE (spam) detectors have been triggered by a message you received:-

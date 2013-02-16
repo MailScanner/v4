@@ -1,20 +1,16 @@
-Ez egy automata uzenet a MailScanner E-Mail virusvedelmi rendszertol
---------------------------------------------------------------------
-Az Onnek kuldott level "$filename" nevu melleklete a
-levelezoszerver szamara elfogadhatatlan kiterjesztessel rendelkezo
-mellekletet tartalmazott ezert le lett cserelve erre a figyelmezteto
-uzenetre.
+This is a message from the MailScanner E-Mail Virus Protection Service
+----------------------------------------------------------------------
+The original e-mail attachment "$filename"
+is on the list of unacceptable attachments for this site and has been
+replaced by this warning message.
 
-A melleklet a maganszfera vedelme erdekeben nem kerult mentesre.
+Due to limitations placed on us by the Regulation of Investigatory Powers
+Act 2000, we were unable to keep a copy of the original attachment.
 
-A viruskereses eredmenye, $date idopontban:
+At $date the virus scanner said:
 $report
-
-Azonosito: $hostname $quarantinedir/$datenumber (message $id).
-
 -- 
-$localpostmaster
-MailScanner - Email Virus Scanner - http://www.mailscanner.info
+Postmaster
 %org-long-name%
 %web-site%
 

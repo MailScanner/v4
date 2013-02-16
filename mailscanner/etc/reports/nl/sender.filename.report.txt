@@ -1,21 +1,20 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Waarschuwing: E-mail virussen gedetecteerd
+Subject: Warning: E-mail viruses detected
 X-%org-name%-MailScanner: generated
 
-Onze virusscanner reageerde op een bericht dat u heeft verzonden:
+Our e-mail content detector has just been triggered by a message you sent:
   To: $to
   Subject: $subject
   Date: $date
 
-Minimaal 1 van de bijlagen staat op de lijst met onaanvaardbare bijlagen
-zoals die voor onze site is vastgelegd. De bijlage is niet afgeleverd bij
-de ontvanger.
+One or more of the attachments ($filename) are on
+the list of unacceptable attachments for this site and will not have
+been delivered.
 
-Wij raden u aan het bestand te hernoemen of het te versturen in een "zip"
-bestand om deze beperkingen te omzeilen.
+Consider renaming the files to avoid this constraint.
 
-De virusscanner gaf onderstaande melding t.a.v. uw bericht:
+The virus detector said this about the message:
 Report: $report
 
 -- 
@@ -24,4 +23,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-MailScanner bedankt ttec Computers voor hun ondersteuning
+For all your IT requirements visit: http://www.transtec.co.uk

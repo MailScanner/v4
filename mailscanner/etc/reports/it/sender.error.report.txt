@@ -1,19 +1,25 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Attenzione: rilevata E-mail contenente errori
+Subject: Warning: E-mail error detected
 X-%org-name%-MailScanner: generated
 
-Il sistema antivirus non e' riuscito ad analizzare completamente il messaggio spedito:-
+Our virus detector failed to completely analyse a message you sent:-
   To: $to
   Subject: $subject
   Date: $date
-Ogni parte del messaggio che non e' stato possibile analizzare, non e' stato inviato al destinatario.
+Any parts of the message that could not be analysed will not have been
+delivered.
 
-Se state utilizzando Microsoft Outlook, vi raccomandiamo di modificare il formato dei messaggi
-da "Rich Text" a "HTML" o "Plain Text".
+If you are using Microsoft Outlook, we strongly recommend you change your
+outgoing message format from "Rich Text" to "HTML" or "Plain Text".
 
-Il sistema antivirus riporta:
-rapporto: $report
+1) Click on the "Tools" menu and choose "Options..."
+2) Go to the "Mail Format" tab
+3) For message format, select "HTML" or "Plain text"
+4) Click OK
+
+The virus detector said this about the message:
+Report: $report
 
 -- 
 MailScanner
@@ -21,3 +27,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
+For all your IT requirements visit: http://www.transtec.co.uk
