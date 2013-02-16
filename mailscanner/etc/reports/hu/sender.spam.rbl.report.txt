@@ -1,24 +1,24 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: {Bounce} Unsolicited commercial email rejected
+Subject: {Bounce} Nem kivant uzenet visszautasitva
 X-%org-name%-MailScanner: generated
 
-Our UCE (spam) detectors have been triggered by a message you sent:-
-  To: $to
-  Subject: $subject
-  Date: $date
-This message has been destroyed. The detectors that were triggered are
-$spamreport.
+Az SPAM (UCE) ellenorzonk SPAM gyanus levelet talalt:
+  Cimzett:  $to
+  Targy  :  $subject
+  Datum  :  $date
+Az uzenet torolve. A SPAM ellenorzo program: $spamreport
 
-The server which is sending the message to our site is listed in a
-public blacklist of badly configured or misused mail systems.
+A szerver ami a levelet hozzank tovabbitotta, szerepel a rosszul
+konfiguralt vagy rossz celokra hasznalt levelezo szerverek
+nyilvanos listajan.
 
-If you have any questions about this, or you believe you have received
-this message in error, please contact the site system administrators.
+Ha barmi kerdese van ezzel kapcsolatban vagy ugy gondolja, hogy tevedesbol
+kapta ezt a levelet, keresse meg a helyi rendszergazdat.
 
 -- 
-MailScanner
-Email Virus Scanner
+$localpostmaster
+MailScanner - Email Virus Scanner - http://www.mailscanner.info
 %org-long-name%
 %web-site%
 

@@ -3,13 +3,12 @@ Our MailScanner believes that the attachment to this message sent to you
     From: $from
  Subject: $subject
 
-is Unsolicited Commercial Email (spam). Unless you are sure that this message
+is Unsolicited Commerial Email (spam). Unless you are sure that this message
 is incorrectly thought to be spam, please delete this message without opening
 it. Opening spam messages might allow the spammer to verify your email
 address.
 
-If you believe that this message has been incorrectly marked as spam, please
+If you believe that this message has been incorrectly marked a spam, please
 forward this email to $localpostmaster.
 
-Date: $datenumber
 $longspamreport

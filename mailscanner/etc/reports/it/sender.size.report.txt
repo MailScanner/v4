@@ -11,8 +11,7 @@ This message has been rejected. The filters said this:
 $report.
 
 This message, or an attachment it contained, was too large and has been
-removed.
-Its length was $messagesize bytes, but the maximum allowed is $maxmessagesize.
+removed ($size > $maxmessagesize).
 
 Please try compressing the attachment file before sending it.
 

@@ -1,15 +1,21 @@
-Our MailScanner believes that the attachment to this message sent to you
-   
-    From: $from
- Subject: $subject
+Notre détecteur de polluriel croit que la pièce jointe à ce courriel,
+reçue:
 
-is Unsolicited Commercial Email (spam). Unless you are sure that this message
-is incorrectly thought to be spam, please delete this message without opening
-it. Opening spam messages might allow the spammer to verify your email
-address.
+    De: $from
+ Sujet: $subject
 
-If you believe that this message has been incorrectly marked as spam, please
-forward this email to $localpostmaster.
+est un courriel commercial non sollicité (polluriel ou spam).
 
-Date: $datenumber
+Nous vous conseillons de détruire ce courriel sans ouvrir la pièce
+jointe, à moins que vous n'ayez une bonne raison de croire que notre
+logiciel a pris une mauvaise décision.
+
+Si vous ouvrez un polluriel, vous risquez d'indiquer à l'émetteur que
+votre adresse de courriel est active, ce qui va l'encourager à vous en
+envoyer d'autres.
+
+Si vous jugez que ce courriel a été déclaré polluriel alors qu'il n'en
+était pas, SVP le faire suivre avec toutes ses entêtes à
+$localpostmaster.
+
 $longspamreport

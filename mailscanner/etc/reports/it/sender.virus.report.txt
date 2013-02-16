@@ -1,20 +1,18 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail viruses detected
+Subject: Attenzione: rilevata E-mail infetta
 X-%org-name%-MailScanner: generated
 
-Our virus detector has just been triggered by a message you sent:-
+Il sistema antivirus e' stato sollecitato dal messaggio seguente:-
   To: $to
   Subject: $subject
   Date: $date
-Any infected parts of the message ($filename)
-have not been delivered.
+Ogni parte del messaggio ritenuta infetta non e' stata consegnata al destinatario.
 
-This message is simply to warn you that your computer system may have a
-virus present and should be checked.
+Questo messaggio e' semplicemente per mettervi sull'avviso che molto probabilmente sul vostro computer e' presente un virus, vi consigliamo di controllare con urgenza il sistema.
 
-The virus detector said this about the message:
-Report: $report
+Il sistema antivirus riporta:
+rapporto: $report
 
 -- 
 MailScanner
@@ -22,4 +20,3 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk

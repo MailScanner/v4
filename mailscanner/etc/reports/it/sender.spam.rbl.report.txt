@@ -1,20 +1,19 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: {Bounce} Unsolicited commercial email rejected
+Subject: {Bounce} respinta e-mail commerciale non richiesta
 X-%org-name%-MailScanner: generated
 
-Our UCE (spam) detectors have been triggered by a message you sent:-
+Il sistema di controllo sulle email commerciali e' stato sollecitato dalla seguente email:-
   To: $to
   Subject: $subject
   Date: $date
-This message has been destroyed. The detectors that were triggered are
+Il messaggio e' stato distrutto. Le motivazioni relative sono le seguenti:
 $spamreport.
 
-The server which is sending the message to our site is listed in a
-public blacklist of badly configured or misused mail systems.
+Il server che ha spedito il messaggio e' presente in liste pubbliche di sistemi mal configurati o fortemente sospettati di essere sorgente di spam-email.
 
-If you have any questions about this, or you believe you have received
-this message in error, please contact the site system administrators.
+Per ogni richiesta, o se pensate di aver ricevuto erroneamente questo messaggio,
+contattate il vostro amministratore di sistema.
 
 -- 
 MailScanner
@@ -22,4 +21,3 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk

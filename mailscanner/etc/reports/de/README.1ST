@@ -1,18 +1,18 @@
-Dies sind die übersetzten Reportvorlagen für MailScanner Version 4.36.4
+Dies sind die Ã¼bersetzten Reportvorlagen fÃ¼r MailScanner Version 4.36.4
 ==========================================================================
 
 Installation:
 1. Sicherheitskopie der Original-Reportvorlagen in /etc/reports anfertigen!
-2. Mit den übersetzten Vorlagen die Original-Reportvorlagen überschreiben.
+2. Mit den Ã¼bersetzten Vorlagen die Original-Reportvorlagen Ã¼berschreiben.
 3. Das war's!
 
-ich übernehme keinerlei Verantwortung in Zusammenhang mit MailScanner oder
-diesen von mir für meine persönlichen Zwecke übersetzten Reportvorlagen.
+ich Ã¼bernehme keinerlei Verantwortung in Zusammenhang mit MailScanner oder
+diesen von mir fÃ¼r meine persÃ¶nlichen Zwecke Ã¼bersetzten Reportvorlagen.
 
-Über Hinweise und Kritiken zu den Übersetzungen freue ich mich!
+Ãœber Hinweise und Kritiken zu den Ãœbersetzungen freue ich mich!
 
 
 Autoren
-+ Thomas Krueten <thomas@trueten.de>	Übersetzungen für Version 4 ALPHA
-+ Felix Schwarz <felix.schwarz@web.de>	Korrekturen und Übersetzungen für Version 4.36.4
++ Thomas Krueten <thomas@trueten.de>	Ãœbersetzungen fÃ¼r Version 4 ALPHA
++ Felix Schwarz <felix.schwarz@web.de>	Korrekturen und Ãœbersetzungen fÃ¼r Version 4.36.4
 

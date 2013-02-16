@@ -1,21 +1,19 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Warning: E-mail viruses detected
+Subject: Attenzione: rilevata E-mail infetta
 X-%org-name%-MailScanner: generated
 
-Our e-mail content detector has just been triggered by a message you sent:
+Il sistema antivirus ha rilevato una infezione nel messaggio:-
   To: $to
   Subject: $subject
   Date: $date
 
-One or more of the attachments ($filename) are on
-the list of unacceptable attachments for this site and will not have
-been delivered.
+Uno o piu' allegati risultano non accettabili da questo sito e non sono stati consegnati al destinatario.
 
-Consider renaming the files to avoid this constraint.
+Come possibile soluzione, rinominate i file o archiviateli all'interno di un archivio "zip".
 
-The virus detector said this about the message:
-Report: $report
+Il sistema antivirus riporta:
+Rapporto: $report
 
 -- 
 MailScanner
@@ -23,4 +21,3 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk

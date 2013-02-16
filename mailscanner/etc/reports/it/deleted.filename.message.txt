@@ -1,17 +1,14 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail attachment "$filename"
-is on the list of unacceptable attachments for this site and has been
-replaced by this warning message.
+Comunicazione dal servizio di Protezione della posta dai Virus "MailScanner"
+----------------------------------------------------------------------------
+L'allegato originale "$filename"
+e' considerato non accettabile da questo sito ed e' stato sostituito da questo messaggio di avviso.
 
-Due to limitations placed on us by the Regulation of Investigatory Powers
-Act 2000, we were unable to keep a copy of the original attachment.
+A causa delle limitazioni imposte dal "Regulation of Investigatory Powers
+Act 2000" (non applicabile in Italia), e' impossibile mantenere copia dell'allegato originale.
 
-At $date the virus scanner said:
+Il giorno $date il sistema antivirus riporta:
 $report
 -- 
 Postmaster
 %org-long-name%
 %web-site%
-
-For all your IT requirements visit: http://www.transtec.co.uk

@@ -1,22 +1,28 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail message contained potentially dangerous content,
-which has been removed for your safety.
+Avertissement de la passerelle antivirus MailScanner
+----------------------------------------------------
 
-The content is dangerous as it is often used to spread viruses or to gain
-personal or confidential information from you, such as passwords or credit
-card numbers.
+Les règles de sécurité de notre entreprise interdisent la
+transmission du courriel qui vous était destiné.
 
-If you wish to receive a copy of the original email, please
-e-mail helpdesk and include the whole of this message
-in your request. Alternatively, you can call them, with
-the contents of this message to hand when you call.
+Le courriel aurait pu permettre de propager des virus ou d'obtenir des
+informations confidentielles comme des mots de passe ou des numéros de
+cartes de crédit.
 
-At $date the content filters said:
+Pour votre sécurité, il a été remplacé par cet avertissement.
+
+Le courriel a été conservé sur la passerelle.  Il peut donc
+vous être rendu sur demande.  Faites suivre ce message à
+$localpostmaster pour le récupérer.
+
+Résultats de l'analyse du courriel:
 $report
-Note to Help Desk: Look on $hostname in $quarantinedir/$datenumber (message $id).
+
+Contactez $localpostmaster pour plus d'informations.
+
+Information de repérage: $hostname:$quarantinedir/$datenumber/$id
+
 -- 
-Postmaster
+MailScanner
 %org-long-name%
 %web-site%
 

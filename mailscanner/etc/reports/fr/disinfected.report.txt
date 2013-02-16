@@ -1,10 +1,10 @@
-Vous avez récemment reçu un courriel de «$from»
-dont le sujet était «$subject».
+Vous avez rÃ©cemment reÃ§u un courriel de Â«$fromÂ»
+dont le sujet Ã©tait Â«$subjectÂ».
 
-Ce courriel contenait une ou plusieurs pièces jointes infectées par
-des virus qui ont pu être désinfectées.
+Ce courriel contenait une ou plusieurs piÃ¨ces jointes infectÃ©es par
+des virus qui ont pu Ãªtre dÃ©sinfectÃ©es.
 
-Les pièces jointes désinfectées sont jointes à ce courriel.
+Les piÃ¨ces jointes dÃ©sinfectÃ©es sont jointes Ã  ce courriel.
 
 Contactez $localpostmaster pour plus d'informations.
 

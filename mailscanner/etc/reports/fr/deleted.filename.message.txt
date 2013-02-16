@@ -1,16 +1,20 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
-----------------------------------------------------------------------
-The original e-mail attachment "$filename"
-is on the list of unacceptable attachments for this site and has been
-replaced by this warning message.
+Avertissement de la passerelle antivirus MailScanner
+----------------------------------------------------
 
-Due to limitations placed on us by the Regulation of Investigatory Powers
-Act 2000, we were unable to keep a copy of the original attachment.
+Les règles de sécurité de notre entreprise interdisent la
+transmission de la pièce jointe «$filename».
 
-At $date the virus scanner said:
+Celle-ci a été remplacée par cet avertissement.
+
+La pièce jointe n'a pas été conservée sur la passerelle.
+
+Résultats de l'antivirus:
 $report
+
+Contactez $localpostmaster pour plus d'informations.
+
 -- 
-Postmaster
+MailScanner
 %org-long-name%
 %web-site%
 

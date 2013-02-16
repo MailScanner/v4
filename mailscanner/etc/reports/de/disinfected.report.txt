@@ -1,9 +1,9 @@
-Eine kürzlich an Sie adressierte Nachricht von "$from"
+Eine kÃ¼rzlich an Sie adressierte Nachricht von "$from"
 mit dem Betreff "$subject"
 enthielt einen oder mehrere Viren, die entfernt werden konnten.
 
 Die Viren wurden entfernt und die virenfreien Dateien wurden an diese E-Mail
-angehängt.
+angehÃ¤ngt.
 
 --
 MailScanner
