@@ -30,7 +30,9 @@ from optparse import OptionParser
 
 COMMENTS_RE = re.compile(r'/\*\s+(#.*)\s+\*/', re.U)
 TRANSLATION_RE = re.compile(r'"(.+)"\s+=\s+"(.+)";', re.U)
+COMMENT_RE = re.compile(r'\\"')
 WRAPPED_STDOUT = codecs.getwriter('UTF-8')(sys.stdout)
+
 
 if __name__ == '__main__':
     # Run tings mon
@@ -55,5 +57,6 @@ if __name__ == '__main__':
             if '=' in line:
                 matches = TRANSLATION_RE.match(line.strip())
                 if matches:
-                    print u'%s = %s' % (matches.groups()[0],
-                                        matches.groups()[1])
+                    opt, trans = matches.groups()
+                    print u'%s = %s' % (opt,
+                                        COMMENT_RE.sub('"', trans))
