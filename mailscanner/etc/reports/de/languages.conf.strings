@@ -41,9 +41,9 @@
 "FoundIFrame" = "In einer HTML-Nachricht wurde eine gef&auml;hrliche IFrame-Anweisung gefunden";
 "FoundForm" = "Die Nachricht enthielt ein HTML-Formular";
 "FoundScript" = "Fand ein Skript in der HTML Nachricht";
-"FoundObject" = "In einer HTML-Nachricht wurde eine gef&auml;hrliche 'Object Codebase'-/'Data'-Anweisung gefunden";
+"FoundObject" = "In einer HTML-Nachricht wurde eine gef&auml;hrliche \"Object Codebase\"-/\"Data\"-Anweisung gefunden";
 "ExternalBody" = "Externe Nachrichteninhalte k&ouml;nnen nicht auf Viren gepr&uuml;ft werden und werden gel&ouml;scht";
-"EudoraLongMIME" = "Eudora 'long-MIME-boundary'-Angriff";
+"EudoraLongMIME" = "Eudora \"long-MIME-boundary\"-Angriff";
 /* # used when detecting denial-of-service attacks */
 "DOSAttack" = "Versuchter Angriff (Denial of Service) in der Nachricht!";
 /* # used when detecting+blocking (un)encrypted messages */
@@ -86,11 +86,11 @@
 "NoticePrefix" = "Die folgenden E-Mails besassen";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"PossibleFraudStart" = "<font color";
+"PossibleFraudStart" = "<font color=\"red\"><b>MailScanner hat einen m&ouml;glichen T&auml;uschungsversuch durch";
 "PossibleFraudEnd" = "festgestellt.</b></font>";
 /* # NumericLinkWarning = <font color="red"><b>MailScanner Warnung: numerical links are often malicious:</b></font> */
-"# NumericLinkWarning" = "<font color";
-"NumericLinkWarning" = "<font color";
+"# NumericLinkWarning" = "<font color=\"red\"><b>MailScanner Warnung: numerical links are often malicious:</b></font>";
+"NumericLinkWarning" = "<font color=\"red\"><b>MailScanner Warnung: nummerische Links sind oftmals  arglistig:</b></font>";
 /* # Used in "From:" header of many reports */
 "PostmasterName" = "MailScanner";
 /* # GSDisabled = Custom Spam Scanner disabled due to repeated failures */
@@ -109,7 +109,7 @@
 "NoticeSizeInfected" = "Attachment detected outside size limits";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"DefiniteFraudStart" = "<font color";
+"DefiniteFraudStart" = "<font color=\"red\"><b>MailScanner has detected definite fraud in the website at";
 "DefiniteFraudEnd" = ". Do <i>not</i> trust this website:</b></font>";
 /* # Used in reports of attacks on HTML::Parser (used for analysing HTML messages) */
 "HTMLParserAttack" = "MailScanner was attacked by a Denial Of Service attack, and has therefore \ndeleted this part of the message. Please contact your e-mail providers \nfor more information if you need it, giving them the whole of this report.";
