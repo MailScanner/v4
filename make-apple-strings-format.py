@@ -27,6 +27,7 @@ from optparse import OptionParser
 
 
 TRANSLATION_RE = re.compile(r'^(.+)\s+=\s+(.+)$', re.U)
+COMMENT_RE = re.compile(r'["]')
 
 
 if __name__ == '__main__':
@@ -48,5 +49,5 @@ if __name__ == '__main__':
             if line.startswith('#'):
                 print '/* %s */' % line.strip()
             if TRANSLATION_RE.match(line.strip()):
-                tmp = line.strip().split('=')
-                print '"%s" = "%s";' % (tmp[0].strip(), tmp[1].strip())
+                opt, trans = TRANSLATION_RE.match(line.strip()).groups()
+                print '"%s" = "%s";' % (opt, COMMENT_RE.sub(r'\"', trans))
