@@ -84,9 +84,9 @@
 "NoticePrefix" = "Se descubrió que los siguientes mensajes tenían";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"PossibleFraudStart" = "<font color";
+"PossibleFraudStart" = "<font color=\"red\"><b>MailScanner ha detectado un posible intento de fraude desde";
 "PossibleFraudEnd" = "</b></font>";
-"NumericLinkWarning" = "<font color";
+"NumericLinkWarning" = "<font color=\"red\"><b>MailScanner le advierte: los links numericos son comunmente utilizados en actividades maliciosas:</b></font>";
 /* # Used in "From:" header of many reports */
 "PostmasterName" = "MailScanner";
 "GSDisabled" = "El Analizador de Mensajes no deseados a medida fue deshabilitado debido a fallas repetidas";
@@ -103,7 +103,7 @@
 "NoticeSizeInfected" = "El adjunto supera el tamaño máximo de archivo";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"DefiniteFraudStart" = "<font color";
+"DefiniteFraudStart" = "<font color=\"red\"><b>MailScanner ha detectado un intento de fraude en la siguiente página web";
 "DefiniteFraudEnd" = ". <i>No</i> confíe en esta página web:</b></font>";
 /* # Used in reports of attacks on HTML::Parser (used for analysing HTML messages) */
 "HTMLParserAttack" = "MailScanner ha sido víctima de una ataque de denegación de servicio, y por lo tanto ha borrado esta parte del mensaje. Por favor, contacte con su proveedor de correo electrónico para más información.";

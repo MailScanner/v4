@@ -3,7 +3,6 @@
 /* # to a user by MailScanner. They are all here so that you can translate */
 /* # them into your language. */
 /* # You should only edit what is on the right of each "=". */
-"# You should only edit what is on the right of each "" = "".";
 /* # If you set the "Language Strings" option in MailScanner.conf to be a */
 /* # ruleset (or even a function!) then you can output responses in different */
 /* # languages to different users and customers. */
@@ -24,7 +23,7 @@
 /* # used for virus report in unparsable messages */
 "CantAnalyze" = "Kunne ikke analysere besked";
 /* # used for virus report in unparsable TNEF messages */
-"BadTNEF" = "Kunne ikke analysere "Outlook Rich Text" bilag";
+"BadTNEF" = "Kunne ikke analysere \"Outlook Rich Text\" bilag";
 /* # used for creating sysadmin notifications */
 "NoticeHeading" = "Følgende e-breve fik konstateret viruser";
 /* # used when SpamAssassin has timed out too often */
@@ -46,7 +45,7 @@
 "ExternalBody" = "Ekstern besked kan ikke blive skannet og er fjernet";
 "EudoraLongMIME" = "Eudora lang MIME-afgrænsningsangreb";
 /* # used when detecting denial-of-service attacks */
-"DOSAttack" = ""Denial-of-Service" angreb i beskeden!";
+"DOSAttack" = "\"Denial-of-Service\" angreb i beskeden!";
 /* # used when detecting+blocking (un)encrypted messages */
 "encrypted" = "Meddelelsen er krypteret";
 "unencrypted" = "Meddelelsen er ikke krypteret";
@@ -85,9 +84,9 @@
 "NoticePrefix" = "The following e-mails were found to have";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"PossibleFraudStart" = "<font color";
+"PossibleFraudStart" = "<font color=\"red\"><b>MailScanner has detected a possible fraud attempt from";
 "PossibleFraudEnd" = "</b></font>";
-"NumericLinkWarning" = "<font color";
+"NumericLinkWarning" = "<font color=\"red\"><b>MailScanner warning: numerical links are often malicious:</b></font>";
 /* # Used in "From:" header of many reports */
 "PostmasterName" = "MailScanner";
 "GSDisabled" = "Custom Spam Scanner disabled due to repeated failures";
@@ -104,7 +103,7 @@
 "NoticeSizeInfected" = "Attachment detected outside size limits";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"DefiniteFraudStart" = "<font color";
+"DefiniteFraudStart" = "<font color=\"red\"><b>MailScanner has detected definite fraud in the website at";
 "DefiniteFraudEnd" = ". Do <i>not</i> trust this website:</b></font>";
 /* # Used in reports of attacks on HTML::Parser (used for analysing HTML messages) */
 "HTMLParserAttack" = "MailScanner was attacked by a Denial Of Service attack, and has therefore \ndeleted this part of the message. Please contact your e-mail providers \nfor more information if you need it, giving them the whole of this report.";

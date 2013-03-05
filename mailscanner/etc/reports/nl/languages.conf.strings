@@ -84,9 +84,9 @@
 "NoticePrefix" = "The following e-mails were found to have";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"PossibleFraudStart" = "<font color";
+"PossibleFraudStart" = "<font color=\"red\"><b> MailScanner heeft een e-mail met mogelijk een poging tot fraude gevonden van";
 "PossibleFraudEnd" = "</b></font>";
-"NumericLinkWarning" = "<font color";
+"NumericLinkWarning" = "<font color=\"red\"><b>MailScanner warning: numerical links are often malicious:</b></font>";
 /* # Used in "From:" header of many reports */
 "PostmasterName" = "MailScanner";
 "GSDisabled" = "Custom Spam Scanner disabled due to repeated failures";
@@ -103,7 +103,7 @@
 "NoticeSizeInfected" = "Attachment detected outside size limits";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"DefiniteFraudStart" = "<font color";
+"DefiniteFraudStart" = "<font color=\"red\"><b>MailScanner has detected definite fraud in the website at";
 "DefiniteFraudEnd" = ". Do <i>not</i> trust this website:</b></font>";
 /* # Used in reports of attacks on HTML::Parser (used for analysing HTML messages) */
 "HTMLParserAttack" = "MailScanner was attacked by a Denial Of Service attack, and has therefore \ndeleted this part of the message. Please contact your e-mail providers \nfor more information if you need it, giving them the whole of this report.";
