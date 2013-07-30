@@ -36,6 +36,7 @@ use Net::DNS::Resolver;
 use LWP::UserAgent;
 use DirHandle;
 use MailScanner::Config;
+use Time::Local;
 
 # Work out Quarantine Directory from MailScanner.conf
 my $base = '/var/spool/MailScanner/quarantine'; # Default value
@@ -131,7 +132,22 @@ my $res = Net::DNS::Resolver->new();
 		}
 }
 
-die "Failed to retrieve valid current details\n" unless (!($currentbase eq "-1"));
+#die "Failed to retrieve valid current details\n" unless (!($currentbase eq "-1"));
+if ($currentbase == -1) {
+  $currentbase = 0;
+  $currentupdate = 0;
+  warn "No appropriate TXT found at $query.\n";
+}
+
+my $day = (gmtime)[6];
+my $year = (gmtime)[5] + 1900;
+my $janone = (gmtime(timegm(0,0,0,1,0,$year-1900)))[6];
+my $week = sprintf ("%02d", int (((gmtime)[7] + $janone) / 7));
+my $mybase = "$year-$week$day";
+if ($currentbase lt $mybase) {
+  $currentbase = $mybase;
+  $currentupdate = 99;
+}
 
 print "I am working with: Current: $currentbase - $currentupdate and Status: $status_base - $status_update\n"; 
 
@@ -195,7 +211,10 @@ if (!($status_update eq $currentupdate)) {
 			print "Retrieving $urlbase$currentbase.$i\n";
 			my $req = HTTP::Request->new(GET => $urlbase.$currentbase.".".$i);
 			my $res = $ua->request($req);
-			warn "Failed to retrieve $urlbase$currentbase.$i" unless ($res->is_success) ;
+		        unless ($res->is_success) {
+		          warn "Failed to retrieve $urlbase$currentbase.$i";
+		          $currentupdate = $i - 1;
+		        }
 					my $line;
 				 foreach $line (split("\n", $res->content)) {
 					# Is it an addition?
@@ -222,6 +241,12 @@ if (!($status_update eq $currentupdate)) {
 					}
 				}
 		}
+	     # Because of our guess and retrieve until error strategy, we could be
+	     # here without having retrieved any new updates which will result in
+	     # our cached $status_update being erased. This does no real harm, but
+	     # it causes extra work on the next run. To avoid this we skip the next
+	     # section in that case.
+	     if (!($status_update eq $currentupdate)) {
 		# OK do we have a previous version to work from?
 		if ($status_update>0) {
 			# Yes - we open the most recent version
@@ -263,6 +288,7 @@ if (!($status_update eq $currentupdate)) {
 			}
 		}
 		close (FILEOUT);
+	    }
 	}
 		
 }
