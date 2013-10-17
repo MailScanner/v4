@@ -2,7 +2,7 @@
 #   MailScanner - SMTP E-Mail Virus Scanner
 #   Copyright (C) 2002  Julian Field
 #
-#   $Id: TNEF.pm 5102 2011-08-20 12:31:59Z sysjkf $
+#   $Id: TNEF.pm 5119 2013-06-17 13:29:15Z sysjkf $
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ use POSIX qw(:signal_h setsid); # For Solaris 9 SIG bug workaround
 use vars qw($VERSION);
 
 ### The package version, both in 1.23 style *and* usable by MakeMaker:
-$VERSION = substr q$Revision: 5102 $, 10;
+$VERSION = substr q$Revision: 5119 $, 10;
 
 my($UseTNEFModule) = 0;
 
@@ -229,17 +229,28 @@ sub ExternalDecoder {
 
   # Create the subdir to unpack it into
   #my $unpackdir = "tnef.$$";
-  my $unpackdir = tempdir("tnefXXXXXX");
-  $unpackdir = $message->MakeNameSafe($unpackdir, $dir);
-  unless (mkdir "$dir/$unpackdir", 0777) {
+  my $unpackdir = tempdir("tnefXXXXXX", DIR => $dir);
+  # This line shouldn't be here any more! $dir =~ s,^.*/,,;
+  # And leave $unpackdir as the full path.
+  #$unpackdir = $message->MakeNameSafe($unpackdir, $dir);
+  unless (-d $unpackdir) {
     MailScanner::Log::WarnLog("Trying to unpack %s in message %s, could not create subdirectory %s, failed to unpack TNEF message", $tnefname, $message->{id},
-                              "$dir/$unpackdir");
+                              "$unpackdir");
     return 0;
   }
-  chmod 0700, "$dir/$unpackdir";
+  # Convert Incoming Work Permissions to an octal value and add search.
+  my $perms = oct(sprintf("%s", MailScanner::Config::Value('workperms')))
+    | 0111;
+  chmod $perms, $unpackdir;
+  # Try to set Incoming Work User and Group.
+  my $uname = MailScanner::Config::Value('workuser');
+  my $gname = MailScanner::Config::Value('workgroup');
+  my $uid = $uname?getpwnam($uname):-1;
+  my $gid = $gname?getgrnam($gname):-1;
+  chown $uid, $gid, $unpackdir;
 
   my $cmd = MailScanner::Config::Value('tnefexpander') .
-            " -f $dir/$tnefname -C $dir/$unpackdir --overwrite";
+            " -f $dir/$tnefname -C $unpackdir --overwrite";
 
   my($kid);
   my($TimedOut, $PipeReturn, $pid);
@@ -310,15 +321,15 @@ sub ExternalDecoder {
 
     unless (MailScanner::Config::Value('replacetnef',$message) =~ /[12]/) {
       # Just need to move all the unpacked files into the main attachments dir
-      my $dirh = new DirHandle "$dir/$unpackdir";
+      my $dirh = new DirHandle "$unpackdir";
       return 0 unless defined $dirh;
       while (defined(my $unpacked = $dirh->read)) {
-        next unless -f "$dir/$unpackdir/$unpacked";
+        next unless -f "$unpackdir/$unpacked";
         # Add a 't' to the safename to mark it as a tnef member.
         my $safe = $message->MakeNameSafe('t'.$unpacked, $dir);
         # This will cause big problems as $safe has a type, and shouldn't!
         $message->{file2parent}{$safe} = $tnefname;
-        my $name1 = "$dir/$unpackdir/$unpacked";
+        my $name1 = "$unpackdir/$unpacked";
         $name1 =~ /(.*)/;
         $name1 = $1;
         my $name2 = "$dir/$safe";
@@ -332,19 +343,21 @@ sub ExternalDecoder {
         $safe =~ s#^(.*/)([^/])([^/]+)$#$1$3#; # I assert $2 will equal 't'.
         $message->{file2parent}{$safe} = $tnefname;
       }
-      rmdir "$dir/$unpackdir"; # Directory should be empty now
+      # The following may result in a warning from a virus scanner that
+      # tries to lstat the directory, but it was empty so it can be ignored.
+      rmdir "$unpackdir"; # Directory should be empty now
       return 1;
     }
     #print STDERR "In TNEF External Decoder\n";
 
-    my $dirh = new DirHandle "$dir/$unpackdir";
+    my $dirh = new DirHandle "$unpackdir";
     return 0 unless defined $dirh;
     my($type, $encoding);
     $message->{entity}->make_multipart;
     my($safename, @replacements, $unpacked);
     while (defined($unpacked = $dirh->read)) {
-      #print STDERR "Directory entry is \"$unpacked\" in \"$dir/$unpackdir\"\n";
-      next unless -f "$dir/$unpackdir/$unpacked";
+      #print STDERR "Directory entry is \"$unpacked\" in \"$unpackdir\"\n";
+      next unless -f "$unpackdir/$unpacked";
       # Add a 't' to the safename to mark it as a tnef member.
       $safename = $message->MakeNameSafe('t'.$unpacked, $dir);
       if (/^msg[\d-]+\.txt$/) {
@@ -352,15 +365,15 @@ sub ExternalDecoder {
       } else {
         ($type, $encoding) = ("application/octet-stream", "base64");
       }
-      #print STDERR "Renaming '$dir/$unpackdir/$unpacked' to '$dir/$safename'\n";
-      my $oldname = "$dir/$unpackdir/$unpacked";
+      #print STDERR "Renaming '$unpackdir/$unpacked' to '$dir/$safename'\n";
+      my $oldname = "$unpackdir/$unpacked";
       my $newname = "$dir/$safename";
       $oldname =~ /^(.*)$/;
       $oldname = $1;
       $newname =~ /^(.*)$/;
       $newname = $1;
       rename $oldname, $newname;
-      #rename "$dir/$unpackdir/$unpacked", "$dir/$safename";
+      #rename "$unpackdir/$unpacked", "$dir/$safename";
       # JKF 20090421 CHMOD, then CHOWN and CHGRP it if necessary.
       chmod $perms, $newname;
       #chmod $perms, "$dir/$safename";
@@ -380,7 +393,9 @@ sub ExternalDecoder {
     $message->{bodymodified} = 1;
     $message->{foundtnefattachments} = 1;
     undef $dirh;
-    rmdir "$dir/$unpackdir"; # Directory should be empty now
+    # The following may result in a warning from a virus scanner that
+    # tries to lstat the directory, but it was empty so it can be ignored.
+    rmdir "$unpackdir"; # Directory should be empty now
     #$message->{entity}->dump_skeleton();
 
     MailScanner::Log::InfoLog("Message %s added TNEF contents %s",
