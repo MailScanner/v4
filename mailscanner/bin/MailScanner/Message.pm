@@ -7594,7 +7594,7 @@ sub CleanLinkURL {
   $linkurl = $DisarmBaseURL . '/' . $linkurl
     if $linkurl ne "" && $DisarmBaseURL ne "" &&
        $linkurl !~ /^(https?|ftp|mailto|webcal):/i;
-  $linkurl =~ s/^(https?:\/\/[^:]+):80($|\D)/$1/i; # Remove http://....:80
+  $linkurl =~ s/^(https?:\/\/[^:]+):80($|\D)/$1$2/i; # Remove http://....:80
   $linkurl =~ s/^(https?|ftp|webcal)[:;]\/\///i;
   return ("",0) if $linkurl =~ /^ma[il]+to[:;]/i;
   #$linkurl = "" if $linkurl =~ /^ma[il]+to[:;]/i;
@@ -7605,7 +7605,6 @@ sub CleanLinkURL {
   return ("",0) if $linkurl =~ /^#/; # Ignore internal links completely
   #$linkurl = "" if $linkurl =~ /^#/; # Ignore internal links completely
   $linkurl =~ s/\/$//; # LinkURL is trimmed -- note
-  $linkurl =~ s/:80$//; # Port 80 is the default anyway
   $alarm = 1 if $linkurl =~ s/[\x00-\x1f[:^ascii:]]/_BAD_/g; # /\&\#/;
   $linkurl = 'JavaScript' if $linkurl =~ /^javascript:/i;
   ($linkurl, $alarm);
