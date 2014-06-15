@@ -37,7 +37,7 @@ no  strict 'subs'; # Allow bare words for parameter %'s
 #use English; # Needed for $PERL_VERSION to work in all versions of Perl
 
 use POSIX qw(:signal_h); # For Solaris 9 SIG bug workaround
-use IO;
+use IO::Pipe;
 # Don't do this any more as SpamAssassin prefers to do it itself
 # use AnyDBM_File; # Doing this here keeps SpamAssassin quiet
 

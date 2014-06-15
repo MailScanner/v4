@@ -746,7 +746,7 @@ use FileHandle;
 use Net::CIDR;
 use Socket;
 use POSIX qw(:signal_h); # For Solaris 9 SIG bug workaround
-use IO;
+use IO::Pipe;
 BEGIN { @AnyDBM_File::ISA = qw(DB_File GDBM_File NDBM_File SDBM_File) }
 use AnyDBM_File;
 

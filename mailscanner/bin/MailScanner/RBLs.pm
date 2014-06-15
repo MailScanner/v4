@@ -36,7 +36,7 @@ use strict 'refs';
 no  strict 'subs'; # Allow bare words for parameter %'s
 
 use POSIX qw(:signal_h); # For Solaris 9 SIG bug workaround
-use IO;
+use IO::Pipe;
 
 use vars qw($VERSION);
 
