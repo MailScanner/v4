@@ -1,4 +1,15 @@
-20/08/2011 New in Version 4.84.3-1
+17/06/2013 New in Version 4.84.6-1
+==================================
+* Fixes *
+1 TNEF code fixed according to commonly-distributed patch.
+1 ScamNailer also updated to include commonly-distributed patches.
+
+10/11/2012 New in Version 4.84.5-3
+==================================
+* Fixes *
+1 Clamd will no longer think there is a virus in MessageBatch.pm.
+
+05/03/2012 New in Version 4.84.5-2
 ==================================
 * Fixes *
 1 Fixed taint errors which show up in new versions of Perl.
@@ -6,6 +17,9 @@
 2 Fixed error occurring when Antiword fails to parse the input file.
 3 Fixed bunch of mktemp bugs, thanks to Andrew Colin Kissa.
 4 Another taint bug in Quarantine.pm.
+5 Fixed disastrous domain expiry problem in update_bad_phishing_sites and
+  update_bad_phishing_emails
+5-2 Updated location of Web Bug Replacement to new cdn site.
 
 17/04/2011 New in Version 4.83.5-1
 ==================================
