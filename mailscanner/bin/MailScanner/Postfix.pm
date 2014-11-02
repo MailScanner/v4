@@ -83,9 +83,9 @@ sub new {
   my $type = shift;
   my $this = {};
 
-  # These need to be improved
-  # No change for V4
-  $this->{HDFileRegexp} = '^([\\dA-F]+)$';
+  # updated by Jerry Benton
+  # Replaced HDFileRegexp '^([\\dA-F]+)$' with '^([\\w]+)$'
+  $this->{HDFileRegexp} = '^([\\w]+)$';
   $this->{TFileRegexp} = '^tf-' . $$ . '-([\\dA-F]+)$';
   # JKF Must fix this once I know what it's for.
   $this->{QueueFileRegexp} = '^([\\d]+-[\\d]+)$';
