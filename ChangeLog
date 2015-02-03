@@ -1,3 +1,19 @@
+03/02/2015 New in Version 4.85.1-1
+==================================
+* Fixes *
+- Postfix long queue ID's in Postfix.pm.
+- Updated files with perl -U option to be compliant with newer versions of perl.
+- Notorious tempfile fix in LastSpam.pm
+- Item use IO; deprecated. Updated files to use use IO::Pipe;
+- Fixed phishing filter URL handling
+- Internal TNEF.pm fixed
+- Typo fixes
+- Various language string updates
+- Updated spam.lists.conf
+- Improved translation tools
+- Postfix taint fix
+- Spamassassin temp file fix
+
 17/06/2013 New in Version 4.84.6-1
 ==================================
 * Fixes *
