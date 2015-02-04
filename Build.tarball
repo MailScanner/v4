@@ -146,6 +146,3 @@ chmod 0644 $BUILDROOT/$INSTALL/perl-tar/*tar.gz
 
 cd $BUILDROOT
 tar czf $INSTALL-$RELEASE.tar.gz $INSTALL
-
-#echo 'Have you remembered to set the version number right'
-#echo 'in mailscanner/bin/mailscanner?'
