@@ -9,7 +9,7 @@
 $parentDir = dirname( dirname(__FILE__) );
 
 // moved parse_conf.php to here
-$fh = fopen($parentDir'/mailscanner/etc/mailscanner.conf','r');
+$fh = fopen($parentDir.'/mailscanner/etc/mailscanner.conf','r');
 if($fh) {
  while(!feof($fh)) {
   $line = fgets($fh,1024);
@@ -44,7 +44,7 @@ fclose($fh);
 unset($fh);
 // finish parse_conf.php
 
-$fh = fopen($parentDir'/mailscanner/bin/MailScanner/ConfigDefs.pl','r');
+$fh = fopen($parentDir.'/mailscanner/bin/MailScanner/ConfigDefs.pl','r');
 if($fh) {
  while(!feof($fh)) {
   $line = fgets($fh,1024);
