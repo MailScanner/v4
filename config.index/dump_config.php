@@ -1,6 +1,6 @@
 <?php
-require_once('./conf_array.php');
-error_reporting(0);
+# this file should have been created by make.sh
+require_once('/tmp/conf_array.php');
 ?>
 <html>
 <head>
@@ -191,7 +191,6 @@ foreach($conf as $ckey=>$cval) {
 }
 ?>
 </table>
-
 </body>
 </html>
 <html><body></body></html>

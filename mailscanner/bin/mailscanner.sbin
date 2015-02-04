@@ -154,7 +154,7 @@ $SIG{'TERM'} = \&ExitParent;
 #
 # First production release will be 4.00.1.
 #
-$MailScanner::Config::MailScannerVersion = '4.84.3';
+$MailScanner::Config::MailScannerVersion = 'VersionNumberHere';
 
 my $WantHelp          = 0;
 my $Versions          = 0;

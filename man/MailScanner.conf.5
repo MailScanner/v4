@@ -1,0 +1,2364 @@
+.TH "MailScanner.conf" "5" "4.50.1" "Julian Field" "Mail"
+.SH "NAME"
+.LP 
+MailScanner.conf \- Main configuration for MailScanner
+.SH "SYNOPSIS"
+.LP 
+none
+.SH "DESCRIPTION"
+.LP 
+MailScanner is configured using the file MailScanner.conf. The location of this file varies from operating system to operating system:
+
+Linux:	/etc/MailScanner
+.br 
+FreeBSD: /usr/local/etc/MailScanner
+.br 
+Other: /opt/MailScanner/etc
+
+.LP 
+Blank lines are ignored, as are leading and trailing spaces. Comments start at a '#' character and extend to the end of the line. All options are expressed in the form
+.br 
+
+.br 
+option = value
+.br 
+
+.br 
+Many of the options can also be the filename of a ruleset, which can be used to control features depending on the addresses of the message, and/or the IP address where the message came from. You will find some examples of rulesets and an explanation of them in the "rules" directories within the MailScanner installation and in the section "RULESETS" later in this manpage.
+
+.LP 
+The options are best listed in a few categories. If this list looks very large then don't worry, the supplied MailScanner.conf file (or MailScanner.conf.sample) contains sensible defaults for all the values. You will probably only need to change a very few of them to start with.
+
+Starting with version 4.40.10 of MailScanner you can use shell environment variables such as $HOSTNAME or ${HOSTNAME} in MailScanner.conf and its relatives.
+
+.LP 
+You should define the following variables:
+.br 
+
+.br 
+
+.TP 
+\fB%report\-dir%\fR
+Default: /opt/MailScanner/etc/reports/en
+.br 
+Default FreeBSD: /usr/local/share/MailScanner/reports/en
+.br 
+
+.br 
+Set the directory containing all the reports in the required language.
+
+.TP 
+\fB%etc\-dir%\fR
+Default: /opt/MailScanner/etc
+.br 
+Default FreeBSD: /usr/local/etc/MailScanner
+.br 
+
+.br 
+Configuration directory containing this file
+
+.TP 
+\fB%rules\-dir%\fR
+Default: /opt/MailScanner/etc/rules
+.br 
+Default FreeBSD: /usr/local/etc/MailScanner/rules
+.br 
+
+.br 
+Rulesets directory containing your ".rules" files
+
+.TP 
+\fB%org\-name%\fR
+Default: yoursite
+.br 
+
+.br 
+Enter a short identifying name for your organisation below, this is used to make the X\-MailScanner headers unique for your organisation. Multiple servers within one site should use an identical value here to avoid adding multiple redundant headers where mail has passed through several servers within your organisation. 
+.br 
+Note: Some Symantec scanners complain (incorrectly) about "." characters appearing in the names of headers.
+
+.TP 
+\fB%org\-long\-name%\fR
+Default: Your Organisation Name Here
+.br 
+
+.br 
+Enter the full name of your organisation below, this is used in the signature placed at the bottom of report messages sent by MailScanner. It can include pretty much any text you like. You can make the result span several lines by including "\n" sequences in the text. These will be replaced by line\-breaks.
+
+.TP 
+\fB%web\-site%\fR
+Default: www.your\-organisation.com
+.br 
+
+.br 
+Enter the location of your organisation's web site below. This is used in the signature placed at the bottom of report messages sent by MailScanner. It should preferably be the location of a page that you have written explaining why you might have rejected the mail and what the recipient and/or sender should do about it.
+.SH "System Settings"
+.TP 
+\fBMax Children\fR
+Default: 5
+.br 
+
+.br 
+MailScanner uses your server efficiently by running several identical processes at the same time, all processing mail. This is the number of these processes to run at once. Turning this figure will optimise the performance of your system if you process a lot of mail. A good figure  to start with is 5 children per CPU. So if you have 4 CPUs in your server, start by setting this to 20.
+
+.TP 
+\fBRun as User\fR
+Default: not to change user
+.br 
+
+.br 
+Provided for Exim users (and anyone not running sendmail as root), this changes the user under which MailScanner runs.
+
+.TP 
+\fBRun as Group\fR
+Default: not to change group
+.br 
+
+.br 
+Provided for Exim users (and anyone not running sendmail as root), this changes the group under which MailScanner runs.
+
+
+.TP 
+\fBQueue Scan Interval\fR
+Default: 5
+.br 
+
+.br 
+How often (in seconds) should each process check the incoming mail queue for new messages? If you have a quiet mail server, you might want to increase this value so it causes less load on your server, at the cost of slightly increasing the time taken for an average message to be processed.
+
+.TP 
+\fBIncoming Queue Dir\fR
+Default: /var/spool/mqueue.in 
+.br 
+
+.br 
+Directory in which MailScanner should find e\-mail messages for scanning. This can be any of the following:
+.br 
+
+.RS 7
+.IP  1. 4
+a directory name. 
+.br 
+Example: /var/spool/mqueue.in
+.IP  2. 4
+a wildcard giving directory names. 
+.br 
+Example: /var/spool/mqueue.in/*
+.IP  3. 4
+the name of a file containing a list of directory names, which can in turn contain wildcards. 
+.br 
+Example: /usr/local/etc/MailScanner/mqueue.in.list.conf
+.RE
+
+.TP 
+\fBOutgoing Queue Dir\fR
+Default: /var/spool/mqueue
+.br 
+
+.br 
+Directory in which MailScanner should place scanned e\-mail messages. This can also be the filename of a ruleset.
+
+.TP 
+\fBIncoming work dir\fR
+Default: /opt/MailScanner/var/incoming 
+.br 
+Default FreeBSD: /var/spool/MailScanner/incoming
+.br 
+
+.br 
+Directory in which to temporarily store unpacked MIME messages during scanning process. 
+
+
+.TP 
+\fBQuarantine Dir\fR
+Default: /opt/MailScanner/var/quarantine
+.br 
+Default FreeBSD: /var/spool/MailScanner/quarantine
+.br 
+
+.br  
+Set where to store infected messages and attachments (if they are kept). This can also be the filename of a ruleset.
+
+.TP 
+\fBPID file\fR
+Default: /opt/MailScanner/var/MailScanner.pid
+.br 
+Default FreeBSD: /var/run/MailScanner.pid
+.br 
+
+.br 
+Set where to store the process id number so you can stop MailScanner. In the FreeBSD port this should remain /var/run/MailScanner.pid in order for the start/stop script to work.
+
+.TP 
+\fBRestart Every\fR
+Default: 14400
+.br 
+
+.br 
+To avoid resource leaks the MailScanner parent process stops and restarts its child processes from time to time. Set the amount of seconds each child process is supposed to live here.
+
+.TP 
+\fBMTA\fR
+Default: sendmail
+.br 
+
+.br 
+MailScanner works with sendmail and exim. Since the queue handling differs a bit, you have to tell MailScanner which MTA you are using. Valid options are sendmail and exim.
+
+.TP 
+\fBSendmail\fR
+Default: /usr/lib/sendmail
+.br 
+Default FreeBSD: /usr/sbin/sendmail
+.br 
+
+.br 
+Set how to invoke MTA when sending messages MailScanner has created (e.g. to sender/recipient saying "found a virus in your message"). This can also be the filename of a ruleset.
+
+.TP 
+\fBSendmail2\fR
+Default: same value as the Sendmail setting
+.br 
+
+.br 
+Sendmail2 is provided for exim users. It is the command used to attempt delivery of outgoing cleaned/disinfected messages. This is not usually required for sendmail. 
+.br 
+For Exim users this could be: Sendmail2 = /usr/sbin/exim \-C /usr/local/etc/exim/configure.out
+
+
+.SH "Incoming Work Dir Settings"
+You should not normally need to touch these settings at all, unless you are using ClamAV and need to be able to use the external archive unpackers instead of ClamAV's built\-in ones.
+
+
+.TP 
+\fBIncoming Work User\fR
+Default:
+.br 
+
+.br 
+If you want to create the temporary working files so they are owned by a user other than the "Run As User" setting, you can change that here. Note: If the "Run As User" is not "root" then you cannot change the user but may still be able to change the group, if the "Run As User" is a member of both of the groups "Run As Group" and "Incoming Work Group".
+
+.TP 
+\fBIncoming Work Group\fR
+Default:
+.br 
+
+.br 
+If you want to create the temporary working files so they are owned by a group other than the "Run As User" setting, you can change that here. Note: If the "Run As User" is not "root" then you cannot change the user but may still be able to change the group, if the "Run As User" is a member of both of the groups "Run As Group" and "Incoming Work Group".
+
+.TP 
+\fBIncoming Work Permissions\fR
+Default: 0600
+.br 
+
+.br 
+If you want processes running under the same *group* as MailScanner to be able to read the working files (and list what is in the directories, of course), set to 0640. If you want *all* other users to be able to read them, set to 0644. For a detailed description, if you're not already familiar with it, refer to `man 2 chmod`. Typical use: external helper programs of virus scanners (notably ClamAV), like unpackers. Use with care, you may well open security holes.
+
+.SH "Quarantine and Archive Settings"
+If, for example, you are using a web interface so that users can manage their quarantined files, you might want to change the ownership and permissions of the quarantined so that they can be read and/or deleted by the web server. Don't touch this unless you know what you are doing!
+
+
+.TP 
+\fBQuarantine User\fR
+Default:
+.br 
+
+.br 
+If you want to create the quarantine/archive so the files are owned by a user other than the "Run As User" setting at the top of this file, you can change that here. Note: If the "Run As User" is not "root" then you cannot change the user but may still be able to change the group, if the "Run As User" is a member of both of the groups "Run As Group" and "Quarantine Group".
+
+.TP 
+\fBQuarantine Group\fR
+Default:
+.br 
+
+.br 
+If you want to create the quarantine/archive so the files are owned by a user other than the "Run As User" setting at the top of this file, you can change that here. Note: If the "Run As User" is not "root" then you cannot change the user but may still be able to change the group, if the "Run As User" is a member of both of the groups "Run As Group" and "Quarantine Group".
+
+.TP 
+\fBQuarantine Permissions\fR
+Default: 0600
+.br 
+
+.br 
+If you want processes running under the same *group* as MailScanner to be able to read the quarantined files (and list what is in the directories, of course), set to 0640. If you want *all* other users to be able to read them, set to 0644. For a detailed description, if you're not already familiar with it, refer to `man 2 chmod`. Typical use: let the webserver have access to the files so users can download them if they really want to. Use with care, you may well open security holes.
+.SH "Process Incoming Mail"
+.TP 
+\fBMax Unscanned Bytes Per Scan\fR
+Default: 100000000
+.br 
+
+.br 
+MailScanner handles messages in batches for efficiency. Messages are gathered (in strict date order) from the incoming queue directory, one at a time, until this or one of the following three limits is reached or the queue is empty.
+.br 
+
+.br 
+This setting limits the total size of messages per batch for which no scanning is done (i.e. Virus Scanning = no).
+
+.TP 
+\fBMax Unsafe Bytes per Scan\fR
+Default: 50000000
+.br 
+
+.br 
+This setting limits the total size of messages per batch for which scanning is done (i.e. Virus Scanning = yes).
+
+.TP 
+\fBMax Unscanned Messages Per Scan\fR
+Default: 100
+.br 
+
+.br 
+This setting limits the total number of messages per batch for which no scanning is done (i.e. Virus Scanning = no).
+
+.TP 
+\fBMax Unsafe Messages per Scan\fR
+Default: 100
+.br 
+
+.br 
+This setting limits the total number of messages per batch for which scanning is done (i.e. Virus Scanning = yes).
+
+.TP 
+\fBMax Normal Queue Size\fR
+Default: 1000
+.br 
+
+.br 
+If more messages are found in the queue than this, then switch to an "accelerated" mode of processing messages. This will cause it to stop scanning messages in strict date order, but in the order it finds them in the queue. If your queue is bigger than this size a lot of the time, then some messages could be greatly delayed. So treat this option as "in emergency only".
+
+
+.TP 
+\fBScan Messages\fR
+Default: yes
+.br 
+
+.br 
+If this is set to yes, then email messages passing through MailScanner will be processed and checked, and all the other options in this file will be used to control what checks are made on the message. If this is set to no, then email messages will NOT be processed or checked *at all*, and so any viruses or other problems will be ignored.
+
+.TP 
+\fBReject Messages\fR
+Default: no
+.br 
+
+.br 
+You may not want to receive mail from certain addresses and/or to certain addresses. If so, you can do this with your email transport (sendmail, Postfix, etc) but that will just send a one\-line message which is not helpful to the user sending the message. If this is set to yes, then the message set by the "Rejection Report" will be sent instead, and the incoming message will be deleted. If you want to store a copy of the original incoming message then use the "Archive Mail" setting to archive a copy of it. The purpose of this option is to set it to be a ruleset, so that you can reject messages from a few offending addresses where you need to  send a polite reply instead of just a brief 1\-line rejection message.
+
+.TP 
+\fBMaximum Attachments Per Message\fR
+Default: 200
+.br 
+
+.br 
+The maximum number of attachments allowed in a message before it is considered to be an error. Some email systems, if bouncing a message between 2 addresses repeatedly, add information about each bounce as an attachment, creating a message with thousands of attachments in just a few minutes. This can slow down or even stop MailScanner as it uses all available memory to unpack these thousands of attachments. This can also be the filename of a ruleset.
+
+.TP 
+\fBExpand TNEF\fR
+Default: yes
+.br 
+
+.br 
+TNEF is primarily used by Microsoft programs such as Outlook and Outlook Express when mails are formatted/sent in Rich\-Text\-Format. Attachments are all put together in one WINMAIL.DAT file.
+.br 
+
+.br 
+Should we use a TNEF decoder (external or Perl module)? This should be "yes" unless the scanner you are using (Sophos, McAfee) has the facility built\-in. However, if you set it to "no", then the filenames within the TNEF attachment will not be checked against the filename rules.
+
+.TP 
+\fBDeliver Unparsable TNEF\fR
+Default: no
+.br 
+
+.br 
+Rich Text format attachments produced by some versions of Microsoft Outlook cannot be completely decoded at present. Setting this option to yes allows compatibility with the behaviour of earlier versions where these attachments were still delivered. This would introduce the slight chance of a virus getting through in the segment of the attachment that could not be decoded, but the setting may be necessary if you have a large number of Microsoft Outlook users who are troubled by the new behaviour. 
+
+.TP 
+\fBTNEF Expander\fR
+Default: /opt/MailScanner/bin/tnef
+.br 
+Default FreeBSD: /usr/local/bin/tnef
+.br 
+
+.br 
+Full pathname giving location of the MS\-TNEF expander/decoder program, or the keyword internal which will force use of the optional Perl Convert::TNEF module instead of the external program. 
+
+.TP 
+\fBTNEF Timeout\fR
+Default: 120
+.br 
+
+.br 
+The maximum length of time (in seconds) the TNEF Expander is allowed to run for diassembling one attachment.
+
+.TP 
+\fBFile Command\fR
+Default: /usr/bin/file
+.br 
+
+.br 
+Where the "file" command is installed. This is used for checking the content type of files, regardless of their filename. To disable Filetype checking, set this value to blank.
+
+.TP 
+\fBFile Timeout\fR
+Default: 20
+.br 
+
+.br 
+The maximum length of time the "file" command is allowed to run for one batch of messages (in seconds).
+
+
+.TP 
+\fBUnrar Command\fR
+Default: /usr/bin/unrar
+.br 
+
+.br 
+Where the "unrar" command is installed. If you haven't got this command, look at www.rarlab.com. This is used for unpacking rar archives so that the contents can be checked for banned filenames and filetypes, and also that the archive can be tested to see if it is password\-protected. Virus scanning the contents of rar archives is still left to the virus scanner, with one exception: If using the clavavmodule virus scanner, this adds external RAR checking to that scanner which is needed for archives which are RAR version 3.
+
+.TP 
+\fBUnrar Timeout\fR
+Default: 50
+.br 
+
+.br 
+The maximum length of time the "unrar" command is allowed to run for 1 RAR archive (in seconds)
+
+.TP 
+\fBBlock Encrypted Messages\fR
+Default: no
+.br 
+
+.br 
+This is inteded for use with a ruleset to ensure that none of your users is covertly mailing sites with which you would not normally communicate (e.g. your competitors). If this is set to yes (or the ruleset evaluates to yes) encrypted messages are blocked.
+
+.TP 
+\fBBlock Unencrypted Messages\fR
+Default: no
+.br 
+
+.br 
+This is intended for use with a ruleset to ensure that mail is always encrypted before being sent. This could be used to ensure that mail to your business partners is sent securely. 
+
+.TP 
+\fBAllow Password\-Protected Archives\fR
+Default: no
+.br 
+
+.br 
+Should archives which contain any password\-protected files be allowed? Leaving this set to "no" is a good way of protecting against all the protected zip files used by viruses at the moment. This can also be the filename of a ruleset.
+
+.TP 
+\fBMaximum Message Size\fR
+Default: 0
+.br 
+
+.br 
+The maximum size, in bytes, of any message including the headers. If this is set to zero, then no size checking is done. This can also be the filename of a ruleset, so you can have different settings for different users. You might want to set this quite small for dialup users so their email applications don't time out downloading huge messages.
+
+.TP 
+\fBMaximum Attachment Size\fR
+Default: \-1
+.br 
+
+.br 
+The maximum size, in bytes, of any attachment in a message. If this is set to zero, effectively no attachments are allowed. If this is set less than zero, then no size checking is done. This can also be the filename of a ruleset, so you can have different settings for different users. You might want to set this quite small for large mailing lists so they don't get deluged by large attachments.
+
+.TP 
+\fBMaximum Archive Depth\fR
+Default: 3
+.br 
+
+.br 
+The maximum depth to which zip archives will be unpacked to allow for checking filenames and filetypes within zip archives. Setting this to 0 will disable filename/\-type checks within zip files while still allowing to block password protected zip files.
+
+.TP 
+\fBFind Archives By Content\fR
+Default: yes
+.br 
+
+.br 
+Find zip archives by filename or by file contents? Finding them by content is a far more reliable way of finding them, but it does mean that you cannot tell your users to avoid zip file checking by renaming the file from ".zip" to "_zip" and tricks like that. Only set this to no (i.e. check by filename only) if you don't want to reliably check the contents of zip files. Note this does not affect virus checking, but it will affect all the other checks done on the contents of the zip file. This can also be the filename of a ruleset.
+.SH "Options specific to Sophos Anti-Virus"
+.TP 
+\fBAllowed Sophos Error Messages\fR
+Default: 
+.br 
+
+.br 
+Anything on the next line that appears in brackets at the end of a line of output from Sophos will cause the error/infection to be ignored. Use of this option is dangerous, and should only be used if you are having trouble with lots of corrupt PDF files, for example. This option allows for multiple strings as well. In this case, the strings should be put in double quotes (") and each string separated with commas. Examples: 
+.br 
+Allowed Sophos Error Messages = corrupt format not supported
+.br 
+Allowed Sophos Error Messages = "corrupt", "format not supported"
+.br 
+
+.br 
+The first version will match "corrupt format not supported" only. The second version will match "corrupt" and "format not supported".
+
+.TP 
+\fBSophos IDE Dir\fR
+Default: /usr/local/Sophos/ide
+.br 
+
+.br 
+The directory (or a link to it) containing all the Sophos *.ide files. This is only used by the "sophossavi" virus scanner, and is irrelevant for all other scanners.
+
+.TP 
+\fBSophos Lib Dir\fR
+Default: /usr/local/Sophos/lib
+.br 
+
+.br 
+The directory (or a link to it) containing all the Sophos *.so libraries.This is only used by the "sophossavi" virus scanner, and is irrelevant for all other scanners.
+
+.TP 
+\fBMonitors For Sophos Updates\fR
+Default: /usr/local/Sophos/ide/*ides.zip
+.br 
+
+.br 
+SophosSAVI only: monitor each of these files for changes in size to detect when a Sophos update has happened. The date of the Sophos Lib Dir is also monitored. This is only used by the "sophossavi" virus scanner, not the "sophos" scanner setting.
+
+.SH "Virus scanning and vulnerability testing"
+.TP 
+\fBVirus Scanning\fR
+Default: yes
+.br 
+
+.br 
+Do you want to scan email for viruses? A few people don't have virus scanner licence and so want to disable all the virus scanning.
+.br 
+NOTE: Switching this to no completely disables all virus\-scanning functionality. If you just want to switch of actual virus scanning, then set "Virus Scanners = none" instead.
+.br 
+If you want to be able to switch scanning on/off for different users or different domains, set this to the filename of a ruleset.
+
+.TP 
+\fBVirus Scanners\fR
+Default: none
+.br 
+
+.br 
+Which Virus Scanning package to use. Possible choices are sophos, sophossavi, mcafee, command, bitdefender, kaspersky, kaspersky\-4.5, kavdaemonclient, inoculate, inoculan, nod32, nod32\-1.99, f\-secure, f\-prot, panda, rav, antivir, clamav, clamavmodule, css, trend, norman, avg, vexira, symscanengine, generic, none (no virus scanning at all). This *cannot* be the filename of a ruleset.
+.br 
+
+.br 
+Note for McAfee users: Do NOT use any symlinks with McAfee at all. It is very strange but McAfee may not detect all viruses when started from a symlink or scanning a directory path including symlinks.
+.br 
+
+.br 
+Note: If you want to use multiple virus scanners, then this should be a space\-separated list of virus scanners.
+.br 
+
+.br 
+Note: Make sure that you check that the base installation directory in the 3rd column of virus.scanners.conf matches the location you have installed each of your virus scanners. The supplied virus.scanners.conf file assumes the default installation locations recommended by each of the virus scanner installation guides.
+
+.TP 
+\fBVirus Scanner Timeout\fR
+Default: 300
+.br 
+
+.br 
+The maximum time (in seconds) that the cirus scanner is allowed to take to scan one batch of messages.
+
+.TP 
+\fBDeliver Disinfected Files\fR
+Default: yes
+.br 
+
+.br 
+Should infected attached documents be automatically disinfected and sent on to the original recipients? Less than 1% of viruses in the wild can be successfully disinfected,as macro viruses are now a rare occurrence. So the default has been changed to "no" as it gives a significant performance improvement.
+
+.TP 
+\fBSilent Viruses\fR
+Default: HTML\-IFrame All\-Viruses
+.br 
+
+.br 
+Messages whose virus reports contain any of the words listed here will be treated as "silent" viruses. No messages will be sent back to the senders of these viruses, and the delivery to the recipient of the message can be controlled by the next option "Still Deliver Silent Viruses". This is primarily designed for viruses such as "Klez" and "Bugbear" which put fake addresses on messages they send, so there is no point informing the sender of the message, as it won't actually be them who sent it anyway. Other words that can be put in this list are the 5 special keywords
+.br 
+.RS 7
+.IP  \(bu 4
+HTML\-IFrame: inserting this will stop senders being warned about HTML Iframe tags, when they are not allowed.
+.IP  \(bu 4
+HTML\-Codebase: inserting this will stop senders being warned about HTML Object Codebase tags, when they are not allowed.
+.IP  \(bu 4
+Zip\-Password: inserting this will stop senders being warned about password\-protected zip files when they are not allowd. This keyword is not needed if you include All\-Viruses.
+.IP  \(bu 4
+All\-Viruses: inserting this will stop senders being warned about any virus, while still allowing you to warn senders about HTML\-based attacks. This includes Zip\-Password so you don't need to include both.
+.br 
+The default of "All\-Viruses" means that no senders of viruses will be notified (as the sender address is always forged these days anyway), but anyone who sends a message that is blocked for other reasons will still be notified.
+.RE
+
+
+.TP 
+\fBStill Deliver Silent Viruses\fR
+Default: no
+.br 
+
+.br 
+If this is set to yes then disinfected messsages that originally contained one of the "silent" viruses will still be delivered to the original recipients, even those addresses were chosen at random by the infected PC and do not correspond to anything a user intended to send. Set this to yes so that your users (and your management) appreciate how much MailScanner is doing to protect them, but set it to no if they complain a lot about receiving lots of virus warnings. 
+
+
+.TP 
+\fBNon\-Forging Viruses\fR
+Default: Joke/ OF97/ WM97/ W97M/
+.br 
+
+.br 
+Strings listed here will be searched for in the output of the virus scanners. It works to achieve the opposite effect of the "Silent Viruses" listed above. If a string here is found in the output of the virus scanners, then the message will be treated as if it were not infected with a "Silent Virus". If a message is detected as both a silent virus and a non\-forging virus, then the non\-forging status will override the silent status. In simple terms, you should list virus names (or parts of them) that you know do *not* forge the From address. A good example of this is a document macro virus or a Joke program. Another word that can be put in this list is the special keyword "Zip\-.Password". Inserting this will cause senders to be warned about password\-protected zip files, whey they are not allowed.
+
+.SH "Options specific to ClamAV Anti-Virus"
+.TP 
+\fBMonitors for ClamAV Updates\fR
+Default: /usr/local/share/clamav/*.cvd
+.br 
+
+.br 
+ClamAVModule only: monitor each of these files for changes in size to detect when a ClamAV update has happened. This is only used by the "clamavmodule" virus scanner, not the "clamav" scanner setting.
+
+.TP 
+\fBClamAVmodule Maximum Recursion Level\fR
+Default: 5
+.br 
+
+.br 
+ClamAVModule only: The maximum recursion level of archives. This setting *cannot* be the filename of a ruleset, only a simple number.
+
+.TP 
+\fBClamAVmodule Maximum Files\fR
+Default: 100
+.br 
+
+.br 
+ClamAVModule only: The maximum number of files per batch. This setting *cannot* be the filename of a ruleset, only a simple number.
+
+
+.TP 
+\fBClamAVmodule Maximum File Size\fR
+Default: 10000000
+.br 
+
+.br 
+ClamAVModule only: The maximum file of each file (Default = 10MB). This setting *cannot* be the filename of a ruleset, only a simple number.
+
+
+.TP 
+\fB\fRClamAVmodule Maximum Compression Ratio
+Default: 250
+.br 
+
+.br 
+ClamAVModule only: The maximum compression ration of archives. This setting *cannot* be the filename of a ruleset, only a simple number.
+ 
+.SH "Removing/Logging dangerous or potentially offensive content"
+.TP 
+\fBAllow Partial Messages\fR
+Default: no
+.br 
+
+.br 
+Do you want to allow partial messages, which only contain a fraction of the attachments, not the whole thing? There is no way that "partial messages" can be scanned for viruses properly, as only a fragment of the message is ever processed, never the whole message at once.
+.br 
+Setting this option to yes is \fBvery dangerous\fR as it can let viruses in. But you might want to use a ruleset to set it for some customers' outgoing mail, for example. 
+
+.TP 
+\fBAllow External Message Bodies\fR
+Default: no
+.br 
+
+.br 
+There is a mechanism, very rarely used, in which the body of a message is contained on a remote server, which the user's email application should download when it displays the message. Currently, I am only aware of this feature being supported by a few versions of Netscape, and the only people who use it are the IETF. There is no way to guarantee that the fetched file has no viruses in it, as MailScanner never sees it.
+.br  
+Setting this option to yes is \fBvery dangerous\fR as it can let viruses in from remote "message body servers". 
+
+.TP 
+\fBFind Phishing Fraud\fR
+Default: yes
+.br 
+
+.br 
+Do you want to check for "Phishing" attacks? These are attacks that look like a genuine email message from your bank, which contain a link to click on to take you to the web site where you will be asked to type in personal information such as your account number or credit card details. Except it is not the real bank's web site at all, it is a very good copy of it run by thieves who want to steal your personal information or credit card details. These can be spotted because the real address of the link in the message is not the same as the text that appears to be the link. Note: This does cause significant extra load, particularly on systems       receiving lots of spam such as secondary MX hosts. This *cannot* be the filename of a ruleset, it must be 'yes' or 'no'.
+
+.TP 
+\fBAlso Find Numeric Phishing\fR
+Default: yes
+.br 
+
+.br 
+While detecting "Phishing" attacks, do you also want to point out links to numeric IP addresses. Genuine links to totally numeric IP addresses are very rare, so this option is set to "yes" by default. If a numeric IP address is found in a link, the same phishing warning message is used as in the Find Phishing Fraud option above. This value cannot be the name of a ruleset, only a simple yes or no.
+
+
+.TP 
+\fBPhishing Safe Sites File\fR
+Default: %etc\-dir%/phishing.safe.sites.conf
+.br 
+
+.br 
+There are some companies, such as banks, that insist on sending out email messages with links in them that are caught by the "Find Phishing Fraud" test described above. This is the name of a file which contains a list of link destinations which should be ignored in the test. This may, for example, contain the known websites of some banks. See the file itself for more information. This can only be the name of the file containing the list, it *cannot* be the filename of a ruleset.
+
+
+.TP 
+\fBAllow IFrame Tags\fR
+Default: no
+.br 
+
+.br 
+Do you want to allow HTML <IFrame> tags in email messages? This is not a good idea as it allows various Microsoft Outlook security vulnerabilities to go unprotected, but if you have a load of mailing lists sending them, then you will want to allow them to keep your users happy. This can also be the filename of a ruleset, so you can allow them from known mailing lists but ban them from everywhere else. Possible Values:
+.br 
+.RS 7
+.IP  \(bu 4
+yes    => Allow these tags to be in the message
+.IP  \(bu 4
+no     => Ban messages containing these tags
+.IP  \(bu 4
+disarm => Allow these tags, but stop these tags from working
+.RE
+
+.TP 
+\fBLog IFrame Tags\fR
+Default: no
+.br 
+
+.br 
+You may receive complaints from your users that HTML mailing lists they subscribe to have been stopped by the "Allow IFrame Tags" option above. So before you use the option above, set this option to "yes" and MailScanner will log the senders all messages which contain IFrame tags. You can then setup a ruleset for the option above which will allow IFrame tags in messages sent by well known (and trusted) mailing lists, while banning them from everywhere else. 
+
+.TP 
+\fBAllow Form Tags\fR
+Default: disarm
+.br 
+
+.br 
+Do you want to allow <Form> tags in email messages? This is a bad idea as these are used as scams to persuade people to part with credit card information and other personal data. This can also be the filename of a ruleset. Possible values:
+.br 
+.RS 7
+.IP  \(bu 4
+yes    => Allow these tags to be in the message
+.IP  \(bu 4
+no     => Ban messages containing these tags
+.IP  \(bu 4
+disarm => Allow these tags, but stop these tags from working
+.RE
+
+.TP 
+\fBAllow Script Tags\fR
+Default: no
+.br 
+
+.br 
+Do you want to allow <Script> tags in email messages? This is a bad idea as these are used to exploit vulnerabilities in email applications and web browsers. This can also be the filename of a ruleset. Possible values:
+.br 
+.RS 7
+.IP  \(bu 4
+yes    => Allow these tags to be in the message
+.IP  \(bu 4
+no     => Ban messages containing these tags
+.IP  \(bu 4
+disarm => Allow these tags, but stop these tags from working
+.RE
+
+.TP 
+\fBAllow WebBugs\fR
+Default: disarm
+.br 
+
+.br 
+Do you want to allow <Img> tags with very small images in email messages? This is a bad idea as these are used as 'web bugs' to find out if a message has been read. It is not dangerous, it is just used to make you give away information. This can also be the filename of a ruleset. Possible values:
+.br 
+.RS 7
+.IP  \(bu 4
+yes    => Allow these tags to be in the message
+.IP  \(bu 4
+no     => Ban messages containing these tags
+.IP  \(bu 4
+disarm => Allow these tags, but stop these tags from working
+.RE
+
+.TP 
+\fBAllow Object Codebase Tags\fR
+Default: no
+.br 
+
+.br 
+Do you want to allow <Object Codebase=...> tags in email messages? This is a bad idea as it leaves you unprotected against various Microsoft\-specific security vulnerabilities. But if your users demand it, you can do it. This can also be the filename of a ruleset. Possible values:
+.br 
+.RS 7
+.IP  \(bu 4
+yes    => Allow these tags to be in the message
+.IP  \(bu 4
+no     => Ban messages containing these tags
+.IP  \(bu 4
+disarm => Allow these tags, but stop these tags from working
+.RE
+
+.TP 
+\fBConvert Dangerous HTML To Text\fR
+Default: no
+.br 
+
+.br 
+This option interacts with the "Allow ... Tags" options above like this:
+.br 
+
+.br 
+Allow...Tags Convert Danger... Action 
+.br 
+============ ================= ============================
+.br 
+   no           no             Blocked
+.br 
+   no           yes            Blocked
+.br 
+   disarm       no             Specified HTML tags disarmed
+.br 
+   disarm       yes            Specified HTML tags disarmed
+.br 
+   yes          no             Nothing
+.br 
+   yes          yes            All HTML tags stripped
+.br 
+
+.br 
+If an "Allow ... Tags = yes" is triggered by a message, and this "Convert Dangerous HTML To Text" is set to "yes", then the HTML message will be converted to plain text.  This makes the HTML harmless, while still allowing your users to see the text content of the messages.  Note that all graphical content will be removed.
+
+.TP 
+\fBConvert HTML To Text\fR
+Default: no
+.br 
+
+.br 
+If you have users who are children, or who are offended by things like pornographic spam email, you can protect them by converting incoming HTML email messages into plain text. HTML attachments will not be affected. You could set this to be a ruleset so you only convert messages addressed to some of your users, or not convert messages from some known trusted sources. This can be essential if you have a "duty of care" for some of your users. 
+
+.TP 
+\fBAllow Form Tags\fR
+Default: no
+.br 
+
+.br 
+Do you want to allow <Form> tags in email messages? This is a bad idea as these are used as scams to pursuade people to part with credit card information and other personal data. This can also be the filename of a ruleset.
+.SH "Attachment filename checking"
+.TP 
+\fBAllow Filenames\fR
+Default:
+.br 
+
+.br 
+Allow any attachment filenames matching any of the patters listed here. If this setting is empty, it is ignored and no matches are made. This can also be the filename of a ruleset.
+.br 
+
+.br 
+To simplify web\-based configuration systems, there are now two extra settings here. They are both intended for use with normal rulesets that you would expect to find in %rules\-dir%. The first gives a list of patterns to match against the attachment filenames, and a filename is allowed if it matches any of these patterns. The second gives the the equivalent list for patterns that are used to deny filenames. If either of these match at all, then filename.rules.conf is ignored  for that filename. So you can easily have a set like this:
+.br 
+
+.br 
+Allow Filenames = \.txt$ \.pdf$
+.br 
+Deny  Filenames = \.com$ \.exe$ \.cpl$ \.pif$
+.br 
+
+.br 
+which is a lot simpler than having to handle filename.rules.conf! It is far simpler when you want to change the allowed+denied list for different domains/addresses, as you can use the filename of a simple ruleset here instead.
+
+.TP 
+\fBDeny Filenames\fR
+Default: 
+.br 
+
+.br 
+Deny any attachment filenames matching any of the patters listed here. If this setting is empty, it is ignored and no matches are made. This can also be the filename of a ruleset.
+
+.TP 
+\fBFilename Rules\fR
+Default: %etc\-dir%/filename.rules.conf
+.br 
+
+.br 
+File in which to store the attachment filename ruleset. This can be a ruleset allowing different filename rules to apply to different users or domains. The syntax of this file is described in section "Attachment Filename Ruleset".
+
+.TP 
+\fBAllow Filetypes\fR
+Default: 
+.br 
+
+.br 
+Allow any attachment filetypes matching any of the patters listed here. If this setting is empty, it is ignored and no matches are made. This can also be the filetype of a ruleset.
+.br 
+
+.br 
+To simplify web\-based configuration systems, there are now two extra settings here. They are both intended for use with normal rulesets that you would expect to find in %rules\-dir%. The first gives a list of patterns to match against the attachment filetypes, and a filetype is allowed if it matches any of these patterns. The second gives the the equivalent list for patterns that are used to deny filetypes. If either of these match at all, then filetype.rules.conf is ignored for that filetype. So you can easily have a set like this:
+.br 
+
+.br 
+Allow Filetypes = \.txt$ \.pdf$
+.br 
+Deny  Filetypes = \.com$ \.exe$ \.cpl$ \.pif$
+.br 
+
+.br 
+which is a lot simpler than having to handle filetype.rules.conf! It is far simpler when you want to change the allowed+denied list for different domains/addresses, as you can use the filetype of a simple ruleset here instead.
+
+.TP 
+\fBDeny Filetypes\fR
+Default: 
+.br 
+
+.br 
+Deny any attachment filetypes matching any of the patters listed here. If this setting is empty, it is ignored and no matches are made. This can also be the filetype of a ruleset.
+
+.TP 
+\fBFiletype Rules\fR
+Default: %etc\-dir%/filetype.rules.conf
+.br 
+
+.br 
+Set where to find the attachment filetype ruleset. The structure of this file is explained elsewhere, but it is used to accept or reject file attachments based on their content as determined by the "file" command, regardless of whether they are infected or not. This can also point to a ruleset, but the ruleset filename must end in ".rules" so that MailScanner can determine if the filename given a ruleset or not!
+
+
+.SH "Reports and responses"
+.TP 
+\fBQuarantine Infections\fR
+Default: yes
+.br 
+
+.br 
+Set this to store infected / dangerous attachments in directories created under the quarantine directory. Without this, they will be deleted. Due to laws on privacy and data protection in your country, you may be forced to set this to "no". 
+
+.TP 
+\fBQuarantine Silent Viruses\fR
+Default: yes
+.br 
+
+.br 
+There is no point quarantining most viruses these days, so if you set this to "no" then no infections listed in your "Silent Viruses" setting will be quarantined, even if you have chosen to quarantine infections in general. This is currently set to "yes" so the behaviour is the same as it was in in previous versions. This can also be the filename of a ruleset.
+
+.TP 
+\fBQuarantine Modified Body\fR
+Default: no
+.br 
+
+.br 
+Do you want to store copies of messages which have been disarmed by having their HTML modified at all? This can also be the filename of a ruleset.
+
+
+.TP 
+\fBQuarantine Whole Message\fR
+Default: no
+.br 
+
+.br 
+When an infected message is stored in the quarantine, a copy of the entire message will be saved, in addition to copies of the infected attachments. 
+
+.TP 
+\fBQuarantine Whole Messages As Queue Files\fR
+Default: no
+.br 
+
+.br 
+When an entire message is saved in the quarantine for any reason, do you want to save it as the raw data files out of the mail queue (which can be processed with the df2mbox script, and which is easier to send to its original recipients), or do you want a conventional message file consisting of the header followed by the body of the message. If the previous option is switched off, then this will only affect archived mail and quarantined spam. If the previous option is on, then this also affects quarantined infections. 
+
+.TP 
+\fBKeep Spam And MCP Archive Clean\fR
+Default: no
+.br 
+
+.br 
+Do you want to stop any virus\-infected spam getting into the spam or MCP archives? If you have a system where users can release messages from the spam or MCP archives, then you probably want to stop them being able to release any infected messages, so set this to yes. It is set to no by default as it causes a small hit in performance, and many people don't allow users to access the spam quarantine, so don't need it. This can also be the filename of a ruleset.
+
+
+.TP 
+\fBLanguage Strings\fR
+Default: %reports\-dir%/languages.conf
+.br 
+
+.br 
+Set where to find all the strings used so they can be translated into your local language. This can also be the filename of a ruleset so you can produce different languages for different messages.
+
+
+.TP 
+\fBRejection Report\fR
+Default: %reports\-dir%/rejection.report.txt
+.br 
+
+.br 
+Set where to find the message text sent to users who triggered the ruleset you are using with the "Reject Message" option.
+
+
+.TP 
+\fBDeleted Bad Filename Message Report\fR
+Default: %reports\-dir%/deleted.filename.message.txt
+.br 
+
+.br 
+When an attachment is deleted from a message because the filename failed the filename rules in force for the message, it is replaced by the contents of this file. A few variable substitutions can be made in this file, an example of each of which is contained in the supplied sample file. 
+
+.TP 
+\fBDeleted Virus Message Report\fR
+Default: %reports\-dir%/deleted.virus.message.txt
+.br 
+
+.br 
+When an attachment is deleted from a message because the attachment contained a virus or other dangerous content, it is replaced by the contents of this file. A few variable substitutions can be made in this file, an example of each of which is contained in the supplied sample file. 
+
+.TP 
+\fBStored Bad Filename Message Report\fR
+Default: %reports\-dir%/stored.filename.message.txt
+.br 
+
+.br 
+When an attachment is deleted and stored from a message (and the attachment has been stored in the quarantine) because the filename failed the filename rules in force for the message, it is replaced by the contents of this file. A few variable substitutions can be made in this file, an example of each of which is contained in the supplied sample file. 
+
+.TP 
+\fBDeleted Bad Content Message Report\fR
+Default: /%reports\-dir%/deleted.content.message.txt
+.br 
+
+.br 
+This report is sent when a message is deleted because it contained bad or dangerous content. A few variable substitutions can be made in this file, an example of each of which is contained in the supplied sample file. 
+
+.TP 
+\fBStored Bad Content Message Report\fR
+Default: %reports\-dir%/stored.content.message.txt
+.br 
+
+.br 
+This report is sent when a message is stored because it contained bad or dangerous content. A few variable substitutions can be made in this file, an example of each of which is contained in the supplied sample file. 
+
+.TP 
+\fBDisinfected Report\fR
+Default: %reports\-dir%/disinfected.report.txt
+.br 
+
+.br 
+When, for example, a Microsoft Word macro virus has been safely removed from a document, leaving the original document intact, it is delivered on to the original recipient. The contents of this text file will be put in the body of the new message, explaining to the user what has happened. 
+
+.TP 
+\fBInline HTML Signature\fR
+Default: %reports\-dir%/inline.sig.html
+.br 
+
+.br 
+If the "Sign Clean Messages" option is set, then the contents of this file will be appended to the end of the body of every message that is scanned by MailScanner. You can use this to inform your users that MailScanner has scanned it, and you can also add any disclaimers you feel should be on mail travelling through your servers. This option corresponds to the contents that is appended to HTML messages.
+
+.TP 
+\fBInline Text Signature\fR
+Default: %reports\-dir%/inline.sig.txt
+.br 
+
+.br 
+If the "Sign Clean Messages" option is set, then the contents of this file will be appended to the end of the body of every message that is scanned by MailScanner. You can use this to inform your users that MailScanner has scanned it, and you can also add any disclaimers you feel should be on mail travelling through your servers. This option corresponds to the contents that is appended to text messages.
+
+.TP 
+\fBSender Error Report\fR
+Default: %reports\-dir%/sender.error.report.txt
+.br 
+
+.br 
+When a message could not be processed completely for some reason, such as bad message structure or unreadable winmail.dat TNEF attachments, this message is sent back to the sender. Read the example file supplied for a demonstration of what variables can be used inside the file. 
+
+.TP 
+\fBSender Bad Filename Report\fR
+Default: %reports\-dir%/sender.filename.report.txt
+.br 
+
+.br 
+When an attachment is trapped by the filename rules, this message is sent back to the sender. 
+
+
+.TP 
+\fBSender Virus Report\fR
+Default: %reports\-dir%/sender.virus.report.txt
+.br 
+
+.br 
+When an attachment is removed because of a virus, this message is sent back to the sender. 
+
+
+.TP 
+\fBHide Incoming Work Dir\fR
+Default: yes
+.br 
+
+.br 
+When this option is set, the full directory in which the virus was found will be removed from report messages sent to users. This makes the infection reports a lot easier to understand.
+
+.TP 
+\fBInclude Scanner Name in Reports\fR
+Default: yes
+.br 
+
+.br 
+Include the name of the virus scanner in each of the scanner reports. This also includes the translation of "MailScanner" in each of the report lines resulting from one of MailScanner's own checks such as filename, filetype or dangerous HTML content. To change the name "MailScanner", look in reports/...../languages.conf.
+.br 
+Very useful if you use several virus scanners, but a bad idea if you don't want to let your customers know which scanners you use.
+.SH "Changes to message headers"
+.TP 
+\fBMail Header\fR
+Default: X\-MailScanner:
+.br 
+
+.br 
+Extra header that should be added to all scanned messages to show they have been scanned. You might want to add an abbreviation of your site name to this, so that you can find headers that are added by your MailScanner server. 
+
+.TP 
+\fBSpam Header\fR
+Default: X\-MailScanner\-SpamCheck:
+.br 
+
+.br 
+Name of the header to add to mail detected as spam. The text of the header is a list of the causes that think the message is spam. 
+
+.TP 
+\fBSpam Score Header\fR
+Default: X\-MailScanner\-SpamScore:
+.br 
+
+.br 
+If the option "Spam Score" is set, this is the name of the header that is used to contain the list of characters. 
+
+
+.TP 
+\fBInformation Header\fR
+Default: X\-MailScanner\-Information:
+.br 
+
+.br 
+Name of the header to add to all messages, to be used for simply providing a URL or contact information for anyone receiving mail that has gone through MailScanner. If you do not want this header, simply set it blank.
+
+.TP 
+\fBAdd Envelope From Header\fR
+Default: yes
+.br 
+
+.br 
+Do you want to add the Envelope\-From: header? This is very useful for tracking where spam came from as it contains the envelope sender address. This can also be the filename of a ruleset.
+
+.TP 
+\fBAdd Envelope To Header\fR
+Default: no
+.br 
+
+.br 
+Do you want to add the Envelope\-To: header? This can be useful for tracking span destinations, but should be used with care due to possible privacy concerns with the use of Bcc: headers by users. This can also be the filename of a ruleset.
+
+.TP 
+\fBEvelope From Header\fR
+Default: X\-%org\-name%\-MailScanner\-From:
+.br 
+
+.br 
+This is the name of the Envelope From header controlled by the option above. This can also be the filename of a ruleset.
+
+.TP 
+\fBEvelope To Header\fR
+Default: X\-%org\-name%\-MailScanner\-To:
+.br 
+
+.br 
+This is the name of the Envelope To header controlled by the option above. This can also be the filename of a ruleset.
+
+.TP 
+\fBDetailed Spam Report\fR
+Default: yes
+.br 
+
+.br 
+If this is set to yes then you get the normal fully detailed spam report in spam messages. If this is set to no then you simply get a "spam" or "not spam" report. The exact text inserted can be configured in the languages.conf file for your language. 
+
+.TP 
+\fBInclude Scores In SpamAssassin Report\fR
+Default: yes
+.br 
+
+.br 
+Do you want to include the numerical scores in the detailed SpamAssassin report, or just list the names of the scores?
+
+
+.TP 
+\fBSpam Score Character\fR
+Default: s
+.br 
+
+.br 
+If the option "Spam Score" is set, this is the character that will be repeated in the "Spam Score Header", one letter for each point in the SpamAssassin score. 
+
+.TP 
+\fBSpamScore Number Instead Of Stars\fR
+Default: no
+.br 
+
+.br 
+If this option is set to yes, you will get a spam\-score header saying just the value of the spam score, instead of the row of characters representing the score. This can also be the filename of a ruleset.
+
+.TP 
+\fBMinimum Stars If on Spam List\fR
+Default: 0
+.br 
+
+.br 
+This sets the minimum number of "Spam Score Characters" which will appear if a message triggered the "Spam List" setting but received a very low SpamAssassin score. This means that people who only filter on the "Spam Stars" will still be able to catch messages which receive a very low SpamAssassin score. Set this value to 0 to disable it. This can also be the filename of a ruleset.
+
+.TP 
+\fBClean header Value\fR
+Default: Found to be clean
+.br 
+
+.br 
+This is the text that is added to the "Mail Header" when a message is found to be clean and free of viruses and other dangerous content. 
+
+.TP 
+\fBInfected Header Value\fR
+Default: Found to be infected
+.br 
+
+.br 
+This is the text that is added to the "Mail Header" when a message is found to be infected with a virus or other dangerous content. 
+
+.TP 
+\fBDisinfected Header Value\fR
+Default: Disinfected
+.br 
+
+.br 
+This is the text that is added to the "Mail Header" of a message that is created by MailScanner to contain disinfected documents containing macro viruses that could be completely removed, leaving the original document intact. 
+
+.TP 
+\fBInformation Header Value\fR
+Default: Please contact the ISP for more information
+.br 
+
+.br 
+This is the text that is added to the "Information Header" of a message that has passed through MailScanner at all. It could be used to provide a URL or contact address for recipients if they have any queries about the messages they have received. If the setting "Information Header" is blank, this message will not be added to the Mail Header.
+
+.TP 
+\fBMultiple Headers\fR
+Default: append
+.br 
+
+.br 
+When a message passes through more than one MailScanner server on your site, they will each try to add their own headers. This option controls what should happen when trying to add a MailScanner header that already exists in the message. Valid options are append (append the new data to the existing header), add (add a new header) and replace (replace the old data with the new data).
+
+.TP 
+\fBHostname\fR
+Default: the MailScanner
+.br 
+
+.br 
+This is the name of the MailScanner server that is put in messages to users. If you have more than one MailScanner server on your site, you will want to change this on each server so that you can tell them apart. 
+
+.TP 
+\fBSign Messages Already Processed\fR
+Default: no
+.br 
+
+.br 
+If a message has already been processed by another MailScanner server on your site, then the "Inline HTML/Text Signature" is not added to the message again if this option is set. Without it, you will get one signature added for every MailScanner server that processes the message. 
+
+.TP 
+\fBSign Clean Messages\fR
+Default: no
+.br 
+
+.br 
+If this option is set, then the "Inline HTML/Text Signature" will be added to the end of every clean message processed by MailScanner. You can use this to inform the recipient that the message has been checked, and also to add any legal disclaimer or copyright statement you want to add to every message. Using a ruleset for this option, you could very simply set it so that only messages leaving your site are signed, for example. 
+
+.TP 
+\fBMark Infected Messages\fR
+Default: yes
+.br 
+
+.br 
+If this option is set, then the "Inline HTML/Text Warning" is added to the start of every message that is found to be infected or has had attachments removed for any reason. This can be used to guide the recipients to read the infection reports contained in the replacement attachments. 
+
+.TP 
+\fBMark Unscanned Messages\fR
+Default: yes
+.br 
+
+.br 
+If this option is set, then any message which is not scanned by MailScanner gets the "Mail Header" added to it with the string contained in the "Unscanned Header Value" option. This can be used to advertise your MailScanner service to customers/clients who are currently not using it. 
+
+.TP 
+\fBUnscanned Header Value\fR
+Default: Not scanned: please contact your Internet E\-Mail Service Provider for details
+.br 
+
+.br 
+This supplies the text that is placed in the "Mail Header" of messages that have not been scanned, if the option "Mark Unscanned Messages" is set. It is a useful place to advertise your MailScanner service to new customers/clients. 
+
+.TP 
+\fBRemove These Headers\fR
+Default: 
+.br 
+
+.br 
+If any of these headers are included in a a message, they will be deleted. This is very useful for removing return\-receipt requests and any headers which mean special things to your email client application, such as # X\-Mozilla\-Status. Each header should end in a ":", but MailScanner will add it if you forget. Headers should be separated by commas or spaces. This can also be the filename of a ruleset.
+
+
+.TP 
+\fBDeliver Cleaned Messages\fR
+Default: yes
+.br 
+
+.br 
+Once a message has had all viruses and dangerous content removed from it, it will then be delivered to the original recipients if this option is set. If you want the behaviour from previous versions of MailScanner that had the "Deliver From Local Domains" keyword, then you should set this to be a ruleset that only returns "yes" for messages destined for inside your site, and "no" for messages going out of your site. 
+
+.SH "Notifications back to the senders of blocked messages"
+.TP 
+\fBNotifiy Senders\fR
+Default: yes
+.br 
+
+.br 
+Do you want to notify the people who sent you messages containing viruses or badly\-named filenames? The default value has been changed to "no" as most viruses now fake sender addresses and therefore should be on the "Silent Viruses" list. This can also be the filename of a ruleset.
+
+.TP 
+\fBNotify Senders Of Blocked Filenames Or Filetypes\fR
+Default: yes
+.br 
+
+.br 
+*If* "Notify Senders" is set to yes, do you want to notify people who sent you messages containing attachments that are blocked due to their filename or file contents? This can also be the filename of a ruleset.
+
+.TP 
+\fBNotify Senders Of Other Blocked Content\fR
+Default: yes
+.br 
+
+.br 
+*If* "Notify Senders" is set to yes, do you want to notify people who sent you messages containing other blocked content, such as partial messages or messages with external bodies? This can also be the filename of a ruleset.
+
+.TP 
+\fBNotify Senders Of Viruses\fR
+Default: no
+.br 
+
+.br 
+*If* "Notify Senders" is set to yes, do you want to notify people who sent you messages containing viruses? This can also be the filename of a ruleset.
+
+.TP 
+\fBNever Notify Senders Of Precedence\fR
+Default: list bulk
+.br 
+
+.br 
+If you supply a space\-separated list of message "precedence" settings, then senders of those messages will not be warned about anything you rejected. This is particularly suitable for mailing lists, so that any MailScanner responses do not get sent to the entire list.
+
+.SH "Changes to subject line"
+.TP 
+\fBScanned Modify Subject\fR
+Default: no # end
+.br 
+
+.br 
+If this is set to "start" or "end" then the "Scanned Subject Text" is inserted at the start or the end of the Subject: line. This only happens if the Subject: line has not already been modified for any other reason. 
+
+.TP 
+\fBScanned Subject Text\fR
+Default: {Scanned}
+.br 
+
+.br 
+This is the text inserted at the start or the end of the Subject: line if the "Scanned Modify Subject" option above is in effect. 
+
+
+.TP 
+\fBVirus Modify Subject\fR
+Default: yes
+.br 
+
+.br 
+If this is set, then the "Subject:" line of a message that was infected with a virus will have the "Virus Subject Text" text inserted at the start. 
+
+.TP 
+\fBVirus Subject Text\fR
+Default: {Virus?}
+.br 
+
+.br 
+This is the text inserted at the start of the "Subject:" line if the "Virus Modify Subject" option is set. 
+
+
+.TP 
+\fBFilename Modify Subject\fR
+Default: yes
+.br 
+
+.br 
+If this is set, then the "Subject:" line of a message that had an attachment with a dangerous filename will have the "Filename Subject Text" text inserted at the start. 
+
+.TP 
+\fBFilename Subject Text\fR
+Default: {Virus?}
+.br 
+
+.br 
+This is the text inserted at the start of the "Subject:" line if the "Filename Modify Subject" option is set. 
+
+.TP 
+\fBContent Modify Subject\fR
+Default: yes
+.br 
+
+.br 
+If this is set, then the "Subject:" line of a message that triggered a content check without anything else wrong in the message will have the "Content Subject Text" text inserted at the start. 
+
+.TP 
+\fBContent Subject Text\fR
+Default: {Filename?}
+.br 
+
+.br 
+This is the text inserted at the start of the "Subject:" line if the "Content Modify Subject" option is set. 
+
+.TP 
+\fBDisarmed Modify Subject\fR
+Default: yes
+.br 
+
+.br 
+If HTML tags in the message were "disarmed" by using the HTML "Allow" options above with the "disarm" settings, do you want to modify the subject line? This can also be the filename of a ruleset.
+
+
+.TP 
+\fBDisarmed Subject Text\fR
+Default: {Disarmed}
+.br 
+
+.br 
+This is the text to add to the start of the subject if the "Disarmed Modify Subject" option is set. This can also be the filename of a ruleset.
+
+
+.TP 
+\fBSpam Modify Subject\fR
+Default: yes
+.br 
+
+.br 
+If this is set, then the "Subject:" line of a message that was determined to be spam will have the "Spam Subject Text" text inserted at the start. 
+
+.TP 
+\fBSpam Subject Text\fR
+Default: {Spam?}
+.br 
+
+.br 
+This is the text to add to the start of the subject if the "Spam Modify Subject" option is set. The exact string "_SCORE_" will be replaced by the numeric SpamAssassin score. This can also be the filename of a ruleset.
+
+.TP 
+\fBHigh Scroing Spam Modify Subject\fR
+Default: yes
+.br 
+
+.br 
+If this is set, then the "Subject:" line of a message that was determined to be spam, and had a SpamAssassin score greater than the "High SpamAssassin Score" will have the "High Scoring Spam Subject Text" text inserted at the start. 
+
+.TP 
+\fBHigh Scoring Spam Subject Text\fR
+Default: {Spam?}
+.br 
+
+.br 
+This is just like the "Spam Subject Text" option above, except that it applies then the score from SpamAssassin is higher than the "High SpamAssassin Score" value. The exact string "_SCORE_" will be replaced by the numeric SpamAssassin score. This can also be the filename of a ruleset.
+.SH "Changes to the message body"
+.TP 
+\fBWarning Is Attachment\fR
+Default: yes
+.br 
+
+.br 
+When an infected or dangerous attachment is replaced with a text message containing the infection report, should the replacement be an attachment (yes) or should it be included inline in the main text of the message (no). 
+
+.TP 
+\fBAttachment Warning Filename\fR
+Default: %org\-name%\-Attachment\-Warning.txt
+.br 
+
+.br 
+What an infected or dangerous attachment is replaced with a text message containing the infection report, this is the filename of the attachment that appears in the message. 
+
+.TP 
+\fBAttachment Encoding Charset\fR
+Default: ISO\-8859\-1
+.br 
+
+.br 
+This is the name of the encoding character set used for the contents of "VirusWarning.txt" attachments. 
+.SH "Mail archiving and monitoring"
+.TP 
+\fBArchive Mail\fR
+Default:
+.br 
+
+.br 
+Space\-separated list of any combination of
+.br 
+	1. email addresses to which mail should be forwarded,
+.br 
+	2. directory names where you want mail to be stored,
+.br 
+	3. file names to which mail will be appended.
+.br 
+
+.br 
+The files (option 3) are using the "mbox" format suitable for most Unix mail systems. These files must already exist since MailScanner will not create them!
+.br 
+
+.br 
+If you give this option a ruleset, you can control exactly whose mail is archived or forwarded. If you do this, beware of the legal implications as this could be deemed to be illegal interception unless the police have asked you to do this.
+.br 
+
+.br 
+Any of the items above can contain the magic string _DATE_ in them which will be replaced with the current date in yyyymmdd format. This will make archive\-rolling and maintenance much easier, as you can guarantee that yesterday's mail archive will not be in active use today.
+.SH "Notices to system administrators"
+.TP 
+\fBSend Notices\fR
+Default: yes
+.br 
+
+.br 
+Should system administrators listed in the "Notices To" option be notified of every infection found? 
+
+.TP 
+\fBNotices Include Full Headers\fR
+Default: no
+.br 
+
+.br 
+If this option is set, then the system administrator notices will include the full headers of every infected message. If this option is set to "no" then only a restricted set of headers is included in the notices. 
+
+.TP 
+\fBHide Incoming Work Dir in Notices\fR
+Default: no
+.br 
+
+.br 
+When this option is set, the full directory in which the virus was found will be removed from report messages sent to administrators. This makes the infection reports a lot easier to understand. It is also very useful if your notices go to your customer sites. 
+
+.TP 
+\fBNotice Signature\fR
+Default: \-\- \\nMailScanner\\nEmail Virus Scanner\\nwww.mailscanner.info
+.br 
+
+.br 
+This string is added to the bottom of all system administrator notices, and is intended to be the signature of your MailScanner system. To insert "line\-breaks" or "newline" characters, use the sequence \n. 
+
+
+.TP 
+\fBNotices From\fR
+Default: MailScanner
+.br 
+
+.br 
+The visible part of the email address used in the "From:" line of the notices. The <user@domain> part of the email address is set to the "Local Postmaster" setting.          
+
+
+.TP 
+\fBNotices To\fR
+Default: postmaster
+.br 
+
+.br 
+This option provides a list of the addresses to which virus notices should be sent. You may want to set this to be a ruleset, providing different notification addresses for different domains that you administer. 
+
+.TP 
+\fBLocal Postmaster\fR
+Default: postmaster
+.br 
+
+.br 
+When virus warnings are sent to any users, this is the email address used as the "From:" header in the messages. 
+.SH "Definitions of virus scanners and spam detectors"
+.TP 
+\fBSpam List Definitions\fR
+Default: %etc\-dir%/spam.lists.conf
+.br 
+
+.br 
+This file contains all the definitions of the "Spam Lists" (also known as RBL's or DNSBL's) which can be used to try to detect spam based on where each message came from. Many more spam lists can be added to this file, but it contains the most popular ones to get you started. 
+
+.TP 
+\fBVirus Scanner Definitions\fR
+Default: %etc\-dir%/virus.scanners.conf
+.br 
+
+.br 
+This file contains the locations of all the commands that are run for each virus scanner. Check this file before starting MailScanner to make sure it will run the correct command or wrapper script. 
+.SH "Spam detection and spam lists (DNS blocklists)"
+.TP 
+\fBSpam Checks\fR
+Default: yes
+.br 
+
+.br 
+If this option is set, messages will be checked to see if they are spam. 
+
+.TP 
+\fBSpam List\fR
+Default: ORDB\-RBL Infinite\-Monkeys
+.br 
+
+.br 
+This provides a space\-separated list of "Spam Lists" (or RBL's or DNSBL's) which are checked for each message. These lists are based on the numeric IP address of the server that sent the message to your MailScanner server. Every list used here must be defined in the "Spam List Definitions" file mentioned above. 
+
+.TP 
+\fBSpam Domain List\fR
+Default: 
+.br 
+
+.br 
+This provides a space\-separated list of "Spam Lists" (or RBL's or DNSBL's) which are checked for each message. These lists are based on the domain name of the sender address of each message. Every list used here must be defined in the "Spam List Definitions" file mentioned above. 
+
+.TP 
+\fBSpam Lists To Be Spam\fR
+Default: 1
+.br 
+
+.br 
+If a message appears in at least this number of "Spam Lists" (as defined above), then the message will be treated as spam and so the "Spam Actions" will happen, unless the message reaches the levels for "High Scoring Spam". By default this is set to 1 to mimic the previous behaviour, which means that appearing in any "Spam Lists" will cause the message to be treated as spam. This can also be the filename of a ruleset.
+
+
+.TP 
+\fBSpam Lists To Reach High Score\fR
+Default: 5
+.br 
+
+.br 
+If a message appears in at least this number of "Spam Lists" (as defined above), then the message will be treated as "High Scoring Spam" and so the "High Scoring Spam Actions" will happen. You probably want to set this to 2 if you are actually using this feature. 5 is high enough that it will never happen unless you use lots of "Spam Lists". This can also be the filename of a ruleset.
+
+.TP 
+\fBSpam List Timeout\fR
+Default: 10
+.br 
+
+.br 
+This is the number of seconds to wait for each "Spam List" lookup to complete. If the lookup takes longer than this, it is killed and ignored. 
+
+.TP 
+\fBMax Spam List Timeouts\fR
+Default: 7
+.br 
+
+.br 
+If a "Spam List" lookup times out for this many consecutive checks without ever succeeding, then the particular "Spam List" entry will not be used any more, as it appears to be unreachable. When MailScanner restarts itself after a few hours, MailScanner will try to use the entry again, in case service has resumed properly. 
+
+.TP 
+\fBSpam List Timeouts History\fR
+Default: 10
+.br 
+
+.br 
+The total number of Spam List attempts during which "Max Spam List Timeouts" will cause the spam list fo be marked as "unavailable". See the previous comment for more information. The default values of 5 and 10 mean that 5 timeouts in any sequence of 10 attempts will cause the list to be marked as "unavailable" until the next periodic restart (see "Restart Every").
+
+.TP 
+\fBIs Definitely Not Spam\fR
+Default: %rules\-dir%/spam.whitelist.rules
+.br 
+
+.br 
+This option would normally be a ruleset. Any messages for which the ruleset result is "yes" will never be marked as spam. This is used to create a spam "whitelist" of addresses which are never spam. You will probably want to include your own site (or your own site's IP addresses) in this ruleset. 
+
+.TP 
+\fBIs Definitely Spam\fR
+Default: no
+.br 
+
+.br 
+This option would normally be a ruleset. Any messages for which the ruleset result is "yes" will always be marked as spam. This is used to create a spam "blacklist" of addresses of known spammers. 
+
+.TP 
+\fBDefinite Spam Is High Scoring\fR
+Default: no
+.br 
+
+.br 
+Setting this to yes means that spam found in the blacklist is treated as "High Scoring Spam" in the "Spam Actions" section below. Setting it to no means that it will be treated as "normal" spam. This can also be the filename of a ruleset.
+
+
+.TP 
+\fBIgnore Spam Whitelist If Recipients Exceed\fR
+Default: 20
+.br 
+
+.br 
+Spammers have learnt that they can get their message through by sending a message with lots of recipients, one of which chooses to whitelist everything coming to them, including the spammer. So if a message arrives with more than this number of recipients, ignore the "Is Definitely Not Spam" whitelist.
+.SH "SpamAssassin"
+.TP 
+\fBUse SpamAssassin\fR
+Default: no
+.br 
+
+.br 
+Do you want to detect spam using the very good SpamAssassin package? You must have installed SpamAssassin before using this option, otherwise MailScanner will not start properly.
+.br 
+NOTE for FreeBSD port user: The SpamAssassin port is not automatically installed with the MailScanner port. You can find it at /usr/ports/mail/p5\-Mail\-SpamAssassin.
+
+
+.TP 
+\fBMax SpamAssassin Size\fR
+Default: 90000
+.br 
+
+.br 
+SpamAssassin is quite slow when processing very large messages. To work round this problem, this option provides a maximum size for messages that are processed with SpamAssassin. Most real spam is usually less than about 50,000 bytes per message. 
+
+
+.TP 
+\fBRequired Spam Assassin Score\fR
+Default: 6
+.br 
+
+.br 
+This gives the minimum SpamAssassin score value above which messages are spam. This replaces SpamAssassin's own "required_hits" value, so that it can be a ruleset and set to different values for different users/domains. 
+
+
+.TP 
+\fBHigh SpamAssassin Score\fR
+Default: 20
+.br 
+
+.br 
+Messages with a SpamAssassin score greater than this value are labelled as being "High Scoring Spam", and a different set of "Spam Actions" are applied to messages scoring at least this value. 
+
+
+.TP 
+\fBSpamAssassin Auto Whitelist\fR
+Default: no
+.br 
+
+.br 
+SpamAssassin has a feature which measures the ratio of spam to non\-spam originating from different addresses, and will automatically add addresses to its own internal "whitelist" if most of the messages from an address is not spam. This option enables this feature of SpamAssassin. Please read their documentation for more information. 
+
+.TP 
+\fBSpamAssassin Prefs File\fR
+Default: %etc\-dir%/spam.assassin.prefs.conf
+.br 
+
+.br 
+SpamAssassin uses a "user preferences" file which can be used to set the values of various SpamAssassin options. This is the name of that file. Its most useful feature is that the RBL/DNSBL/"Spam List" checks done by SpamAssassin can be disabled as MailScanner already does them and there is little to be gained by doing these checks twice for every message. 
+
+.TP 
+\fBSpamAssassin Timeout\fR
+Default: 30
+.br 
+
+.br 
+This option sets the maximum number of seconds to wait for SpamAssassin to process a message. This is a useful protection against occasional bugs in SpamAssassin that can cause it to take hours to process a single message. 
+
+.TP 
+\fBMax SpamAssasin Timeouts\fR
+Default: 20
+.br 
+
+.br 
+If several consecutive calls to SpamAssassin time out, then MailScanner decides that there is something stopping SpamAssassin from working properly. It will therefore be disabled for the next few hours until MailScanner restarts itself, at which point it will be tried again. 
+
+.TP 
+\fBSpamAssassin Timeouts History\fR
+Default: 30
+.br 
+
+.br 
+The total number of SpamAssassin attempts during which "Max SpamAssassin Timeouts" will cause SpamAssassin to be marked as "unavailable". See the previous comment for more information. The default values of 10 and 20 mean that 10 timeouts in any sequence of 20 attempts will trigger the behaviour described above, until the next periodic restart (see "Restart Every").
+
+.TP 
+\fBCheck SpamAssassin If On Spam List\fR
+Default: yes
+.br 
+
+.br 
+If a message has already triggered any of the "Spam List" checks, the SpamAssassin check will be skipped if this option is set to "no". This can help reduce the load on your server if SpamAssassin checks take a long time for some reason. 
+
+.TP 
+\fBAlways Include SpamAssasin Report\fR
+Default: no
+.br 
+
+.br 
+If this option is set, then the "Spam Header" will be included in the header of every message, so its presence cannot be used to filter out spam by your users' e\-mail applications. 
+
+.TP 
+\fBSpam Score\fR
+Default: yes
+.br 
+
+.br 
+If a message is spam, and this option is set, then a header will be added to the message containing 1 character for each point in the SpamAssassin score. This allows users to choose for themselves the SpamAssassin scores at which they want to do different things with the message, such as file it or delete it. 
+
+
+.TP 
+\fBCache SpamAssassin Results\fR
+Default: yes
+.br 
+
+.br 
+Many naive spammers send out the same message to lots of people. These messages are very likely to have roughly the same SpamAssassin score. For extra speed, cache the SpamAssassin results for the messages being processed so that you only call SpamAssassin once for all of the messages. This can also be the filename of a ruleset.
+
+.TP 
+\fBSpamAssassin Cache Database File\fR
+Default: /var/spool/MailScanner/incoming/SpamAsssassin.cache.db
+.br 
+
+.br 
+The SpamAssassin cache uses a database file which needs to be writable by the MailScanner "Run As User". This file will be created and setup for you automatically when MailScanner is started.
+
+.TP 
+\fBRebuild Bayes Every\fR
+Default: 0
+.br 
+
+.br 
+If you are using the Bayesian statistics engine on a busy server, you may well need to force a Bayesian database rebuild and expiry at regular intervals. This is measures in seconds. 24 hours = 86400 seconds. To disable this feature set this to 0.
+
+.TP 
+\fBWait During Bayes Rebuild\fR
+Default: no
+.br 
+
+.br 
+The Bayesian database rebuild and expiry may take a 2 or 3 minutes to complete. During this time you can either wait, or simply disable SpamAssassin checks until it has completed.
+
+
+
+.SH "Custom Spam Scanner Plugin"
+.TP 
+\fBUse Custom Spam Scanner\fR
+Default: no
+.br 
+
+.br 
+Use the Custom Spam Scanner. This is code you will have to write yourself, a function called "GenericSpamScanner" stored in the file "MailScanner/lib/MailScanner/CustomFunctions/GenericSpamScanner.pm". A sample function is given in the correct file in the distribution. This sample function also includes code to show you how to make it run an external program to produce a spam score. This can also be the filename of a ruleset. The function will be passed
+.br 
+.RS 7
+.IP  \(bu 4
+$IP		\- the numeric IP address of the system on the remote end of the SMTP connections
+.IP  \(bu 4
+$From	\- the address of the envelope sender of the message
+.IP  \(bu 4
+$To		\- a perl reference to the envelope recipients of the message
+.IP  \(bu 4
+$Message	\- a perl reference to the list of line of the message
+.RE
+.br 
+
+
+.TP 
+\fBMax Custom Spam Scanner Size\fR
+Default: 20000
+.br 
+
+.br 
+How much of the message should be passed tot he Custom Spam Scanner. Most spam tools only need the first 20kbytes of the message to determine if it is spam or not. Passing more than is necessary only slows things down. This can also be the filename of a ruleset.
+
+.TP 
+\fBCustom Spam Scanner Timeout\fR
+Default: 20
+.br 
+
+.br 
+How long should the custom spam scanner take to run? If it takes more seconds than this, then it should be considered to have crashed and should be killed. This stops denial\-of\-service attacks.
+
+
+.TP 
+\fBMax Custom Spam Scanner Timeouts\fR
+Default: 10
+.br 
+
+.br 
+If the Custom Spam Scanner times out more times in a row than this, then it will be marked as "unavailable" until MailScanner next re\-starts itself.
+
+.TP 
+\fBCustom Spam Scanner Timeout History\fR
+Default: 20
+.br 
+
+.br 
+The total number of Custom Spam Scanner attempts during which "Max Custom Spam Scanner Timeouts" will cause the Custom Spam Scanner to be marked as "unavailable". See the previous comment for more information. The default values of 10 and 20 mean that 10 timeouts in any sequence of 20 attempts will trigger the behaviour described above, until the next periodic restart (see "Restart Every").
+.SH "What to do with spam"
+.TP 
+\fBSpam Actions\fR
+Default: deliver
+.br 
+
+.br 
+This can be any combination of 1 or more of the following keywords, and these actions are applied to any message which is spam. 
+.br 
+.RS 7
+.IP  \(bu 4
+deliver \- the message is delivered to the recipient as normal 
+.IP  \(bu 4
+delete \- the message is deleted 
+.IP  \(bu 4
+store \- the message is stored in the quarantine 
+
+.IP  \(bu 4
+forward \- an email address is supplied, to which the message is forwarded 
+.IP  \(bu 4
+notify \- Send the recipients a short notification that spam addressed to them was not delivered. They can then take action to request retrieval of the orginal message if they think it was not spam.
+.IP  \(bu 4
+striphtml \- convert all in\-line HTML content in the message to be stripped to plain text, which removes all images and scripts and so can be used to protect your users from offensive spam. Note that using this action on its own does not imply that the message will be delivered, you will need to specify "deliver" or "forward" to actually deliver the message. 
+.IP  \(bu 4
+attachment \- Convert the original message into an attachment of the message. This means the user has to take an extra step to open the spam, and stops "web bugs" very effectively.
+.IP  \(bu 4
+bounce \- bounce the spam message. This option should not be used and must be enabled with the "Enable Spam Bounce" option first.
+.IP  \(bu 4
+header "name: value" \- Add the header "name: value" to the message. name must not contain any spaces.
+.RE
+
+.TP 
+\fBHigh Scoring Spam Actions\fR
+Default: deliver
+.br 
+
+.br 
+This is the same as the "Spam Actions" option above, but it gives the actions to apply to any message whose SpamAssassin score is above the "High Scoring" threshold described above. 
+
+.TP 
+\fBNon Spam Actions\fR
+Default: deliver
+.br 
+
+.br 
+This is the same as the "Spam Actions" option above, except that it applies to messages that are NOT spam. The bounce option does not make much sense here so do not use it.
+
+.TP 
+\fBSender Spam Report\fR
+Default: %reports\-dir%/sender.spam.report.txt
+.br 
+
+.br 
+When the "bounce" spam action is applied to a message that triggered both a "Spam List" check and SpamAssassin, this file gives the text to put in that message. 
+
+.TP 
+\fBSender Spam List Report\fR
+Default: %reports\-dir%/sender.spam.rbl.report.txt
+.br 
+
+.br 
+When the "bounce" spam action is applied to a message that triggered a "Spam List" check, this file gives the text to put in that message.
+ 
+.TP 
+\fBSender SpamAssassin Report\fR
+Default: %reports\-dir%/sender.spam.sa.report.txt
+.br 
+
+.br 
+When the "bounce" spam action is applied to a message that triggered SpamAssassin, this file gives the text to put in that message. 
+
+.TP 
+\fBInline Spam Warning\fR
+Default: %reports\-dir%/inline.spam.warning.txt
+.br 
+
+.br 
+If you use the 'attachment' Spam Action or High Scoring Spam Action then this is the location of inline spam report that is inserted at the top of the message.
+
+.TP 
+\fBRecipient Spam Report\fR
+Default: %reports\-dir%/recipient.spam.report.txt
+.br 
+
+.br 
+If you use the 'notify' Spam Action or High Scoring Spam Action then this is the location of the notification message that is sent to the original recipients of the message.
+
+.TP 
+\fBEnable Spam Bounce\fR
+Default: %rules\-dir%/bounce.rules
+.br 
+
+.br 
+You can use this ruleset to enable the "bounce" Spam Action. You must *only* enable this for mail from sites with which you have agreed to bounce possible spam. Use it on low\-scoring spam only (<10) and only to your regular customers for use in the rare case that a message is mis\-tagged as spam when it shouldn't have been. Beware that many sites will automatically delete the bounce messages created by using this option unless you have agreed this with them in advance.
+
+
+.SH "System logging"
+.TP 
+\fBSyslog Facility\fR
+Default: mail
+.br 
+
+.br 
+This is the name of the "facility" used by syslogd to log MailScanner's messages. If this doesn't mean anything to you, then either leave it alone or else read the "syslogd" man page. 
+.TP 
+\fBLog Speed\fR
+Default: no
+.br 
+
+.br 
+Do you want to log the processing speed for each section of the code for a batch? This can be very useful for diagnosing speed problems, particularly in spam checking.
+
+.TP 
+\fBLog Spam\fR
+Default: no
+.br 
+
+.br 
+If this option is set, then every spam message will be logged to syslog. If you get a lot of spam, or your server load is high, you will want to leave this option switched off. But if you are having trouble with spam detection, setting this to "yes" temporarily can provide useful debugging output. 
+
+.TP 
+\fBLog Non Spam\fR
+Default: no
+.br 
+
+.br 
+Do you want all non\-spam to be logged? Useful if you want to see all the SpamAssassin reports of mail that was marked as non\-spam. Note: It will generate a lot of log traffic.
+
+.TP 
+\fBLog Permitted Filenames\fR
+Default: no
+.br 
+
+.br 
+If this option is set, then every attachment filename that passes the "filename rules" checks will be logged to syslog. Normally this is of no interest. But if you are having trouble getting your filename rules correct, setting, this can provide useful debugging output. 
+
+.TP 
+\fBLog Permitted Filetypes\fR
+Default: no
+.br 
+
+.br 
+Log all the filenames that are allowed by the Filetype Rules, or just the filetypes that are denied? This can also be the filename of a ruleset.
+
+.TP 
+\fBLog Silent Viruses\fR
+Default: no
+.br 
+
+.br 
+Log all occurrences of "Silent Viruses" as defined above? This can only be a simple yes/no value, not a ruleset.
+
+.TP 
+\fBLog Dangerous HTML Tags\fR
+Default: no
+.br 
+Log all occurrences of HTML tags found in messages, that can be blocked. This will help you build up your whitelist of message sources for which particular HTML tags should be allowed, such as mail from newsletters and daily cartoon strips. This can also be the filename of a ruleset.
+.SH "Advanced SpamAssassin Settings"
+If you are using Postfix you may well need to use some of the settings below, as the home directory for the "postfix" user cannot be written to by the "postfix" user. You may also need to use these if you have installed SpamAssassin somewhere other than the default location. 
+
+.TP 
+\fBSpamAssassin User State Dir\fR
+Default:
+.br 
+
+.br 
+The per\-user files (bayes, auto\-whitelist, user_prefs) are looked for here and in ~/.spamassassin/. Note the files are mutable. If this is unset then no extra places are searched for. NOTE: SpamAssassin is always called from MailScanner as the same user, and that is the "Run As" user specified in MailScanner.conf. So you can only have 1 set of "per\-user" files, it's just that you might possibly need to modify this location. You should not normally need to set this at all. If using Postfix, you probably want to set this to /var/spool/MailScanner/spamassassin and do
+
+.RS 10
+mkdir /var/spool/MailScanner/spamassassin
+.br 
+chown postfix.postfix /var/spool/MailScanner/spamassassin
+.RE
+
+.TP 
+\fBSpamAssassin Install Prefix\fR
+Default:
+.br 
+
+.br 
+This setting is useful if SpamAssassin is installed in an unusual place, e.g. /opt/MailScanner. The install prefix is used to find some fallback directories if neither of the following two settings work. If this is set then it adds to the list of places that are searched; otherwise it has no effect.
+
+.TP 
+\fBSpamAssassin Local Rules Dir\fR
+Default:
+.br 
+
+.br 
+This tells MailScanner where to look for the site\-local rules. If this is set it adds to the list of places that are searched. MailScanner will always look at the following places (even if this option is not set):
+.RS 7
+.IP  \(bu 4
+prefix/etc/spamassassin
+.IP  \(bu 4
+prefix/etc/mail/spamassassin
+.IP  \(bu 4
+/usr/local/etc/spamassassin
+.IP  \(bu 4
+/etc/spamassassin
+.IP  \(bu 4
+/etc/mail/spamassassin
+.IP  \(bu 4
+maybe others as well
+.RE
+
+.TP 
+\fBSpamAssassin Default Rules Dir\fR
+Default:
+.br 
+
+.br 
+This tells MailScanner where to look for the default rules. If this is set it adds to the list of places that are searched. MailScanner will always look at the following places (even if this option is not set):
+.RS 7
+.IP  \(bu 4
+prefix/share/spamassassin
+.IP  \(bu 4
+/usr/local/share/spamassassin
+.IP  \(bu 4
+/usr/share/spamassassin
+.IP  \(bu 4
+maybe others as well
+.RE
+.SH "Advanced Settings"
+.TP 
+\fBSpam Score Number Format\fR
+Default: %d
+.br 
+
+.br 
+When putting the value of the spam score of a message into the headers, how do you want to format it. If you don't know how to use sprintf() or printf() in C, please *do not modify* this value. This can also be the filename of a ruleset. A few examples for you:
+.RS 7
+.TP 
+%d
+==> 12
+.TP 
+%5.2f
+==> 12.34
+.TP 
+%05.1f
+==> 012.3
+.RE
+
+.TP 
+\fBDebug\fR
+Default: no
+.br 
+
+.br 
+Not for use by normal users. Setting this option to "yes" will put MailScanner into debugging mode, in which it creates slightly more output and will not become a daemon.
+
+.TP 
+\fBDebug SpamAssassin\fR
+Default: no
+.br 
+
+.br 
+Do you want to debug SpamAssassin from within MailScanner?
+
+.TP 
+\fBRun In Foreground\fR
+Default: no
+.br 
+
+.br 
+Set Run In Foreground to "yes" if you want MailScanner to operate normally in foreground (and not as a background daemon). Use this if you are controlling the execution of MailScanner with a tool like DJB's 'supervise' (see http://cr.yp.to/daemontools.html).
+
+.TP 
+\fBLDAP Server\fR
+Default:
+.br 
+
+.br 
+If you are using an LDAP server to read the configuration, these are the details required for the LDAP connection. The connection is anonymous. Example: localhost
+
+.TP 
+\fBLDAP Base\fR
+Default:
+.br 
+
+.br 
+If you are using an LDAP server to read the configuration, these are the details required for the LDAP connection. The connection is anonymous. Example: o=fsl
+
+.TP 
+\fBLDAP Site\fR
+Default:
+.br 
+
+.br 
+If you are using an LDAP server to read the configuration, these are the details required for the LDAP connection. The connection is anonymous. Example: default
+
+.TP 
+\fBAlways Looked Up Last\fR
+Default: no
+.br 
+
+.br 
+The value of the option is actually never used, but it is evaluated at the end of processing a batch of messages. It is designed to be used in conjunction with a Custom Function. The Custom Function should then be written to have a "side effect" of doing something useful such as logging lots of information about the batch of messages to a file or an SQL database. 
+
+.TP 
+\fBDeliver in Background\fR
+Default: yes
+.br 
+
+.br 
+When attempting delivery of any messages (when the "Delivery Method = batch") the sendmail/Exim command will be run in the background so that MailScanner does not have to wait for the delivery attempt to complete. There are very few good reasons for setting this to "no". 
+
+
+.TP 
+\fBLockfile Dir\fR
+Default: /tmp
+.br 
+
+.br 
+This is the directory in which lock files are placed to stop the virus scanners used while they are in the middle of updating themselves with new virus definitions. If you change this at all, you will need to edit the "autoupdate" scripts for all your virus scanners. 
+
+.TP 
+\fBCustom Functions Dir\fR
+Default: /opt/MailScanner/lib/MailScanner/CustomFunctions
+.br 
+Default FreeBSD: /usr/local/lib/MailScanner/MailScanner/CustomFunctions
+.br 
+
+.br 
+Where to put the code for your "Custom Functions". No code in this directory should be over\-written by the installation or upgrade process. All files starting with "." or ending with ".rpmnew" will be ignored, all other files will be compiled and may be used with Custom Functions.
+
+.TP 
+\fBLock Type\fR
+Do not set this option to anything unless you know exactly what you are doing. For sendmail and Exim, MailScanner will choose the correct value by default. This affects how mail queue files are locked, and your mail will be totally screwed up if you set this option to anything other than the correct value for your MTA. So leave it alone and let MailScanner choose the correct value for you. 
+
+.TP 
+\fBMinimum Code Status\fR
+Default: supported
+.br 
+
+.br 
+Minimum acceptable code stability status \-\- if we come across code that's not at least as stable as this, we barf. This is currently only used to check that you don't end up using untested virus scanner support code without realising it. Don't even *think* about setting this to anything other than "beta" or "supported" on a system that receives real mail until you have tested it yourself and are happy that it is all working as you expect it to. Don't set it to anything other than "supported" on a system that could ever receive important mail. Levels used are:
+
+.RS 7
+.IP  \(bu 4
+none \- there may not even be any code.
+.IP  \(bu 4
+unsupported \- code may be completely untested, a contributed dirty hack, anything, really.
+.IP  \(bu 4
+alpha \- code is pretty well untested. Don't assume it will work.
+.IP  \(bu 4
+beta \- code is tested a bit. It should work.
+.IP  \(bu 4
+supported \- code *should* be reliable.
+.RE
+
+.TP 
+\fBSplit Exim Spool\fR
+Default: yes
+.br 
+
+.br 
+Are you using Exim with split spool directories? If you don't understand this, the answer is probably "no". Refer to the Exim documentation for more information about split spool directories.
+
+.TP 
+\fBUse Default Rules With Multiple Recipients\fR
+Default: no
+.br 
+
+.br 
+When trying to work out the value of configuration parameters which are using a ruleset, this controls the behaviour when a rule is checking the  "To:" addresses.  If this option is set to "no", then some rules will use the result they get from the first matching rule for any of the recipients of a message, so the exact value cannot be predicted for messages with more than 1 recipient. This value *cannot* be the filename of a ruleset. 
+.br 
+If this option is set to "yes", then the following happens when checking the ruleset:
+.RS 7
+.IP  a) 4
+1 recipient. Same behaviour as normal.
+.IP  b) 4
+Several recipients, but all in the same domain (domain.com for example). The rules are checked for one that matches the string "*@domain.com".
+.IP  c) 4
+Several recipients, not all in the same domain. The rules are checked for one that matches the string "*@*".
+.RE
+.SH "RULESETS"
+.LP 
+Ruleset files should all be put in /opt/MailScanner/etc/rules (FreeBSD: /usr/local/etc/MailScanner/rules) and their filename should end in ".rules" wherever possible.
+.br 
+
+.br 
+All blank lines are ignored, and comments start with "#" and continue to the
+end of the line, like this:
+        # This line is just a comment
+.br 
+
+.br 
+Other than that, every line is a rule and looks like this example:
+        From:   john.doe@domain.com     yes
+.br 
+
+.br 
+As you can see, each rule has 3 fields:
+.br 
+        1. Direction
+.br 
+        2. Pattern to match
+.br 
+        3. Result value (or values)
+.LP 
+1. Direction should be one of the following:
+.TP 
+From:      
+Matches when the message is from a matching address
+.TP 
+To:
+Matches when the message is to a matching address
+.TP 
+FromOrTo:
+Matches when the message is from or to a matching address
+.TP 
+FromAndTo:
+Matches when the message is from and to a matching address
+.LP 
+
+The syntax of these is very loosely defined. Any word containing "from", any word containing "to", any word containing "from" and "to" (in either order), and any word containing "and" will work just fine. You can put them in upper or lower case, it doesn't matter. And any additional punctuation will be ignored.
+.br 
+
+.br 
+This specifies the whether the rule should be matched against the sender's address (or IP address), or the recipient's address.
+
+.LP 
+2. The pattern describes what messages should match this rule. Some examples are:
+.br 
+
+.br 
+user@sub.domain.com     # Individual address
+.br 
+.br 
+user@*                  # 1 user at any domain
+.br 
+*@sub.domain.com        # Any user at 1 domain
+.br 
+*@*.domain.com          # Any user at any sub\-domain of "domain.com"
+.br 
+*@domain.com            # Any user at 1 specific domain
+.br 
+/pattern/               # Any address matching this Perl regular
+.br 
+                        # expression
+.br 
+192.168.                # Any SMTP client IP address in this network
+.br 
+/pattern\-with\-no\-letters/ # Any SMTP client IP address matching this
+.br 
+                          # Perl regular expression
+.br 
+/^192\.168\.1[4567]\./  # Any SMTP client IP address in the networks
+.br 
+                        # 192.168.14 \- 192.168.17
+.br 
+*@*                     # Default value
+.br 
+default                 # Default value
+.br 
+
+.br 
+You should be able to do just about anything with that.
+
+.LP 
+3. The result value is what you could have put in the entry in the main mailscanner.conf file had you not given the filename of a ruleset instead.
+
+.LP 
+See the file EXAMPLES for a few ideas on how to do things with this system.
+.SH "ATTACHMENT FILENAME RULESET"
+.LP 
+This is held in the filename pointed to by the configuration option Filename rules. It contains a set of rules that are used to judge whether any given file attachment should be accepted or rejected on the basis of its filename, regardless of whether it is found to be virus\-infected or not. This can not only be used for draconian measures such as banning all .exe attachments, but it can be used with any Perl regular expression to provide facilities such as detection of attempts at hiding filenames. 
+.LP 
+Many Windows e\-mail programs (eg. Microsoft Outlook) hide common file extensions in an attempt to not baffle the user. The result is that while an attachment called "Your Document.doc" is helpfully displayed as "Your Document", a more sinister attachment just as "Looks Safe.txt.pif" will appear simply as "Looks Safe.txt". Many users recognise the .txt filename extension as applying to plain text files, which they know are safe. So even an experienced user may well double\-click on this attachment thinking it is just going to start Notepad and display the text file. However, the file is really an MS\-Dos shortcut (.pif file) and can execute any arbitrary commands the author wanted: all without any indication to the unwitting user. 
+.LP 
+The rules are matched in order from the top to the bottom of the file, and the first rule containing a matching regular expression is used. Each line of the file is either blank, a comment (in which case it starts with a '#' character) or is a rule made up of 4 fields separated by one or more TAB characters:
+
+.TP 
+allow / deny
+Accept or reject the attachment if its filename matches the regular expression 
+
+.TP 
+regular expression 
+The rule is executed if the attachment matches this expression. It may optionally be surrounded in '/' characters. 
+.TP 
+log text 
+If the rule matches, this text is placed in the syslog. If the text is "\-", no string is logged. 
+
+.TP 
+user text 
+If the rule matches, this text is placed in the text message sent to the user. If the text is "\-", no text is used. 
+
+.LP 
+Please have a look at the filename.rules.conf or filename.rules.conf.sample file provided with this distribution/package/port.
+.SH "SEE ALSO"
+.LP 
+MailScanner(8)

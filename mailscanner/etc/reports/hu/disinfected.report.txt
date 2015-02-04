@@ -9,4 +9,4 @@ MailScanner - Email Virus Scanner - http://www.mailscanner.info
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+

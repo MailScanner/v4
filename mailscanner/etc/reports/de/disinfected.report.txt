@@ -11,4 +11,4 @@ E-Mail-Virus-Scanner
 %org-long-name%
 %web-site%
 
-For all your IT requirements visit: http://www.transtec.co.uk
+

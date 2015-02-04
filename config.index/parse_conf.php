@@ -1,6 +1,6 @@
 <?php
 //$fh = fopen('./MailScanner.conf','r');
-$fh = fopen('/root/v4/NEWSTABLE/mailscanner/etc/mailscanner.conf','r');
+$fh = fopen('/msdev/v4/mailscanner/etc/mailscanner.conf','r');
 if($fh) {
  while(!feof($fh)) {
   $line = fgets($fh,1024);

@@ -27,4 +27,4 @@ Email Virus Scanner
 %org-long-name%
 %web-site%
 
-MailScanner bedankt ttec Computers voor hun ondersteuning
+

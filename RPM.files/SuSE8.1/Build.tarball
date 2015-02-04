@@ -1,10 +1,41 @@
 #!/bin/sh
 
-set -x
+# if not set from the "Build.all" script
+if [ -z "$MSVERSION" ]; then
+	echo Please tell me the version number (x.xx.x):
+	read MSVERSION
+	export MSVERSION
+fi
 
-BUILDROOT=/root/v4/NEWSTABLE/RPM.files/SuSE8.1
-BUILD=1
-VERSION=4.84.3-$BUILD
+# if not set from the "Build.all" script
+if [ -z "$MSBUILD" ]; then
+	echo And the build number (-x):
+	read MSBUILD	
+	export MSBUILD
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$FULLMSVER" ]; then
+	FULLMSVER=$MSVERSION-$MSBUILD
+	export FULLMSVER
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$DEVBASEDIR" ]; then
+	echo Enter the parent directory of RPM.files without the trailing slash:
+	read DEVBASEDIR
+	export DEVBASEDIR
+fi
+
+# create this if missing
+if[ ! -a /tmp/MailScanner.conf.index.html ]; then
+	sh $DEVBASEDIR/config.index/make.sh
+	cd $DEVBASEDIR
+fi
+
+BUILDROOT=$DEVBASEDIR/RPM.files/SuSE8.1
+BUILD=$MSBUILD
+VERSION=$MSVERSION-$BUILD
 export BUILDROOT VERSION BUILD
 
 cd $BUILDROOT
@@ -17,18 +48,18 @@ fi
 if [ \! -d MailScanner-$VERSION ] ; then
   mkdir MailScanner-$VERSION
 fi
-cp /root/v4/NEWSTABLE/RPM.files/perl-module-rpms/src/perl*rpm MailScanner-$VERSION
-cp /root/v4/NEWSTABLE/RPM.files/perl-module-rpms/src/MailScanner-perl*rpm MailScanner-$VERSION
-cp /root/v4/NEWSTABLE/mailscanner/bin/CheckModuleVersion MailScanner-$VERSION
-cp /root/v4/NEWSTABLE/mailscanner/bin/getPERLLIB MailScanner-$VERSION
+cp $DEVBASEDIR/RPM.files/perl-module-rpms/src/perl*rpm MailScanner-$VERSION
+cp $DEVBASEDIR/RPM.files/perl-module-rpms/src/MailScanner-perl*rpm MailScanner-$VERSION
+cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion MailScanner-$VERSION
+cp $DEVBASEDIR/mailscanner/bin/getPERLLIB MailScanner-$VERSION
 cp ../Perl8.0/install.sh                     MailScanner-$VERSION
 cp ../Perl8.0/README                         MailScanner-$VERSION
 cp ../Perl8.0/ExtUtils-MakeMaker-6.30.tar.gz MailScanner-$VERSION
 #cp ../Perl8.0/Update-MakeMaker.sh            MailScanner-$VERSION
-cp /root/v4/NEWSTABLE/RPM.files/tnef/tnef-1.4.5*{i386,x86_64}.rpm MailScanner-$VERSION
+cp $DEVBASEDIR/RPM.files/tnef/tnef-1.4.5*{i386,x86_64}.rpm MailScanner-$VERSION
 
 # Put the QuickInstall instructions in place
-cp /root/v4/NEWSTABLE/www/QuickInstall.txt MailScanner-$VERSION
+cp $DEVBASEDIR/QuickInstall.txt MailScanner-$VERSION
 
 # Now to copy in the source code into the redhat/SOURCE dir
 VERSION2=`echo $VERSION | sed -e 's/^\([0-9.]*\)-.*$/\1/'`
@@ -41,53 +72,57 @@ read a
 
 # Put the top-level code in place
 cd /usr/src/redhat/SOURCES/mailscanner-$VERSION2
-cp /root/v4/NEWSTABLE/RPM.files/common/check_MailScanner.cron .
-cp /root/v4/NEWSTABLE/RPM.files/common/MailScanner.init.SuSE .
-cp /root/v4/NEWSTABLE/RPM.files/common/MailScanner.opts.SuSE .
-cp /root/v4/NEWSTABLE/RPM.files/common/update_spamassassin.opts.SuSE .
-cp /root/v4/NEWSTABLE/RPM.files/common/update_virus_scanners.cron .
-cp /root/v4/NEWSTABLE/RPM.files/common/update_phishing_sites.cron .
-cp /root/v4/NEWSTABLE/RPM.files/common/update_bad_phishing_sites.cron .
-cp /root/v4/NEWSTABLE/RPM.files/common/clean.quarantine.cron .
-cp /root/v4/NEWSTABLE/RPM.files/common/update_spamassassin.cron .
-cp /root/v4/NEWSTABLE/RPM.files/common/processing_messages_alert.cron .
-#cp /root/v4/NEWSTABLE/RPM.files/common/clean.SA.cache.cron .
+cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron .
+cp $DEVBASEDIR/RPM.files/common/MailScanner.init.SuSE .
+cp $DEVBASEDIR/RPM.files/common/MailScanner.opts.SuSE .
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.opts.SuSE .
+cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron .
+cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron .
+cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron .
+cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron .
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron .
+cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron .
+#cp /msdev/v4/RPM.files/common/clean.SA.cache.cron .
 
 # Put the docs in place
 rm -rf doc
 mkdir doc
 cd doc
-#cp /root/v4/NEWSTABLE/RPM.files/Perl8.0/MailScanner.8 .
-cp /root/v4/NEWSTABLE/www/man/*[12345678] .
-cp /root/v4/NEWSTABLE/www/COPYING .
+#cp /msdev/v4/RPM.files/Perl8.0/MailScanner.8 .
+cp $DEVBASEDIR/man/*[12345678] .
+cp $DEVBASEDIR/COPYING .
 rm -rf html
-cp /root/v4/NEWSTABLE/www/MailScanner.conf.index.html .
+
+cp /tmp/MailScanner.conf.index.html .
 #mkdir html
-#( cd /root/v4/NEWSTABLE/docs && tar cf - . ) | ( cd html && tar xBpf - )
+#( cd /msdev/v4/docs && tar cf - . ) | ( cd html && tar xBpf - )
 #rm -rf html/.svn html/install/.svn html/man/.svn
 
 # Put the wrappers in place
 cd ..
 rm -rf lib
 mkdir lib
-cp /root/v4/NEWSTABLE/mailscanner/lib/*{wrapper,update} lib
-cp /root/v4/NEWSTABLE/mailscanner/lib/mcafee-autoupdate.old     lib
-cp /root/v4/NEWSTABLE/mailscanner/lib/kaspersky.prf     lib
+cp $DEVBASEDIR/mailscanner/lib/*{wrapper,update} lib
+cp $DEVBASEDIR/mailscanner/lib/mcafee-autoupdate.old     lib
+cp $DEVBASEDIR/mailscanner/lib/kaspersky.prf     lib
 
 # Put the etc files in place
 rm -rf etc
 mkdir etc
 for F in filename.rules.conf filetype.rules.conf archives.filename.rules.conf archives.filetype.rules.conf spam.assassin.prefs.conf spam.lists.conf virus.scanners.conf phishing.safe.sites.conf phishing.bad.sites.conf country.domains.conf
 do
-  cp /root/v4/NEWSTABLE/mailscanner/etc/$F etc
+  cp $DEVBASEDIR/mailscanner/etc/$F etc
 done
-cp /root/v4/NEWSTABLE/mailscanner/etc/mailscanner.conf etc/MailScanner.conf
-( cd /root/v4/NEWSTABLE/mailscanner/etc && tar cf - reports rules mcp ) | ( cd etc && tar xBpf - )
+cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf etc/MailScanner.conf
+( cd $DEVBASEDIR/mailscanner/etc && tar cf - reports rules mcp ) | ( cd etc && tar xBpf - )
 mkdir -p etc/conf.d
-cp /root/v4/NEWSTABLE/mailscanner/etc/conf.d/README etc/conf.d/
+cp $DEVBASEDIR/mailscanner/etc/conf.d/README etc/conf.d/
 
 # Insert the version number we are building
 perl -pi -e 's/VersionNumberHere/'$VERSION2'/;' etc/MailScanner.conf
+
+# do the same for the mailscanner.sbin
+perl -pi -e 's/VersionNumberHere/'$NUMBER'/;' bin/mailscanner.sbin
 
 # Put the top-level code in place
 rm -rf bin
@@ -95,29 +130,29 @@ mkdir bin
 mkdir bin/MailScanner
 mkdir bin/MailScanner/CustomFunctions
 cd bin
-cp /root/v4/NEWSTABLE/mailscanner/bin/check_mailscanner ../check_MailScanner
-cp /root/v4/NEWSTABLE/mailscanner/bin/Sophos.install.linux Sophos.install
-cp /root/v4/NEWSTABLE/mailscanner/bin/Quick.Peek .
-cp /root/v4/NEWSTABLE/mailscanner/bin/df2mbox .
-cp /root/v4/NEWSTABLE/mailscanner/bin/d2mbox .
-cp /root/v4/NEWSTABLE/mailscanner/bin/CheckModuleVersion .
-cp /root/v4/NEWSTABLE/mailscanner/bin/getPERLLIB .
-cp /root/v4/NEWSTABLE/mailscanner/bin/mailscanner_create_locks .
-cp /root/v4/NEWSTABLE/mailscanner/bin/processing_messages_alert .
-cp /root/v4/NEWSTABLE/mailscanner/bin/update_virus_scanners .
-cp /root/v4/NEWSTABLE/mailscanner/bin/update_spamassassin .
-cp /root/v4/NEWSTABLE/mailscanner/bin/update_phishing_sites .
-cp /root/v4/NEWSTABLE/mailscanner/bin/update_bad_phishing_sites .
-cp /root/v4/NEWSTABLE/mailscanner/bin/analyse_SpamAssassin_cache .
+cp $DEVBASEDIR/mailscanner/bin/check_mailscanner ../check_MailScanner
+cp $DEVBASEDIR/mailscanner/bin/Sophos.install.linux Sophos.install
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek .
+cp $DEVBASEDIR/mailscanner/bin/df2mbox .
+cp $DEVBASEDIR/mailscanner/bin/d2mbox .
+cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion .
+cp $DEVBASEDIR/mailscanner/bin/getPERLLIB .
+cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks .
+cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert .
+cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners .
+cp $DEVBASEDIR/mailscanner/bin/update_spamassassin .
+cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites .
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites .
+cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache .
 ln -sf analyse_SpamAssassin_cache analyze_SpamAssassin_cache
-cp /root/v4/NEWSTABLE/mailscanner/bin/upgrade_MailScanner_conf .
+cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf .
 ln -sf upgrade_MailScanner_conf upgrade_languages_conf
-cp /root/v4/NEWSTABLE/mailscanner/bin/mailscanner.sbin mailscanner
+cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin mailscanner
 chmod a+rx *
-cp /root/v4/NEWSTABLE/mailscanner/bin/MailScanner.pm .
-cp /root/v4/NEWSTABLE/mailscanner/bin/MailScanner/*pm MailScanner
-cp /root/v4/NEWSTABLE/mailscanner/bin/MailScanner/*pl MailScanner
-cp /root/v4/NEWSTABLE/mailscanner/bin/MailScanner/CustomFunctions/*pm MailScanner/CustomFunctions
+cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm .
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pm MailScanner
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pl MailScanner
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*pm MailScanner/CustomFunctions
 
 # Put the var files in place
 cd ..

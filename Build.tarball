@@ -1,26 +1,60 @@
 #!/bin/sh
 
-set -x
+# this Build.tarball script should be located in the base
+# directory when run. Example: /msdev/v4/Build.tarball
 
-export NUMBER=4.84.3
-export VERSION=MailScanner-$NUMBER
-export INSTALL=MailScanner-install-$NUMBER
-export RELEASE=1
+# if not set from the "Build.all" script
+if [ -z "$MSVERSION" ]; then
+	echo Please tell me the version number (x.xx.x):
+	read MSVERSION
+	export MSVERSION
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$MSBUILD" ]; then
+	echo And the build number (-x):
+	read MSBUILD	
+	export MSBUILD
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$FULLMSVER" ]; then
+	FULLMSVER=$MSVERSION-$MSBUILD
+	export FULLMSVER
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$DEVBASEDIR" ]; then
+	DEVBASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	export DEVBASEDIR
+fi
+
+# create this if missing
+if[ ! -a /tmp/MailScanner.conf.index.html ]; then
+	sh $DEVBASEDIR/config.index/make.sh
+	cd $DEVBASEDIR
+fi
+
+# set stuff
+# export NUMBER=$MSVERSION
+export VERSION=MailScanner-$MSVERSION
+export INSTALL=MailScanner-install-$MSVERSION
+export RELEASE=$MSBUILD
 export BUILDROOT=/root/build/tar
 
+# make some dirs
 mkdir -p $BUILDROOT
 rm -rf $BUILDROOT/$VERSION-$RELEASE
-mkdir $BUILDROOT/$VERSION-$RELEASE
-
-cd /root/v4/NEWSTABLE
+mkdir -p $BUILDROOT/$VERSION-$RELEASE
 
 # Put the docs in place
-tar cf - www/README README | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
-# and the BSD installation guides
+#tar cf - www/README README | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
+cd $DEVBASEDIR
+cp README $BUILDROOT/$VERSION-$RELEASE
 cp FreeBSD/INSTALL.FreeBSD $BUILDROOT/$VERSION-$RELEASE
 cp OpenBSD/INSTALL.OpenBSD $BUILDROOT/$VERSION-$RELEASE
-cp www/MailScanner.conf.index.html $BUILDROOT/$VERSION-$RELEASE
-cp www/ChangeLog $BUILDROOT/$VERSION-$RELEASE
+cp /tmp/MailScanner.conf.index.html $BUILDROOT/$VERSION-$RELEASE
+cp ChangeLog $BUILDROOT/$VERSION-$RELEASE
 
 # Put all the subdirs (including the code) in place
 ( cd mailscanner && tar cf - . ) | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
@@ -34,8 +68,6 @@ perl -pi -e 's/\/usr\/sbin/\/opt\/MailScanner\/bin/g;' $BUILDROOT/$VERSION-$RELE
 
 cd $BUILDROOT/$VERSION-$RELEASE
 ## Copy in the old (working) check_mailscanner script
-## New one works now, so solaris-specific no longer needed
-#cp bin/check_mailscanner.solaris bin/check_mailscanner
 # And fix the paths in it and the scanners updater script
 perl -pi - bin/check_mailscanner <<EOF2
 s/process=mailscanner/process=MailScanner/;
@@ -44,12 +76,13 @@ EOF2
 
 # Get rid of Subversion dirs, autoconf files and useless tnef sources
 find . -type d -name '.svn' -exec rm -rf {} \;
+find . -type d -name '.git' -exec rm -rf {} \;
 rm -f bin/tnef*tar.gz
 find . -type f -name '*.in' -print -exec rm -f {} \;
 
 # Add the -I to the start of the main perl script so it gets all its libs
 perl -pi - $BUILDROOT/$VERSION-$RELEASE/bin/mailscanner.sbin <<EOF
-s./usr/bin/perl$./usr/bin/perl -I/opt/MailScanner/lib/.;
+s./usr/bin/perl$./usr/bin/perl -U -I/opt/MailScanner/lib/.;
 EOF
 
 # Set the default path to the SA cache file
@@ -58,7 +91,11 @@ s./etc/MailScanner./opt/MailScanner/etc.;
 EOF
 
 # Insert the version number we are building
-perl -pi -e 's/VersionNumberHere/'$NUMBER'/;' etc/mailscanner.conf
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' etc/mailscanner.conf
+
+# do the same for the mailscanner.sbin
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' bin/mailscanner.sbin
+
 
 # Move all the bin/MailScanner to lib/MailScanner
 mv bin/MailScanner lib/MailScanner
@@ -84,10 +121,10 @@ tar czf $VERSION-$RELEASE.tar.gz $VERSION-$RELEASE
 #
 
 rm -rf $BUILDROOT/$INSTALL
-mkdir $BUILDROOT/$INSTALL
+mkdir -p $BUILDROOT/$INSTALL
 cd $BUILDROOT/$INSTALL
 mkdir perl-tar
-cd /root/v4/NEWSTABLE
+cd $DEVBASEDIR
 cp installer/install* $BUILDROOT/$INSTALL
 chmod 0755 $BUILDROOT/$INSTALL/install*
 cp mailscanner/bin/CheckModuleVersion $BUILDROOT/$INSTALL
@@ -106,5 +143,5 @@ chmod 0644 $BUILDROOT/$INSTALL/perl-tar/*tar.gz
 cd $BUILDROOT
 tar czf $INSTALL-$RELEASE.tar.gz $INSTALL
 
-echo 'Have you remembered to set the version number right'
-echo 'in mailscanner/bin/mailscanner?'
+#echo 'Have you remembered to set the version number right'
+#echo 'in mailscanner/bin/mailscanner?'

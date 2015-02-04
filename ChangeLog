@@ -13,6 +13,7 @@
 - Improved translation tools
 - Postfix taint fix
 - Spamassassin temp file fix
+- Removed Transtec links in notices
 
 17/06/2013 New in Version 4.84.6-1
 ==================================

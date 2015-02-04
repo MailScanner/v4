@@ -2,10 +2,49 @@
 <?php
 // Load MailScanner.conf array
 // this returns $conf array
-require_once('parse_conf.php');
-// echo "Loaded ".count($conf)." values from MailScanner.conf\n";
+//require_once('parse_conf.php');
 
-$fh = fopen('/root/v4/NEWSTABLE/mailscanner/bin/MailScanner/ConfigDefs.pl','r');
+// this script must be run from a sub directory of the build. example: /msbuild/v4/config.index
+// and the "mailscanner" directory must be one up. example: /mydir/v4/mailscanner
+$parentDir = dirname( dirname(__FILE__) );
+
+// moved parse_conf.php to here
+$fh = fopen($parentDir'/mailscanner/etc/mailscanner.conf','r');
+if($fh) {
+ while(!feof($fh)) {
+  $line = fgets($fh,1024);
+  // Clear out pre on every blank line
+  if(isset($pre) && preg_match('/$^/',$line)) {
+   unset($pre);
+  } else {
+   if(preg_match('/^#/',$line)) {
+    if(isset($pre)) {
+     $pre .= $line;
+    } else {
+     $pre = $line;
+    }
+   }
+  }
+
+  $line = rtrim($line); 
+  if( (!preg_match('/^#/',$line) && !preg_match('/^%/',$line)) && (preg_match('/(.*)\s=(.*)/',$line,$match))) {
+   $ext = strtolower(str_replace(array(' ','-'),'',rtrim($match[1])));
+   $conf[$ext]['name'] = rtrim($match[1]);
+   $conf[$ext]['value'] = rtrim($match[2]);
+   if(isset($pre)) {
+    $conf[$ext]['comment'] = str_replace(array('#','# '),'',rtrim($pre));
+   } else {
+    $conf[$ext]['comment'] = "";
+   }
+   unset($pre, $ext);
+  }
+ }
+}
+fclose($fh);
+unset($fh);
+// finish parse_conf.php
+
+$fh = fopen($parentDir'/mailscanner/bin/MailScanner/ConfigDefs.pl','r');
 if($fh) {
  while(!feof($fh)) {
   $line = fgets($fh,1024);
@@ -130,7 +169,7 @@ asort($setup);
 
 echo "<?php
 /*
-** Auto-generated DefenderMX MailScanner GUI configuration guide
+** Auto-generated MailScanner GUI configuration guide
 */
 
 ";

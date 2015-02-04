@@ -1,4 +1,4 @@
-%define version 4.84.3
+%define version VersionNumberHere
 %define release 1
 %define name    mailscanner
 

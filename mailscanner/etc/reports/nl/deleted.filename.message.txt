@@ -15,4 +15,4 @@ Postmaster
 %org-long-name%
 %web-site%
 
-MailScanner bedankt ttec Computers voor hun ondersteuning
+

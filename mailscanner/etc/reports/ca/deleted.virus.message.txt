@@ -16,4 +16,3 @@ Postmaster
 %org-long-name%
 %web-site%
 
-Per qualsevol necessitat d'IT visiteu: http://www.transtec.co.uk
