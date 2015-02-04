@@ -55,7 +55,11 @@ $i=0;
 while($i<count($index)) {
  echo " <tr>\n";
  for($n=0; $n<$columns; $n++) {
-  echo "  <td><a href=\"#{$index[$i]}\">{$index[$i]}</a></td>\n";
+ 	if($index[$i]){
+	  	echo "  <td><a href=\"#{$index[$i]}\">{$index[$i]}</a></td>\n";
+	}else{
+		echo "  <td></td>\n";
+	}
   $i++;
  }
  echo " </tr>\n";
