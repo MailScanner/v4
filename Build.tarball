@@ -30,7 +30,7 @@ if [ -z "$DEVBASEDIR" ]; then
 fi
 
 # create this if missing
-if[ ! -a /tmp/MailScanner.conf.index.html ]; then
+if[ ! -a '/tmp/MailScanner.conf.index.html' ]; then
 	sh $DEVBASEDIR/config.index/make.sh
 	cd $DEVBASEDIR
 fi
