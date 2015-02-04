@@ -351,7 +351,7 @@ echo
 if [ -d /usr/local/MailScanner ] ; then
   echo
   echo
-  echo Please remember to kill all the old mailscanner version 3
+  echo Please remember to kill all the old mailscanner version
   echo processes before you start the new version.
   echo
 fi
@@ -422,7 +422,7 @@ timewait 10
 
 echo
 echo 'If you want help setting up MailScanner, please read the Wiki'
-echo 'at wiki.mailscanner.info and buy the MailScanner book at'
+echo 'at wiki.mailscanner.info and download the MailScanner book at'
 echo 'www.mailscanner.info'
 echo
 
