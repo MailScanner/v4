@@ -115,9 +115,9 @@ foreach($conf as $ckey=>$cval) {
   <td colspan="3">
    <?php 
    if($cval['type'] == "yesno") {
-    echo "{$cval['values'][$cval['default']]}";
+    echo $cval['values'][$cval['default']];
    } else {
-    echo "{$cval['default']}";
+    echo $cval['default'];
    }
    ?>
   </td>
