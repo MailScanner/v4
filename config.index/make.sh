@@ -32,5 +32,5 @@ if [ -a create_conf_array.php ]; then
 fi
 
 if [ -a dump_config.php ]; then
-	php -q dump_config.php?v=$FULLMSVER > /tmp/MailScanner.conf.index.html
+	php-cgi -f dump_config.php v=$FULLMSVER > /tmp/MailScanner.conf.index.html
 fi
