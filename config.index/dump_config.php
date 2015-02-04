@@ -106,7 +106,7 @@ foreach($conf as $ckey=>$cval) {
  if(empty($cval['name'])) continue;
  ?>
  <tr>
-  <th>Name:</td><td colspan="5"><b><a name="<?=$cval['name']?>"><?=$cval['name']?></a></b></td>
+  <th>Name:</td><td colspan="5"><b><a name="<?php echo $cval['name']; ?>"><?php echo $cval['name']; ?></a></b></td>
  </tr>
  <tr>
   <th>Current Value:</th>
