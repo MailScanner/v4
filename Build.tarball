@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Checked and updated to be more streamlined by
+# Jerry Benton
+# 03FEB15
+
 # this Build.tarball script should be located in the base
 # directory when run. Example: /msdev/v4/Build.tarball
 
@@ -30,7 +34,7 @@ if [ -z "$DEVBASEDIR" ]; then
 fi
 
 # create this if missing
-if[ ! -a '/tmp/MailScanner.conf.index.html' ]; then
+if [ ! -a '/tmp/MailScanner.conf.index.html' ]; then
 	sh $DEVBASEDIR/config.index/make.sh
 	cd $DEVBASEDIR
 fi
