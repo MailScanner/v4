@@ -4,7 +4,7 @@ require_once('/tmp/conf_array.php');
 ?>
 <html>
 <head>
-<title>MailScanner Configuration Dump</title>
+<title>Configuration Index</title>
 <style type="text/css">
 <!--
 body {
@@ -39,7 +39,7 @@ th {
 </head>
 <body>
 
-<h1><a href="http://www.mailscanner.info">MailScanner Configuration Index</a></h1>
+<h1>Configuration Index</h1>
 
 <?php
 // Build an index by Full Name
@@ -68,7 +68,7 @@ while($i<count($index)) {
 </table>
 <p>
 <b>Further information</b><br/>
-There are <?=count($index)?> configuration option in this version.
+There are <?php echo count($index); ?> configuration options in this version.
 </p>
 <p>
 "First Match" rulesets work through the recipients and stop at the
