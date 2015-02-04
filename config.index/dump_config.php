@@ -1,10 +1,15 @@
 <?php
 # this file should have been created by make.sh
 require_once('/tmp/conf_array.php');
+if(isset($_GET['v'])){
+	$display_version = 'v'.$_GET['v'];
+}else{
+	$display_version = NULL;
+}
 ?>
 <html>
 <head>
-<title>Configuration Index</title>
+<title>MailScanner Configuration Index</title>
 <style type="text/css">
 <!--
 body {
@@ -39,7 +44,7 @@ th {
 </head>
 <body>
 
-<h1>Configuration Index</h1>
+<h1>Configuration Index - MailScanner <?php echo $display_version; ?></h1>
 
 <?php
 // Build an index by Full Name
