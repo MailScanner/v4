@@ -132,7 +132,7 @@ foreach($conf as $ckey=>$cval) {
      </tr>
      <?php foreach($cval['values'] as $vkey=>$vval) { ?>
      <tr>
-      <td><?=$vval?></td>
+      <td><?php echo $vval; ?></td>
      </tr>
      <?php } ?>
     </table>
