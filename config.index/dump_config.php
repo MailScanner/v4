@@ -110,7 +110,7 @@ foreach($conf as $ckey=>$cval) {
  </tr>
  <tr>
   <th>Current Value:</th>
-  <td><?=$cval['value']?></td>
+  <td><?php echo $cval['value']; ?></td>
   <th>Default Value:</th>
   <td colspan="3">
    <?php 
