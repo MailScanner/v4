@@ -67,9 +67,6 @@ export VERSION2
 mkdir /usr/src/redhat/SOURCES/mailscanner-$VERSION2
 echo Going to put code into $VERSION2
 
-echo 'Make sure the dir already exists'
-read a
-
 # Put the top-level code in place
 cd /usr/src/redhat/SOURCES/mailscanner-$VERSION2
 cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron .
@@ -82,20 +79,20 @@ cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron .
 cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron .
 cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron .
 cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron .
-#cp /msdev/v4/RPM.files/common/clean.SA.cache.cron .
+#cp $DEVBASEDIR/RPM.files/common/clean.SA.cache.cron .
 
 # Put the docs in place
 rm -rf doc
 mkdir doc
 cd doc
-#cp /msdev/v4/RPM.files/Perl8.0/MailScanner.8 .
+#cp $DEVBASEDIR/RPM.files/Perl8.0/MailScanner.8 .
 cp $DEVBASEDIR/man/*[12345678] .
 cp $DEVBASEDIR/COPYING .
 rm -rf html
 
 cp /tmp/MailScanner.conf.index.html .
 #mkdir html
-#( cd /msdev/v4/docs && tar cf - . ) | ( cd html && tar xBpf - )
+#( cd $DEVBASEDIR/docs && tar cf - . ) | ( cd html && tar xBpf - )
 #rm -rf html/.svn html/install/.svn html/man/.svn
 
 # Put the wrappers in place
@@ -119,16 +116,14 @@ mkdir -p etc/conf.d
 cp $DEVBASEDIR/mailscanner/etc/conf.d/README etc/conf.d/
 
 # Insert the version number we are building
-perl -pi -e 's/VersionNumberHere/'$VERSION2'/;' etc/MailScanner.conf
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' etc/MailScanner.conf
 
 # do the same for the mailscanner.sbin
-perl -pi -e 's/VersionNumberHere/'$NUMBER'/;' bin/mailscanner.sbin
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' bin/mailscanner.sbin
 
 # Put the top-level code in place
 rm -rf bin
-mkdir bin
-mkdir bin/MailScanner
-mkdir bin/MailScanner/CustomFunctions
+mkdir -p bin/MailScanner/CustomFunctions
 cd bin
 cp $DEVBASEDIR/mailscanner/bin/check_mailscanner ../check_MailScanner
 cp $DEVBASEDIR/mailscanner/bin/Sophos.install.linux Sophos.install
@@ -156,8 +151,7 @@ cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*pm MailScanner/Custo
 
 # Put the var files in place
 cd ..
-mkdir var
-mkdir var/run
+mkdir -p var/run
 touch var/run/MailScanner.pid
 
 # Build the src tarball for RPM construction
@@ -167,15 +161,7 @@ tar czf mailscanner-${VERSION}.tgz mailscanner-$VERSION2
 # Build the RPM and SRPMS
 cd $BUILDROOT
 rm -rf /var/tmp/mailscanner-root
-echo Now to build the RPM and SRPM
-read a
-#rpmbuild -ba MailScanner4.spec
-#rpm -ba SuSE-MailScanner4.spec
 rpmbuild -ba SuSE-MailScanner4.spec
-
-echo Wallop return to carry on
-read a
 
 cp /usr/src/redhat/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm MailScanner-$VERSION
 tar czf MailScanner-${VERSION}.suse.tar.gz MailScanner-$VERSION
-

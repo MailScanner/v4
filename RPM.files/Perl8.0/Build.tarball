@@ -121,6 +121,9 @@ perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' etc/MailScanner.conf
 # do the same for the mailscanner.sbin
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' bin/mailscanner.sbin
 
+# do the same for MailScanner4.spec
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' MailScanner4.spec
+
 # Put the top-level code in place
 rm -rf bin
 mkdir bin

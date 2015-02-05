@@ -1011,6 +1011,9 @@ exit 0
 %doc %attr(755,root,root) doc
 
 %changelog
+* Wed Feb 04 2015 Jerry Benton <support@mailborder.com>
+- Updated code with 9 years of updates. Wow ...
+
 * Mon Jan 09 2006 Julian Field <mailscanner@ecs.soton.ac.uk>
 - Added analyse_SpamAssassin_cache.
 
