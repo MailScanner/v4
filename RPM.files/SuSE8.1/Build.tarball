@@ -22,13 +22,15 @@ fi
 
 # if not set from the "Build.all" script
 if [ -z "$DEVBASEDIR" ]; then
-	echo Enter the parent directory of RPM.files without the trailing slash:
+	THISCURDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	echo "You current directory is $THISCURDIR"
+	echo "Enter the parent directory of RPM.files without the trailing slash:"
 	read DEVBASEDIR
 	export DEVBASEDIR
 fi
 
 # create this if missing
-if[ ! -a /tmp/MailScanner.conf.index.html ]; then
+if [ ! -a '/tmp/MailScanner.conf.index.html' ]; then
 	sh $DEVBASEDIR/config.index/make.sh
 	cd $DEVBASEDIR
 fi
