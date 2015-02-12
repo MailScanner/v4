@@ -54,20 +54,24 @@ fi
 mkdir MailScanner-$VERSION
 #cp $DEVBASEDIR/RPM.files/perl-module-rpms/src/perl*rpm MailScanner-$VERSION
 #cp $DEVBASEDIR/RPM.files/perl-module-rpms/src/MailScanner-perl*rpm MailScanner-$VERSION
-cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion MailScanner-$VERSION
-cp $DEVBASEDIR/mailscanner/bin/getPERLLIB MailScanner-$VERSION
-cp ../Perl8.0/install.sh                     MailScanner-$VERSION
-cp ../Perl8.0/README                         MailScanner-$VERSION
+#cp ../Perl8.0/install.sh                     MailScanner-$VERSION
+#cp ../Perl8.0/README                         MailScanner-$VERSION
 #cp ../Perl8.0/ExtUtils-MakeMaker-6.30.tar.gz MailScanner-$VERSION
 #cp ../Perl8.0/Update-MakeMaker.sh            MailScanner-$VERSION
 #cp $DEVBASEDIR/RPM.files/tnef/tnef-1.4.5*{i386,x86_64}.rpm MailScanner-$VERSION
+cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion ./MailScanner-$VERSION
+cp $DEVBASEDIR/mailscanner/bin/getPERLLIB ./MailScanner-$VERSION
+cp install.sh ./MailScanner-$VERSION
+cp README ./MailScanner-$VERSION
 
 # Put the QuickInstall instructions in place
-cp $DEVBASEDIR/QuickInstall.txt MailScanner-$VERSION
+cp $DEVBASEDIR/QuickInstall.txt ./MailScanner-$VERSION
 
 # Now to copy in the source code into the redhat/SOURCE dir
 VERSION2=`echo $VERSION | sed -e 's/^\([0-9.]*\)-.*$/\1/'`
 export VERSION2
+echo "Version2 variable: $VERSION2";
+read a
 mkdir -p /usr/src/redhat/SOURCES/mailscanner-$VERSION2
 echo Going to put code into $VERSION2
 
