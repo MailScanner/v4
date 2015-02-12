@@ -1,42 +1,44 @@
-%define version VersionNumberHere
-%define release 1
 %define name    mailscanner
+%define version 4.85.1
+%define release 1
 
 Name:        %{name}
 Version:     %{version}
 Release:     %{release}
-Summary:     E-Mail Gateway Virus Scanner and Spam Detector
+Summary:     Email Gateway Virus Scanner with Malware, Phishing, and Spam Detection
 Group:       System Environment/Daemons
-License:     GPL
-Vendor:      Electronics and Computer Science, University of Southampton
-Packager:    Julian Field <mailscanner@ecs.soton.ac.uk>
-URL:         http://www.mailscanner.info/
+License:     GPLv2+
+Vendor:      MailScanner Community
+Packager:    Jerry Benton <mailscanner@mailborder.com>
+URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-IO-stringy >= 1.211, perl-MailTools >= 1.46, perl-Convert-TNEF
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-Convert-TNEF
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
+#Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
+Requires:    perl >= 5.005
 Source:      %{name}-%{version}-%{release}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
 
 %description
-MailScanner is a freely distributable E-Mail gateway virus scanner and
-spam detector. It uses Postfix, sendmail, ZMailer, Qmail or Exim as its basis,
-and a choice of 22 commercial virus scanning engines to do the actual
-virus scanning.  It can decode and scan attachments intended solely
-for Microsoft Outlook users (MS-TNEF). If possible, it will disinfect
-infected documents and deliver them automatically. It provides protection
-against many security vulnerabilities in widely-used e-mail programs
-such as Eudora and Microsoft Outlook. It will also selectively filter
-the content of email messages to protect users from offensive content
-such as pornographic spam. It also has features which protect it against
-Denial Of Service attacks.
+MailScanner is a freely distributable email gateway virus scanner with
+malware, phishing, and spam detection. It supports Postfix, sendmail, 
+ZMailer, Qmail or Exim mail transport agents and a choice of 22 
+open source and commercial virus scanning engines for virus scanning.  
+It can decode and scan attachments intended solely for Microsoft Outlook 
+users (MS-TNEF). If possible, it will disinfect infected documents and 
+deliver them automatically. It provides protection against many security 
+vulnerabilities in widely-used e-mail programs such as Eudora and 
+Microsoft Outlook. It will also selectively filter the content of email 
+messages to protect users from offensive content such as pornographic spam. 
+It also has features which protect it against Denial Of Service attacks.
 
-After installation, you must install one of the supported commercial anti-
-virus packages.
+After installation, you must install one of the supported open source or
+commercial antivirus packages if not installed using the MailScanner
+installation script.
 
-This has been tested on Red Hat Linux, but should work on other RPM-based
-Linuxes. Read "man rpm" if you have dependency problems.
+This has been tested on Red Hat Linux, but should work on other RPM 
+based Linux distributions.
 
 %prep
 %setup
@@ -184,8 +186,8 @@ install etc/conf.d/README ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d/
 # files, giving an unknown value of the %variable% at that point.
 #
 # -- 
-# Jules
-# MailScanner@ecs.soton.ac.uk
+# Jerry Benton
+# <mailscanner@mailborder.com>
 #EOREADME
 
 while read f
@@ -381,7 +383,7 @@ else
   else
     ln -s -f /etc/MailScanner/spam.assassin.prefs.conf ${SADIR}/mailscanner.cf
   fi
-  echo Good, SpamAssassin site rules found in ${SADIR}
+  echo SpamAssassin site rules found in ${SADIR}
 fi
 
 # Create the incoming and quarantine dirs if needed
@@ -406,8 +408,11 @@ echo    chkconfig MailScanner on
 #echo    chkconfig --level 2345 MailScanner on
 echo    service MailScanner start
 echo
-echo For technical support, please read the MAQ at www.mailscanner.biz/maq/
-echo and buy the book at www.mailscanner.info/store
+echo Note that you will need to replace the 'sendmail' option
+echo above with your respective MTA. (Sendmail, Postfix, Exim, etc.)
+echo
+echo For technical support subscribe to the mailing list
+echo at http://www.mailscanner.info
 echo
 %preun
 if [ $1 = 0 ]; then
@@ -421,9 +426,9 @@ exit 0
 %postun
 if [ "$1" -ge "1" ]; then
     # We are being upgraded or replaced, not deleted
-    echo 'To upgrade your MailScanner.conf and languages.conf files automatically, run'
-    echo '    upgrade_MailScanner_conf'
-    echo '    upgrade_languages_conf'
+    #echo 'To upgrade your MailScanner.conf and languages.conf files automatically, run'
+    #echo '    upgrade_MailScanner_conf'
+    #echo '    upgrade_languages_conf'
     #service MailScanner restart </dev/null >/dev/null 2>&1
 fi
 exit 0
@@ -1006,6 +1011,9 @@ exit 0
 %doc %attr(755,root,root) doc
 
 %changelog
+* Thu Feb 12 2015 Jerry Benton <mailscanner@mailborder.com>
+- Many updates. See the ChangeLog for details.
+  
 * Mon Jan 09 2006 Julian Field <mailscanner@ecs.soton.ac.uk>
 - Added analyse_SpamAssassin_cache
 
