@@ -1,47 +1,49 @@
-Mailscanner quick install notes
+Mailscanner Quick Install Notes
 
-2015-02-03
+2015-02-13
+Jerry Benton < mailscanner@mailborder.com >
 
 This describes the steps necessary to install MailScanner on
-Red Hat and CentOS systems, and many other Linux systems.
-This can be done by running the install.sh
-script from the MailScanner distribution.
+Red Hat, CentOS and other variants.
 
 
-Install sequence
+Installation
 
-1. Install MailScanner package, by running the "./install.sh" script
-   contained in the distribution directory. The "README" file will tell
-   you of some advanced options you can use with this if you want to
-   install it faster or if you hit any problems.
+- Ensure that your system has internet access. This is required to 
+  install numerous packages via Yum.
+   
+- Install the MailScanner package, by running the "./install.sh" script
+  contained in the distribution directory.
 
-2. Install one or more supported anti-virus packages. Virtually all Unix
-   anti-virus packages are supported.
+- Install one or more supported antivirus packages. Virtually all Unix
+  antivirus packages are supported. The install.sh script will give 
+  you the option to install the free Clam AV package during setup.
 
-3. You may need to edit the file /etc/MailScanner/virus.scanners.conf
-   to set the installation directory you used for your virus scanners.
-   You will be able to find this out by running "MailScanner --lint"
-   and reading the output to see if all your virus scanners correctly
-   spotted the test. MailScanner should automatically find all the
-   anti-virus packages you have installed.
+- You may need to edit the file /etc/MailScanner/virus.scanners.conf
+  to set the installation directory you used for your virus scanners.
+  You will be able to find this out by running "MailScanner --lint"
+  and reading the output to see if all your virus scanners correctly
+  spotted the test. MailScanner should automatically find all the
+  antivirus packages you have installed.
 
-4. Download and install the easy-to-install ClamAV & SpamAssassin package
-   from the Downloads page on www.MailScanner.info.
+- Stop any old versions of MailScanner by running
 
-5. Stop any old versions of MailScanner by running
+   service MailScanner stop
 
-    service MailScanner stop
-
-6. Check your configuration by running
+- Check your configuration by running
 
     MailScanner --lint
 
-7. Stop and disable your original sendmail setup. To do this,
+- Stop and disable your original sendmail setup. To do this,
 
     service sendmail stop
     chkconfig sendmail off
+    
+    Note that you will need to replace "sendmail" with the MTA you are
+    using such as postfix or exim.
 
-8. Enable and start your new MailScanner setup. To do this,
+- Enable and start your new MailScanner setup.
 
     chkconfig MailScanner on
     service MailScanner restart
+    

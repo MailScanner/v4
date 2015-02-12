@@ -42,13 +42,15 @@ shift
 Scanner=kav4fs/bin/kav4fs-kavscanner
 if [ -x ${PackageDir}/$Scanner ]; then
   #Report=/tmp/kavoutput.tmp.$$
+  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
   ScanOptions="-xp -i0" # Don't report progress, don't attempt to clean
   if [ "x$1" = "x-IsItInstalled" ]; then
+    rm -f $Report
     exit 0
   fi
 
   Args=`echo "$@" | sed -e 's/ -I/ -i/g; s/^-I/-i/g; s/-- / /g;'`
-  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
+  rm -f $Report
   # 29/09/05 JKF Removed -j3 on advice from Kaspersky users
   ${PackageDir}/$Scanner $ScanOptions -o$Report -q "$@"
   cat $Report
@@ -60,13 +62,15 @@ fi
 Scanner=kav4unix/bin/kavscanner
 if [ -x ${PackageDir}/$Scanner ]; then
   #Report=/tmp/kavoutput.tmp.$$
+  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
   ScanOptions="-xp -i0" # Don't report progress, don't attempt to clean
   if [ "x$1" = "x-IsItInstalled" ]; then
+    rm -f $Report
     exit 0
   fi
 
   Args=`echo "$@" | sed -e 's/ -I/ -i/g; s/^-I/-i/g; s/-- / /g;'`
-  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
+  rm -f $Report
   # 29/09/05 JKF Removed -j3 on advice from Kaspersky users
   ${PackageDir}/$Scanner $ScanOptions -o$Report -q "$@"
   cat $Report
@@ -78,13 +82,15 @@ fi
 Scanner=bin/kavscanner
 if [ -x ${PackageDir}/$Scanner ]; then
   #Report=/tmp/kavoutput.tmp.$$
+  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
   ScanOptions="-xp -i0" # Don't report progress, don't attempt to clean
   if [ "x$1" = "x-IsItInstalled" ]; then
+    rm -f $Report
     exit 0
   fi
 
   Args=`echo "$@" | sed -e 's/ -I/ -i/g; s/^-I/-i/g; s/-- / /g;'`
-  Report=$(mktemp) || { echo "$0: Cannot create temporary file" >&2; exit 1; }
+  rm -f $Report
   # 29/09/05 JKF Removed -j3 on advice from Kaspersky users
   ${PackageDir}/$Scanner $ScanOptions -o$Report -q "$@"
   cat $Report

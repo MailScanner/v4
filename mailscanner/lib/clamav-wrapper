@@ -52,6 +52,7 @@
 # You may want to check this script for bash-isms
 
 #TempDir="/tmp/clamav.$$"
+TempDir=$(mktemp) || { echo "$0: Cannot make name for temporary dir" >&2; exit 1; }
 ClamUser="clamav"
 ClamGroup="clamav"
 
@@ -131,6 +132,7 @@ if [ ! -x $ClamScan ]; then
 fi
 
 if [ "x$1" = "x-IsItInstalled" ]; then
+  rm -f ${TempDir}
   [ -x $ClamScan ] && exit 0
   exit 1
 fi
@@ -139,10 +141,14 @@ fi
 PATH=$PATH:/usr/ucb
 export PATH
 
+# Check if the tmpdir exists, if so delete so we start with a clean slate
+if [ -x "${TempDir}" ]; then
+	rm -rf ${TempDir} >/dev/null 2>&1
+fi
 
 # Make the Temp dir
 umask 0077
-TempDir=$(mktemp -d) || { echo "$0: Cannot create temporary dir" >&2; exit 1; }
+mkdir "${TempDir}" >/dev/null 2>&1
 
 # In case we get interupted....
 trap "rm -rf ${TempDir}" EXIT
