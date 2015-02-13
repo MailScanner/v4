@@ -557,7 +557,6 @@ exit 0
 %config(noreplace) /etc/MailScanner/reports/de/recipient.spam.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/recipient.mcp.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/README.1ST
 %config(noreplace) /etc/MailScanner/reports/de/sender.error.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/sender.filename.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/sender.spam.rbl.report.txt
@@ -801,7 +800,6 @@ exit 0
 %config(noreplace) /etc/MailScanner/reports/se/recipient.spam.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/recipient.mcp.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/README
 %config(noreplace) /etc/MailScanner/reports/se/sender.error.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/sender.filename.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/sender.spam.rbl.report.txt
