@@ -176,7 +176,9 @@ find $WORK -name 'EXAMPLES' -exec chmod 644 {} \;
 find $WORK -name 'COPYING' -exec chmod 644 {} \;
 
 # Build the src tarball for RPM construction
-tar czf ~/rpmbuild/SOURCES/mailscanner-${VERSION}.tgz $WORK
+cd $WORK
+cd ..
+tar czf ~/rpmbuild/SOURCES/mailscanner-${VERSION}.tgz mailscanner-${VERSION}
 
 # Build the RPM and SRPMS
 #rpmbuild -ba ~/rpmbuild/SPECS/MailScanner.spec
