@@ -158,9 +158,9 @@ perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/etc/MailScanner.conf
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/bin/mailscanner
 
 # do the same for MailScanner4.spec
-cp -f $DEVBASEDIR/RPM.files/Perl8.0/MailScanner4.spec ~/rpmbuild/SPECS/MailScanner.spec
-perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' ~/rpmbuild/SPECS/MailScanner.spec
-perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' ~/rpmbuild/SPECS/MailScanner.spec
+cp -f $DEVBASEDIR/RPM.files/Perl8.0/MailScanner4.spec ~/rpmbuild/SPECS/mailscanner.spec
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' ~/rpmbuild/SPECS/mailscanner.spec
+perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' ~/rpmbuild/SPECS/mailscanner.spec
 
 # remove svn and git
 find $WORK -name '.svn' -exec rm -rf {} \;
@@ -176,7 +176,7 @@ find $WORK -name 'EXAMPLES' -exec chmod 644 {} \;
 find $WORK -name 'COPYING' -exec chmod 644 {} \;
 
 # Build the src tarball for RPM construction
-#tar czf ~/rpmbuild/SOURCES/mailscanner-${VERSION}.tgz $WORK
+tar czf ~/rpmbuild/SOURCES/mailscanner-${VERSION}.tgz $WORK
 
 # Build the RPM and SRPMS
 #rpmbuild -ba ~/rpmbuild/SPECS/MailScanner.spec
