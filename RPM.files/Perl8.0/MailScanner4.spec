@@ -2,6 +2,10 @@
 %define version VersionNumberHere
 %define release ReleaseNumberHere
 
+# make the rpm backwards compatible
+%define _source_payload w0.gzdio
+%define _binary_payload w0.gzdio
+
 Name:        %{name}
 Version:     %{version}
 Release:     %{release}

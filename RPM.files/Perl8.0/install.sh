@@ -386,7 +386,6 @@ echo;
 echo "Installing the MailScanner RPM ... ";
 $RPM -Uvh $NODEPS mailscanner*noarch.rpm
 
-clear
 echo;
 echo '----------------------------------------------------------';
 echo 'Installation Complete'; echo;
