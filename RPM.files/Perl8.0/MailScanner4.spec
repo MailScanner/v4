@@ -19,12 +19,13 @@ URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-Convert-TNEF
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
-#Requires:    perl >= 5.8.0
+#Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
+Requires:    perl >= 5.8.0
 #Source:      %{name}-%{version}-%{release}.tgz
 Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
+AutoReq:	 no
 
 %description
 MailScanner is a freely distributable email gateway virus scanner with
