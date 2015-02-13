@@ -237,9 +237,6 @@ stored.virus.message.txt
 EOF
 done
 
-#install etc/reports/de/README.1ST ${RPM_BUILD_ROOT}/etc/MailScanner/reports/de
-#install etc/reports/se/README     ${RPM_BUILD_ROOT}/etc/MailScanner/reports/se
-
 while read f 
 do
   install etc/rules/$f ${RPM_BUILD_ROOT}/etc/MailScanner/rules
