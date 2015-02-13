@@ -2,7 +2,7 @@
 #
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >
-# 12 FEB 2015
+# 13 FEB 2015
 #
 # This script will build the latest RPM install 
 # package and put it in /msbuilds/rpm
@@ -193,7 +193,7 @@ mkdir -p $RPMOUT/MailScanner-$VERSION
 cp $SRCDIR/install.sh $RPMOUT/MailScanner-$VERSION/
 cp $SRCDIR/README $RPMOUT/MailScanner-$VERSION/
 cp $DEVBASEDIR/QuickInstall.txt $RPMOUT/MailScanner-$VERSION/
-find $RPMOUT/MailScanner-$VERSION -name '*.sh' -exec chmod 644 {} \;
+find $RPMOUT/MailScanner-$VERSION -name 'install.sh' -exec chmod 655 {} \;
 find $RPMOUT/MailScanner-$VERSION -name '*.txt' -exec chmod 644 {} \;
 find $RPMOUT/MailScanner-$VERSION -name 'README' -exec chmod 644 {} \;
 
@@ -204,5 +204,9 @@ rpmbuild -ba ~/rpmbuild/SPECS/mailscanner.spec
 cp ~/rpmbuild/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm $RPMOUT/MailScanner-$VERSION
 cd $RPMOUT
 tar czf MailScanner-${VERSION}.rpm.tar.gz MailScanner-$VERSION
+rm -rf $RPMOUT/MailScanner-$VERSION
+rm -rf $work
 
+echo;
 echo "Completed: $RPMOUT/MailScanner-${VERSION}.rpm.tar.gz";
+

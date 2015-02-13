@@ -10,7 +10,7 @@
 #
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >
-# 10 FEB 2015
+# 13 FEB 2015
 
 # clear the screen. yay!
 clear
