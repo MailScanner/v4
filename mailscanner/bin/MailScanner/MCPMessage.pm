@@ -28,9 +28,8 @@
 #      SO17 1BJ
 #      United Kingdom
 #
-#
-#package MailScanner::Message;
-package MailScanner::MCPMessage;
+
+package MailScanner::Message;
 
 use strict 'vars';
 use strict 'refs';
