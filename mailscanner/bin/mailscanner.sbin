@@ -35,7 +35,7 @@
 use strict;
 no strict 'subs';
 use POSIX;
-#require 5.005;
+require 5.005;
 
 # Awkard BEGIN block so that we pick up MIME::Base64 from the right place!
 BEGIN {
