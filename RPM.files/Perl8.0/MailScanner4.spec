@@ -16,8 +16,8 @@ URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 Requires:    perl >= 5.8.0
-#Source:      %{name}-%{version}-%{release}.tgz
-Source:      %{name}-%{version}.tgz
+Source:      %{name}-%{version}-%{release}.tgz
+#Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
 
