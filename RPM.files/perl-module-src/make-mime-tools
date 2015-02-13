@@ -1,4 +1,0 @@
-cpanflute2 --create --email='mailscanner@ecs.soton.ac.uk' --noarch --noperlreqs --patch=mime-tools-patch1.txt --patch=mime-tools-patch2.txt --patch=mime-tools-patch3.txt --release=1 --test MIME-tools-5.411.tar.gz
-echo
-echo Now you have to change all the references to "patch" in the SPEC file
-echo so that it uses mime-tools-patch{1,2,3}.txt for patch{0,1,2}

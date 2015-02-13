@@ -1,3 +1,0 @@
-The .tar.gz files in here are used in building the non-RedHat RPM,
-which compiles and installs all the Perl modules at installation time.
-Most of the rest of it is out of date now.
