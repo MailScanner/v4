@@ -1,6 +1,6 @@
 %define name    mailscanner
-%define version 4.85.1
-%define release 1
+%define version VersionNumberHere
+%define release ReleaseNumberHere
 
 Name:        %{name}
 Version:     %{version}
@@ -15,7 +15,7 @@ URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-Convert-TNEF
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-Requires:    perl >= 5.005
+Requires:    perl >= 5.8.0
 Source:      %{name}-%{version}-%{release}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
@@ -236,8 +236,8 @@ stored.virus.message.txt
 EOF
 done
 
-install etc/reports/de/README.1ST ${RPM_BUILD_ROOT}/etc/MailScanner/reports/de
-install etc/reports/se/README     ${RPM_BUILD_ROOT}/etc/MailScanner/reports/se
+#install etc/reports/de/README.1ST ${RPM_BUILD_ROOT}/etc/MailScanner/reports/de
+#install etc/reports/se/README     ${RPM_BUILD_ROOT}/etc/MailScanner/reports/se
 
 while read f 
 do
@@ -398,7 +398,7 @@ done
 # Sort out the rc.d directories
 chkconfig --add MailScanner
 #chkconfig MailScanner off
-chkconfig --level 2 sendmail off # To fix bug in some RedHat dist's
+#chkconfig --level 2 sendmail off # To fix bug in some RedHat dist's
 echo
 echo To activate MailScanner run the following commands:
 echo

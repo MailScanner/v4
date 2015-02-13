@@ -43,7 +43,9 @@ cd $DEVBASEDIR/RPM.files/SuSE8.1
 ./Build.tarball
 
 # redhat
-echo Building RPM distribution
+echo "Building RPM distribution in /msdev/builds/rpm";
+RPMOUT="/msdev/builds/rpm";
+export RPMOUT;
 cd $DEVBASEDIR/RPM.files/Perl8.0
 ./Build.tarball
 

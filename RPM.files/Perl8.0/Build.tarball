@@ -2,7 +2,16 @@
 #
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >
-# 10 FEB 2015
+# 12 FEB 2015
+#
+# This script will build the latest RPM install 
+# package and put it in /msdev/builds/rpm
+
+# if not set from the "Build.all" script
+if [ -z "$RPMOUT" ]; then
+	RPMOUT="/msdev/builds/rpm";
+	export RPMOUT;
+fi
 
 # if not set from the "Build.all" script
 if [ -z "$MSVERSION" ]; then
@@ -34,152 +43,143 @@ if [ -z "$DEVBASEDIR" ]; then
 fi
 
 # create this if missing
-if [ ! -a '/tmp/MailScanner.conf.index.html' ]; then
+if [ ! -f '/tmp/MailScanner.conf.index.html' ]; then
 	sh $DEVBASEDIR/config.index/make.sh
-	cd $DEVBASEDIR
 fi
 
-BUILDROOT=$DEVBASEDIR/RPM.files/Perl8.0
+# the source directory
+SRCDIR=$DEVBASEDIR/RPM.files/Perl8.0
+
+# version info 
 BUILD=$MSBUILD
 VERSION=$MSVERSION-$BUILD
-export BUILDROOT VERSION BUILD
+export VERSION BUILD
 
-cd $BUILDROOT
+# setup rpm development dirs
+mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
-if [ -d MailScanner-$VERSION ]; then
-   mv MailScanner-$VERSION MailScanner-$VERSION.old.$$
+# create build output base dir 
+mkdir -p $RPMOUT
+
+# the work directory
+WORK="/tmp/MailScanner-$VERSION";
+
+# delete work tmp if already exists
+if [ -d $WORK ]; then
+   rm -rf $WORK
 fi
 
-# Put the perl RPMs in the tar build-source directory
-mkdir MailScanner-$VERSION
-#cp $DEVBASEDIR/RPM.files/perl-module-rpms/src/perl*rpm MailScanner-$VERSION
-#cp $DEVBASEDIR/RPM.files/perl-module-rpms/src/MailScanner-perl*rpm MailScanner-$VERSION
-#cp ../Perl8.0/install.sh                     MailScanner-$VERSION
-#cp ../Perl8.0/README                         MailScanner-$VERSION
-#cp ../Perl8.0/ExtUtils-MakeMaker-6.30.tar.gz MailScanner-$VERSION
-#cp ../Perl8.0/Update-MakeMaker.sh            MailScanner-$VERSION
-#cp $DEVBASEDIR/RPM.files/tnef/tnef-1.4.5*{i386,x86_64}.rpm MailScanner-$VERSION
-cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion ./MailScanner-$VERSION
-cp $DEVBASEDIR/mailscanner/bin/getPERLLIB ./MailScanner-$VERSION
-cp install.sh ./MailScanner-$VERSION
-cp README ./MailScanner-$VERSION
+# make working dir and subs
+mkdir -p $WORK
+mkdir -p $WORK/{bin,doc,etc,lib,var/run}
+mkdir -p $WORK/etc/{conf.d,wrapper}
+mkdir -p $WORK/bin/MailScanner/CustomFunctions
+# /etc/ reports,rules,mcp will get created below
 
-# Put the QuickInstall instructions in place
-cp $DEVBASEDIR/QuickInstall.txt ./MailScanner-$VERSION
+# var
+touch $WORK/var/run/MailScanner.pid
 
-# Now to copy in the source code into the redhat/SOURCE dir
-VERSION2=`echo $VERSION | sed -e 's/^\([0-9.]*\)-.*$/\1/'`
-export VERSION2
-echo "Version2 variable: $VERSION2";
-read a
-mkdir -p /usr/src/redhat/SOURCES/mailscanner-$VERSION2
-echo Going to put code into $VERSION2
+# base
+cp $SRCDIR/install.sh $WORK/
+cp $SRCDIR/README $WORK/
+cp $DEVBASEDIR/QuickInstall.txt $WORK/
+cp $DEVBASEDIR/mailscanner/bin/check_mailscanner $WORK/check_MailScanner
+cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron $WORK/
+cp $DEVBASEDIR/RPM.files/common/MailScanner.init.rh $WORK/
+cp $DEVBASEDIR/RPM.files/common/MailScanner.opts.rh $WORK/
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.opts.rh $WORK/
+cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron $WORK/
+cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron $WORK/
+cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron $WORK/
+cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron $WORK/
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron $WORK/
+cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron $WORK/
 
-echo 'Make sure the dir already exists'
-read a
+# doc dir
+cp $DEVBASEDIR/man/*[12345678] $WORK/doc/
+cp $DEVBASEDIR/COPYING $WORK/doc/
+cp /tmp/MailScanner.conf.index.html $WORK/doc/
 
-# Put the top-level code in place
-cd /usr/src/redhat/SOURCES/mailscanner-$VERSION2
-cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron .
-cp $DEVBASEDIR/RPM.files/common/MailScanner.init.rh .
-cp $DEVBASEDIR/RPM.files/common/MailScanner.opts.rh .
-cp $DEVBASEDIR/RPM.files/common/update_spamassassin.opts.rh .
-cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron .
-cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron .
-cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron .
-cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron .
-cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron .
-cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron .
-#cp $DEVBASEDIR/RPM.files/common/clean.SA.cache.cron .
+# lib dir
+cp $DEVBASEDIR/mailscanner/lib/*{wrapper,update} $WORK/lib/
+cp $DEVBASEDIR/mailscanner/lib/mcafee-autoupdate.old $WORK/lib/
+cp $DEVBASEDIR/mailscanner/lib/kaspersky.prf $WORK/lib/
 
-# Put the docs in place
-rm -rf doc
-mkdir doc
-cd doc
-#cp $DEVBASEDIR/RPM.files/Perl8.0/MailScanner.8 .
-cp $DEVBASEDIR/man/*[12345678] .
-cp $DEVBASEDIR/COPYING .
-rm -rf html
-cp /tmp/MailScanner.conf.index.html .
-#mkdir html
-#( cd $DEVBASEDIR/docs && tar cf - . ) | ( cd html && tar xBpf - )
-#rm -rf html/.svn html/install/.svn html/man/.svn
-
-# Put the wrappers in place
-cd ..
-rm -rf lib
-mkdir lib
-cp $DEVBASEDIR/mailscanner/lib/*{wrapper,update} lib
-cp $DEVBASEDIR/mailscanner/lib/mcafee-autoupdate.old lib
-cp $DEVBASEDIR/mailscanner/lib/kaspersky.prf     lib
-
-# Put the etc files in place
-rm -rf etc
-mkdir etc
+# etc dir
 for F in filename.rules.conf filetype.rules.conf archives.filename.rules.conf archives.filetype.rules.conf spam.assassin.prefs.conf spam.lists.conf virus.scanners.conf phishing.safe.sites.conf phishing.bad.sites.conf country.domains.conf
 do
-  cp $DEVBASEDIR/mailscanner/etc/$F etc
+	cp $DEVBASEDIR/mailscanner/etc/$F $WORK/etc/
 done
-cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf etc/MailScanner.conf
-( cd $DEVBASEDIR/mailscanner/etc && tar cf - reports rules mcp ) | ( cd etc && tar xBpf - )
-mkdir -p etc/conf.d
-cp $DEVBASEDIR/mailscanner/etc/conf.d/README etc/conf.d/
+cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf $WORK/etc/MailScanner.conf
+cp $DEVBASEDIR/mailscanner/etc/conf.d/README $WORK/etc/conf.d/
+(cd $DEVBASEDIR/mailscanner/etc&& tar cf - reports rules mcp ) | ( cd $WORK/etc && tar xBpf - )
+
+# bin dir
+cp $DEVBASEDIR/mailscanner/bin/Sophos.install.linux $WORK/bin/Sophos.install
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/df2mbox $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/d2mbox $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/getPERLLIB $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_spamassassin $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin $WORK/bin/mailscanner
+
+# links
+cd $WORK/bin
+ln -sf analyse_SpamAssassin_cache analyze_SpamAssassin_cache
+ln -sf upgrade_MailScanner_conf upgrade_languages_conf
+
+# set attributes
+chmod a+rx *
+
+# return to where i started
+cd $THISCURDIR
+
+# copy remaining pm items
+cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pm $WORK/bin/MailScanner
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pl $WORK/bin/MailScanner
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*pm $WORK/bin/MailScanner/CustomFunctions
+
+# set conf file permissions
+chmod 0644 $WORK/etc/*.conf
 
 # Insert the version number we are building
-perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' etc/MailScanner.conf
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/etc/MailScanner.conf
 
 # do the same for the mailscanner.sbin
-perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' bin/mailscanner.sbin
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/bin/mailscanner
 
 # do the same for MailScanner4.spec
-perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' MailScanner4.spec
+cp -f $DEVBASEDIR/RPM.files/Perl8.0/MailScanner4.spec ~/rpmbuild/SPECS/MailScanner.spec
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' ~/rpmbuild/SPECS/MailScanner.spec
+perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' ~/rpmbuild/SPECS/MailScanner.spec
 
-# Put the top-level code in place
-rm -rf bin
-mkdir bin
-mkdir bin/MailScanner
-mkdir bin/MailScanner/CustomFunctions
-cd bin
-cp $DEVBASEDIR/mailscanner/bin/check_mailscanner ../check_MailScanner
-cp $DEVBASEDIR/mailscanner/bin/Sophos.install.linux Sophos.install
-cp $DEVBASEDIR/mailscanner/bin/Quick.Peek .
-cp $DEVBASEDIR/mailscanner/bin/df2mbox .
-cp $DEVBASEDIR/mailscanner/bin/d2mbox .
-cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion .
-cp $DEVBASEDIR/mailscanner/bin/getPERLLIB .
-cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks .
-cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners .
-cp $DEVBASEDIR/mailscanner/bin/update_spamassassin .
-cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites .
-cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites .
-cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert .
-cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache .
-ln -sf analyse_SpamAssassin_cache analyze_SpamAssassin_cache
-cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf .
-ln -sf upgrade_MailScanner_conf upgrade_languages_conf
-cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin mailscanner
-chmod a+rx *
-cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm .
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pm MailScanner
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pl MailScanner
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*pm MailScanner/CustomFunctions
-
-# Put the var files in place
-cd ..
-mkdir var
-mkdir var/run
-touch var/run/MailScanner.pid
+# remove svn and git
+find $WORK -name '.svn' -exec rm -rf {} \;
+find $WORK -name '.git' -exec rm -rf {} \;
+find $WORK -name '*.DS_Store' -exec rm -rf {} \;
+find $WORK -depth -name '__MACOSX' -exec rm -rf {} \;
+find $WORK -name '*.pm' -exec chmod 644 {} \;
+find $WORK -name '*.conf' -exec chmod 644 {} \;
+find $WORK -name '*.txt' -exec chmod 644 {} \;
+find $WORK -name '*.rules' -exec chmod 644 {} \;
+find $WORK -name 'README' -exec chmod 644 {} \;
+find $WORK -name 'EXAMPLES' -exec chmod 644 {} \;
+find $WORK -name 'COPYING' -exec chmod 644 {} \;
 
 # Build the src tarball for RPM construction
-cd /usr/src/redhat/SOURCES
-tar czf mailscanner-${VERSION}.tgz mailscanner-$VERSION2
+#tar czf ~/rpmbuild/SOURCES/mailscanner-${VERSION}.tgz $WORK
 
 # Build the RPM and SRPMS
-cd $BUILDROOT
-rm -rf /var/tmp/mailscanner-root
-echo Now to build the RPM and SRPM
-read a
-rpmbuild -ba MailScanner4.spec
+#rpmbuild -ba ~/rpmbuild/SPECS/MailScanner.spec
 
-cp /usr/src/redhat/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm MailScanner-$VERSION
-tar czf MailScanner-${VERSION}.rpm.tar.gz MailScanner-$VERSION
+#cp /usr/src/redhat/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm MailScanner-$VERSION
+#tar czf MailScanner-${VERSION}.rpm.tar.gz MailScanner-$VERSION
