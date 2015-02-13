@@ -5,12 +5,17 @@
 # 12 FEB 2015
 #
 # This script will build the latest RPM install 
-# package and put it in /msdev/builds/rpm
+# package and put it in /msbuilds/rpm
 
 # if not set from the "Build.all" script
 if [ -z "$RPMOUT" ]; then
-	RPMOUT="/msdev/builds/rpm";
+	RPMOUT="/msbuilds/rpm";
 	export RPMOUT;
+fi
+
+# check to see if the output directory exists
+if [ ! -d "$RPMOUT" ]; then
+	mkdir -p $RPMOUT
 fi
 
 # if not set from the "Build.all" script
@@ -80,9 +85,6 @@ mkdir -p $WORK/bin/MailScanner/CustomFunctions
 touch $WORK/var/run/MailScanner.pid
 
 # base
-cp $SRCDIR/install.sh $WORK/
-cp $SRCDIR/README $WORK/
-cp $DEVBASEDIR/QuickInstall.txt $WORK/
 cp $DEVBASEDIR/mailscanner/bin/check_mailscanner $WORK/check_MailScanner
 cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron $WORK/
 cp $DEVBASEDIR/RPM.files/common/MailScanner.init.rh $WORK/
@@ -180,8 +182,27 @@ cd $WORK
 cd ..
 tar czf ~/rpmbuild/SOURCES/mailscanner-${MSVERSION}.tgz mailscanner-${MSVERSION}
 
-# Build the RPM and SRPMS
-#rpmbuild -ba ~/rpmbuild/SPECS/MailScanner.spec
+# return to where i started
+cd $THISCURDIR
 
-#cp /usr/src/redhat/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm MailScanner-$VERSION
-#tar czf MailScanner-${VERSION}.rpm.tar.gz MailScanner-$VERSION
+# create the output dir in $RPMOUT
+rm -rf $RPMOUT/MailScanner-$VERSION
+mkdir -p $RPMOUT/MailScanner-$VERSION
+
+# copy some file we need
+cp $SRCDIR/install.sh $RPMOUT/MailScanner-$VERSION/
+cp $SRCDIR/README $RPMOUT/MailScanner-$VERSION/
+cp $DEVBASEDIR/QuickInstall.txt $RPMOUT/MailScanner-$VERSION/
+find $RPMOUT/MailScanner-$VERSION -name '*.sh' -exec chmod 644 {} \;
+find $RPMOUT/MailScanner-$VERSION -name '*.txt' -exec chmod 644 {} \;
+find $RPMOUT/MailScanner-$VERSION -name 'README' -exec chmod 644 {} \;
+
+# Build the RPM and SRPMS
+rpmbuild -ba ~/rpmbuild/SPECS/mailscanner.spec
+
+# copy the rpm built to the output dir
+cp ~/rpmbuild/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm $RPMOUT/MailScanner-$VERSION
+cd $RPMOUT
+tar czf MailScanner-${VERSION}.rpm.tar.gz MailScanner-$VERSION
+
+echo "Completed: $RPMOUT/MailScanner-${VERSION}.rpm.tar.gz";
