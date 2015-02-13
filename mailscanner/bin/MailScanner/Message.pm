@@ -52,8 +52,7 @@ use OLE::Storage_Lite;
 use Fcntl;
 use File::Path;
 use File::Temp;
-#use MailScanner::FileInto;
-use MIME::Parser::MailScanner;
+use MailScanner::FileInto;
 
 # Install an extra MIME decoder for badly-header uue messages.
 install MIME::Decoder::UU 'uuencode';

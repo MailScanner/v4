@@ -1,9 +1,7 @@
 # Over-ride the standard MIME::Parser::FileInto class with our own to pre-
 # pend all filenames with an "n" to show they were normal attachments and
 # did not come from within an archive.
-
 package MIME::Parser::MailScanner;
-
 
 use MIME::WordDecoder;
 use strict;
