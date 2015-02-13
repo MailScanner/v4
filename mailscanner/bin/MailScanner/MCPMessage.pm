@@ -29,7 +29,7 @@
 #      United Kingdom
 #
 
-package MailScanner::Message;
+package MailScanner::MCPMessage;
 
 use strict 'vars';
 use strict 'refs';

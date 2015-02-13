@@ -87,7 +87,8 @@ mkdir -p ${RPM_BUILD_ROOT}/usr/sbin/
 mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man8
 mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man5
 #mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man1
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/
+mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner
+mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/cy+en
