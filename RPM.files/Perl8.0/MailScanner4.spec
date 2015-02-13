@@ -407,7 +407,7 @@ echo    chkconfig MailScanner on
 echo    service MailScanner start
 echo
 echo Note that you will need to replace the 'sendmail' option
-echo above with your respective MTA. (Sendmail, Postfix, Exim, etc.)
+echo above with your respective MTA. Sendmail, Postfix, Exim, etc.
 echo
 echo For technical support subscribe to the mailing list
 echo at http://www.mailscanner.info
