@@ -62,7 +62,7 @@ mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 mkdir -p $RPMOUT
 
 # the work directory
-WORK="/tmp/mailscanner-$VERSION";
+WORK="/tmp/mailscanner-$MSVERSION";
 
 # delete work tmp if already exists
 if [ -d $WORK ]; then
@@ -178,7 +178,7 @@ find $WORK -name 'COPYING' -exec chmod 644 {} \;
 # Build the src tarball for RPM construction
 cd $WORK
 cd ..
-tar czf ~/rpmbuild/SOURCES/mailscanner-${VERSION}.tgz mailscanner-${VERSION}
+tar czf ~/rpmbuild/SOURCES/mailscanner-${MSVERSION}.tgz mailscanner-${MSVERSION}
 
 # Build the RPM and SRPMS
 #rpmbuild -ba ~/rpmbuild/SPECS/MailScanner.spec
