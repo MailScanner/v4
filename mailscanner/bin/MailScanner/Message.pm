@@ -53,6 +53,7 @@ use Fcntl;
 use File::Path;
 use File::Temp;
 #use MailScanner::FileInto;
+use MIME::Parser::MailScanner;
 
 # Install an extra MIME decoder for badly-header uue messages.
 install MIME::Decoder::UU 'uuencode';
