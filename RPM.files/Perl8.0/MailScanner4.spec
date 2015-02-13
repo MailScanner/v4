@@ -19,7 +19,8 @@ URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-Convert-TNEF
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-Requires:    perl >= 5.8.0
+Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
+#Requires:    perl >= 5.8.0
 #Source:      %{name}-%{version}-%{release}.tgz
 Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
@@ -116,8 +117,8 @@ mkdir -p ${RPM_BUILD_ROOT}/etc/cron.hourly
 mkdir -p ${RPM_BUILD_ROOT}/etc/cron.daily
 mkdir -p ${RPM_BUILD_ROOT}/etc/sysconfig
 mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue.in
-#mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/incoming
-#mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/quarantine
+mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/incoming
+mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/quarantine
 mkdir -p ${RPM_BUILD_ROOT}/var/run
 
 install bin/df2mbox            ${RPM_BUILD_ROOT}/usr/sbin/df2mbox
@@ -439,8 +440,8 @@ exit 0
 %files
 %defattr (644,root,root)
 %attr(700,root,root) %dir /var/spool/mqueue.in
-#%attr(700,root,root) %dir /var/spool/MailScanner/incoming
-#%attr(700,root,root) %dir /var/spool/MailScanner/quarantine
+%attr(750,root,root) %dir /var/spool/MailScanner/incoming
+%attr(750,root,root) %dir /var/spool/MailScanner/quarantine
 %attr(700,root,root) /var/run/MailScanner.pid
 %attr(755,root,root) /usr/sbin/df2mbox
 %attr(755,root,root) /usr/sbin/d2mbox
