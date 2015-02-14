@@ -21,7 +21,7 @@ URL:         http://www.mailscanner.info
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
 Requires:     perl >= 5.8.0
-Suggests:	  perl(MailScanner::FileInto)
+Recommends:	  perl(MailScanner::FileInto)
 #Source:      %{name}-%{version}-%{release}.tgz
 Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
