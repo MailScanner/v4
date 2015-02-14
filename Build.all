@@ -6,7 +6,8 @@
 # 03FEB15
 
 # this Build.all script should be located in the base
-# directory when run. Example: /msdev/v4/Build.all
+# directory of the project when run. 
+
 
 # Added so you can run from anywhere
 # current directory
@@ -43,8 +44,8 @@ cd $DEVBASEDIR/RPM.files/SuSE8.1
 ./Build.tarball
 
 # redhat
-echo "Building RPM distribution in /msdev/builds/rpm";
-RPMOUT="/msdev/builds/rpm";
+echo "Building RPM distribution in $HOME/msbuilds/rpm"";
+RPMOUT="$HOME/msbuilds/rpm"";
 export RPMOUT;
 cd $DEVBASEDIR/RPM.files/Perl8.0
 ./Build.tarball

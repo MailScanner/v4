@@ -9,7 +9,7 @@
 
 # if not set from the "Build.all" script
 if [ -z "$RPMOUT" ]; then
-	RPMOUT='~/msbuilds/rpm';
+	RPMOUT="$HOME/msbuilds/rpm";
 	export RPMOUT;
 fi
 
