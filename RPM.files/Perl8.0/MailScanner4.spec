@@ -26,6 +26,7 @@ Provides:	  perl(MailScanner), perl(MailScanner::Antiword), perl(MailScanner::Bi
 Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
+AutoReqProv: yes
 
 
 %description
