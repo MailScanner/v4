@@ -201,7 +201,7 @@ find $RPMOUT/MailScanner-$VERSION -name 'README' -exec chmod 644 {} \;
 
 # Build the RPM and SRPMS
 # extra define statements help make the rpm backwards compatible
-rpmbuild -ba --define "_binary_filedigest_algorithm  1"  --define "_binary_payload 1" ~/rpmbuild/SPECS/mailscanner.spec
+rpmbuild -ba --sign --define "_binary_filedigest_algorithm  1"  --define "_binary_payload 1" ~/rpmbuild/SPECS/mailscanner.spec
 
 # copy the rpm built to the output dir
 cp ~/rpmbuild/RPMS/noarch/mailscanner-${VERSION}.noarch.rpm $RPMOUT/MailScanner-$VERSION
