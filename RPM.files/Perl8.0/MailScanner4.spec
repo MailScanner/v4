@@ -20,12 +20,13 @@ URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
-Requires:    perl >= 5.8.0
+Requires:     perl >= 5.8.0
+Enhances:	  perl(MailScanner::FileInto)
 #Source:      %{name}-%{version}-%{release}.tgz
 Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
-AutoReq:	 no
+#AutoReq:	 no
 
 %description
 MailScanner is a freely distributable email gateway virus scanner with
@@ -171,32 +172,6 @@ country.domains.conf
 EOF
 
 install etc/conf.d/README ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d/
-#cat <<EOREADME > ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d/README
-# In this directory, you can put files that will be automatically included
-# as if they were inserted at the end of the main MailScanner.conf file
-# in the directory above this one.
-# 
-# They should be read in alphabetical order.
-#
-# NOTE: If you change the value of a %variable% then you must redefine all
-# the settings that use that %variable% here, as the %variable%
-# substitutions are done when the files are initially read, not later when
-# settings are looked up when MailScanner is processing messages.
-# So if, for example, you change the value of %rules-dir% in an included
-# file here, you must reset the values of the settings
-#        Maximum Message Size
-#        Is Definitely Not Spam
-#        Enable Spam Bounce
-# in order for them all to use the new value of %rules-dir%.
-# My apologies for this, but it is only possible to know the values of
-# each %variable% when the configuration files are read, and not when
-# the settings are evaluated as they could be set at any point within the
-# files, giving an unknown value of the %variable% at that point.
-#
-# -- 
-# Jerry Benton
-# <mailscanner@mailborder.com>
-#EOREADME
 
 while read f
 do
@@ -435,6 +410,7 @@ if [ "$1" -ge "1" ]; then
     #echo '    upgrade_MailScanner_conf'
     #echo '    upgrade_languages_conf'
     #service MailScanner restart </dev/null >/dev/null 2>&1
+    mkdir -p /etc/MailScanner/CustomFunctions
 fi
 exit 0
 
