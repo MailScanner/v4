@@ -382,16 +382,30 @@ if [ $TNEFOPTION = 1 ]; then
 	fi
 fi
 
+# get the public signing key for the mailscanner rpm
+$WGET --no-check-certificate -O /tmp/JBMSDEV-GPG-KEY.public https://s3.amazonaws.com/mailscanner/JBMSDEV-GPG-KEY.public
+rpm --import /tmp/JBMSDEV-GPG-KEY.public
+
 clear
 echo;
 echo "Installing the MailScanner RPM ... ";
 $RPM -Uvh $NODEPS mailscanner*noarch.rpm
 
-echo;
-echo '----------------------------------------------------------';
-echo 'Installation Complete'; echo;
-echo 'See http://www.mailscanner.info for more information and  '
-echo 'support via the MailScanner mailing list.'
-echo;
+if [ $? != 0 ]; then
+	echo;
+	echo '----------------------------------------------------------';
+	echo 'Installation Error'; echo;
+	echo 'The MailScanner RPM failed to install. Address the required';
+	echo 'dependencies and run the installer again. Note that electing';
+	echo 'to use EPEL and CPAN will resolve dependency errors.';
+	echo;
+else
+	echo;
+	echo '----------------------------------------------------------';
+	echo 'Installation Complete'; echo;
+	echo 'See http://www.mailscanner.info for more information and  '
+	echo 'support via the MailScanner mailing list.'
+	echo;
+fi 
 
 ) 2>&1 | tee mailscanner-install.log
