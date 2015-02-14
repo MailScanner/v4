@@ -377,7 +377,7 @@ if [ $TNEFOPTION = 1 ]; then
 			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
 		else
 			echo "NOTICE: I cannot find a suitable RPM to install tnef (x86_64, i686, i386)";
-			timewait 3
+			timewait 5
 		fi
 	fi
 fi
