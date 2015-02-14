@@ -229,7 +229,7 @@ ARMOD+=('Pod::Escapes');		ARMOD+=('Pod::Simple');			ARMOD+=('POSIX');
 ARMOD+=('Scalar::Util');		ARMOD+=('Socket'); 				ARMOD+=('Storable'); 	 	 	 	 			
 ARMOD+=('Test::Harness');		ARMOD+=('Test::Pod');			ARMOD+=('Test::Simple');
 ARMOD+=('Time::HiRes');			ARMOD+=('Time::localtime'); 	ARMOD+=('Sys::Hostname::Long');
-ARMOD+=('Sys::SigAction');		ARMOD+=('Sys::Syslog'); 		
+ARMOD+=('Sys::SigAction');		ARMOD+=('Sys::Syslog'); 		ARMOD+=('Archive::Tar');
 
 # add to array if the user is installing spamassassin
 if [ SA = 1 ]; then

@@ -20,13 +20,13 @@ URL:         http://www.mailscanner.info
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
 #Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
-Requires:     perl >= 5.8.0
+Requires:     perl >= 5.8.0, perl(Archive::Tar), perl(Archive::Zip), perl(bignum), perl(Carp), perl(Compress::Zlib), perl(Compress::Raw::Zlib), perl(Convert::TNEF), perl(Data::Dumper), perl(Date::Parse), perl(DBD::SQLite), perl(DBI), perl(Digest::HMAC), perl(Digest::MD5), perl(Digest::SHA1), perl(DirHandle), perl(ExtUtils::MakeMaker), perl(Fcntl), perl(File::Basename), perl(File::Copy), perl(File::Path), perl(File::Spec), perl(File::Temp), perl(FileHandle), perl(Filesys::Df), perl(Getopt::Long), perl(Inline::C), perl(IO), perl(IO::File), perl(IO::Pipe), perl(IO::Stringy), perl(HTML::Entities), perl(HTML::Parser), perl(HTML::Tagset), perl(HTML::TokeParser), perl(Mail::Field), perl(Mail::Header), perl(Mail::IMAPClient), perl(Mail::Internet), perl(Math::BigInt), perl(Math::BigRat), perl(MIME::Base64), perl(MIME::Decoder), perl(MIME::Decoder::UU), perl(MIME::Head), perl(MIME::Parser), perl(MIME::QuotedPrint), perl(MIME::Tools), perl(Net::CIDR), perl(Net::DNS), perl(Net::IP), perl(OLE::Storage_Lite), perl(Pod::Escapes), perl(Pod::Simple), perl(POSIX), perl(Scalar::Util), perl(Socket), perl(Storable), perl(Test::Harness), perl(Test::Pod), perl(Test::Simple), perl(Time::HiRes), perl(Time::localtime), perl(Sys::Hostname::Long), perl(Sys::SigAction), perl(Sys::Syslog)
 Provides:	  perl(MailScanner::FileInto)
 #Source:      %{name}-%{version}-%{release}.tgz
 Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
-#AutoReq:	 no
+
 
 %description
 MailScanner is a freely distributable email gateway virus scanner with

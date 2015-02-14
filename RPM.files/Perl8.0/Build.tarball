@@ -164,11 +164,13 @@ cp -f $DEVBASEDIR/RPM.files/Perl8.0/MailScanner4.spec ~/rpmbuild/SPECS/mailscann
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' ~/rpmbuild/SPECS/mailscanner.spec
 perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' ~/rpmbuild/SPECS/mailscanner.spec
 
-# remove svn and git
+# remove svn and git and mac stuff
 find $WORK -name '.svn' -exec rm -rf {} \;
 find $WORK -name '.git' -exec rm -rf {} \;
 find $WORK -name '*.DS_Store' -exec rm -rf {} \;
 find $WORK -depth -name '__MACOSX' -exec rm -rf {} \;
+
+# permissions
 find $WORK -name '*.pm' -exec chmod 644 {} \;
 find $WORK -name '*.conf' -exec chmod 644 {} \;
 find $WORK -name '*.txt' -exec chmod 644 {} \;
@@ -198,6 +200,7 @@ find $RPMOUT/MailScanner-$VERSION -name '*.txt' -exec chmod 644 {} \;
 find $RPMOUT/MailScanner-$VERSION -name 'README' -exec chmod 644 {} \;
 
 # Build the RPM and SRPMS
+# extra define statements help make the rpm backwards compatible
 rpmbuild -ba --define "_binary_filedigest_algorithm  1"  --define "_binary_payload 1" ~/rpmbuild/SPECS/mailscanner.spec
 
 # copy the rpm built to the output dir
