@@ -44,7 +44,7 @@ fi
 export VERSION=MailScanner-$MSVERSION
 export INSTALL=MailScanner-install-$MSVERSION
 export RELEASE=$MSBUILD
-export BUILDROOT=/root/build/tar
+export BUILDROOT=$HOME/msbuilds/tar
 
 # make some dirs
 mkdir -p $BUILDROOT
