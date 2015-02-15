@@ -364,6 +364,11 @@ do
 			echo "$i is missing. Installing via CPAN ..."; echo;
 			timewait 1
 			perl -MCPAN -e "CPAN::Shell->force(qw(install $i ));"
+			
+			# rpm install will fail if the modules were not installed via RPM
+			# so i am setting the --nodeps flag here since the user elected to 
+			# use CPAN to remediate the modules
+			NODEPS='--nodeps'
 		else
 			echo "WARNING: $i is missing. You should fix this.";
 			PMODWAIT=5
@@ -414,7 +419,11 @@ if [ $? != 0 ]; then
 	echo 'Installation Error'; echo;
 	echo 'The MailScanner RPM failed to install. Address the required';
 	echo 'dependencies and run the installer again. Note that electing';
-	echo 'to use EPEL and CPAN will resolve dependency errors.';
+	echo 'to use EPEL and CPAN should resolve dependency errors.';
+	echo;
+	echo 'Note that Perl modules need to be available system-wide. A';
+	echo 'common issue is that missing modules were installed in a ';
+	echo 'user specific configuration.';
 	echo;
 else
 	echo;
