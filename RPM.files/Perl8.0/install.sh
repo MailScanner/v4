@@ -15,6 +15,9 @@
 # clear the screen. yay!
 clear
 
+# where i started for RPM install
+THISCURRPMDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
 # Function used to Wait for n seconds
 timewait () {
 	DELAY=$1
@@ -197,14 +200,14 @@ else
 fi
 
 # base system packages
-BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip wget which zip libtool-ltdl perl";
+BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip wget which zip libtool-ltdl perl curl";
 
 # Perl packages available in the yum base of RHEL 5,6,7
 # and EPEL. If the user elects not to use EPEL or if the 
 # package is not available for their distro release it
 # will be ignored during the install.
 #
-PERLPACKAGES="perl-CPAN perl-MailTools perl-TimeDate perl-HTML-Tagset perl-HTML-Parser perl-Compress-Zlib perl-IO-Zlib perl-Archive-Tar perl-Archive-Zip perl-DBI perl-Digest-HMAC perl-Net-DNS perl-Pod-Escapes perl-Pod-Simple perl-Test-Pod perl-Time-HiRes perl-IO-stringy perl-Mail-DKIM perl-Mail-SPF perl-File-Temp perl-URI perl-Mail-IMAPClient perl-Scalar-List-Utils perl-Storable perl-Getopt-Long perl-Digest-SHA1 perl-Inline perl-Convert-TNEF perl-Convert-BinHex perl-Net-CIDR perl-Net-IP perl-DBD-SQLite perl-Compress-Raw-Zlib perl-Pod-Escapes perl-Pod-Simple perl-Test-Pod perl-OLE-Storage_Lite perl-Sys-SigAction perl-Sys-Hostname-Long perl-Filesys-Df perl-Mail-SPF perl-MIME-tools";
+PERLPACKAGES="perl-CPAN perl-Env perl-MailTools perl-TimeDate perl-HTML-Tagset perl-HTML-Parser perl-Compress-Zlib perl-IO-Zlib perl-Archive-Tar perl-Archive-Zip perl-DBI perl-Digest-HMAC perl-Net-DNS perl-Pod-Escapes perl-Pod-Simple perl-Test-Pod perl-Time-HiRes perl-IO-stringy perl-Mail-DKIM perl-Mail-SPF perl-File-Temp perl-URI perl-Mail-IMAPClient perl-Scalar-List-Utils perl-Storable perl-Getopt-Long perl-Digest-SHA1 perl-Inline perl-Convert-TNEF perl-Convert-BinHex perl-Net-CIDR perl-Net-IP perl-DBD-SQLite perl-Compress-Raw-Zlib perl-Pod-Escapes perl-Pod-Simple perl-Test-Pod perl-OLE-Storage_Lite perl-Sys-SigAction perl-Sys-Hostname-Long perl-Filesys-Df perl-Mail-SPF perl-MIME-tools";
 
 # the array of perl modules needed
 ARMOD=();
@@ -230,7 +233,7 @@ ARMOD+=('Pod::Simple');			ARMOD+=('POSIX');				ARMOD+=('Scalar::Util');
 ARMOD+=('Socket'); 				ARMOD+=('Storable'); 	 	 	ARMOD+=('Test::Harness');		
 ARMOD+=('Test::Pod');			ARMOD+=('Test::Simple');		ARMOD+=('Time::HiRes');			
 ARMOD+=('Time::localtime'); 	ARMOD+=('Sys::Hostname::Long');	ARMOD+=('Sys::SigAction');		
-ARMOD+=('Sys::Syslog'); 		
+ARMOD+=('Sys::Syslog'); 		ARMOD+=('Env'); 		
 
 # add to array if the user is installing spamassassin
 if [ SA = 1 ]; then
@@ -311,7 +314,9 @@ if [ $CPANOPTION = 1 ]; then
 		echo;
 		echo "CPAN config missing. Creating one ..."; echo;
 		mkdir -p /root/.cpan/CPAN
-		$WGET --no-check-certificate -O /root/.cpan/CPAN/MyConfig.pm https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
+		cd /root/.cpan/CPAN
+		curl -O https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
+		cd $THISCURRPMDIR
 		timewait 1
 	fi
 fi
@@ -337,6 +342,18 @@ echo "Checking Perl Modules ... "; echo;
 timewait 2
 # used to trigger a wait if something this missing
 PMODWAIT=0
+
+# first try to install missing perl modules via yum
+# using this trick
+for i in "${ARMOD[@]}"
+do
+	perldoc -l $i >/dev/null 2>&1
+	if [ $? != 0 ]; then
+		echo "$i is missing. Trying to install via Yum ..."; echo;
+		THING="'perl($i)'";
+		$YUM -y install $THING
+	fi
+done
 
 for i in "${ARMOD[@]}"
 do
