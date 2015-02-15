@@ -48,6 +48,21 @@ if [ ! -f '/etc/redhat-release' ]; then
 	# this is mostly to prevent accidental installation on a non redhat based system
 	echo "Unable to determine distribution release from /etc/redhat-release. Installation aborted."; echo;
 	exit 192
+else
+	# figure out what release is being used
+	if grep -qs 'release 5' /etc/redhat-release ; then
+			# RHEL 5
+			RHEL=5
+	elif grep -qs 'release 6' /etc/redhat-release ; then
+			# RHEL 6
+			RHEL=6
+	elif grep -qs 'release 7' /etc/redhat-release ; then
+			# RHEL 7
+			RHEL=7
+	else
+			# No supported release match
+			RHEL=0
+	fi
 fi
 
 # basic test to see if we can ping google
@@ -115,7 +130,7 @@ else
 fi
 
 # ask if the user wants Clam AV installed if they selected EPEL
-if [ $EPEL = 1 ]; then
+if [ $EPEL == 1 ]; then
 	clear
 	echo;
 	echo "Do you want to install or update Clam AV during this installation process?"; echo;
@@ -175,39 +190,71 @@ read -r -p "Install missing Perl modules via CPAN? [y/N] : " response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     # user wants to use CPAN for missing modules
 	CPANOPTION=1
+	
+	# rpm install will fail if the modules were not installed via RPM
+	# so i am setting the --nodeps flag here since the user elected to 
+	# use CPAN to remediate the modules
+	NODEPS='--nodeps';
 else
     # user does not want to use CPAN
     CPANOPTION=0
 fi
 
-# ask if the user wants to ignore dependencies
-clear
-echo;
-echo "Do you want to ignore MailScanner dependencies?"; echo;
-echo "This will force install the MailScanner RPM package regardless of missing"; 
-echo "dependencies. It is highly recommended that you DO NOT do this unless you"; 
-echo "are debugging.";
-echo;
-echo "Recommended: N (no)"; echo;
-read -r -p "Ignore MailScanner dependencies (nodeps)? [y/N] : " response
+# ask if the user wants to install 3rd party rpms for missing
+# perl-Filesys-Df and perl-Sys-Hostname-Long
+if [ $RHEL == 7 ]; then
+	clear
+	echo;
+	echo "Do you want to install perl-Filesys-Df and perl-Sys-Hostname-Long via RPM if missing?"; echo;
+	echo "perl-Filesys-Df and perl-Sys-Hostname-Long and known to be missing from the Yum base and the";
+	echo "EPEL repo for RHEL7 at the release of this installer. I will try to install them from the";
+	echo "official Yum base and EPEL repo first. (If you elected the EPEL option.) If they are still ";
+	echo "missing I can attempt to install these two missing RPMs with 3rd party RPM packages. If they";
+	echo "are still missing and you selected the CPAN remediation I will try to install them from CPAN.";
+	echo;
+	echo "Recommended: Y (yes)"; echo;
+	read -r -p "Install these missing items via RPM? [y/N] : " response
 
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    # user wants to ignore deps
-    NODEPS='--nodeps'
-else
-    # requiring deps
-	NODEPS=
+	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+		# user wants to use RPM for missing stuff
+		DFOPTION=1
+	else
+		# user does not want to use RPM
+		DFOPTION=0
+	fi
+fi
+
+# ask if the user wants to ignore dependencies. they are automatically ignored
+# if the user elected the CPAN option as explained above
+if [ $CPANOPTION != 1 ]; then
+	clear
+	echo;
+	echo "Do you want to ignore MailScanner dependencies?"; echo;
+	echo "This will force install the MailScanner RPM package regardless of missing"; 
+	echo "dependencies. It is highly recommended that you DO NOT do this unless you"; 
+	echo "are debugging.";
+	echo;
+	echo "Recommended: N (no)"; echo;
+	read -r -p "Ignore MailScanner dependencies (nodeps)? [y/N] : " response
+
+	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+		# user wants to ignore deps
+		NODEPS='--nodeps'
+	else
+		# requiring deps
+		NODEPS=
+	fi
 fi
 
 # base system packages
-BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip wget which zip libtool-ltdl perl curl";
+BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl openssl openssl-devel";
 
 # Perl packages available in the yum base of RHEL 5,6,7
 # and EPEL. If the user elects not to use EPEL or if the 
 # package is not available for their distro release it
 # will be ignored during the install.
 #
-PERLPACKAGES="perl-CPAN perl-Env perl-MailTools perl-TimeDate perl-HTML-Tagset perl-HTML-Parser perl-Compress-Zlib perl-IO-Zlib perl-Archive-Tar perl-Archive-Zip perl-DBI perl-Digest-HMAC perl-Net-DNS perl-Pod-Escapes perl-Pod-Simple perl-Test-Pod perl-Time-HiRes perl-IO-stringy perl-Mail-DKIM perl-Mail-SPF perl-File-Temp perl-URI perl-Mail-IMAPClient perl-Scalar-List-Utils perl-Storable perl-Getopt-Long perl-Digest-SHA1 perl-Inline perl-Convert-TNEF perl-Convert-BinHex perl-Net-CIDR perl-Net-IP perl-DBD-SQLite perl-Compress-Raw-Zlib perl-Pod-Escapes perl-Pod-Simple perl-Test-Pod perl-OLE-Storage_Lite perl-Sys-SigAction perl-Sys-Hostname-Long perl-Filesys-Df perl-Mail-SPF perl-MIME-tools";
+PERLPACKAGES="perl-Archive-Tar perl-Archive-Zip perl-Compress-Raw-Zlib perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-CPAN perl-DBD-SQLite perl-DBI perl-Digest-HMAC perl-Digest-SHA1 perl-Env perl-ExtUtils-MakeMaker perl-File-ShareDir-Install perl-File-Temp perl-Filesys-Df perl-Getopt-Long perl-IO-stringy perl-HTML-Parser perl-HTML-Tagset perl-Inline perl-IO-Zlib perl-Mail-DKIM perl-Mail-IMAPClient perl-Mail-SPF perl-MailTools perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes perl-Pod-Simple perl-Scalar-List-Utils perl-Storable perl-Pod-Escapes perl-Pod-Simple perl-Razor-Agent perl-Sys-Hostname-Long perl-Sys-SigAction perl-Test-Pod perl-Time-HiRes perl-TimeDate perl-URI pyzor";
 
 # the array of perl modules needed
 ARMOD=();
@@ -233,15 +280,15 @@ ARMOD+=('Pod::Simple');			ARMOD+=('POSIX');				ARMOD+=('Scalar::Util');
 ARMOD+=('Socket'); 				ARMOD+=('Storable'); 	 	 	ARMOD+=('Test::Harness');		
 ARMOD+=('Test::Pod');			ARMOD+=('Test::Simple');		ARMOD+=('Time::HiRes');			
 ARMOD+=('Time::localtime'); 	ARMOD+=('Sys::Hostname::Long');	ARMOD+=('Sys::SigAction');		
-ARMOD+=('Sys::Syslog'); 		ARMOD+=('Env'); 		
+ARMOD+=('Sys::Syslog'); 		ARMOD+=('Env'); 				ARMOD+=('File::ShareDir::Install');
 
 # add to array if the user is installing spamassassin
-if [ SA = 1 ]; then
+if [ $SA == 1 ]; then
 	ARMOD+=('Mail::SpamAssassin');
 fi
 
 # add to array if the user is installing clam av
-if [ CAV = 1 ]; then
+if [ $CAV == 1 ]; then
 	ARMOD+=('Mail::ClamAV');
 fi
 
@@ -293,29 +340,29 @@ else
 	PATCH='/usr/bin/patch';
 fi
 
-# check for wget
-if [ ! -x /usr/bin/wget ]; then
+# check for curl
+if [ ! -x /usr/bin/curl ]; then
 	clear
 	echo;
-	echo "The wget command cannot be found. I have already attempted to install this";
+	echo "The curl command cannot be found. I have already attempted to install this";
 	echo "package, but it is still not found. Please ensure that you have network access";
 	echo "to the internet and try running the installation again.";
 	echo;
 	exit 1
 else
-	WGET='/usr/bin/wget';
+	CURL='/usr/bin/curl';
 fi
 
 # create the cpan config if there isn't one and the user
 # elected to use CPAN
-if [ $CPANOPTION = 1 ]; then
+if [ $CPANOPTION == 1 ]; then
 	# user elected to use CPAN option
 	if [ ! -f '/root/.cpan/CPAN/MyConfig.pm' ]; then
 		echo;
 		echo "CPAN config missing. Creating one ..."; echo;
 		mkdir -p /root/.cpan/CPAN
 		cd /root/.cpan/CPAN
-		curl -O https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
+		$CURL -O https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
 		cd $THISCURRPMDIR
 		timewait 1
 	fi
@@ -334,6 +381,60 @@ echo "Spamassassin (if elected) via yum. You can safely ignore any";
 echo "subsequent 'No package available' errors."; echo;
 timewait 3
 $YUM -y install $TNEF $PERLPACKAGES $CAVOPTION $SAOPTION
+
+# install missing tnef if the user elected to do so
+if [ $TNEFOPTION == 1 ]; then
+	# user elected to use tnef RPM option
+	if [ ! -x '/usr/bin/tnef' ]; then
+		clear
+		echo;
+		echo "Tnef missing. Installing via RPM ..."; echo;
+		if [ $MACHINE_TYPE == 'x86_64' ]; then
+			# 64-bit stuff here
+			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.x86_64.rpm
+		elif [ $MACHINE_TYPE == 'i686' ]; then
+			# i686 stuff here
+			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
+		elif [ $MACHINE_TYPE == 'i386' ]; then
+			# i386 stuff here
+			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
+		else
+			echo "NOTICE: I cannot find a suitable RPM to install tnef (x86_64, i686, i386)";
+			timewait 5
+		fi
+	fi
+fi
+
+# install missing perl-Filesys-Df and perl-Sys-Hostname-Long on RHEL 7
+if [ $DFOPTION == 1 ]; then
+	# test to see if these are installed. if not install from RPM
+		
+	# perl-Filesys-Df
+	perldoc -l Filesys::Df >/dev/null 2>&1
+	if [ $? != 0 ]; then
+		cd /tmp
+		curl -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Filesys-Df-0.92-1.el7.x86_64.rpm
+		rpm -Uvh perl-Filesys-Df-0.92-1.el7.x86_64.rpm
+	fi
+	
+	# perl-Sys-Hostname-Long
+	perldoc -l Filesys::Df >/dev/null 2>&1
+	if [ $? != 0 ]; then
+		cd /tmp
+		curl -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
+		rpm -Uvh perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
+	fi
+	
+	# go back to where i started
+	cd $THISCURRPMDIR
+fi
+
+# fix the stupid line in /etc/freshclam.conf that disables freshclam 
+# in RHEL7 by default
+if [ $CAV == 1 ]; then
+	COUT='#Example';
+	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
+fi
 
 # now check for missing perl modules and install them via cpan
 # if the user elected to do so
@@ -359,16 +460,11 @@ for i in "${ARMOD[@]}"
 do
 	perldoc -l $i >/dev/null 2>&1
 	if [ $? != 0 ]; then
-		if [ $CPANOPTION = 1 ]; then
+		if [ $CPANOPTION == 1 ]; then
 			clear
 			echo "$i is missing. Installing via CPAN ..."; echo;
 			timewait 1
 			perl -MCPAN -e "CPAN::Shell->force(qw(install $i ));"
-			
-			# rpm install will fail if the modules were not installed via RPM
-			# so i am setting the --nodeps flag here since the user elected to 
-			# use CPAN to remediate the modules
-			NODEPS='--nodeps'
 		else
 			echo "WARNING: $i is missing. You should fix this.";
 			PMODWAIT=5
@@ -381,37 +477,21 @@ done
 # will pause if a perl module was missing
 timewait $PMODWAIT
 
-# install missing tnef if the user elected to do so
-if [ $TNEFOPTION = 1 ]; then
-	# user elected to use tnef RPM option
-	if [ ! -x '/usr/bin/tnef' ]; then
-		clear
-		echo;
-		echo "Tnef missing. Installing via RPM ..."; echo;
-		if [ $MACHINE_TYPE = 'x86_64' ]; then
-			# 64-bit stuff here
-			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.x86_64.rpm
-		elif [ $MACHINE_TYPE = 'i686' ]; then
-			# i686 stuff here
-			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
-		elif [ $MACHINE_TYPE = 'i386' ]; then
-			# i386 stuff here
-			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
-		else
-			echo "NOTICE: I cannot find a suitable RPM to install tnef (x86_64, i686, i386)";
-			timewait 5
-		fi
-	fi
-fi
-
 # get the public signing key for the mailscanner rpm
-$WGET --no-check-certificate -O /tmp/jb_ms_rpm_public.key https://s3.amazonaws.com/mailscanner/jb_ms_rpm_public.key
-rpm --import /tmp/jb_ms_rpm_public.key
+cd /tmp
+rm -f jb_ms_rpm_public.key
+$CURL -O https://s3.amazonaws.com/mailscanner/jb_ms_rpm_public.key
+rpm --import jb_ms_rpm_public.key
+cd $THISCURRPMDIR
 
 clear
 echo;
 echo "Installing the MailScanner RPM ... ";
-$RPM -Uvh $NODEPS mailscanner*noarch.rpm
+
+# using --force option to reinstall the rpm if the same version is
+# already installed. this will not overwrite configuration files
+# as they are protected in the rpm spec file
+$RPM -Uvh --force $NODEPS mailscanner*noarch.rpm
 
 if [ $? != 0 ]; then
 	echo;
