@@ -418,7 +418,7 @@ if [ $DFOPTION == 1 ]; then
 	fi
 	
 	# perl-Sys-Hostname-Long
-	perldoc -l Filesys::Df >/dev/null 2>&1
+	perldoc -l Sys::Hostname::Long >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		cd /tmp
 		curl -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
