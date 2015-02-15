@@ -383,8 +383,8 @@ if [ $TNEFOPTION = 1 ]; then
 fi
 
 # get the public signing key for the mailscanner rpm
-$WGET --no-check-certificate -O /tmp/JBMSDEV-GPG-KEY.public https://s3.amazonaws.com/mailscanner/JBMSDEV-GPG-KEY.public
-rpm --import /tmp/JBMSDEV-GPG-KEY.public
+$WGET --no-check-certificate -O /tmp/JBMSDEV-GPG-KEY.public https://s3.amazonaws.com/mailscanner/jb_ms_rpm_public.key
+rpm --import /tmp/jb_ms_rpm_public.key
 
 clear
 echo;
