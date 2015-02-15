@@ -434,6 +434,7 @@ fi
 if [ $CAV == 1 ]; then
 	COUT='#Example';
 	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
+	freshclam
 fi
 
 # now check for missing perl modules and install them via cpan
