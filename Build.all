@@ -35,7 +35,6 @@ wget --no-check-certificate -O /$DEVBASEDIR/mailscanner/etc/phishing.bad.sites.c
 
 # tarball build
 echo Building tar distribution
-cd $DEVBASEDIR
 sh $DEVBASEDIR/Build.tarball
 
 # SuSE - yuck man
@@ -47,8 +46,8 @@ cd $DEVBASEDIR/RPM.files/SuSE8.1
 echo "Building RPM distribution in $HOME/msbuilds/rpm"";
 RPMOUT="$HOME/msbuilds/rpm"";
 export RPMOUT;
-cd $DEVBASEDIR/RPM.files/Perl8.0
-./Build.tarball
+#cd $DEVBASEDIR/RPM.files/Perl8.0
+sh $DEVBASEDIR/Build.rpmpkg
 
 # copy to where ever later
 echo 'Copying distributions:'
