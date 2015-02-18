@@ -88,7 +88,8 @@ fi
 # make working dir and subs
 mkdir -p $WORK
 mkdir -p $WORK/{bin,doc,etc,lib,var/run}
-mkdir -p $WORK/etc/{conf.d,wrapper,CustomFunctions}
+mkdir -p $WORK/etc/{conf.d,wrapper}
+mkdir -p $WORK/etc/CustomFunctions
 mkdir -p $WORK/bin/MailScanner/CustomFunctions
 # /etc/ reports,rules,mcp will get created below
 
