@@ -473,6 +473,8 @@ exit 0
 %config(noreplace) /etc/MailScanner/mcp/mcp.spam.assassin.prefs.conf
 %config(noreplace) /etc/MailScanner/mcp/v320.pre
 
+%config(noreplace) /etc/MailScanner/CustomFunctions/MyExample.pm
+
 %config(noreplace) /etc/MailScanner/reports/en/deleted.content.message.txt
 %config(noreplace) /etc/MailScanner/reports/en/stored.content.message.txt
 %config(noreplace) /etc/MailScanner/reports/en/sender.content.report.txt
