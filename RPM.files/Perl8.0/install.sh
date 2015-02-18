@@ -10,7 +10,7 @@
 #
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >
-# 13 FEB 2015
+# 18 FEB 2015
 
 # clear the screen. yay!
 clear
@@ -96,10 +96,14 @@ echo "Do you want to install or update Spamassassin?"; echo;
 echo "This package is recommended unless you have your own spam detection solution.";
 echo;
 echo "Recommended: Y (yes)"; echo;
-read -r -p "Install or update Spamassassin? [y/N] : " response
+read -r -p "Install or update Spamassassin? [n/Y] : " response
 
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     # user wants SA installed
+    SA=1
+    SAOPTION="spamassassin"
+elif [ -z $response ]; then    
+	# user wants SA installed
     SA=1
     SAOPTION="spamassassin"
 else
@@ -117,10 +121,14 @@ echo "and Clam AV, which is recommended. This will also reduce the number of Per
 echo "installed via CPAN. Note that EPEL is considered a third party repository."; 
 echo;
 echo "Recommended: Y (yes)"; echo;
-read -r -p "Install EPEL? [y/N] : " response
+read -r -p "Install EPEL? [n/Y] : " response
 
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     # user wants EPEL installed
+    EPEL=1
+    EPELOPTION="epel-release";
+elif [ -z $response ]; then    
+	# user wants EPEL installed
     EPEL=1
     EPELOPTION="epel-release";
 else
@@ -138,12 +146,15 @@ if [ $EPEL == 1 ]; then
 	echo "Note that you may use more than one virus scanner at once with MailScanner.";
 	echo;
 	echo "Recommended: Y (yes)"; echo;
-	read -r -p "Install or update Clam AV? [y/N] : " response
+	read -r -p "Install or update Clam AV? [n/Y] : " response
 
 	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
 		# user wants clam av installed
 		# some of these options may result in a 'no package available' on
 		# some distributions, but that is ok
+		CAV=1
+		CAVOPTION="clamav clamav-db clamav-devel clamd clamav-update clamav-server clamav-data-empty";
+	elif [ -z $response ]; then  
 		CAV=1
 		CAVOPTION="clamav clamav-db clamav-devel clamd clamav-update clamav-server clamav-data-empty";
 	else
@@ -167,10 +178,13 @@ echo "install this from an RPM provided by the MailScanner Community Project. Tn
 echo "MailScanner to handle Microsoft specific winmail.dat files.";
 echo;
 echo "Recommended: Y (yes)"; echo;
-read -r -p "Install missing tnef modules via RPM? [y/N] : " response
+read -r -p "Install missing tnef modules via RPM? [n/Y] : " response
 
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     # user wants to use RPM for missing tnef
+	TNEFOPTION=1
+elif [ -z $response ]; then 
+	# user wants to use RPM for missing tnef
 	TNEFOPTION=1
 else
     # user does not want to use RPM
@@ -185,10 +199,18 @@ echo "I will attempt to install Perl modules via yum, but some may not be unavai
 echo "installation process. Missing modules will likely cause MailScanner to malfunction.";
 echo;
 echo "Recommended: Y (yes)"; echo;
-read -r -p "Install missing Perl modules via CPAN? [y/N] : " response
+read -r -p "Install missing Perl modules via CPAN? [n/Y] : " response
 
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     # user wants to use CPAN for missing modules
+	CPANOPTION=1
+	
+	# rpm install will fail if the modules were not installed via RPM
+	# so i am setting the --nodeps flag here since the user elected to 
+	# use CPAN to remediate the modules
+	NODEPS='--nodeps';
+elif [ -z $response ]; then 
+	 # user wants to use CPAN for missing modules
 	CPANOPTION=1
 	
 	# rpm install will fail if the modules were not installed via RPM
@@ -202,6 +224,7 @@ fi
 
 # ask if the user wants to install 3rd party rpms for missing
 # perl-Filesys-Df and perl-Sys-Hostname-Long
+DFOPTION=0
 if [ $RHEL == 7 ]; then
 	clear
 	echo;
@@ -213,9 +236,12 @@ if [ $RHEL == 7 ]; then
 	echo "are still missing and you selected the CPAN remediation I will try to install them from CPAN.";
 	echo;
 	echo "Recommended: Y (yes)"; echo;
-	read -r -p "Install these missing items via RPM? [y/N] : " response
+	read -r -p "Install these missing items via RPM? [n/Y] : " response
 
 	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+		# user wants to use RPM for missing stuff
+		DFOPTION=1
+	elif [ -z $response ]; then 
 		# user wants to use RPM for missing stuff
 		DFOPTION=1
 	else
@@ -247,7 +273,7 @@ if [ $CPANOPTION != 1 ]; then
 fi
 
 # base system packages
-BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl openssl openssl-devel";
+BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl openssl openssl-devel bzip2-devel";
 
 # Perl packages available in the yum base of RHEL 5,6,7
 # and EPEL. If the user elects not to use EPEL or if the 
