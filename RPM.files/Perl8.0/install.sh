@@ -212,7 +212,7 @@ echo "install this from an RPM provided by the MailScanner Community Project. Tn
 echo "MailScanner to handle Microsoft specific winmail.dat files.";
 echo;
 echo "Recommended: Y (yes)"; echo;
-read -r -p "Install missing tnef modules via RPM? [n/Y] : " response
+read -r -p "Install missing tnef via RPM? [n/Y] : " response
 
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     # user wants to use RPM for missing tnef
@@ -223,6 +223,28 @@ elif [ -z $response ]; then
 else
     # user does not want to use RPM
     TNEFOPTION=0
+fi
+
+# ask if the user wants to install unrar by RPM if missing
+clear
+echo;
+echo "Do you want to install unrar via RPM if missing?"; echo;
+echo "I will attempt to install tnef via the Yum Package Manager, but if not found I can ";
+echo "install this from an RPM provided by RepoForge. unrar allows";
+echo "MailScanner to handle archives compressed with rar.";
+echo;
+echo "Recommended: Y (yes)"; echo;
+read -r -p "Install missing unrar via RPM? [n/Y] : " response
+
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    # user wants to use RPM for missing unrar
+	UNRAROPTION=1
+elif [ -z $response ]; then 
+	# user wants to use RPM for missing unrar
+	UNRAROPTION=1
+else
+    # user does not want to use RPM
+    UNRAROPTION=0
 fi
 
 # ask if the user wants missing modules installed via CPAN
@@ -307,14 +329,14 @@ if [ $CPANOPTION != 1 ]; then
 fi
 
 # base system packages
-BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl openssl openssl-devel bzip2-devel";
+BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl openssl openssl-devel bzip2-devel unrar";
 
 # Perl packages available in the yum base of RHEL 5,6,7
 # and EPEL. If the user elects not to use EPEL or if the 
 # package is not available for their distro release it
 # will be ignored during the install.
 #
-PERLPACKAGES="perl-Archive-Tar perl-Archive-Zip perl-Compress-Raw-Zlib perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-CPAN perl-DBD-SQLite perl-DBI perl-Digest-HMAC perl-Digest-SHA1 perl-Env perl-ExtUtils-MakeMaker perl-File-ShareDir-Install perl-File-Temp perl-Filesys-Df perl-Getopt-Long perl-IO-stringy perl-HTML-Parser perl-HTML-Tagset perl-Inline perl-IO-Zlib perl-Mail-DKIM perl-Mail-IMAPClient perl-Mail-SPF perl-MailTools perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes perl-Pod-Simple perl-Scalar-List-Utils perl-Storable perl-Pod-Escapes perl-Pod-Simple perl-Razor-Agent perl-Sys-Hostname-Long perl-Sys-SigAction perl-Test-Pod perl-Time-HiRes perl-TimeDate perl-URI pyzor";
+PERLPACKAGES="perl-Archive-Tar perl-Archive-Zip perl-Compress-Raw-Zlib perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-CPAN perl-DBD-SQLite perl-DBI perl-Digest-HMAC perl-Digest-SHA1 perl-Env perl-ExtUtils-MakeMaker perl-File-ShareDir-Install perl-File-Temp perl-Filesys-Df perl-Getopt-Long perl-IO-stringy perl-HTML-Parser perl-HTML-Tagset perl-Inline perl-IO-Zlib perl-Mail-DKIM perl-Mail-IMAPClient perl-Mail-SPF perl-MailTools perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes perl-Pod-Simple perl-Scalar-List-Utils perl-Storable perl-Pod-Escapes perl-Pod-Simple perl-Razor-Agent perl-Sys-Hostname-Long perl-Sys-SigAction perl-Test-Pod perl-Time-HiRes perl-TimeDate perl-URI pyzor unrar";
 
 # the array of perl modules needed
 ARMOD=();
@@ -460,6 +482,55 @@ if [ $TNEFOPTION == 1 ]; then
 			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
 		else
 			echo "NOTICE: I cannot find a suitable RPM to install tnef (x86_64, i686, i386)";
+			timewait 5
+		fi
+	fi
+fi
+
+# install missing unrar if the user elected to do so
+if [ $UNRAROPTION == 1 ]; then
+	# user elected to use unrar RPM option
+	if [ ! -x '/usr/bin/unrar' ]; then
+		clear
+		echo;
+		echo "unrar missing. Installing via RPM ..."; echo;
+		if [ $MACHINE_TYPE == 'x86_64' ]; then
+			# 64-bit stuff here
+			if [ $RHEL == 5 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.x86_64.rpm
+			elif [ $RHEL == 6 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.x86_64.rpm
+			elif [ $RHEL == 7 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el7.rf.x86_64.rpm
+			else
+				echo 'Could not identify the version of your distro for unrar install.';
+			fi
+		elif [ $MACHINE_TYPE == 'i686' ]; then
+			# i686 stuff here
+			if [ $RHEL == 5 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
+			elif [ $RHEL == 6 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
+			elif [ $RHEL == 7 ]; then
+				# there is no i686 of el 7
+				FOO=
+			else
+				echo 'Could not identify the version of your distro for unrar install.';
+			fi
+		elif [ $MACHINE_TYPE == 'i386' ]; then
+			# i386 stuff here
+			if [ $RHEL == 5 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
+			elif [ $RHEL == 6 ]; then
+				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
+			elif [ $RHEL == 7 ]; then
+				# there is no i386 of el 7
+				FOO=
+			else
+				echo 'Could not identify the version of your distro for unrar install.';
+			fi
+		else
+			echo "NOTICE: I cannot find a suitable RPM to install unrar (x86_64, i686, i386)";
 			timewait 5
 		fi
 	fi
