@@ -173,7 +173,6 @@ country.domains.conf
 EOF
 
 install etc/conf.d/README ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d/
-install etc/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions/
 
 while read f
 do
@@ -344,6 +343,8 @@ install bin/MailScanner/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/usr/lib/M
 install bin/MailScanner/CustomFunctions/CustomAction.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
 install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
 install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
+
+install etc/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions/
 
 install var/run/MailScanner.pid ${RPM_BUILD_ROOT}/var/run/
 
