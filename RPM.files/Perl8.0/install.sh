@@ -89,6 +89,40 @@ echo "during the yum installation of packages."; echo;
 echo "When you are ready to continue, press return ... ";
 read foobar
 
+# ask if the user wants an mta installed
+clear
+echo;
+echo "Do you want to install a Mail Transfer Agent (MTA)?"; echo;
+echo "I can install an MTA via the Yum package manager to save";
+echo "you the trouble of doing so later.";
+echo;
+echo "1 - sendmail";
+echo "2 - postfix";
+echo "3 - exim";
+echo "N - Do not install";
+echo;
+echo "Recommended: 1 (sendmail)"; echo;
+read -r -p "Install an MTA? [1] : " response
+
+if [[ $response =~ ^([nN][oO])$ ]]; then
+    # do not install
+    MTAOPTION=
+elif [ -z $response ]; then    
+	# sendmail default
+    MTAOPTION="sendmail";
+elif [ $response == 1 ]; then    
+	# sendmail 
+    MTAOPTION="sendmail";    
+elif [ $response == 2 ]; then    
+	# sendmail 
+    MTAOPTION="postfix";
+elif [ $response == 3 ]; then    
+	# sendmail 
+    MTAOPTION="exim";        
+else
+	MTAOPTION=
+fi
+
 # ask if the user wants spamassassin installed
 clear
 echo;
@@ -336,7 +370,7 @@ echo;
 timewait 2
 
 # install base packages
-$YUM -y install $BASEPACKAGES $EPELOPTION
+$YUM -y install $BASEPACKAGES $EPELOPTION $MTAOPTION
 
 # make sure rpm is available
 if [ -x /bin/rpm ]; then
