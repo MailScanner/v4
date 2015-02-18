@@ -88,8 +88,7 @@ fi
 # make working dir and subs
 mkdir -p $WORK
 mkdir -p $WORK/{bin,doc,etc,lib,var/run}
-mkdir -p $WORK/etc/{conf.d,wrapper}
-mkdir -p $WORK/etc/CustomFunctions
+mkdir -p $WORK/etc/{conf.d,wrapper,CustomFunctions}
 mkdir -p $WORK/bin/MailScanner/CustomFunctions
 # /etc/ reports,rules,mcp will get created below
 
@@ -161,7 +160,7 @@ cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/bin/
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pm $WORK/bin/MailScanner
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/*pl $WORK/bin/MailScanner
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*pm $WORK/bin/MailScanner/CustomFunctions
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/MyExample.pm $WORK/etc/MailScanner/CustomFunctions
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/MyExample.pm $WORK/etc/CustomFunctions
 
 # set conf file permissions
 chmod 0644 $WORK/etc/*.conf
