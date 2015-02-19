@@ -378,6 +378,10 @@ do
     chmod 0755 /var/spool/MailScanner/$F
   fi
 done
+
+# upgrade the MailScanner.conf
+
+
 # Sort out the rc.d directories
 chkconfig --add MailScanner
 #chkconfig MailScanner off
@@ -413,7 +417,6 @@ if [ "$1" -ge "1" ]; then
     #echo '    upgrade_MailScanner_conf'
     #echo '    upgrade_languages_conf'
     #service MailScanner restart </dev/null >/dev/null 2>&1
-    mkdir -p /etc/MailScanner/CustomFunctions
 fi
 exit 0
 
