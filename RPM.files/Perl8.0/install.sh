@@ -89,12 +89,40 @@ echo "during the yum installation of packages."; echo;
 echo "When you are ready to continue, press return ... ";
 read foobar
 
+# if already installed, offer to upgrade the mailscanner.conf
+AUTOUPGRADE=0
+if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+	clear
+	echo;
+	echo "Automatically upgrade MailScanner.conf?"; echo;
+	echo "Based on a system analysis, I think you are performing an upgrade. Would you like to";
+	echo "automatically upgrade /etc/MailScanner/MailScanner.conf to the new version? If you ";
+	echo "elect not to upgrade it automatically, you will need to manually run the upgrade";
+	echo "script after installation. If this in fact a new installation and not an upgrade, you";
+	echo "can just enter 'N' or 'no' to ignore this.";
+	echo;
+	echo "Recommended: Y (yes)"; echo;
+	read -r -p "Auto upgrade MailScanner.conf? [n/Y] : " response
+	
+	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+		# user wants to auto upgrade mailscanner.conf
+		AUTOUPGRADE=1
+	elif [ -z $response ]; then    
+		# user wants to auto upgrade mailscanner.conf
+		AUTOUPGRADE=1
+    else
+    	# no auto upgrade
+    	AUTOUPGRADE=0
+    fi
+fi
+
 # ask if the user wants an mta installed
 clear
 echo;
 echo "Do you want to install a Mail Transfer Agent (MTA)?"; echo;
-echo "I can install an MTA via the Yum package manager to save";
-echo "you the trouble of doing so later.";
+echo "I can install an MTA via the Yum package manager to save you the trouble of having to do";
+echo "this later. If you plan on using an MTA that is not listed below, you will have install ";
+echo "it manually yourself if you have not already done so.";
 echo;
 echo "1 - sendmail";
 echo "2 - postfix";
@@ -638,6 +666,20 @@ if [ $? != 0 ]; then
 	echo 'user specific configuration.';
 	echo;
 else
+	if [ $AUTOUPGRADE == 1 ]; then
+		echo "Upgrading /etc/MailScanner/MailScanner.conf";
+		echo;
+		echo "Your old configuration file will be saved as:";
+		echo "/etc/MailScanner/MailScanner.conf.old.$$";
+		echo;
+		timewait 1
+		
+		upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.rpmnew > /etc/MailScanner/MailScanner.new
+		mv -f /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.old.$$
+		mv -f /etc/MailScanner/MailScanner.new  /etc/MailScanner/MailScanner.conf
+		
+	fi
+	
 	echo;
 	echo '----------------------------------------------------------';
 	echo 'Installation Complete'; echo;
