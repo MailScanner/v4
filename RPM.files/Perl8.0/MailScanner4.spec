@@ -379,9 +379,6 @@ do
   fi
 done
 
-# upgrade the MailScanner.conf
-
-
 # Sort out the rc.d directories
 chkconfig --add MailScanner
 #chkconfig MailScanner off
@@ -398,8 +395,9 @@ echo
 echo Note that you will need to replace the 'sendmail' option
 echo above with your respective MTA. Sendmail, Postfix, Exim, etc.
 echo
-echo For technical support subscribe to the mailing list
-echo at http://www.mailscanner.info
+echo If you are using Clam AV, ensure that you check that the user
+echo and group specified in /usr/lib/MailScanner/clamav-wrapper
+echo matches the user specified in /etc/passwd.
 echo
 %preun
 if [ $1 = 0 ]; then

@@ -76,7 +76,7 @@ fi
 
 # user info screen before the install process starts
 echo "MailScanner Installation for RPM Based Systems"; echo; echo;
-echo "This will install or upgrade the required software for MailScanner on RPM based systems";
+echo "This will INSTALL or UPGRADE the required software for MailScanner on RPM based systems";
 echo "via the Yum package manager. Supported distributions are RHEL 5,6,7 and associated";
 echo "variants such as CentOS and Scientific Linux. Internet connectivity is required for"; 
 echo "this installation script to execute. "; echo;
@@ -206,6 +206,9 @@ if [ $EPEL == 1 ]; then
 	echo "Do you want to install or update Clam AV during this installation process?"; echo;
 	echo "This package is recommended unless you plan on using a different virus scanner.";
 	echo "Note that you may use more than one virus scanner at once with MailScanner.";
+	echo;
+	echo "Even if you already have Clam AV installed you should select this option so I";
+	echo "will know to check the clamav-wrapper and make corrections if required.";
 	echo;
 	echo "Recommended: Y (yes)"; echo;
 	read -r -p "Install or update Clam AV? [n/Y] : " response
@@ -594,6 +597,21 @@ if [ $CAV == 1 ]; then
 	COUT='#Example';
 	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
 	freshclam
+fi
+
+# fix the clamav wrapper if the user does not exist
+if [ $CAV == 1 ]; then
+	if id -u clam >/dev/null 2>&1; then
+		#clam is being used instead of clamav
+		OLDCAVUSR='ClamUser="clamav"';
+		NEWCAVUSR='ClamUser="clam"'
+	
+		OLDCAVGRP='ClamGroup="clamav"';
+		NEWCAVGRP='ClamGroup="clam"';
+	
+		perl -pi -e 's/'$OLDCAVUSR'/'$NEWCAVUSR'/;' /usr/lib/MailScanner/clamav-wrapper
+		perl -pi -e 's/'$OLDCAVGRP'/'$NEWCAVGRP'/;' /usr/lib/MailScanner/clamav-wrapper
+	fi
 fi
 
 # now check for missing perl modules and install them via cpan
