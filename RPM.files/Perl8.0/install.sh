@@ -261,7 +261,7 @@ clear
 echo;
 echo "Do you want to install unrar via RPM if missing?"; echo;
 echo "I will attempt to install unrar via the Yum Package Manager, but if not found I can ";
-echo "install this from an RPM provided by RepoForge. unrar allows";
+echo "install this from an RPM provided by MailScanner Community Project. unrar allows";
 echo "MailScanner to handle archives compressed with rar.";
 echo;
 echo "Recommended: Y (yes)"; echo;
