@@ -536,60 +536,22 @@ if [ $UNRAROPTION == 1 ]; then
 		echo "unrar missing. Installing via RPM ..."; echo;
 		if [ $MACHINE_TYPE == 'x86_64' ]; then
 			# 64-bit stuff here
-			if [ $RHEL == 5 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.x86_64.rpm
-				$RPM -Uvh unrar-5.0.3-1.el5.rf.x86_64.rpm
-				cd $THISCURRPMDIR
-			elif [ $RHEL == 6 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.x86_64.rpm
-				$RPM -Uvh unrar-5.0.3-1.el6.rf.x86_64.rpm
-				cd $THISCURRPMDIR
-			elif [ $RHEL == 7 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el7.rf.x86_64.rpm
-				$RPM -Uvh unrar-5.0.3-1.el7.rf.x86_64.rpm
-				cd $THISCURRPMDIR
-			else
-				echo 'Could not identify the version of your distro for unrar install.';
-			fi
+			cd /tmp
+			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/unrar-5.0.3-1.x86_64.rpm
+			$RPM -Uvh unrar-5.0.3-1.x86_64.rpm
+			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i686' ]; then
 			# i686 stuff here
-			if [ $RHEL == 5 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
-				$RPM -Uvh unrar-5.0.3-1.el5.rf.i386.rpm
-				cd $THISCURRPMDIR
-			elif [ $RHEL == 6 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
-				$RPM -Uvh unrar-5.0.3-1.el6.rf.i686.rpm
-				cd $THISCURRPMDIR
-			elif [ $RHEL == 7 ]; then
-				# there is no i686 of el 7
-				FOO=
-			else
-				echo 'Could not identify the version of your distro for unrar install.';
-			fi
+			cd /tmp
+			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/unrar-5.0.3-1.i686.rpm
+			$RPM -Uvh unrar-5.0.3-1.i686.rpm
+			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i386' ]; then
 			# i386 stuff here
-			if [ $RHEL == 5 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
-				$RPM -Uvh unrar-5.0.3-1.el5.rf.i386.rpm
-				cd $THISCURRPMDIR
-			elif [ $RHEL == 6 ]; then
-				cd /tmp
-				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
-				$RPM -Uvh unrar-5.0.3-1.el6.rf.i686.rpm
-				cd $THISCURRPMDIR
-			elif [ $RHEL == 7 ]; then
-				# there is no i386 of el 7
-				FOO=
-			else
-				echo 'Could not identify the version of your distro for unrar install.';
-			fi
+			cd /tmp
+			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/unrar-5.0.3-1.i386.rpm
+			$RPM -Uvh unrar-5.0.3-1.i386.rpm
+			cd $THISCURRPMDIR
 		else
 			echo "NOTICE: I cannot find a suitable RPM to install unrar (x86_64, i686, i386)";
 			timewait 5
