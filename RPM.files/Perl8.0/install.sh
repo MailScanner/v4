@@ -360,14 +360,14 @@ if [ $CPANOPTION != 1 ]; then
 fi
 
 # base system packages
-BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl wget openssl openssl-devel bzip2-devel ";
+BASEPACKAGES="binutils gcc glibc-devel libaio make man-pages man-pages-overrides patch rpm tar time unzip which zip libtool-ltdl perl curl wget openssl openssl-devel bzip2-devel";
 
-# Perl packages available in the yum base of RHEL 5,6,7
+# Packages available in the yum base of RHEL 5,6,7
 # and EPEL. If the user elects not to use EPEL or if the 
 # package is not available for their distro release it
 # will be ignored during the install.
 #
-PERLPACKAGES="perl-Archive-Tar perl-Archive-Zip perl-Compress-Raw-Zlib perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-CPAN perl-DBD-SQLite perl-DBI perl-Digest-HMAC perl-Digest-SHA1 perl-Env perl-ExtUtils-MakeMaker perl-File-ShareDir-Install perl-File-Temp perl-Filesys-Df perl-Getopt-Long perl-IO-stringy perl-HTML-Parser perl-HTML-Tagset perl-Inline perl-IO-Zlib perl-Mail-DKIM perl-Mail-IMAPClient perl-Mail-SPF perl-MailTools perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes perl-Pod-Simple perl-Scalar-List-Utils perl-Storable perl-Pod-Escapes perl-Pod-Simple perl-Razor-Agent perl-Sys-Hostname-Long perl-Sys-SigAction perl-Test-Pod perl-Time-HiRes perl-TimeDate perl-URI pyzor unrar tnef unrar";
+MOREPACKAGES="perl-Archive-Tar perl-Archive-Zip perl-Compress-Raw-Zlib perl-Compress-Zlib perl-Convert-BinHex perl-Convert-TNEF perl-CPAN perl-DBD-SQLite perl-DBI perl-Digest-HMAC perl-Digest-SHA1 perl-Env perl-ExtUtils-MakeMaker perl-File-ShareDir-Install perl-File-Temp perl-Filesys-Df perl-Getopt-Long perl-IO-stringy perl-HTML-Parser perl-HTML-Tagset perl-Inline perl-IO-Zlib perl-Mail-DKIM perl-Mail-IMAPClient perl-Mail-SPF perl-MailTools perl-MIME-tools perl-Net-CIDR perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Pod-Escapes perl-Pod-Simple perl-Scalar-List-Utils perl-Storable perl-Pod-Escapes perl-Pod-Simple perl-Razor-Agent perl-Sys-Hostname-Long perl-Sys-SigAction perl-Test-Pod perl-Time-HiRes perl-TimeDate perl-URI pyzor unrar tnef unrar";
 
 # the array of perl modules needed
 ARMOD=();
@@ -493,7 +493,7 @@ echo "Installing available Perl packages, Clam AV (if elected), and ";
 echo "Spamassassin (if elected) via yum. You can safely ignore any";
 echo "subsequent 'No package available' errors."; echo;
 timewait 3
-$YUM -y install $TNEF $PERLPACKAGES $CAVOPTION $SAOPTION
+$YUM -y install $TNEF $MOREPACKAGES $CAVOPTION $SAOPTION
 
 # install missing tnef if the user elected to do so
 if [ $TNEFOPTION == 1 ]; then
@@ -504,13 +504,22 @@ if [ $TNEFOPTION == 1 ]; then
 		echo "Tnef missing. Installing via RPM ..."; echo;
 		if [ $MACHINE_TYPE == 'x86_64' ]; then
 			# 64-bit stuff here
-			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.x86_64.rpm
+			cd /tmp
+			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.x86_64.rpm
+			$RPM -Uvh tnef-1.4.12-1.x86_64.rpm
+			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i686' ]; then
 			# i686 stuff here
-			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
+			cd /tmp 
+			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
+			$RPM -Uvh tnef-1.4.12-1.i686.rpm
+			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i386' ]; then
 			# i386 stuff here
-			$RPM -Uvh https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
+			cd /tmp
+			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i386.rpm
+			$RPM -Uvh tnef-1.4.12-1.i686.rpm
+			cd $THISCURRPMDIR
 		else
 			echo "NOTICE: I cannot find a suitable RPM to install tnef (x86_64, i686, i386)";
 			timewait 5
@@ -528,20 +537,35 @@ if [ $UNRAROPTION == 1 ]; then
 		if [ $MACHINE_TYPE == 'x86_64' ]; then
 			# 64-bit stuff here
 			if [ $RHEL == 5 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.x86_64.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.x86_64.rpm
+				$RPM -Uvh unrar-5.0.3-1.el5.rf.x86_64.rpm
+				cd $THISCURRPMDIR
 			elif [ $RHEL == 6 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.x86_64.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.x86_64.rpm
+				$RPM -Uvh unrar-5.0.3-1.el6.rf.x86_64.rpm
+				cd $THISCURRPMDIR
 			elif [ $RHEL == 7 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el7.rf.x86_64.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el7.rf.x86_64.rpm
+				$RPM -Uvh unrar-5.0.3-1.el7.rf.x86_64.rpm
+				cd $THISCURRPMDIR
 			else
 				echo 'Could not identify the version of your distro for unrar install.';
 			fi
 		elif [ $MACHINE_TYPE == 'i686' ]; then
 			# i686 stuff here
 			if [ $RHEL == 5 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
+				$RPM -Uvh unrar-5.0.3-1.el5.rf.i386.rpm
+				cd $THISCURRPMDIR
 			elif [ $RHEL == 6 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
+				$RPM -Uvh unrar-5.0.3-1.el6.rf.i686.rpm
+				cd $THISCURRPMDIR
 			elif [ $RHEL == 7 ]; then
 				# there is no i686 of el 7
 				FOO=
@@ -551,9 +575,15 @@ if [ $UNRAROPTION == 1 ]; then
 		elif [ $MACHINE_TYPE == 'i386' ]; then
 			# i386 stuff here
 			if [ $RHEL == 5 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el5.rf.i386.rpm
+				$RPM -Uvh unrar-5.0.3-1.el5.rf.i386.rpm
+				cd $THISCURRPMDIR
 			elif [ $RHEL == 6 ]; then
-				$RPM -Uvh http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
+				cd /tmp
+				$CURL -O http://pkgs.repoforge.org/unrar/unrar-5.0.3-1.el6.rf.i686.rpm
+				$RPM -Uvh unrar-5.0.3-1.el6.rf.i686.rpm
+				cd $THISCURRPMDIR
 			elif [ $RHEL == 7 ]; then
 				# there is no i386 of el 7
 				FOO=
@@ -575,7 +605,7 @@ if [ $DFOPTION == 1 ]; then
 	perldoc -l Filesys::Df >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		cd /tmp
-		curl -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Filesys-Df-0.92-1.el7.x86_64.rpm
+		$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Filesys-Df-0.92-1.el7.x86_64.rpm
 		rpm -Uvh perl-Filesys-Df-0.92-1.el7.x86_64.rpm
 	fi
 	
@@ -583,7 +613,7 @@ if [ $DFOPTION == 1 ]; then
 	perldoc -l Sys::Hostname::Long >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		cd /tmp
-		curl -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
+		$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
 		rpm -Uvh perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
 	fi
 	
