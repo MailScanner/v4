@@ -499,31 +499,31 @@ $YUM -y install $TNEF $MOREPACKAGES $CAVOPTION $SAOPTION
 if [ $TNEFOPTION == 1 ]; then
 	# user elected to use tnef RPM option
 	if [ ! -x '/usr/bin/tnef' ]; then
+		cd /tmp
+		rm -f tnef-1.4.12*
 		clear
 		echo;
 		echo "Tnef missing. Installing via RPM ..."; echo;
 		if [ $MACHINE_TYPE == 'x86_64' ]; then
 			# 64-bit stuff here
-			cd /tmp
 			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.x86_64.rpm
 			$RPM -Uvh tnef-1.4.12-1.x86_64.rpm
-			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i686' ]; then
 			# i686 stuff here
-			cd /tmp 
 			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i686.rpm
 			$RPM -Uvh tnef-1.4.12-1.i686.rpm
-			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i386' ]; then
 			# i386 stuff here
-			cd /tmp
 			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/tnef-1.4.12-1.i386.rpm
 			$RPM -Uvh tnef-1.4.12-1.i686.rpm
-			cd $THISCURRPMDIR
 		else
 			echo "NOTICE: I cannot find a suitable RPM to install tnef (x86_64, i686, i386)";
 			timewait 5
 		fi
+		
+		# back to where i started
+		rm -f tnef-1.4.12*
+		cd $THISCURRPMDIR
 	fi
 fi
 
@@ -531,42 +531,44 @@ fi
 if [ $UNRAROPTION == 1 ]; then
 	# user elected to use unrar RPM option
 	if [ ! -x '/usr/bin/unrar' ]; then
+		cd /tmp
+		rm -f unrar-5.0.3*
 		clear
 		echo;
 		echo "unrar missing. Installing via RPM ..."; echo;
 		if [ $MACHINE_TYPE == 'x86_64' ]; then
 			# 64-bit stuff here
-			cd /tmp
 			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/unrar-5.0.3-1.x86_64.rpm
 			$RPM -Uvh unrar-5.0.3-1.x86_64.rpm
-			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i686' ]; then
 			# i686 stuff here
-			cd /tmp
 			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/unrar-5.0.3-1.i686.rpm
 			$RPM -Uvh unrar-5.0.3-1.i686.rpm
-			cd $THISCURRPMDIR
 		elif [ $MACHINE_TYPE == 'i386' ]; then
 			# i386 stuff here
-			cd /tmp
 			$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/unrar-5.0.3-1.i386.rpm
 			$RPM -Uvh unrar-5.0.3-1.i386.rpm
-			cd $THISCURRPMDIR
 		else
 			echo "NOTICE: I cannot find a suitable RPM to install unrar (x86_64, i686, i386)";
 			timewait 5
 		fi
+		
+		# back to where i started
+		rm -f unrar-5.0.3*
+		cd $THISCURRPMDIR
 	fi
 fi
 
 # install missing perl-Filesys-Df and perl-Sys-Hostname-Long on RHEL 7
 if [ $DFOPTION == 1 ]; then
 	# test to see if these are installed. if not install from RPM
+	cd /tmp
+	rm -f perl-Filesys-Df*
+	rm -f perl-Sys-Hostname-Long*
 		
 	# perl-Filesys-Df
 	perldoc -l Filesys::Df >/dev/null 2>&1
 	if [ $? != 0 ]; then
-		cd /tmp
 		$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Filesys-Df-0.92-1.el7.x86_64.rpm
 		rpm -Uvh perl-Filesys-Df-0.92-1.el7.x86_64.rpm
 	fi
@@ -574,12 +576,13 @@ if [ $DFOPTION == 1 ]; then
 	# perl-Sys-Hostname-Long
 	perldoc -l Sys::Hostname::Long >/dev/null 2>&1
 	if [ $? != 0 ]; then
-		cd /tmp
 		$CURL -O https://s3.amazonaws.com/mailscanner/install/rpm/perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
 		rpm -Uvh perl-Sys-Hostname-Long-1.5-1.el7.noarch.rpm
 	fi
 	
 	# go back to where i started
+	rm -f perl-Filesys-Df*
+	rm -f perl-Sys-Hostname-Long*
 	cd $THISCURRPMDIR
 fi
 
@@ -650,8 +653,9 @@ timewait $PMODWAIT
 # get the public signing key for the mailscanner rpm
 cd /tmp
 rm -f jb_ms_rpm_public.key
-$CURL -O https://s3.amazonaws.com/mailscanner/jb_ms_rpm_public.key
+$CURL -O https://s3.amazonaws.com/mailscanner/gpg/jb_ms_rpm_public.key
 rpm --import jb_ms_rpm_public.key
+rm -f jb_ms_rpm_public.key
 cd $THISCURRPMDIR
 
 clear
