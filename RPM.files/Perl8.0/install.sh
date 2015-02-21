@@ -594,21 +594,6 @@ if [ $CAV == 1 ]; then
 	freshclam
 fi
 
-# fix the clamav wrapper if the user does not exist
-if [ $CAV == 1 ]; then
-	if id -u clam >/dev/null 2>&1; then
-		#clam is being used instead of clamav
-		OLDCAVUSR='ClamUser="clamav"';
-		NEWCAVUSR='ClamUser="clam"'
-	
-		OLDCAVGRP='ClamGroup="clamav"';
-		NEWCAVGRP='ClamGroup="clam"';
-	
-		perl -pi -e 's/'$OLDCAVUSR'/'$NEWCAVUSR'/;' /usr/lib/MailScanner/clamav-wrapper
-		perl -pi -e 's/'$OLDCAVGRP'/'$NEWCAVGRP'/;' /usr/lib/MailScanner/clamav-wrapper
-	fi
-fi
-
 # now check for missing perl modules and install them via cpan
 # if the user elected to do so
 clear; echo;
@@ -666,6 +651,21 @@ echo "Installing the MailScanner RPM ... ";
 # already installed. this will not overwrite configuration files
 # as they are protected in the rpm spec file
 $RPM -Uvh --force $NODEPS mailscanner*noarch.rpm
+
+# fix the clamav wrapper if the user does not exist
+if [ $CAV == 1 ]; then
+	if id -u clam >/dev/null 2>&1; then
+		#clam is being used instead of clamav
+		OLDCAVUSR='ClamUser="clamav"';
+		NEWCAVUSR='ClamUser="clam"'
+	
+		OLDCAVGRP='ClamGroup="clamav"';
+		NEWCAVGRP='ClamGroup="clam"';
+	
+		perl -pi -e 's/'$OLDCAVUSR'/'$NEWCAVUSR'/;' /usr/lib/MailScanner/clamav-wrapper
+		perl -pi -e 's/'$OLDCAVGRP'/'$NEWCAVGRP'/;' /usr/lib/MailScanner/clamav-wrapper
+	fi
+fi
 
 if [ $? != 0 ]; then
 	echo;
