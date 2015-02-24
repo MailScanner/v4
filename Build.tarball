@@ -137,8 +137,8 @@ mkdir -p $BUILDROOT/$INSTALL
 cd $BUILDROOT/$INSTALL
 mkdir perl-tar
 cd $DEVBASEDIR
-cp installer/install* $BUILDROOT/$INSTALL
-chmod 0755 $BUILDROOT/$INSTALL/install*
+cp installer/install.sh $BUILDROOT/$INSTALL
+chmod 0755 $BUILDROOT/$INSTALL/install.sh
 #cp mailscanner/bin/CheckModuleVersion $BUILDROOT/$INSTALL
 #cp mailscanner/bin/getPERLLIB $BUILDROOT/$INSTALL
 #cp mailscanner/bin/Quick.Peek $BUILDROOT/$INSTALL

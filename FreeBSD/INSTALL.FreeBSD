@@ -14,16 +14,16 @@ Option 1:
 		
 Option 2:
 
-		1. Unpack the distribution into /opt and make a link to the new version
+		1. Install packages
+		
+			pkg install spamassassin bash gcc tnef perl5
+			
+		2. Unpack the distribution into /opt and make a link to the new version
 
 		   cd /opt
 		   tar xvf MailScanner-4.20-1.tar
 		   ln -s MailScanner-4.20-1 MailScanner
 
-		2. Install tnef
-		
-			pkg install tnef
-		   
 
 3. Edit /opt/MailScanner/etc/MailScanner.conf
 
