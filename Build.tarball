@@ -142,9 +142,9 @@ chmod 0755 $BUILDROOT/$INSTALL/install*
 #cp mailscanner/bin/CheckModuleVersion $BUILDROOT/$INSTALL
 #cp mailscanner/bin/getPERLLIB $BUILDROOT/$INSTALL
 #cp mailscanner/bin/Quick.Peek $BUILDROOT/$INSTALL
-chmod 0755 $BUILDROOT/$INSTALL/CheckModuleVersion
-chmod 0755 $BUILDROOT/$INSTALL/getPERLLIB
-chmod 0755 $BUILDROOT/$INSTALL/Quick.Peek
+#chmod 0755 $BUILDROOT/$INSTALL/CheckModuleVersion
+#chmod 0755 $BUILDROOT/$INSTALL/getPERLLIB
+#chmod 0755 $BUILDROOT/$INSTALL/Quick.Peek
 #cp RPM.files/perl-module-src/*tar.gz $BUILDROOT/$INSTALL/perl-tar
 # Now remove the odd exception - this saves download time!
 rm -f $BUILDROOT/$INSTALL/perl-tar/MIME-tools-5.411.tar.gz
@@ -154,4 +154,4 @@ chmod 0644 $BUILDROOT/$INSTALL/perl-tar/*tar.gz
 
 cd $BUILDROOT
 tar czf $INSTALL-$RELEASE.tar.gz $INSTALL
-rm -rf $INSTALL
+rm -rf $BUILDROOT/$INSTALL
