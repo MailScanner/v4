@@ -148,7 +148,7 @@ chmod 0755 $BUILDROOT/$INSTALL/Quick.Peek
 #cp RPM.files/perl-module-src/*tar.gz $BUILDROOT/$INSTALL/perl-tar
 # Now remove the odd exception - this saves download time!
 rm -f $BUILDROOT/$INSTALL/perl-tar/MIME-tools-5.411.tar.gz
-cp mailscanner/bin/tnef-1.4.5*tar.gz $BUILDROOT/$INSTALL/perl-tar
+#cp mailscanner/bin/tnef-1.4.5*tar.gz $BUILDROOT/$INSTALL/perl-tar
 cp $BUILDROOT/$VERSION-$RELEASE.tar.gz $BUILDROOT/$INSTALL/perl-tar
 chmod 0644 $BUILDROOT/$INSTALL/perl-tar/*tar.gz
 
