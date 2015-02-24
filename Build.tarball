@@ -139,9 +139,9 @@ mkdir perl-tar
 cd $DEVBASEDIR
 cp installer/install* $BUILDROOT/$INSTALL
 chmod 0755 $BUILDROOT/$INSTALL/install*
-cp mailscanner/bin/CheckModuleVersion $BUILDROOT/$INSTALL
-cp mailscanner/bin/getPERLLIB $BUILDROOT/$INSTALL
-cp mailscanner/bin/Quick.Peek $BUILDROOT/$INSTALL
+#cp mailscanner/bin/CheckModuleVersion $BUILDROOT/$INSTALL
+#cp mailscanner/bin/getPERLLIB $BUILDROOT/$INSTALL
+#cp mailscanner/bin/Quick.Peek $BUILDROOT/$INSTALL
 chmod 0755 $BUILDROOT/$INSTALL/CheckModuleVersion
 chmod 0755 $BUILDROOT/$INSTALL/getPERLLIB
 chmod 0755 $BUILDROOT/$INSTALL/Quick.Peek
@@ -154,3 +154,4 @@ chmod 0644 $BUILDROOT/$INSTALL/perl-tar/*tar.gz
 
 cd $BUILDROOT
 tar czf $INSTALL-$RELEASE.tar.gz $INSTALL
+rm -rf $INSTALL
