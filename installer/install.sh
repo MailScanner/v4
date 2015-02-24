@@ -82,7 +82,7 @@ if [ ! -x '/usr/bin/perl' ]; then
 	echo;
 	exit 192
 else
-	PERL="usr/bin/perl";
+	PERL="/usr/bin/perl";
 fi
 
 # find programs and location
@@ -115,6 +115,7 @@ CC=`findprog cc $CCPATH`
 GCC=`findprog gcc $TARPATH`
 TNEF=`findprog tar $TNEFPATH`
 PERLDOC=`findprog perldoc $PERLPATH`
+
 
 # check for tnef
 if [ "x$TNEF" = "x" ]; then
