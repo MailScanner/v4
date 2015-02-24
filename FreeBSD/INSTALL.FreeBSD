@@ -1,20 +1,29 @@
 JKF 26/12/2002
-Jerry Benton 03/02/2015
+Jerry Benton 24 FEB 2015
 
 Installation instructions for FreeBSD
 =====================================
 
-1. Unpack the distribution into /opt and make a link to the new version
+Option 1:
 
-   cd /opt
-   tar xvf MailScanner-4.20-1.tar
-   ln -s MailScanner-4.20-1 MailScanner
+		1. Make sure you have the following installed:
+			- bash		- gnu tar, or gtar
+			- perl		- tnef
+			
+		2. Run the ./install.sh script.
+		
+Option 2:
 
-2. Replace the link /opt/MailScanner/bin/tnef
+		1. Unpack the distribution into /opt and make a link to the new version
 
-   cd /opt/MailScanner/bin
-   rm tnef
-   ln -s tnef.linux tnef
+		   cd /opt
+		   tar xvf MailScanner-4.20-1.tar
+		   ln -s MailScanner-4.20-1 MailScanner
+
+		2. Install tnef
+		
+			pkg install tnef
+		   
 
 3. Edit /opt/MailScanner/etc/MailScanner.conf
 

@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Checked and updated to be more streamlined by
 # Jerry Benton
-# 03FEB15
+# 24 FEB 2015
 
 # this Build.tarball script should be located in the base
 # directory when run. Example: /msdev/v4/Build.tarball

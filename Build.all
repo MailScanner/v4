@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # All build scripts checked and updated to be
 # more streamlined by

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # MailScanner installation script for RPM based systems
 # 
