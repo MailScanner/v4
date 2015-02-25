@@ -4,26 +4,28 @@ Jerry Benton 24 FEB 2015
 Installation instructions for FreeBSD
 =====================================
 
-Option 1:
-
-		1. Make sure you have the following installed:
-			- bash		- gnu tar, or gtar
-			- perl		- tnef
-			
-		2. Run the ./install.sh script.
+1. Make sure you have the following installed:
+	- bash		- tar or gtar
+	- perl5		- tnef
+	- gcc
+	
+	Recommended packages:
+		- spamassassin
+		- clamav	
+	
+	Perl Modules:
+		- The installer can install all missing perl modules via CPAN. To
+		  do so select 'yes' when asked during the installation process.
+		  This is the recommended approach.
+		   
+		- The installer can tell you what perl modules are missing if you
+		  wish to install them yourself. Select 'no' when asked about
+		  installing perl modules via CPAN. A list of missing modules will
+		  be generated and you will have the opportunity to quit the install
+		  process (CTRL + C) and install them via other means.
+	
+2. Run the ./install.sh script.
 		
-Option 2:
-
-		1. Install packages
-		
-			pkg install spamassassin bash gcc tnef perl5
-			
-		2. Unpack the distribution into /opt and make a link to the new version
-
-		   cd /opt
-		   tar xvf MailScanner-4.20-1.tar
-		   ln -s MailScanner-4.20-1 MailScanner
-
 
 3. Edit /opt/MailScanner/etc/MailScanner.conf
 
@@ -49,14 +51,14 @@ Option 2:
    MailScanner_pidfile="/opt/MailScanner/var/MailScanner.pid"
    # MailScanner ends here
 
-6. Download /opt/MailScanner/bin/rc.MailScanner
+6. Setup /opt/MailScanner/bin/rc.MailScanner
 
-   Fetch the file from
-   http://www.sng.ecs.soton.ac.uk/mailscanner/files/4/freebsd/rc.MailScanner
+   cp ./FreeBSD/rc.MailScanner /opt/MailScanner/bin/rc.MailScanner
    chmod a=rx /opt/MailScanner/bin/rc.MailScanner
 
 MailScanner should now be started when the system boots.
 To start and stop MailScanner manually, use
+
    /opt/MailScanner/bin/rc.MailScanner start
 and
    /opt/MailScanner/bin/rc.MailScanner stop
