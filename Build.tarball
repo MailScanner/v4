@@ -63,7 +63,6 @@ mkdir -p $BUILDROOT/$VERSION-$RELEASE
 #tar cf - www/README README | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
 cd $DEVBASEDIR
 cp /tmp/MailScanner.conf.index.html $BUILDROOT/$VERSION-$RELEASE
-cp ChangeLog $BUILDROOT
 
 # Put all the subdirs (including the code) in place
 ( cd mailscanner && tar cf - . ) | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
@@ -139,6 +138,7 @@ cp README $BUILDROOT/$INSTALL
 cp mailscanner/COPYING $BUILDROOT/$INSTALL
 cp FreeBSD/INSTALL.FreeBSD $BUILDROOT/$INSTALL
 cp OpenBSD/INSTALL.OpenBSD $BUILDROOT/$INSTALL
+cp ChangeLog $BUILDROOT/$INSTALL
 chmod 0755 $BUILDROOT/$INSTALL/install.sh
 #cp mailscanner/bin/CheckModuleVersion $BUILDROOT/$INSTALL
 #cp mailscanner/bin/getPERLLIB $BUILDROOT/$INSTALL
