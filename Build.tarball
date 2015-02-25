@@ -64,6 +64,10 @@ mkdir -p $BUILDROOT/$VERSION-$RELEASE
 cd $DEVBASEDIR
 cp /tmp/MailScanner.conf.index.html $BUILDROOT/$VERSION-$RELEASE
 
+# module check script
+cp $DEVBASEDIR/check_modules.sh $BUILDROOT/$VERSION-$RELEASE
+chmod 0755 $BUILDROOT/$VERSION-$RELEASE/check_modules.sh
+
 # Put all the subdirs (including the code) in place
 ( cd mailscanner && tar cf - . ) | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
 ln -s upgrade_MailScanner_conf $BUILDROOT/$VERSION-$RELEASE/bin/upgrade_languages_conf

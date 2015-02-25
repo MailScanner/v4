@@ -23,6 +23,9 @@ Installation instructions for FreeBSD
 		  installing perl modules via CPAN. A list of missing modules will
 		  be generated and you will have the opportunity to quit the install
 		  process (CTRL + C) and install them via other means.
+		  
+		- The check_modules.sh script can quickly check for missing modules
+		  and output the results.   
 	
 2. Run the ./install.sh script.
 		
