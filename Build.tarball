@@ -62,11 +62,12 @@ mkdir -p $BUILDROOT/$VERSION-$RELEASE
 # Put the docs in place
 #tar cf - www/README README | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )
 cd $DEVBASEDIR
-cp README $BUILDROOT/$VERSION-$RELEASE
-cp FreeBSD/INSTALL.FreeBSD $BUILDROOT/$VERSION-$RELEASE
-cp OpenBSD/INSTALL.OpenBSD $BUILDROOT/$VERSION-$RELEASE
+cp README $BUILDROOT
+cp mailscanner/COPYING $BUILDROOT
+cp FreeBSD/INSTALL.FreeBSD $BUILDROOT
+cp OpenBSD/INSTALL.OpenBSD $BUILDROOT
 cp /tmp/MailScanner.conf.index.html $BUILDROOT/$VERSION-$RELEASE
-cp ChangeLog $BUILDROOT/$VERSION-$RELEASE
+cp ChangeLog $BUILDROOT
 
 # Put all the subdirs (including the code) in place
 ( cd mailscanner && tar cf - . ) | ( cd $BUILDROOT/$VERSION-$RELEASE && tar xvBpf - )

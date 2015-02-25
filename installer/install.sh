@@ -178,6 +178,7 @@ unpackarchive () {
       if [ -f "$SOURCE2" ]; then
         ( cd $DIR && $TAR xBpf - ) < $SOURCE2
       else
+      	echo;
         echo "Could not find $SOURCE2";
         echo "As I could not find GNU tar or gunzip, you need to";
         echo "uncompress each of the .gz files yourself.";
@@ -361,11 +362,11 @@ fi
 #TMPINSTALL=${TMPBUILDDIR}/MStmpinstall.$$
 #mkdir $TMPINSTALL
 #chmod go-rwx $TMPINSTALL
-
-echo "Installing MailScanner into /opt.";
-echo "If you do not want it there, just move it to where you want it";
-echo "and then edit MailScanner.conf and check_mailscanner";
-echo "to set the correct locations.";
+echo;
+echo "Installing MailScanner into the /opt directory. If you do not want it there,";
+echo "just move it to where you want it and then edit MailScanner.conf and ";
+echo "check_mailscanner to set the correct locations.";
+echo;
 
 if [ \! -d /opt ]; then
 	mkdir /opt
@@ -375,12 +376,16 @@ fi
 unpackarchive /opt `ls ${PERL_DIR}/MailScanner*.tar.gz | tail -1`
 
 VERNUM=`cd ${PERL_DIR}; ls MailScanner*.tar.gz | $PERL -pe 's/^MailScanner-([0-9.]+-\d+).*$/$1/' | tail -1`
+echo;
 echo "Installed version $VERNUM into /opt/MailScanner-$VERNUM";
+echo;
 
 # Create the symlink if not already present
 if [ -d /opt/MailScanner ]; then
+	echo;
 	echo "You will need to update the symlink /opt/MailScanner to point";
 	echo "to the new version before starting it.";
+	echo;
 else
 	ln -sf MailScanner-${VERNUM} /opt/MailScanner
 fi
@@ -396,6 +401,7 @@ if [ \! -d /var/spool/MailScanner ]; then
 	chmod u=rwx,g=rx,o-rwx /var/spool/mqueue.in
 	chmod a+rx /var/spool/MailScanner/incoming
 	chmod a+rx /var/spool/MailScanner/incoming/Locks
+	echo;
 	echo "It looks like this is your first MailScanner installation so I have";
 	echo "created the working directories and quarantine for you in /var/spool.";
 fi
