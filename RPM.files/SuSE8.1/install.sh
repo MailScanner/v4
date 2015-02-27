@@ -490,7 +490,7 @@ echo "Installing the MailScanner RPM ... ";
 $RPM -Uvh --force $NODEPS mailscanner*noarch.rpm
 
 # fix the clamav wrapper if the user does not exist
-if [ $CAV == 1 ]; then
+if [ -f '/etc/freshclam.conf' ]; then
 	if id -u vscan >/dev/null 2>&1; then
 		#clam is being used instead of clamav
 		OLDCAVUSR='ClamUser="clamav"';

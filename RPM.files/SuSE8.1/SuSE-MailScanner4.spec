@@ -405,8 +405,8 @@ echo    chkconfig MailScanner on
 echo    /etc/init.d/MailScanner start
 echo
 echo
-echo For technical support, please read the MAQ at wiki.mailscanner.info
-echo and buy the book at www.mailscanner.info/store
+echo For technical support, you can join the mailing list at
+echo www.mailscanner.info
 echo
 
 %preun
@@ -430,8 +430,8 @@ exit 0
 
 %files
 %defattr (644,root,root)
-%attr(700,root,root) %dir /var/spool/mqueue.in
-%attr(700,root,root) %dir /var/spool/mqueue.in/.hoststat
+%attr(700,root,root) %dir /var/spool/mqueue
+%attr(700,root,root) %dir /var/spool/mqueue/.hoststat
 #%attr(700,root,root) %dir /var/spool/MailScanner/incoming
 #%attr(700,root,root) %dir /var/spool/MailScanner/quarantine
 %attr(700,root,root) /var/run/MailScanner.pid
