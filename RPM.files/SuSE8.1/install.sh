@@ -545,6 +545,7 @@ if [ -f '/etc/freshclam.conf' ]; then
 		
 		mkdir -p /var/run/clamav
 		chown vscan:vscan /var/run/clamav
+		freshclam
 	fi
 fi
 
