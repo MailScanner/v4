@@ -220,6 +220,32 @@ else
     CPANOPTION=0
 fi
 
+if [ "$CPANOPTION" = "1" ]; then
+	# ask if the user wants bonus perl modules installed
+	clear
+	echo;
+	echo "Do you want to install recommended Perl modules?"; echo;
+	echo "I will attempt to install the required Perl modules, but I can also attempt";
+	echo "to install additional recommended modules. Do you want to install additional";
+	echo "recommended Perl modules?";
+	echo;
+	echo "Recommended: Y (yes)"; echo;
+	read -r -p "Install recommended Perl modules? [n/Y] : " response
+
+	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+		# user wants extra installed
+		NICETOHAVE=1
+	elif [ -z $response ]; then    
+		# user wants extra installed
+		NICETOHAVE=1
+	else
+		# user does not want extra
+		NICETOHAVE=0
+	fi
+else
+	NICETOHAVE=0
+fi
+
 # ask if the user wants to install the Mail::ClamAV module
 if [ "$CPANOPTION" = "1" ]; then
 	# Mail::ClamAV
@@ -314,6 +340,21 @@ ARMOD+=('Test::Pod');			ARMOD+=('Test::Simple');		ARMOD+=('Time::HiRes');
 ARMOD+=('Time::localtime'); 	ARMOD+=('Sys::Hostname::Long');	ARMOD+=('Sys::SigAction');		
 ARMOD+=('Sys::Syslog'); 		ARMOD+=('Env'); 				ARMOD+=('File::ShareDir::Install');
 
+# not required but nice to have
+if [ "$NICETOHAVE" = "1" ]; then
+	ARMOD+=('bignum');				ARMOD+=('Business::ISBN');		ARMOD+=('Business::ISBN::Data');
+	ARMOD+=('Data::Dump');			ARMOD+=('DB_File');				ARMOD+=('DBD::SQLite');
+	ARMOD+=('DBI');					ARMOD+=('Digest');				ARMOD+=('Encode::Detect');
+	ARMOD+=('Error');				ARMOD+=('ExtUtils::CBuilder');	ARMOD+=('ExtUtils::ParseXS');
+	ARMOD+=('Getopt::Long');		ARMOD+=('Inline');				ARMOD+=('IO::String');	
+	ARMOD+=('IO::Zlib');			ARMOD+=('IP::Country');			ARMOD+=('Mail::SPF');
+	ARMOD+=('Mail::SPF::Query');	ARMOD+=('Module::Build');		ARMOD+=('Net::CIDR::Lite');
+	ARMOD+=('Net::DNS');			ARMOD+=('Net::LDAP');			ARMOD+=('Net::DNS::Resolver::Programmable');
+	ARMOD+=('NetAddr::IP');			ARMOD+=('Parse::RecDescent');	ARMOD+=('Test::Harness');
+	ARMOD+=('Test::Manifest');		ARMOD+=('Text::Balanced');		ARMOD+=('URI');	
+	ARMOD+=('version');				ARMOD+=('Digest');				ARMOD+=('Digest');	
+fi
+
 # add to array if the user is wants spamassassin
 if [ "$SA" = "1" ]; then
 	ARMOD+=('Mail::SpamAssassin');
@@ -395,6 +436,10 @@ if [ \! -d /var/spool/MailScanner ]; then
 	mkdir -p /var/spool/MailScanner/incoming
 	mkdir -p /var/spool/MailScanner/incoming/Locks
 	mkdir -p /var/spool/MailScanner/quarantine
+	mkdir -p /var/spool/mqueue
+	chown root /var/spool/mqueue
+	chgrp bin  /var/spool/mqueue
+	chmod u=rwx,g=rx,o-rwx /var/spool/mqueue
 	mkdir -p /var/spool/mqueue.in
 	chown root /var/spool/mqueue.in
 	chgrp bin  /var/spool/mqueue.in

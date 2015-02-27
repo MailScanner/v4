@@ -108,6 +108,8 @@ mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/
 mkdir -p ${RPM_BUILD_ROOT}/etc/cron.hourly
 mkdir -p ${RPM_BUILD_ROOT}/etc/cron.daily
 mkdir -p ${RPM_BUILD_ROOT}/etc/sysconfig
+mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue
+mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue/.hoststat
 mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue.in
 mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue.in/.hoststat
 #mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/incoming
@@ -432,6 +434,8 @@ exit 0
 %defattr (644,root,root)
 %attr(700,root,root) %dir /var/spool/mqueue
 %attr(700,root,root) %dir /var/spool/mqueue/.hoststat
+%attr(700,root,root) %dir /var/spool/mqueue.in
+%attr(700,root,root) %dir /var/spool/mqueue.in/.hoststat
 #%attr(700,root,root) %dir /var/spool/MailScanner/incoming
 #%attr(700,root,root) %dir /var/spool/MailScanner/quarantine
 %attr(700,root,root) /var/run/MailScanner.pid
