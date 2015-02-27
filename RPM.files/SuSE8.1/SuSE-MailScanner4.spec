@@ -1,40 +1,43 @@
-%define version 4.85.1
-%define release 1
 %define name    mailscanner
+%define version VersionNumberHere
+%define release ReleaseNumberHere
 
 Name:        %{name}
 Version:     %{version}
 Release:     %{release}
-Summary:     E-Mail Gateway Virus Scanner and Spam Detector
+Summary:     Email Gateway Virus Scanner with Malware, Phishing, and Spam Detection
 Group:       System Environment/Daemons
-License:     GPL
-Vendor:      Electronics and Computer Science, University of Southampton
-Packager:    Julian Field <mailscanner@ecs.soton.ac.uk>
+License:     GPLv2+
+Vendor:      MailScanner Community
+Packager:    Jerry Benton <mailscanner@mailborder.com>
 URL:         http://www.mailscanner.info/
 #Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-Source:      %{name}-%{version}-%{release}.tgz
+#Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
+Requires:     perl >= 5.005, binutils, gcc, glibc-devel, libaio, make, man-pages, man-pages-overrides, patch, rpm, tar, time, unzip, which, zip, openssl-devel, perl(Archive::Zip), perl(bignum), perl(Carp), perl(Compress::Zlib), perl(Compress::Raw::Zlib), perl(Convert::TNEF), perl(Data::Dumper), perl(Date::Parse), perl(DBD::SQLite), perl(DBI), perl(Digest::HMAC), perl(Digest::MD5), perl(Digest::SHA1), perl(DirHandle), perl(ExtUtils::MakeMaker), perl(Fcntl), perl(File::Basename), perl(File::Copy), perl(File::Path), perl(File::Spec), perl(File::Temp), perl(FileHandle), perl(Filesys::Df), perl(Getopt::Long), perl(Inline::C), perl(IO), perl(IO::File), perl(IO::Pipe), perl(IO::Stringy), perl(HTML::Entities), perl(HTML::Parser), perl(HTML::Tagset), perl(HTML::TokeParser), perl(Mail::Field), perl(Mail::Header), perl(Mail::IMAPClient), perl(Mail::Internet), perl(Math::BigInt), perl(Math::BigRat), perl(MIME::Base64), perl(MIME::Decoder), perl(MIME::Decoder::UU), perl(MIME::Head), perl(MIME::Parser), perl(MIME::QuotedPrint), perl(MIME::Tools), perl(MIME::WordDecoder), perl(Net::CIDR), perl(Net::DNS), perl(Net::IP), perl(OLE::Storage_Lite), perl(Pod::Escapes), perl(Pod::Simple), perl(POSIX), perl(Scalar::Util), perl(Socket), perl(Storable), perl(Test::Harness), perl(Test::Pod), perl(Test::Simple), perl(Time::HiRes), perl(Time::localtime), perl(Sys::Hostname::Long), perl(Sys::SigAction), perl(Sys::Syslog)
+Provides:	  perl(MailScanner), perl(MailScanner::Antiword), perl(MailScanner::BinHex), perl(MailScanner::Config), perl(MailScanner::ConfigSQL), perl(MailScanner::CustomConfig), perl(MailScanner::FileInto), perl(MailScanner::GenericSpam), perl(MailScanner::LinksDump), perl(MailScanner::Lock), perl(MailScanner::Log), perl(MailScanner::Mail), perl(MailScanner::MCP), perl(MailScanner::MCPMessage), perl(MailScanner::Message), perl(MailScanner::MessageBatch), perl(MailScanner::Quarantine), perl(MailScanner::Queue), perl(MailScanner::RBLs), perl(MailScanner::MCPMessage), perl(MailScanner::Message), perl(MailScanner::MCP), perl(MailScanner::SA), perl(MailScanner::Sendmail), perl(MailScanner::SMDiskStore), perl(MailScanner::SweepContent), perl(MailScanner::SweepOther), perl(MailScanner::SweepViruses), perl(MailScanner::TNEF), perl(MailScanner::Unzip), perl(MailScanner::WorkArea), perl(MIME::Parser::MailScanner)
+Source:      %{name}-%{version}.tgz
 BuildRoot:   %{_tmppath}/%{name}-root
 BuildArchitectures: noarch
 
 %description
-MailScanner is a freely distributable E-Mail gateway virus scanner and
-spam detector. It uses Postfix, sendmail, ZMailer, Qmail or Exim as its basis,
-and a choice of 22 commercial virus scanning engines to do the actual
-virus scanning.  It can decode and scan attachments intended solely
-for Microsoft Outlook users (MS-TNEF). If possible, it will disinfect
-infected documents and deliver them automatically. It provides protection
-against many security vulnerabilities in widely-used e-mail programs
-such as Eudora and Microsoft Outlook. It will also selectively filter
-the content of email messages to protect users from offensive content
-such as pornographic spam. It also has features which protect it against
-Denial Of Service attacks.
+MailScanner is a freely distributable email gateway virus scanner with
+malware, phishing, and spam detection. It supports Postfix, sendmail, 
+ZMailer, Qmail or Exim mail transport agents and a choice of 22 
+open source and commercial virus scanning engines for virus scanning.  
+It can decode and scan attachments intended solely for Microsoft Outlook 
+users (MS-TNEF). If possible, it will disinfect infected documents and 
+deliver them automatically. It provides protection against many security 
+vulnerabilities in widely-used e-mail programs such as Eudora and 
+Microsoft Outlook. It will also selectively filter the content of email 
+messages to protect users from offensive content such as pornographic spam. 
+It also has features which protect it against Denial Of Service attacks.
 
-After installation, you must install one of the supported commercial anti-
-virus packages.
+After installation, you must install one of the supported open source or
+commercial antivirus packages if not installed using the MailScanner
+installation script.
 
-This has been tested on SuSE Linux 8.0, 8.1, 9.1 and 10. Read "man rpm"
-if you have dependency problems.
+This has been tested on openSuSE Linux 13.2. Read "man rpm" if you have
+dependency problems.
 
 %prep
 %setup
@@ -184,9 +187,6 @@ install etc/conf.d/README ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d/
 # the settings are evaluated as they could be set at any point within the
 # files, giving an unknown value of the %variable% at that point.
 #
-# --
-# Jules
-# MailScanner@ecs.soton.ac.uk
 #EOREADME
 
 while read f

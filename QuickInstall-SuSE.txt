@@ -1,0 +1,48 @@
+Mailscanner Quick Install Notes
+
+2015-02-27
+Jerry Benton < mailscanner@mailborder.com >
+
+This describes the steps necessary to install MailScanner on SuSE.
+
+
+Installation
+
+- Ensure that your system has internet access. This is required to 
+  install numerous packages via zypper.
+   
+- Install the MailScanner package, by running the "./install.sh" script
+  contained in the distribution directory.
+
+- Install one or more supported antivirus packages. Virtually all Unix
+  antivirus packages are supported. The install.sh script will give 
+  you the option to install the free Clam AV package during setup.
+
+- You may need to edit the file /etc/MailScanner/virus.scanners.conf
+  to set the installation directory you used for your virus scanners.
+  You will be able to find this out by running "MailScanner --lint"
+  and reading the output to see if all your virus scanners correctly
+  spotted the test. MailScanner should automatically find all the
+  antivirus packages you have installed.
+
+- Stop any old versions of MailScanner by running
+
+   service MailScanner stop
+
+- Check your configuration by running
+
+    MailScanner --lint
+
+- Stop and disable your original sendmail setup. To do this,
+
+    service sendmail stop
+    chkconfig sendmail off
+    
+    Note that you will need to replace "sendmail" with the MTA you are
+    using such as postfix or exim.
+
+- Enable and start your new MailScanner setup.
+
+    chkconfig MailScanner on
+    service MailScanner restart
+    
