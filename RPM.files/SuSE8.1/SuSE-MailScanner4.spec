@@ -234,9 +234,6 @@ stored.virus.message.txt
 EOF
 done
 
-install etc/reports/de/README.1ST ${RPM_BUILD_ROOT}/etc/MailScanner/reports/de
-install etc/reports/se/README     ${RPM_BUILD_ROOT}/etc/MailScanner/reports/se
-
 while read f
 do
   install etc/rules/$f ${RPM_BUILD_ROOT}/etc/MailScanner/rules
@@ -552,7 +549,6 @@ exit 0
 %config(noreplace) /etc/MailScanner/reports/de/recipient.spam.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/recipient.mcp.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/README.1ST
 %config(noreplace) /etc/MailScanner/reports/de/sender.error.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/sender.filename.report.txt
 %config(noreplace) /etc/MailScanner/reports/de/sender.spam.rbl.report.txt
@@ -769,7 +765,6 @@ exit 0
 %config(noreplace) /etc/MailScanner/reports/se/recipient.spam.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/recipient.mcp.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/README
 %config(noreplace) /etc/MailScanner/reports/se/sender.error.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/sender.filename.report.txt
 %config(noreplace) /etc/MailScanner/reports/se/sender.spam.rbl.report.txt
