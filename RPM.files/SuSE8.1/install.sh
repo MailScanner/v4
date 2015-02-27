@@ -3,7 +3,7 @@
 # MailScanner installation script for SuSE based systems
 # 
 # This script installs the required software for
-# MailScanner via yum and CPAN based on user input.  
+# MailScanner via zypper and CPAN based on user input.  
 #
 # Tested distributions: 	SuSE 13.2
 #
@@ -322,15 +322,12 @@ if [ $CPANOPTION != 1 ]; then
 fi
 
 # base system packages
-BASEPACKAGES="binutils gcc glibc-devel libaio1 patch make man-pages patch rpm tar time unzip which zip libtool perl curl wget openssl bzip2 tnef unrar razor-agents";
+BASEPACKAGES="binutils gcc glibc-devel libaio1 patch make man-pages patch rpm tar time unzip which zip libtool perl curl wget openssl libopenssl-devel bzip2 tnef unrar razor-agents";
 
 # Packages available in the suse base 13.2. If the user elects not to use EPEL or if the 
 # package is not available for their distro release it will be ignored during the install.
 #
 MOREPACKAGES="perl-Archive-Zip perl-Convert-BinHex perl-Convert-TNEF perl-DBD-SQLite perl-DBI perl-Digest-HMAC perl-Digest-SHA1 perl-ExtUtils-MakeMaker perl-File-ShareDir-Install perl-File-Temp perl-Filesys-Df perl-Getopt-Long-Descriptive perl-IO-stringy perl-HTML-Parser perl-HTML-Tagset perl-Inline perl-Mail-DKIM perl-Mail-SPF perl-MailTools perl-MIME-tools perl-Net-CIDR-Set perl-Net-DNS perl-Net-IP perl-OLE-Storage_Lite perl-Scalar-List-Utils perl-razor-agents perl-Sys-Hostname-Long perl-Sys-SigAction perl-Test-Pod perl-TimeDate perl-URI ";
-
-# missing 
-# perl-Archive-Tar perl-Compress-Raw-Zlib perl-Compress-Zlib perl-CPAN perl-Env perl-IO-Zlib perl-Mail-IMAPClient perl-Pod-Escapes perl-Pod-Simple perl-Storable perl-Time-HiRes
 
 # the array of perl modules needed
 ARMOD=();
@@ -399,6 +396,7 @@ timewait 2
 # install base packages
 $ZYPPER --non-interactive install $BASEPACKAGES
 
+# install this separate in case it conflicts
 if [ "x$MTAOPTION" != "x" ]; then
 	$ZYPPER --non-interactive install $MTAOPTION
 fi
@@ -468,7 +466,7 @@ clear
 echo;
 echo "Installing available Perl packages, Clam AV (if elected), and ";
 echo "Spamassassin (if elected) via zypper. You can safely ignore any";
-echo "subsequent 'No package available' errors."; echo;
+echo "subsequent warnings from zypper."; echo;
 timewait 3
 $ZYPPER --non-interactive install $MOREPACKAGES $CAVOPTION $SAOPTION
 

@@ -16,9 +16,9 @@ export DEVBASEDIR
 
 #vi mailscanner/bin/mailscanner.sbin www/ChangeLog www/index.html www/downloads.html Build.tarball RPM.files/Perl8.0/MailScanner4.spec RPM.files/Perl8.0/Build.tarball RPM.files/SuSE8.1/SuSE-MailScanner4.spec RPM.files/SuSE8.1/Build.tarball
 
-echo Please tell me the version number (x.xx.x):
+echo "Please tell me the version number (x.xx.x):";
 read MSVERSION
-echo And the build number (-x):
+echo "And the build number (-x):";
 read MSBUILD
 FULLMSVER=$MSVERSION-$MSBUILD
 
@@ -26,28 +26,26 @@ FULLMSVER=$MSVERSION-$MSBUILD
 export MSVERSION MSBUILD FULLMSVER
 
 # mailscanner.conf guide build
-echo Building MailScanner.conf index
+echo "Building MailScanner.conf index";
 sh $DEVBASEDIR/config.index/make.sh
 
 # latest phishing sites
-echo Fetching latest phishing.bad.sites.conf file
+echo "Fetching latest phishing.bad.sites.conf file";
 wget --no-check-certificate -O /$DEVBASEDIR/mailscanner/etc/phishing.bad.sites.conf http://www.mailscanner.eu/phishing.bad.sites.conf
 
 # tarball build
-echo Building tar distribution
-sh $DEVBASEDIR/Build.tarball
-
-# SuSE - yuck man
-echo Building SuSE distribution
-cd $DEVBASEDIR/RPM.files/SuSE8.1
+echo "Building tar distribution in $HOME/msbuilds/tar";
 ./Build.tarball
 
+# SuSE - yuck man
+echo "Building SuSE distribution in $HOME/msbuilds/suse";
+./Build.suse
+
 # redhat
-echo "Building RPM distribution in $HOME/msbuilds/rpm"";
-RPMOUT="$HOME/msbuilds/rpm"";
-export RPMOUT;
-#cd $DEVBASEDIR/RPM.files/Perl8.0
-sh $DEVBASEDIR/Build.rpmpkg
+echo "Building RPM distribution in $HOME/msbuilds/rpm";
+RPMOUT="$HOME/msbuilds/rpm";
+export RPMOUT
+./Build.rpmpkg
 
 # copy to where ever later
 echo 'Copying distributions:'

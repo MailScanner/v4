@@ -460,7 +460,12 @@ echo;
 timewait 2
 
 # install base packages
-$YUM -y install $BASEPACKAGES $EPELOPTION $MTAOPTION
+$YUM -y install $BASEPACKAGES $EPELOPTION
+
+# install this separate in case it conflicts
+if [ "x$MTAOPTION" != "x" ]; then
+	$YUM -y install $MTAOPTION
+fi
 
 # make sure rpm is available
 if [ -x /bin/rpm ]; then
