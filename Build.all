@@ -14,7 +14,7 @@
 DEVBASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export DEVBASEDIR
 
-#vi mailscanner/bin/mailscanner.sbin www/ChangeLog www/index.html www/downloads.html Build.tarball RPM.files/Perl8.0/MailScanner4.spec RPM.files/Perl8.0/Build.tarball RPM.files/SuSE8.1/SuSE-MailScanner4.spec RPM.files/SuSE8.1/Build.tarball
+#vi mailscanner/bin/mailscanner.sbin www/ChangeLog www/index.html www/downloads.html Build.tarball RPM.files/RHEL/MailScanner4.spec RPM.files/RHEL/Build.tarball RPM.files/SuSE/SuSE-MailScanner4.spec RPM.files/SuSE/Build.tarball
 
 echo "Please tell me the version number (x.xx.x):";
 read MSVERSION
@@ -52,9 +52,9 @@ echo 'Copying distributions:'
 sleep 2
 #cd /root/build/tar
 #scp MailScanner-install-${MSVERSION}-${MSBUILD}.tar.gz admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/tar/
-#cd /msdev/v4/RPM.files/SuSE8.1
+#cd /msdev/v4/RPM.files/SuSE
 #scp MailScanner-${MSVERSION}-${MSBUILD}.suse.tar.gz admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/suse/
-#cd /msdev/v4/RPM.files/Perl8.0
+#cd /msdev/v4/RPM.files/RHEL
 #scp MailScanner-${MSVERSION}-${MSBUILD}.rpm.tar.gz admin@server.jules.fm:domains/mailscanner.info/public_html/files/4/rpm/
 #cd /usr/src/redhat/SRPMS
 #echo 'Pausing...'

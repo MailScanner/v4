@@ -64,7 +64,7 @@ if [ ! -f '/tmp/MailScanner.conf.index.html' ]; then
 fi
 
 # the source directory
-SRCDIR=$DEVBASEDIR/RPM.files/Perl8.0
+SRCDIR=$DEVBASEDIR/RPM.files/RHEL
 
 # version info 
 BUILD=$MSBUILD
@@ -172,7 +172,7 @@ perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/etc/MailScanner.conf
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/bin/mailscanner
 
 # do the same for MailScanner4.spec
-cp -f $DEVBASEDIR/RPM.files/Perl8.0/MailScanner4.spec ~/rpmbuild/SPECS/mailscanner.spec
+cp -f $DEVBASEDIR/RPM.files/RHEL/MailScanner4.spec ~/rpmbuild/SPECS/mailscanner.spec
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' ~/rpmbuild/SPECS/mailscanner.spec
 perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' ~/rpmbuild/SPECS/mailscanner.spec
 
