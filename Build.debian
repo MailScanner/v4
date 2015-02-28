@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+# Checked and updated to be more streamlined by
+# Jerry Benton
+# 24 FEB 2015
+
+# this Build.debian script should be located in the base
+# directory when run. 
+
+# make sure this is run from the base directory
+if [ ! -d 'RPM.files' ]; then
+	echo 'This script must be executed from the base directory.';
+	echo;
+	exit 192
+fi
+
+# directory we are in
+THISCURDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+# where the final file will be copied
+FILEOUT="$HOME/msbuilds/deb";
+export FILEOUT;
+
+# check to see if the output directory exists
+if [ ! -d "$FILEOUT" ]; then
+	mkdir -p $FILEOUT
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$MSVERSION" ]; then
+	echo "Please tell me the version number (x.xx.x): ";
+	read MSVERSION
+	export MSVERSION
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$MSBUILD" ]; then
+	echo "And the build number (-x): ";
+	read MSBUILD	
+	export MSBUILD
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$FULLMSVER" ]; then
+	FULLMSVER=$MSVERSION-$MSBUILD
+	export FULLMSVER
+fi
+
+# if not set from the "Build.all" script
+if [ -z "$DEVBASEDIR" ]; then
+	DEVBASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+	#echo "You current directory is $THISCURDIR"; echo;
+	#echo "Enter the parent directory of RPM.files without the trailing slash: ";
+	#read DEVBASEDIR
+	export DEVBASEDIR
+fi
+
+# create this if missing
+if [ ! -f '/tmp/MailScanner.conf.index.html' ]; then
+	sh $DEVBASEDIR/config.index/make.sh
+fi
+
+# our working directory
+WORK="/tmp/mailscanner-$FULLMSVER";
+
+# delete work tmp if already exists
+if [ -d $WORK ]; then
+   rm -rf $WORK
+fi
+
+# make working dir and subs
+mkdir -p $WORK
+mkdir -p $WORK/{var,usr,etc}
+mkdir -p $WORK/var/{lock/subsys,lock/MailScanner,lib/MailScanner,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
+mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
+mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner}
+mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
+mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
+mkdir -p $WORK/etc/MailScanner/{rules,mcp,autoupdate,CustomFunctions,conf.d,wrapper,Custom}
+
+# copy the language files
+for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
+do
+  while read f 
+  do
+    cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/usr/share/MailScanner/reports/$lang
+  done << EOF
+deleted.content.message.txt
+deleted.filename.message.txt
+deleted.size.message.txt
+deleted.virus.message.txt
+disinfected.report.txt
+inline.sig.html
+inline.sig.txt
+inline.spam.warning.txt
+inline.warning.html
+inline.warning.txt
+languages.conf
+recipient.spam.report.txt
+recipient.mcp.report.txt
+rejection.report.txt
+sender.content.report.txt
+sender.error.report.txt
+sender.filename.report.txt
+sender.spam.rbl.report.txt
+sender.spam.report.txt
+sender.spam.sa.report.txt
+sender.mcp.report.txt
+sender.size.report.txt
+sender.virus.report.txt
+stored.content.message.txt
+stored.filename.message.txt
+stored.size.message.txt
+stored.virus.message.txt
+EOF
+done
+
+
+
+
+
+
