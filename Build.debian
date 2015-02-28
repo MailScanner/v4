@@ -79,12 +79,12 @@ mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.work
 mkdir -p $WORK/etc/MailScanner/{rules,mcp,autoupdate,CustomFunctions,conf.d,wrapper,Custom}
 
 # copy the language files
-for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
+for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca 
 do
-  while read f 
-  do
-    cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/usr/share/MailScanner/reports/$lang
-  done << EOF
+	while read f
+	do
+		cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/usr/share/MailScanner/reports/$lang
+	done << EOF
 deleted.content.message.txt
 deleted.filename.message.txt
 deleted.size.message.txt
@@ -115,6 +115,17 @@ stored.virus.message.txt
 EOF
 done
 
+# mailscanner rules
+while read f 
+do
+	cp $DEVBASEDIR/mailscanner/etc/rules/$f $WORK/etc/MailScanner/rules
+done << EOF
+EXAMPLES
+README
+spam.whitelist.rules
+bounce.rules
+max.message.size.rules
+EOF
 
 
 
