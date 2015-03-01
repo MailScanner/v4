@@ -73,7 +73,7 @@ mkdir -p $WORK
 mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{lock/subsys,lock/MailScanner,lib/MailScanner,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
-mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner}
+mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner,lib/MailScanner}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
 mkdir -p $WORK/etc/MailScanner/{rules,mcp,autoupdate,CustomFunctions,conf.d,wrapper,Custom}
@@ -126,6 +126,11 @@ spam.whitelist.rules
 bounce.rules
 max.message.size.rules
 EOF
+
+# wrappers
+cp $DEVBASEDIR/mailscanner/lib/*autoupdate $WORK/etc/MailScanner/autoupdate
+cp $DEVBASEDIR/mailscanner/lib/*wrapper $WORK/usr/lib/MailScanner
+
 
 
 
