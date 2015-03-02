@@ -359,7 +359,7 @@ qmailintdhashnumber		1
 [Simple,Other]
 cachetiming		1800,300,10800,172800,600
 ClamWatchFiles		/usr/local/share/clamav/*.cvd
-CustomFunctionsDir	/usr/lib/MailScanner/MailScanner/CustomFunctions
+CustomFunctionsDir	/usr/share/MailScanner/MailScanner/CustomFunctions
 FileCommand		/usr/bin/file
 FirstCheck		mcp
 getipfromheader		0

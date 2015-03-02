@@ -116,7 +116,7 @@ fi
 
 
 SOPHOS=/usr/local/Sophos
-SCRIPTS=/usr/lib/MailScanner
+SCRIPTS=/usr/share/MailScanner
 COMPD=solaris.intel.tar.Z
 DISTRIB=solaris.intel.tar
 

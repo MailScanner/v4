@@ -1,3 +1,9 @@
+03/02/2015 Changes in    v4.85.2-1
+==================================
+* Updates *
+- Moved structure to /usr/share/MailScanner to comply with 
+  Filesystem Hierarchy Standard (FHS) 
+
 03/02/2015 New in Version 4.85.1-1
 ==================================
 * Fixes *

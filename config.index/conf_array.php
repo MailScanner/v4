@@ -476,7 +476,7 @@ Archive Mail = /var/spool/MailScanner/archive',
     'external' => 'customfunctionsdir',
     'type' => 'other',
     'ruleset' => 'no',
-    'default' => '/usr/lib/MailScanner/MailScanner/CustomFunctions',
+    'default' => '/usr/share/MailScanner/MailScanner/CustomFunctions',
     'name' => 'Custom Functions Dir',
     'desc' => ' Where to put the code for your "Custom Functions". No code in this
  directory should be over-written by the installation or upgrade process.

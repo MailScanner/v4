@@ -25,7 +25,7 @@
 # 10.2.3.4 # Complete exact IP address
 # 
 # You need to copy the
-# cp SpamWhiteList.pm /usr/lib/MailScanner/MailScanner/CustomFunctions/
+# cp SpamWhiteList.pm /usr/share/MailScanner/MailScanner/CustomFunctions/
 # 
 # and then restart MailScanner completely.
 # 

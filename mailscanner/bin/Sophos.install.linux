@@ -144,7 +144,7 @@ fi
 
 
 SOPHOS=/usr/local/Sophos
-SCRIPTS=/usr/lib/MailScanner
+SCRIPTS=/usr/share/MailScanner
 COMPD=linux.intel.libc6.tar.Z
 DISTRIB=linux.intel.libc6.tar
 

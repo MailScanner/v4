@@ -29,9 +29,9 @@ $VERSION = substr q$Revision: 5102 $, 10;
 #       end in ".rule" or ".rules".
 #
 # Installation Instructions:
-# 1. Copy this file into /usr/lib/MailScanner/MailScanner/CustomFunctions/
+# 1. Copy this file into /usr/share/MailScanner/MailScanner/CustomFunctions/
 #
-# 2. In /usr/lib/MailScanner/MailScanner/ConfigDefs.pl you need to add
+# 2. In /usr/share/MailScanner/MailScanner/ConfigDefs.pl you need to add
 # RandomSignatures
 # on a line on its own at the very end of the file.
 #

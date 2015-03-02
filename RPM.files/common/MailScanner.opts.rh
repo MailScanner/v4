@@ -6,7 +6,7 @@
 #
 # Set-up variables to allow MailScanner functions to be returned
 #
-MSLIB=/usr/lib/MailScanner
+MSLIB=/usr/share/MailScanner
 MSCONF=/etc/MailScanner/MailScanner.conf
 CMD="perl -I$MSLIB -MMailScanner::Config"
 

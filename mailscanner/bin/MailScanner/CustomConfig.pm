@@ -523,7 +523,7 @@ sub SQLLogging {
 #    Spam Actions              = &InternalActions
 #    High Scoring Spam Actions = &InternalActions
 # in your MailScanner.conf file, having added this code to
-#    /usr/lib/MailScanner/MailScanner/CustomConfig.pm
+#    /usr/share/MailScanner/MailScanner/CustomConfig.pm
 #
 # It uses a configuration file whose path is
 my($InternalAccountList) = '/etc/MailScanner/internal.accounts.conf';
@@ -1645,7 +1645,7 @@ __DATA__
 #
 #
 
-#!/usr/bin/perl -U -I/usr/lib/MailScanner
+#!/usr/bin/perl -U -I/usr/share/MailScanner
 
 #
 #   MailScanner - SMTP E-Mail Virus Scanner
@@ -1675,7 +1675,7 @@ __DATA__
 #      SO17 1BJ
 #      United Kingdom
 #
-push @INC,"/usr/lib/MailScanner","/opt/MailScanner/lib";
+push @INC,"/usr/share/MailScanner","/opt/MailScanner/lib";
 use FileHandle;
 use Fcntl qw(:DEFAULT :flock);
 use Sys::Syslog;
