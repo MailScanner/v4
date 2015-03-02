@@ -630,8 +630,17 @@ sub CopyEntireMessage {
   my $this = shift;
   my($message, $targetdir, $targetfile, $uid, $gid, $changeowner) = @_;
   
-  $targetfile =~/([\w\d]{9,15}\.[\w\d]{5})/;
-  $targetfile = $1;
+  #$targetfile =~/([\w\d]{9,15}\.[\w\d]{5})/;
+  #$targetfile = $1;
+  if ($targetfile =~ /([A-F\d]{8,15}\.[A-F\d]{5})/) {
+  	$targetfile = $1;
+  } else {
+	if ($targetfile =~ /([\w\d\.]{4,32})/) {
+		$targetfile = $1;
+	} else {
+		$targetfile = "fallback";
+	}
+  }
 
   #print STDERR "Copying to $targetdir $targetfile\n";
   if (MailScanner::Config::Value('storeentireasdfqf')) {

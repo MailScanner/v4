@@ -71,7 +71,7 @@ fi
 # make working dir and subs
 mkdir -p $WORK
 mkdir -p $WORK/{var,usr,etc}
-mkdir -p $WORK/var/{lock/subsys,lock/MailScanner,lib/MailScanner,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
+mkdir -p $WORK/var/{lock/subsys,lock/MailScanner,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
 mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner/CustomFunctions}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
@@ -132,10 +132,10 @@ cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/Mail
 chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
 
 # perl modules 
+cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/MailScanner/
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/MailScanner/CustomFunctions
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/MailScanner/CustomFunctions/
 
  
 
