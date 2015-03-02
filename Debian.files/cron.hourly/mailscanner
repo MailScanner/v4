@@ -1,0 +1,21 @@
+#! /bin/sh -e
+#
+# Regular cron jobs for the mailscanner package
+#
+# Calls the init-script to start MailScanner if
+# it wasn't stopped by hand (see $stopped_lockfile)
+
+run_mailscanner=0;
+stopped_lockfile=/var/lock/MailScanner/mailscanner.off;
+
+if [ -f /etc/default/mailscanner ];
+then
+	. /etc/default/mailscanner;
+fi;
+
+[ $run_mailscanner = 0 ] && exit 0;
+[ -f $stopped_lockfile ] && exit 0;
+
+invoke-rc.d mailscanner start >/dev/null 2>&1;
+
+exit 0;

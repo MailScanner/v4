@@ -65,8 +65,8 @@ s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
 s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
 s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
 s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/lib/MailScanner.;
-s./opt/MailScanner/bin./usr/lib/MailScanner.;
+s./opt/MailScanner/lib./usr/share/MailScanner.;
+s./opt/MailScanner/bin./usr/share/MailScanner.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 perl -pi - check_MailScanner bin/mailscanner_create_locks bin/processing_messages_alert <<EOF
@@ -78,7 +78,7 @@ s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
 s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
 s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
 s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/lib/MailScanner.;
+s./opt/MailScanner/lib./usr/share/MailScanner.;
 s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
@@ -112,10 +112,10 @@ mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/hu
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/ca
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/rules
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/mcp
-mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/
-mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner
-mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/
+# mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/
+# mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
+# mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/
 mkdir -p ${RPM_BUILD_ROOT}/etc/cron.hourly
 mkdir -p ${RPM_BUILD_ROOT}/etc/cron.daily
 mkdir -p ${RPM_BUILD_ROOT}/etc/sysconfig
@@ -234,7 +234,7 @@ EOF
 
 while read f 
 do
-  install lib/$f ${RPM_BUILD_ROOT}/usr/lib/MailScanner
+  install lib/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner
 done << EOF
 antivir-autoupdate
 antivir-wrapper
@@ -295,12 +295,12 @@ vexira-autoupdate
 vexira-wrapper
 EOF
 
-install bin/MailScanner.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/
+install bin/MailScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/
 
 #BinHex.pm
 while read f 
 do
-  install bin/MailScanner/$f ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/
+  install bin/MailScanner/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/
 done << EOF
 ConfigDefs.pl
 Antiword.pm
@@ -339,11 +339,11 @@ ZMailer.pm
 ZMDiskStore.pm
 EOF
 
-install bin/MailScanner/CustomFunctions/GenericSpamScanner.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/CustomAction.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/GenericSpamScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/CustomAction.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
 
 install etc/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions/
 
@@ -397,7 +397,7 @@ echo Note that you will need to replace the 'sendmail' option
 echo above with your respective MTA. Sendmail, Postfix, Exim, etc.
 echo
 echo If you are using Clam AV, ensure that you check that the user
-echo and group specified in /usr/lib/MailScanner/clamav-wrapper
+echo and group specified in /usr/share/MailScanner/clamav-wrapper
 echo matches the user specified in /etc/passwd.
 echo
 %preun
@@ -890,107 +890,107 @@ exit 0
 %config(noreplace) /etc/MailScanner/rules/max.message.size.rules
 %config(noreplace) /etc/MailScanner/rules/bounce.rules
 
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/antivir-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/antivir-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/avast-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/avast-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/avastd-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/avg-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/avg-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/bitdefender-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/bitdefender-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/clamav-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/clamav-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/css-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/css-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/command-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/drweb-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/esets-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/esets-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/etrust-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/etrust-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/f-prot-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/f-prot-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/f-prot-6-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/f-prot-6-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/f-secure-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/f-secure-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/generic-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/generic-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/inoculan-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/inoculan-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/inoculate-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/kaspersky-autoupdate
-%attr(644,root,root) %config(noreplace) /usr/lib/MailScanner/kaspersky.prf
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/kaspersky-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/kavdaemonclient-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/mcafee-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/mcafee-autoupdate.old
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/mcafee-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/mcafee6-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/mcafee6-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/nod32-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/nod32-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/norman-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/norman-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/panda-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/panda-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/rav-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/rav-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/sophos-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/sophos-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/symscanengine-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/symscanengine-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/trend-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/trend-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/vba32-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/vba32-wrapper
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/vexira-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/lib/MailScanner/vexira-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/antivir-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/antivir-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avast-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avast-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avastd-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avg-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avg-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/bitdefender-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/bitdefender-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/clamav-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/clamav-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/css-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/css-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/command-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/drweb-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/esets-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/esets-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/etrust-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/etrust-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-6-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-6-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-secure-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-secure-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/generic-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/generic-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/inoculan-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/inoculan-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/inoculate-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/kaspersky-autoupdate
+%attr(644,root,root) %config(noreplace) /usr/share/MailScanner/kaspersky.prf
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/kaspersky-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/kavdaemonclient-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee-autoupdate.old
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee6-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee6-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/nod32-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/nod32-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/norman-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/norman-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/panda-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/panda-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/rav-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/rav-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/sophos-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/sophos-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/symscanengine-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/symscanengine-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/trend-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/trend-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vba32-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vba32-wrapper
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vexira-autoupdate
+%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vexira-wrapper
 
-/usr/lib/MailScanner/MailScanner.pm
+/usr/share/MailScanner/MailScanner.pm
 
-#/usr/lib/MailScanner/MailScanner/BinHex.pm
-/usr/lib/MailScanner/MailScanner/Antiword.pm
-/usr/lib/MailScanner/MailScanner/ConfigDefs.pl
-/usr/lib/MailScanner/MailScanner/Config.pm
-/usr/lib/MailScanner/MailScanner/ConfigSQL.pm
-%config(noreplace) /usr/lib/MailScanner/MailScanner/CustomConfig.pm
-%config(noreplace) /usr/lib/MailScanner/MailScanner/CustomFunctions/GenericSpamScanner.pm
-%config(noreplace) /usr/lib/MailScanner/MailScanner/CustomFunctions/MyExample.pm
-%config(noreplace) /usr/lib/MailScanner/MailScanner/CustomFunctions/CustomAction.pm
-%config(noreplace) /usr/lib/MailScanner/MailScanner/CustomFunctions/Ruleset-from-Function.pm
-%config(noreplace) /usr/lib/MailScanner/MailScanner/CustomFunctions/ZMRouterDirHash.pm
-/usr/lib/MailScanner/MailScanner/Exim.pm
-/usr/lib/MailScanner/MailScanner/EximDiskStore.pm
-/usr/lib/MailScanner/MailScanner/FileInto.pm
-/usr/lib/MailScanner/MailScanner/GenericSpam.pm
-/usr/lib/MailScanner/MailScanner/Lock.pm
-/usr/lib/MailScanner/MailScanner/Log.pm
-/usr/lib/MailScanner/MailScanner/Mail.pm
-/usr/lib/MailScanner/MailScanner/MessageBatch.pm
-/usr/lib/MailScanner/MailScanner/Message.pm
-/usr/lib/MailScanner/MailScanner/PFDiskStore.pm
-/usr/lib/MailScanner/MailScanner/Postfix.pm
-/usr/lib/MailScanner/MailScanner/Qmail.pm
-/usr/lib/MailScanner/MailScanner/QMDiskStore.pm
-/usr/lib/MailScanner/MailScanner/Quarantine.pm
-/usr/lib/MailScanner/MailScanner/Queue.pm
-/usr/lib/MailScanner/MailScanner/RBLs.pm
-/usr/lib/MailScanner/MailScanner/SA.pm
-/usr/lib/MailScanner/MailScanner/Sendmail.pm
-/usr/lib/MailScanner/MailScanner/SMDiskStore.pm
-/usr/lib/MailScanner/MailScanner/SweepContent.pm
-/usr/lib/MailScanner/MailScanner/SweepOther.pm
-/usr/lib/MailScanner/MailScanner/SweepViruses.pm
-/usr/lib/MailScanner/MailScanner/SystemDefs.pm
-/usr/lib/MailScanner/MailScanner/MCP.pm
-/usr/lib/MailScanner/MailScanner/MCPMessage.pm
-/usr/lib/MailScanner/MailScanner/TNEF.pm
-/usr/lib/MailScanner/MailScanner/Unzip.pm
-/usr/lib/MailScanner/MailScanner/WorkArea.pm
-/usr/lib/MailScanner/MailScanner/ZMailer.pm
-/usr/lib/MailScanner/MailScanner/ZMDiskStore.pm
+#/usr/share/MailScanner/MailScanner/BinHex.pm
+/usr/share/MailScanner/MailScanner/Antiword.pm
+/usr/share/MailScanner/MailScanner/ConfigDefs.pl
+/usr/share/MailScanner/MailScanner/Config.pm
+/usr/share/MailScanner/MailScanner/ConfigSQL.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomConfig.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/GenericSpamScanner.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/MyExample.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/CustomAction.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/Ruleset-from-Function.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/ZMRouterDirHash.pm
+/usr/share/MailScanner/MailScanner/Exim.pm
+/usr/share/MailScanner/MailScanner/EximDiskStore.pm
+/usr/share/MailScanner/MailScanner/FileInto.pm
+/usr/share/MailScanner/MailScanner/GenericSpam.pm
+/usr/share/MailScanner/MailScanner/Lock.pm
+/usr/share/MailScanner/MailScanner/Log.pm
+/usr/share/MailScanner/MailScanner/Mail.pm
+/usr/share/MailScanner/MailScanner/MessageBatch.pm
+/usr/share/MailScanner/MailScanner/Message.pm
+/usr/share/MailScanner/MailScanner/PFDiskStore.pm
+/usr/share/MailScanner/MailScanner/Postfix.pm
+/usr/share/MailScanner/MailScanner/Qmail.pm
+/usr/share/MailScanner/MailScanner/QMDiskStore.pm
+/usr/share/MailScanner/MailScanner/Quarantine.pm
+/usr/share/MailScanner/MailScanner/Queue.pm
+/usr/share/MailScanner/MailScanner/RBLs.pm
+/usr/share/MailScanner/MailScanner/SA.pm
+/usr/share/MailScanner/MailScanner/Sendmail.pm
+/usr/share/MailScanner/MailScanner/SMDiskStore.pm
+/usr/share/MailScanner/MailScanner/SweepContent.pm
+/usr/share/MailScanner/MailScanner/SweepOther.pm
+/usr/share/MailScanner/MailScanner/SweepViruses.pm
+/usr/share/MailScanner/MailScanner/SystemDefs.pm
+/usr/share/MailScanner/MailScanner/MCP.pm
+/usr/share/MailScanner/MailScanner/MCPMessage.pm
+/usr/share/MailScanner/MailScanner/TNEF.pm
+/usr/share/MailScanner/MailScanner/Unzip.pm
+/usr/share/MailScanner/MailScanner/WorkArea.pm
+/usr/share/MailScanner/MailScanner/ZMailer.pm
+/usr/share/MailScanner/MailScanner/ZMDiskStore.pm
 
 
 %doc %attr(755,root,root) doc/COPYING
