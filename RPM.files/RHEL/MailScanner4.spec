@@ -344,6 +344,7 @@ install bin/MailScanner/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/usr/share
 install bin/MailScanner/CustomFunctions/CustomAction.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
 install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
 install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/MailWatch.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
 
 install etc/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions/
 
@@ -961,6 +962,7 @@ exit 0
 %config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/CustomAction.pm
 %config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/Ruleset-from-Function.pm
 %config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/ZMRouterDirHash.pm
+%config(noreplace) /usr/share/MailScanner/MailScanner/CustomFunctions/MailWatch.pm
 /usr/share/MailScanner/MailScanner/Exim.pm
 /usr/share/MailScanner/MailScanner/EximDiskStore.pm
 /usr/share/MailScanner/MailScanner/FileInto.pm

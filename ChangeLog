@@ -2,7 +2,10 @@
 ==================================
 * Updates *
 - Moved structure to /usr/share/MailScanner to comply with 
-  Filesystem Hierarchy Standard (FHS) 
+  Filesystem Hierarchy Standard (FHS)
+- Added MailWatch.pm to CustomFunctions
+* Fixes *
+- PFDiskStore.pm updated 
 
 03/02/2015 New in Version 4.85.1-1
 ==================================

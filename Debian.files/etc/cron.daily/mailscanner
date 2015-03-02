@@ -50,23 +50,23 @@ if [ "$SPOOLDIR" != "$SPOOLDIRDEFAULT" ]; then
 
         # do what exim-base should have done
         # run tidydb as Debian-exim:Debian-exim.
-				if [ -x /usr/sbin/exim_tidydb ]; then
-						cd $SPOOLDIRDEFAULT/db || exit 1
-						if ! find $SPOOLDIRDEFAULT/db -maxdepth 1 -name '*.lockfile' -or -type f \
+			if [ -x /usr/sbin/exim_tidydb ]; then
+				cd $SPOOLDIRDEFAULT/db || exit 1
+				if ! find $SPOOLDIRDEFAULT/db -maxdepth 1 -name '*.lockfile' -or -type f \
+						-printf '%f\0' | \
+						xargs -0r -n 1 \
+						start-stop-daemon --start --exec /usr/sbin/exim_tidydb \
+						--chuid Debian-exim:Debian-exim -- $SPOOLDIRDEFAULT > /dev/null; then
+		# if we reach this, invoking exim_tidydb from start-stop-daemon has
+		# failed, most probably because of libpam-tmpdir being in use
+		# (see #373786 and #376165)
+						find $SPOOLDIRDEFAULT/db -maxdepth 1 -name '*.lockfile' -or -type f \
 								-printf '%f\0' | \
-								xargs -0r -n 1 \
-								start-stop-daemon --start --exec /usr/sbin/exim_tidydb \
-								--chuid Debian-exim:Debian-exim -- $SPOOLDIRDEFAULT > /dev/null; then
-                # if we reach this, invoking exim_tidydb from start-stop-daemon has
-                # failed, most probably because of libpam-tmpdir being in use
-                # (see #373786 and #376165)
-								find $SPOOLDIRDEFAULT/db -maxdepth 1 -name '*.lockfile' -or -type f \
-										-printf '%f\0' | \
-										su - --shell /bin/bash \
-										--command "xargs -0r -n 1 /usr/sbin/exim_tidydb $SPOOLDIRDEFAULT > /dev/null" \
-										Debian-exim
-						fi
+								su - --shell /bin/bash \
+								--command "xargs -0r -n 1 /usr/sbin/exim_tidydb $SPOOLDIRDEFAULT > /dev/null" \
+								Debian-exim
 				fi
+			fi
 
 		fi
 fi

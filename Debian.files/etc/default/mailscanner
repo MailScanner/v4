@@ -1,4 +1,9 @@
 #
+# Uncomment this line once MailScanner has been fully configured.
+#
+#run_mailscanner=1
+
+#
 # This sets how many days files will remain in the "quarantine" area before
 # being automatically removed.
 #
@@ -18,11 +23,6 @@ run_nice=2
 #
 HOSTNAME=$(hostname)
 export HOSTNAME
-
-#
-# Uncomment this line once MailScanner has been fully configured.
-#
-#run_mailscanner=1
 
 #
 # Lockfile to inform scripts if MailScanner was stopped by hand
