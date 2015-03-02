@@ -456,14 +456,14 @@ exit 0
 %attr(755,root,root) /usr/sbin/analyze_SpamAssassin_cache
 %attr(755,root,root) /usr/sbin/upgrade_MailScanner_conf
 %attr(755,root,root) /usr/sbin/upgrade_languages_conf
-%config(noreplace) %attr(755,root,root) /etc/init.d/MailScanner
+%attr(755,root,root) /etc/init.d/MailScanner
 %attr(755,root,root) /usr/sbin/rcMailScanner
 %attr(755,root,root) /etc/cron.hourly/check_MailScanner
 %config(noreplace) %attr(755,root,root) /etc/cron.hourly/update_virus_scanners
 %attr(755,root,root) /etc/cron.daily/update_phishing_sites
 %attr(755,root,root) /etc/cron.hourly/update_bad_phishing_sites
 %attr(755,root,root) /etc/cron.hourly/processing_messages_alert
-%config(noreplace)%attr(755,root,root) /etc/cron.daily/update_spamassassin
+%config(noreplace) %attr(755,root,root) /etc/cron.daily/update_spamassassin
 %config(noreplace) %attr(755,root,root) /etc/cron.daily/clean.quarantine
 #%config(noreplace) %attr(755,root,root) /etc/cron.daily/clean.SA.cache
 %config(noreplace) %attr(644,root,root) /etc/sysconfig/MailScanner
@@ -473,7 +473,7 @@ exit 0
 #%doc /usr/share/man/man1/MailScanner.1.gz
 %doc /usr/share/man/man5/MailScanner.conf.5.gz
 
-%config(noreplace) /etc/MailScanner/conf.d/README
+/etc/MailScanner/conf.d/README
 %config(noreplace) /etc/MailScanner/filename.rules.conf
 %config(noreplace) /etc/MailScanner/filetype.rules.conf
 %config(noreplace) /etc/MailScanner/archives.filename.rules.conf
@@ -902,63 +902,63 @@ exit 0
 %config(noreplace) /etc/MailScanner/rules/max.message.size.rules
 %config(noreplace) /etc/MailScanner/rules/bounce.rules
 
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/antivir-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/antivir-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avast-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avast-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avastd-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avg-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/avg-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/bitdefender-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/bitdefender-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/clamav-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/clamav-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/css-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/css-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/command-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/drweb-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/esets-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/esets-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/etrust-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/etrust-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-6-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-prot-6-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-secure-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/f-secure-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/generic-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/generic-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/inoculan-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/inoculan-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/inoculate-wrapper
-%attr(644,root,root) %config(noreplace) /usr/share/MailScanner/kaspersky.prf
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/kaspersky-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/kaspersky-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/kavdaemonclient-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee-autoupdate.old
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee6-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/mcafee6-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/nod32-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/nod32-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/norman-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/norman-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/panda-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/panda-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/rav-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/rav-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/sophos-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/sophos-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/symscanengine-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/symscanengine-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/trend-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/trend-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vba32-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vba32-wrapper
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vexira-autoupdate
-%attr(755,root,root) %config(noreplace) /usr/share/MailScanner/vexira-wrapper
+%attr(755,root,root) /usr/share/MailScanner/antivir-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/antivir-wrapper
+%attr(755,root,root) /usr/share/MailScanner/avast-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/avast-wrapper
+%attr(755,root,root) /usr/share/MailScanner/avastd-wrapper
+%attr(755,root,root) /usr/share/MailScanner/avg-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/avg-wrapper
+%attr(755,root,root) /usr/share/MailScanner/bitdefender-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/bitdefender-wrapper
+%attr(755,root,root) /usr/share/MailScanner/clamav-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/clamav-wrapper
+%attr(755,root,root) /usr/share/MailScanner/css-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/css-wrapper
+%attr(755,root,root) /usr/share/MailScanner/command-wrapper
+%attr(755,root,root) /usr/share/MailScanner/drweb-wrapper
+%attr(755,root,root) /usr/share/MailScanner/esets-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/esets-wrapper
+%attr(755,root,root) /usr/share/MailScanner/etrust-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/etrust-wrapper
+%attr(755,root,root) /usr/share/MailScanner/f-prot-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/f-prot-wrapper
+%attr(755,root,root) /usr/share/MailScanner/f-prot-6-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/f-prot-6-wrapper
+%attr(755,root,root) /usr/share/MailScanner/f-secure-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/f-secure-wrapper
+%attr(755,root,root) /usr/share/MailScanner/generic-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/generic-wrapper
+%attr(755,root,root) /usr/share/MailScanner/inoculan-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/inoculan-wrapper
+%attr(755,root,root) /usr/share/MailScanner/inoculate-wrapper
+%attr(755,root,root) /usr/share/MailScanner/kaspersky-autoupdate
+%attr(644,root,root) /usr/share/MailScanner/kaspersky.prf
+%attr(755,root,root) /usr/share/MailScanner/kaspersky-wrapper
+%attr(755,root,root) /usr/share/MailScanner/kavdaemonclient-wrapper
+%attr(755,root,root) /usr/share/MailScanner/mcafee-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/mcafee-autoupdate.old
+%attr(755,root,root) /usr/share/MailScanner/mcafee-wrapper
+%attr(755,root,root) /usr/share/MailScanner/mcafee6-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/mcafee6-wrapper
+%attr(755,root,root) /usr/share/MailScanner/nod32-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/nod32-wrapper
+%attr(755,root,root) /usr/share/MailScanner/norman-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/norman-wrapper
+%attr(755,root,root) /usr/share/MailScanner/panda-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/panda-wrapper
+%attr(755,root,root) /usr/share/MailScanner/rav-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/rav-wrapper
+%attr(755,root,root) /usr/share/MailScanner/sophos-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/sophos-wrapper
+%attr(755,root,root) /usr/share/MailScanner/symscanengine-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/symscanengine-wrapper
+%attr(755,root,root) /usr/share/MailScanner/trend-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/trend-wrapper
+%attr(755,root,root) /usr/share/MailScanner/vba32-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/vba32-wrapper
+%attr(755,root,root) /usr/share/MailScanner/vexira-autoupdate
+%attr(755,root,root) /usr/share/MailScanner/vexira-wrapper
 
 /usr/share/MailScanner/MailScanner.pm
 
@@ -1010,6 +1010,9 @@ exit 0
 %doc %attr(755,root,root) doc
 
 %changelog
+* Sun Mar 1 2015 Jerry Benton <mailscanner@mailborder.com>
+- Moved structure to /usr/share/MailScanner
+
 * Wed Feb 04 2015 Jerry Benton <support@mailborder.com>
 - Updated code with 9 years of updates. Wow ...
 
