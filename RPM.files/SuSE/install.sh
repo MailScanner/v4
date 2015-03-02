@@ -538,8 +538,8 @@ if [ -f '/etc/freshclam.conf' ]; then
 		OLDCAVGRP='ClamGroup="clamav"';
 		NEWCAVGRP='ClamGroup="vscan"';
 	
-		perl -pi -e 's/'$OLDCAVUSR'/'$NEWCAVUSR'/;' /usr/lib/MailScanner/clamav-wrapper
-		perl -pi -e 's/'$OLDCAVGRP'/'$NEWCAVGRP'/;' /usr/lib/MailScanner/clamav-wrapper
+		perl -pi -e 's/'$OLDCAVUSR'/'$NEWCAVUSR'/;' /usr/share/MailScanner/clamav-wrapper
+		perl -pi -e 's/'$OLDCAVGRP'/'$NEWCAVGRP'/;' /usr/share/MailScanner/clamav-wrapper
 		
 		mkdir -p /var/run/clamav
 		chown vscan:vscan /var/run/clamav
