@@ -76,10 +76,38 @@ mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/do
 mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner/CustomFunctions}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
-mkdir -p $WORK/etc/MailScanner/{rules,mcp,CustomFunctions,conf.d,wrapper,Custom}
+mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 
 # etc
-# copy the language files
+# cron, default, init.d, logcheck
+cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/
+cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/
+cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/
+cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/
+cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/
+cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/
+chmod +x $WORK/etc/init.d/mailscanner $WORK/etc/cron.hourly/mailscanner $WORK/etc/cron.daily/mailscanner
+
+# etc/MailScanner
+cp $DEVBASEDIR/mailscanner/etc/*.conf $WORK/etc/MailScanner/
+cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf.with.mcp $WORK/etc/MailScanner/
+cp $DEVBASEDIR/mailscanner/etc/conf.d/README $WORK/etc/MailScanner/conf.d/
+cp $DEVBASEDIR/mailscanner/etc/mcp/* $WORK/etc/MailScanner/mcp/
+mv $WORK/etc/MailScanner/mailscanner.conf $WORK/etc/MailScanner/MailScanner.conf
+
+# etc/MailScanner/rules
+while read f 
+do
+	cp $DEVBASEDIR/mailscanner/etc/rules/$f $WORK/etc/MailScanner/rules
+done << EOF
+EXAMPLES
+README
+spam.whitelist.rules
+bounce.rules
+max.message.size.rules
+EOF
+
+# etc/MailScanner/reports
 for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca 
 do
 	while read f
@@ -116,34 +144,8 @@ stored.virus.message.txt
 EOF
 done
 
-# etc
-# mailscanner rules
-while read f 
-do
-	cp $DEVBASEDIR/mailscanner/etc/rules/$f $WORK/etc/MailScanner/rules
-done << EOF
-EXAMPLES
-README
-spam.whitelist.rules
-bounce.rules
-max.message.size.rules
-EOF
+# usr/sbin
 
-# etc
-# cron, default, init.d, logcheck
-cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/
-cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/
-cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/
-cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/
-cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/
-cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/
-chmod +x $WORK/etc/init.d/mailscanner $WORK/etc/cron.hourly/mailscanner $WORK/etc/cron.daily/mailscanner
-
-# etc/MailScanner
-
-
-# usr
-#
 
 # wrappers and updates
 cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
