@@ -1,0 +1,6 @@
+# Add your custom Phishing safe sites to the
+# phishing.safe.sites.custom file in your MailScanner 
+# directory. Note that phishing.safe.sites.conf is
+# overwritten when update_phishing_sites is executed.
+#
+mailscanner.info

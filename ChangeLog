@@ -4,6 +4,8 @@
 - Moved structure to /usr/share/MailScanner to comply with 
   Filesystem Hierarchy Standard (FHS)
 - Added MailWatch.pm to CustomFunctions
+- Added phishing.safe.sites.custom to allow for easier maintenance 
+
 * Fixes *
 - PFDiskStore.pm updated 
 
