@@ -145,6 +145,14 @@ EOF
 done
 
 # usr/sbin
+cp $DEVBASEDIR/mailscanner/bin/d2mbox $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/df2mbox $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin $WORK/usr/sbin/MailScanner
+cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/usr/sbin/
+
+
 
 
 # wrappers and updates
