@@ -216,6 +216,7 @@ EOF
 
 cp -rf $DEVBASEDIR/Debian.files/DEBIAN/ $WORK
 perl -pi -e 's/DebianVersionHere/'$MSVERSION'/;' $WORK/DEBIAN/control
+chmod +x $WORK/DEBIAN/postinst
 
 
 
