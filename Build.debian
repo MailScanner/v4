@@ -227,7 +227,7 @@ chmod +x $WORK/etc/cron.hourly/mailscanner
 chmod +x $WORK/etc/init.d/mailscanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
-#gzip -9 $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5 $WORK/usr/share/doc/mailscanner/changelog
+gzip -9 $WORK/usr/share/doc/mailscanner/changelog
 
 fakeroot dpkg -b $WORK $FILEOUT/mailscanner-$FULLMSVER.deb
 rm -rf $WORK
