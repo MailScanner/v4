@@ -73,8 +73,8 @@ mkdir -p $WORK
 mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{lock/subsys,lock/MailScanner,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/sbin
-mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
-mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner/CustomFunctions}
+#mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
+mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner/CustomFunctions}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
 mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
@@ -148,6 +148,7 @@ done
 # usr/sbin
 cp $DEVBASEDIR/mailscanner/bin/d2mbox $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/df2mbox $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/check_mailscanner $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin $WORK/usr/sbin/MailScanner
 cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
@@ -157,11 +158,13 @@ cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_emails $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
+chmod +x $WORK/usr/sbin/*
 
 # usr/share/man
-cp $DEVBASEDIR/man/*[12345678] $WORK/usr/share/man/man8/
+cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/man8/
+cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
 gzip $WORK/usr/share/man/man8/MailScanner.8
-gzip $WORK/usr/share/man/man8/MailScanner.conf.5
+gzip $WORK/usr/share/man/man5/MailScanner.conf.5
 
 # usr/share/doc
 cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
@@ -181,7 +184,34 @@ cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/Mail
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/MailScanner/CustomFunctions/
 
- 
+# set correct paths
+perl -pi - $WORK/usr/share/MailScanner/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites <<EOF
+s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
+s./opt/MailScanner/var./var/run.;
+s./opt/MailScanner/bin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
+s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
+s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
+s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
+s./opt/MailScanner/etc./etc/MailScanner.;
+s./opt/MailScanner/lib./usr/share/MailScanner.;
+s./opt/MailScanner/bin./usr/share/MailScanner.;
+s./usr/lib/sendmail./usr/sbin/sendmail.;
+EOF
+perl -pi - $WORK/usr/sbin/check_mailscanner $WORK/usr/sbin/mailscanner_create_locks $WORK/usr/sbin/processing_messages_alert <<EOF
+s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s./opt/MailScanner/var./var/run.;
+s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
+s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
+s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
+s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
+s./opt/MailScanner/etc./etc/MailScanner.;
+s./opt/MailScanner/lib./usr/share/MailScanner.;
+s./opt/MailScanner/bin./usr/sbin.;
+s./usr/lib/sendmail./usr/sbin/sendmail.;
+EOF 
 
 
 
