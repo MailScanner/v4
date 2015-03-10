@@ -161,7 +161,7 @@ cp $DEVBASEDIR/mailscanner/bin/update_spamassassin $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
-chmod +x $WORK/usr/sbin/*
+
 
 # usr/share/man
 cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/
@@ -177,7 +177,6 @@ cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/sh
 
 # wrappers and updates
 cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
-chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
 
 # perl modules 
 cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/
@@ -216,8 +215,11 @@ EOF
 
 cp -rf $DEVBASEDIR/Debian.files/DEBIAN/ $WORK
 perl -pi -e 's/DebianVersionHere/'$MSVERSION'/;' $WORK/DEBIAN/control
+find $WORK -type f -exec chmod 0664 {} \;
+find $WORK -type d -exec chmod 0755 {} \;
+chmod +x $WORK/usr/sbin/*
 chmod +x $WORK/DEBIAN/postinst
-
+chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
 
 
 
