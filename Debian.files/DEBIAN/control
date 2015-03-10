@@ -1,18 +1,15 @@
 Package: mailscanner
 Version: DebianVersionHere
+Architecture: all
 Section: mail
 Priority: optional
 Maintainer: Jerry Benton <mailscanner@mailborder.com>
+Description: Open Source Email Gateway
 Build-Depends: debhelper (>= 8.0.0)
 Build-Depends-Indep: perl (>= 5.8.7)
 Standards-Version: 3.9.4
 Homepage: http://www.mailscanner.info
-
-Package: mailscanner
-Architecture: all
-Depends: ${perl:Depends},
-         ${misc:Depends},
-         perl,
+Depends: perl,
          perl-base,
          perl-modules,
          tnef,
@@ -32,7 +29,4 @@ Depends: ${perl:Depends},
          libdbd-sqlite3-perl,
          libsys-syslog-perl,
          libsys-sigaction-perl                 
-Recommends: wget | curl, clamav, clamav-daemon, spamassassin, perl-doc
-Description: Open Source Email Gateway
- Virus, malware, spam and phishing detection.
- 
+Recommends: wget | curl, clamav, clamav-daemon, spamassassin, perl-doc 
