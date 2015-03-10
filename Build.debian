@@ -162,15 +162,16 @@ cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
 
-
 # usr/share/man
-cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/
-cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/
+cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/man8/
+cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
+gzip $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
 
 # usr/share/doc
 cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
 cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
 cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/mailscanner/
+cp $DEVBASEDIR/Debian.files/DEBIAN/copyright $WORK/usr/share/doc/mailscanner/
 
 # /usr/share/linitian/overrides
 cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/
@@ -221,7 +222,9 @@ find . -type d -exec chmod 0755 {} \;
 chmod +x $WORK/usr/sbin/*
 chmod +x $WORK/DEBIAN/postinst
 chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
-
+chmod +x $WORK/etc/cron.daily/mailscanner
+chmod +x $WORK/etc/cron.hourly/mailscanner
+chmod +x $WORK/etc/init.d/mailscanner
 
 
 

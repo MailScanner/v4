@@ -6,9 +6,9 @@ Priority: optional
 Maintainer: Jerry Benton <mailscanner@mailborder.com>
 Description: Open Source Email Gateway
 Homepage: http://www.mailscanner.info
-Depends: perl,
-         perl-base,
-         perl-modules,
+Depends: perl (>=5.8.7),
+         perl-base (>=5.8.7),
+         perl-modules (>=5.8.7),
          tnef,
          libconvert-tnef-perl,
          libdbd-mysql-perl,
