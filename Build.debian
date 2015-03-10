@@ -164,8 +164,7 @@ chmod +x $WORK/usr/sbin/*
 # usr/share/man
 cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/man8/
 cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
-gzip $WORK/usr/share/man/man8/MailScanner.8
-gzip $WORK/usr/share/man/man5/MailScanner.conf.5
+gzip $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
 
 # usr/share/doc
 cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
@@ -212,10 +211,7 @@ s./opt/MailScanner/etc./etc/MailScanner.;
 s./opt/MailScanner/lib./usr/share/MailScanner.;
 s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
-EOF 
-
-
-
+EOF
 
 
 
