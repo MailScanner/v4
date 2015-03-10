@@ -216,7 +216,7 @@ EOF
 cp -rf $DEVBASEDIR/Debian.files/DEBIAN/ $WORK
 perl -pi -e 's/DebianVersionHere/'$MSVERSION'/;' $WORK/DEBIAN/control
 cd $WORK
-find . -type f -exec chmod 0664 {} \;
+find . -type f -exec chmod 0644 {} \;
 find . -type d -exec chmod 0755 {} \;
 chmod +x $WORK/usr/sbin/*
 chmod +x $WORK/DEBIAN/postinst
