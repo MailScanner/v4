@@ -225,6 +225,8 @@ chmod +x $WORK/etc/cron.daily/mailscanner
 chmod +x $WORK/etc/cron.hourly/mailscanner
 chmod +x $WORK/etc/init.d/mailscanner
 
+fakeroot dpkg -b $WORK/mailscanner-$FULLMSVER $FILEOUT/mailscanner-$FULLMSVER.deb
+rm -rf $WORK
 
 
 
