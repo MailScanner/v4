@@ -58,6 +58,9 @@ install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/incoming
 install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/incoming
 install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/quarantine
 
+# register the startup script
+update-rc.d mailscanner defaults
+
 case "$1" in
     configure)
     ;;
