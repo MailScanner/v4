@@ -165,7 +165,7 @@ cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
 # usr/share/man
 cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/man8/
 cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
-gzip $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
+gzip -9 $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
 
 # usr/share/doc
 cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
