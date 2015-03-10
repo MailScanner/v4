@@ -214,7 +214,7 @@ s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 
 cp -rf $DEVBASEDIR/Debian.files/DEBIAN/ $WORK
-perl -pi -e 's/DebianVersionHere/'$MSVERSION'/;' $WORK/DEBIAN/control
+perl -pi -e 's/DebianVersionHere/'$FULLMSVER'/;' $WORK/DEBIAN/control
 cd $WORK
 find . -type f -exec chmod 0644 {} \;
 find . -type d -exec chmod 0755 {} \;
