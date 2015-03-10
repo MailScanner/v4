@@ -1,0 +1,72 @@
+'\" t
+.\"     Title: df2mbox
+.\"    Author: Simon Walter
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 09.12.2006
+.\"    Manual: Combined contents
+.\"    Source: [FIXME: source]
+.\"  Language: English
+.\"
+.TH "DF2MBOX" "8" "09\&.12\&.2006" "[FIXME: source]" "Combined contents"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+df2mbox \- a script to create an mbox format file from MailScanners quarantine directory when using sendmail as MTA\&.
+.SH "SYNOPSIS"
+.HP \w'\fBdf2mbox\fR\ 'u
+\fBdf2mbox\fR [\fB\fIdirectories\fR\fR]
+.SH "DESCRIPTION"
+.PP
+This manual page documents briefly the
+\fBdf2mbox\fR
+options\&.
+.PP
+This manual page was written for the
+Debian(TM)
+distribution because the original program does not have a manual page\&.
+.PP
+\fBdf2mbox\fR
+is a helper script for MailScanner, a freely distributable E\-Mail gateway virus scanner and spam detector\&. df2mbox convert all exim queue files into one mbox file for each directory given as parameter\&. The resulting mbox files are placed in the current directory an named spam\&.<dir>\&.
+.SH "SEE ALSO"
+.PP
+\fBd2mbox\fR(8) \fBMailScanner\fR(8)
+.RS 4
+.RE
+.SH "AUTHOR"
+.PP
+This manual page was written by Simon Walter
+simon\&.walter@hp\-factory\&.de
+for the
+Debian(TM)
+system (but may be used by others)\&. Permission is granted to copy, distribute and/or modify this document under the terms of the
+GNU
+General Public License, Version 2 any later version published by the Free Software Foundation\&.
+.PP
+On Debian systems, the complete text of the GNU General Public License can be found in /usr/share/common\-licenses/GPL\&.
+.SH "AUTHOR"
+.PP
+\fBSimon Walter\fR
+.RS 4
+Author.
+.RE
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2006 Simon Walter
+.br

@@ -1,0 +1,72 @@
+'\" t
+.\"     Title: mailscanner_create_locks
+.\"    Author: Simon Walter
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 14.01.2009
+.\"    Manual: Combined contents
+.\"    Source: [FIXME: source]
+.\"  Language: English
+.\"
+.TH "MAILSCANNER_CREATE_L" "8" "14\&.01\&.2009" "[FIXME: source]" "Combined contents"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+mailscanner_create_locks \- a script to create the lockfile used by MailScanner\&.
+.SH "DESCRIPTION"
+.PP
+This manual page documents briefly the
+\fBmailscanner_create_locks\fR
+options\&.
+.PP
+This manual page was written for the
+Debian(TM)
+distribution because the original program does not have a manual page\&.
+.PP
+\fBmailscanner_create_locks\fR
+is helper script for MailScanner, a freely distributable E\-Mail gateway virus scanner and spam detector\&. mailscanner_create_locks the locksfiles for MailScanner and ensures they are no symlinks and have the right ownership and permission\&.
+.PP
+The directory for the lockfiles is configured in
+/etc/MailScanner/MailScanner\&.conf\&.
+.SH "SEE ALSO"
+.PP
+\fBMailScanner\fR(8) /etc/MailScanner/MailScanner\&.conf
+.RS 4
+.RE
+.SH "AUTHOR"
+.PP
+This manual page was written by Simon Walter
+simon\&.walter@hp\-factory\&.de
+for the
+Debian(TM)
+system (but may be used by others)\&. Permission is granted to copy, distribute and/or modify this document under the terms of the
+GNU
+General Public License, Version 2 any later version published by the Free Software Foundation\&.
+.PP
+On Debian systems, the complete text of the GNU General Public License can be found in /usr/share/common\-licenses/GPL\&.
+.SH "AUTHOR"
+.PP
+\fBSimon Walter\fR
+.RS 4
+Author.
+.RE
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2006 Simon Walter
+.br

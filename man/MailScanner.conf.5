@@ -1,4 +1,4 @@
-.TH "MailScanner.conf" "5" "4.50.1" "Julian Field" "Mail"
+.TH "MailScanner.conf" "5" "4.83.1" "Julian Field" "Mail"
 .SH "NAME"
 .LP 
 MailScanner.conf \- Main configuration for MailScanner
@@ -10,10 +10,7 @@ none
 MailScanner is configured using the file MailScanner.conf. The location of this file varies from operating system to operating system:
 
 Linux:	/etc/MailScanner
-.br 
-FreeBSD: /usr/local/etc/MailScanner
-.br 
-Other: /opt/MailScanner/etc
+.br
 
 .LP 
 Blank lines are ignored, as are leading and trailing spaces. Comments start at a '#' character and extend to the end of the line. All options are expressed in the form
@@ -39,30 +36,24 @@ You should define the following variables:
 
 .TP 
 \fB%report\-dir%\fR
-Default: /opt/MailScanner/etc/reports/en
-.br 
-Default FreeBSD: /usr/local/share/MailScanner/reports/en
-.br 
+Default: /etc/MailScanner/reports/en
+.br
 
 .br 
 Set the directory containing all the reports in the required language.
 
 .TP 
 \fB%etc\-dir%\fR
-Default: /opt/MailScanner/etc
-.br 
-Default FreeBSD: /usr/local/etc/MailScanner
-.br 
+Default: /etc/MailScanner
+.br  
 
 .br 
 Configuration directory containing this file
 
 .TP 
 \fB%rules\-dir%\fR
-Default: /opt/MailScanner/etc/rules
-.br 
-Default FreeBSD: /usr/local/etc/MailScanner/rules
-.br 
+Default: /etc/MailScanner/rules
+.br
 
 .br 
 Rulesets directory containing your ".rules" files
@@ -160,9 +151,7 @@ Directory in which MailScanner should place scanned e\-mail messages. This can a
 
 .TP 
 \fBIncoming work dir\fR
-Default: /opt/MailScanner/var/incoming 
-.br 
-Default FreeBSD: /var/spool/MailScanner/incoming
+Default: /var/spool/MailScanner/incoming 
 .br 
 
 .br 
@@ -171,9 +160,7 @@ Directory in which to temporarily store unpacked MIME messages during scanning p
 
 .TP 
 \fBQuarantine Dir\fR
-Default: /opt/MailScanner/var/quarantine
-.br 
-Default FreeBSD: /var/spool/MailScanner/quarantine
+Default: /var/spool/MailScanner/quarantine
 .br 
 
 .br  
@@ -181,13 +168,11 @@ Set where to store infected messages and attachments (if they are kept). This ca
 
 .TP 
 \fBPID file\fR
-Default: /opt/MailScanner/var/MailScanner.pid
-.br 
-Default FreeBSD: /var/run/MailScanner.pid
-.br 
+Default: /var/run/MailScanner/MailScanner.pid
+.br  
 
 .br 
-Set where to store the process id number so you can stop MailScanner. In the FreeBSD port this should remain /var/run/MailScanner.pid in order for the start/stop script to work.
+Set where to store the process id number so you can stop MailScanner.
 
 .TP 
 \fBRestart Every\fR
@@ -209,8 +194,6 @@ MailScanner works with sendmail and exim. Since the queue handling differs a bit
 \fBSendmail\fR
 Default: /usr/lib/sendmail
 .br 
-Default FreeBSD: /usr/sbin/sendmail
-.br 
 
 .br 
 Set how to invoke MTA when sending messages MailScanner has created (e.g. to sender/recipient saying "found a virus in your message"). This can also be the filename of a ruleset.
@@ -223,7 +206,7 @@ Default: same value as the Sendmail setting
 .br 
 Sendmail2 is provided for exim users. It is the command used to attempt delivery of outgoing cleaned/disinfected messages. This is not usually required for sendmail. 
 .br 
-For Exim users this could be: Sendmail2 = /usr/sbin/exim \-C /usr/local/etc/exim/configure.out
+For Exim users this could be: Sendmail2 = /usr/sbin/exim \-C /etc/exim/exim_out.conf
 
 
 .SH "Incoming Work Dir Settings"
@@ -373,9 +356,7 @@ Rich Text format attachments produced by some versions of Microsoft Outlook cann
 
 .TP 
 \fBTNEF Expander\fR
-Default: /opt/MailScanner/bin/tnef
-.br 
-Default FreeBSD: /usr/local/bin/tnef
+Default: /usr/bin/tnef
 .br 
 
 .br 
@@ -1687,8 +1668,6 @@ Default: no
 
 .br 
 Do you want to detect spam using the very good SpamAssassin package? You must have installed SpamAssassin before using this option, otherwise MailScanner will not start properly.
-.br 
-NOTE for FreeBSD port user: The SpamAssassin port is not automatically installed with the MailScanner port. You can find it at /usr/ports/mail/p5\-Mail\-SpamAssassin.
 
 
 .TP 
@@ -2187,9 +2166,7 @@ This is the directory in which lock files are placed to stop the virus scanners 
 
 .TP 
 \fBCustom Functions Dir\fR
-Default: /opt/MailScanner/lib/MailScanner/CustomFunctions
-.br 
-Default FreeBSD: /usr/local/lib/MailScanner/MailScanner/CustomFunctions
+Default: /usr/share/MailScanner/MailScanner/CustomFunctions
 .br 
 
 .br 
@@ -2247,7 +2224,7 @@ Several recipients, not all in the same domain. The rules are checked for one th
 .RE
 .SH "RULESETS"
 .LP 
-Ruleset files should all be put in /opt/MailScanner/etc/rules (FreeBSD: /usr/local/etc/MailScanner/rules) and their filename should end in ".rules" wherever possible.
+Ruleset files should all be put in /etc/MailScanner/rules and their filename should end in ".rules" wherever possible.
 .br 
 
 .br 
