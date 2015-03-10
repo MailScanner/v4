@@ -146,6 +146,7 @@ EOF
 done
 
 # usr/sbin
+cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/d2mbox $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/df2mbox $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/check_mailscanner $WORK/usr/sbin/
@@ -156,15 +157,15 @@ cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_emails $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_spamassassin $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
 chmod +x $WORK/usr/sbin/*
 
 # usr/share/man
-cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/man8/
-cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
-gzip $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
+cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/
+cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/
 
 # usr/share/doc
 cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
