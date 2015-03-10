@@ -26,11 +26,6 @@ if [ ! -z "$DEVBASEDIR" ]; then
 fi
 
 # the php files below should be in the same directory
+php -q create_conf_array.php > /tmp/conf_array.php
+php-cgi -f dump_config.php v=$FULLMSVER > /tmp/MailScanner.conf.index.html
 
-if [ -a create_conf_array.php ]; then
-	php -q create_conf_array.php > /tmp/conf_array.php
-fi
-
-if [ -a dump_config.php ]; then
-	php-cgi -f dump_config.php v=$FULLMSVER > /tmp/MailScanner.conf.index.html
-fi
