@@ -215,6 +215,7 @@ s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 
 cp -rf $DEVBASEDIR/Debian.files/DEBIAN/ $WORK
+perl -pi -e 's/DebianVersionHere/'$MSVERSION'/;' $WORK/DEBIAN/control
 
 
 

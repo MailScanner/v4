@@ -1,5 +1,5 @@
 Package: mailscanner
-#Source: mailscanner
+Version: DebianVersionHere
 Section: mail
 Priority: optional
 Maintainer: Jerry Benton <mailscanner@mailborder.com>
