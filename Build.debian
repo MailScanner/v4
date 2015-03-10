@@ -165,7 +165,6 @@ cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
 # usr/share/man
 cp $DEVBASEDIR/man/MailScanner.8 $WORK/usr/share/man/man8/
 cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
-gzip -9 $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
 
 # usr/share/doc
 cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
@@ -226,6 +225,7 @@ chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
 chmod +x $WORK/etc/cron.daily/mailscanner
 chmod +x $WORK/etc/cron.hourly/mailscanner
 chmod +x $WORK/etc/init.d/mailscanner
+gzip -9 $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5 $WORK/usr/share/doc/mailscanner/changelog
 
 fakeroot dpkg -b $WORK $FILEOUT/mailscanner-$FULLMSVER.deb
 rm -rf $WORK
