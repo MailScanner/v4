@@ -156,6 +156,7 @@ cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_emails $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
 chmod +x $WORK/usr/sbin/*
@@ -185,7 +186,7 @@ cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailSca
 cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/MailScanner/CustomFunctions/
 
 # set correct paths
-perl -pi - $WORK/usr/share/MailScanner/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites <<EOF
+perl -pi - $WORK/usr/share/MailScanner/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
 s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
