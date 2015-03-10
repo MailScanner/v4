@@ -72,6 +72,7 @@ fi
 mkdir -p $WORK
 mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{lock/subsys,lock/MailScanner,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
+mkdir -p $WORK/usr/sbin
 mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
 mkdir -p $WORK/usr/{share/doc/mailscanner/exim,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner/CustomFunctions}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
