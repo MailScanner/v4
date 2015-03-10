@@ -1,0 +1,4 @@
+/usr/sbin/check_mailscanner /usr/sbin/check_MailScanner
+/usr/sbin/upgrade_MailScanner_conf /usr/sbin/upgrade_languages_conf
+/usr/sbin/analyse_SpamAssassin_cache /usr/sbin/analyze_SpamAssassin_cache
+/etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/spam.assassin.prefs.cf

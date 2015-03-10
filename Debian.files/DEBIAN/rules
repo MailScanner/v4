@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh $@ 
+
+override_dh_install:
+	dh_install
+	rm -f debian/mailscanner/etc/MailScanner/rules/README
+	rm -f debian/mailscanner/etc/MailScanner/rules/EXAMPLES
+	rm -f debian/mailscanner/etc/MailScanner/conf.d/README
+	rm -f debian/mailscanner/etc/MailScanner/mcp/v320.pre
+	rm -f debian/mailscanner/etc/MailScanner/mcp/10_example.cf
+
+override_dh_auto_build:
+	dh_auto_build
+	cp bin/cron/clean.quarantine.cron clean_quarantine
+	cp bin/cron/update_spamassassin.cron update_spamassassin
+	cp bin/cron/update_phishing_sites.cron update_phishing_sites
+	cp bin/cron/check_MailScanner.cron check_MailScanner
+	cp bin/cron/update_virus_scanners.cron update_virus_scanners
+	cp bin/cron/update_bad_phishing_sites.cron update_bad_phishing_sites
+	cp bin/cron/processing_messages_alert.cron processing_messages_alert
+override_dh_auto_clean:
+	rm -f clean_quarantine
+	rm -f update_spamassassin
+	rm -f update_phishing_sites
+	rm -f check_MailScanner
+	rm -f update_virus_scanners
+	rm -f update_bad_phishing_sites
+	rm -f processing_messages_alert
+	dh_auto_clean
