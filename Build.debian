@@ -151,9 +151,24 @@ cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin $WORK/usr/sbin/MailScanner
 cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
 cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_emails $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
 
+# usr/share/man
+cp $DEVBASEDIR/man/*[12345678] $WORK/usr/share/man/man8/
+gzip $WORK/usr/share/man/man8/MailScanner.8
+gzip $WORK/usr/share/man/man8/MailScanner.conf.5
 
+# usr/share/doc
+cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
+cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
+cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/mailscanner/
 
+# /usr/share/linitian/overrides
+cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/
 
 # wrappers and updates
 cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner

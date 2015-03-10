@@ -11,7 +11,7 @@ use Sys::Syslog;
 # in the syntax "full.host.name:port".
 $HTTPproxy = "";
 
-$PackageDir = shift || "/usr/local";
+$PackageDir = shift || "/usr";
 
 $LogFile = "/tmp/ClamAV.update.log";
 
