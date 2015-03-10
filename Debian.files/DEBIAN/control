@@ -5,9 +5,6 @@ Section: mail
 Priority: optional
 Maintainer: Jerry Benton <mailscanner@mailborder.com>
 Description: Open Source Email Gateway
-Build-Depends: debhelper (>= 8.0.0)
-Build-Depends-Indep: perl (>= 5.8.7)
-Standards-Version: 3.9.4
 Homepage: http://www.mailscanner.info
 Depends: perl,
          perl-base,
