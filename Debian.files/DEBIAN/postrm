@@ -1,0 +1,6 @@
+#!/bin/sh
+# postrm script for mailscanner
+#
+
+# unregister the startup script
+update-rc.d mailscanner disable
