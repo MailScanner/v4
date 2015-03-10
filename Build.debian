@@ -214,7 +214,7 @@ s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 
-cp -r cp $DEVBASEDIR/Debian.files/debian $WORK
+cp -rf $DEVBASEDIR/Debian.files/debian/ $WORK
 
 
 
