@@ -1,5 +1,0 @@
-run_nice=0
-HOSTNAME=$(hostname -f)
-export HOSTNAME
-run_mailscanner=0
-stopped_lockfile=/var/lock/MailScanner/mailscanner.off

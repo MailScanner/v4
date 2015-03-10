@@ -168,10 +168,9 @@ cp $DEVBASEDIR/man/MailScanner.conf.5 $WORK/usr/share/man/man5/
 gzip -9 $WORK/usr/share/man/man8/MailScanner.8 $WORK/usr/share/man/man5/MailScanner.conf.5
 
 # usr/share/doc
-cp $DEVBASEDIR/COPYING $WORK/usr/share/doc/mailscanner/
 cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
 cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/mailscanner/
-cp $DEVBASEDIR/Debian.files/DEBIAN/copyright $WORK/usr/share/doc/mailscanner/
+cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/mailscanner/
 
 # /usr/share/linitian/overrides
 cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/
