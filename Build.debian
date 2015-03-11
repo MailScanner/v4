@@ -75,9 +75,9 @@ mkdir -p $WORK/var/{spool/MailScanner/archive,spool/MailScanner/quarantine,spool
 mkdir -p $WORK/usr/sbin
 #mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
 mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/MailScanner/CustomFunctions}
-mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
+mkdir -p $WORK/etc/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
-mkdir -p $WORK/etc/MailScanner/{reports,rules,mcp,conf.d}
+mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 
 # etc
 # cron, default, init.d, logcheck
