@@ -168,7 +168,7 @@ cp $DEVBASEDIR/man/*.5 $WORK/usr/share/man/man5/
 
 # usr/share/doc
 cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
-cp $DEVBASEDIR/ChangeLog $WORK/usr/share/doc/mailscanner/changelog.Debian
+cp $DEVBASEDIR/Debian.files/changelog.Debian $WORK/usr/share/doc/mailscanner/
 cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/mailscanner/
 cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/mailscanner/
 
