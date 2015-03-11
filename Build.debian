@@ -74,10 +74,10 @@ mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/sbin
 #mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
-mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/reports,share/MailScanner/MailScanner/CustomFunctions}
+mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/MailScanner/CustomFunctions}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
-mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
+mkdir -p $WORK/etc/MailScanner/{reports,rules,mcp,conf.d}
 
 # etc
 # cron, default, init.d, logcheck
@@ -113,7 +113,7 @@ for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
 do
 	while read f
 	do
-		cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/usr/share/MailScanner/reports/$lang
+		cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/etc/MailScanner/reports/$lang
 	done << EOF
 deleted.content.message.txt
 deleted.filename.message.txt

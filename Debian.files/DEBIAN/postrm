@@ -5,3 +5,5 @@ set -e
 
 # unregister the startup script
 update-rc.d mailscanner disable
+
+exit 0
