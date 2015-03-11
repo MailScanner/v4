@@ -54,6 +54,12 @@ if [ -d "/var/spool/exim4.in" ]; then
 	install -d -oDebian-exim -gmtagroup -m0750 /var/spool/exim4.in/msglog
 fi
 
+if [ ! -d "/var/spool/mqueue.in" ]; then
+	OLD="Incoming Queue Dir = /var/spool/mqueue.in"
+	NEW="Incoming Queue Dir = /var/spool/mqueue"
+	perl -pi -e 's/'$OLD'/'$NEW'/;' /etc/MailScanner/MailScanner.conf
+fi
+
 install -d -omail -gmtagroup -m0775 /var/run/MailScanner
 install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/archive
 install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/incoming
