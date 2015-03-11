@@ -168,7 +168,7 @@ cp $DEVBASEDIR/man/*.5 $WORK/usr/share/man/man5/
 
 # usr/share/doc
 cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
-cp $DEVBASEDIR/ChangeLog $WORK/usr/share/doc/mailscanner/changelog
+cp $DEVBASEDIR/ChangeLog $WORK/usr/share/doc/mailscanner/changelog.Debian
 cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/mailscanner/
 cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/mailscanner/
 
@@ -227,7 +227,7 @@ chmod +x $WORK/etc/cron.hourly/mailscanner
 chmod +x $WORK/etc/init.d/mailscanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
-gzip -9 $WORK/usr/share/doc/mailscanner/changelog
+gzip -9 $WORK/usr/share/doc/mailscanner/changelog.Debian
 
 fakeroot dpkg -b $WORK $FILEOUT/mailscanner-$FULLMSVER.deb
 rm -rf $WORK
