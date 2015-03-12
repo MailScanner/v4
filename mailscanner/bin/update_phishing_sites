@@ -49,7 +49,7 @@ if [ ! -f $CONFIGDIR/phishing.safe.sites.custom ]; then
 	echo 'mailscanner.info' >> $CONFIGDIR/phishing.safe.sites.custom
 fi
 
-wget --no-check-certificate --header="accept-encoding: gzip" -O $CONFIGDIR/phishing.safe.sites.conf.master $THEURL || \
+wget --no-check-certificate -O $CONFIGDIR/phishing.safe.sites.conf.master $THEURL || \
 curl --compressed -o $CONFIGDIR/phishing.safe.sites.conf.master $THEURL || \
 ( logger -p mail.warn -t update.phishing.sites Cannot find wget or curl, update failed. ; echo Cannot find wget or curl to do phishing sites update. ; exit 1 )
 

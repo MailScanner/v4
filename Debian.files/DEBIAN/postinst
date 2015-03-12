@@ -55,9 +55,7 @@ if [ -d "/var/spool/exim4.in" ]; then
 fi
 
 if [ ! -d "/var/spool/mqueue.in" ]; then
-	OLD="Incoming Queue Dir = /var/spool/mqueue.in"
-	NEW="Incoming Queue Dir = /var/spool/mqueue"
-	perl -pi -e 's/{$OLD}/{$NEW}/;' /etc/MailScanner/MailScanner.conf
+	perl -pi -e 's{Incoming Queue Dir = /var/spool/mqueue.in}{Incoming Queue Dir = /var/spool/mqueue}g;' /etc/MailScanner/MailScanner.conf
 fi
 
 install -d -omail -gmtagroup -m0775 /var/run/MailScanner
