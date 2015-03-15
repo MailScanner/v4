@@ -92,7 +92,6 @@ mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man8
 mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man5
 #mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man1
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/cy+en
@@ -346,8 +345,6 @@ install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROO
 install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
 install bin/MailScanner/CustomFunctions/MailWatch.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/MailScanner/CustomFunctions
 
-install etc/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/etc/MailScanner/CustomFunctions/
-
 install var/run/MailScanner.pid ${RPM_BUILD_ROOT}/var/run/
 
 %clean
@@ -413,7 +410,6 @@ exit 0
 %postun
 # copy old ms files if this is an upgrade
 if [ -d "/usr/lib/MailScanner" ]; then
-	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
 	rm -rf /usr/lib/MailScanner
 fi
 
@@ -486,8 +482,6 @@ exit 0
 %config(noreplace) /etc/MailScanner/mcp/10_example.cf
 %config(noreplace) /etc/MailScanner/mcp/mcp.spam.assassin.prefs.conf
 %config(noreplace) /etc/MailScanner/mcp/v320.pre
-
-%config(noreplace) /etc/MailScanner/CustomFunctions/MyExample.pm
 
 %config(noreplace) /etc/MailScanner/reports/en/deleted.content.message.txt
 %config(noreplace) /etc/MailScanner/reports/en/stored.content.message.txt

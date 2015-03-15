@@ -91,31 +91,7 @@ if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
     
     # set this to automatically answer conffiles questions
     CONFFILES="--force-confold"
-    
-    # back up their stuff
-    SAVEDIR="$HOME/ms_upgrade/saved.$$";
-    mkdir -p $SAVEDIR
-    
-    if [ -d "/usr/lib/MailScanner" ]; then
-    	mkdir -p $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
-    	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
-    	clear
-    	echo;
-    	echo "I have copied /usr/lib/MailScanner/MailScanner/CustomFunctions/* to";
-    	echo "$SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions";
-    	timewait 3;
-    fi
-    
-    if [ -d "/etc/MailScanner/CustomFunctions" ]; then
-    	mkdir -p $SAVEDIR/etc/MailScanner/CustomFunctions
-    	cp -f /etc/MailScanner/CustomFunctions* $SAVEDIR/etc/MailScanner/CustomFunctions
-    	clear
-    	echo;
-    	echo "I have copied /etc/MailScanner/CustomFunctions/* to";
-    	echo "$SAVEDIR/etc/MailScanner/CustomFunctions";
-    	timewait 3;
-    fi
-    
+   
 else
 	# new install
 	CONFFILES=
@@ -256,6 +232,42 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
 else
 	# requiring deps
 	NODEPS=
+fi
+
+# back up their stuff
+SAVEDIR="$HOME/ms_upgrade/saved.$$";
+
+if [ -d "/usr/lib/MailScanner" ]; then
+	mkdir -p $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
+	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
+	clear
+	echo;
+	echo "I have copied /usr/lib/MailScanner/MailScanner/CustomFunctions/* to";
+	echo "$SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions";
+	echo;
+	timewait 3;
+fi
+
+if [ -d "/etc/MailScanner/CustomFunctions" ]; then
+	mkdir -p $SAVEDIR/etc/MailScanner/CustomFunctions
+	cp -f /etc/MailScanner/CustomFunctions* $SAVEDIR/etc/MailScanner/CustomFunctions
+	clear
+	echo;
+	echo "I have copied /etc/MailScanner/CustomFunctions/* to";
+	echo "$SAVEDIR/etc/MailScanner/CustomFunctions";
+	echo;
+	timewait 3;
+fi
+
+if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
+	mkdir -p $SAVEDIR/etc/MailScanner
+	cp -f /etc/MailScanner/CustomConfig.pm $SAVEDIR/etc/MailScanner/
+	clear
+	echo;
+	echo "I have copied /etc/MailScanner/CustomConfig.pm to";
+	echo "$SAVEDIR/etc/MailScanner/CustomConfig.pm";
+	echo;
+	timewait 3;
 fi
 
 # base system packages
