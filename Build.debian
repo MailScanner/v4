@@ -241,8 +241,8 @@ cp $DEVBASEDIR/ChangeLog $PKGTMP
 cp $DEVBASEDIR/COPYING $PKGTMP
 cp $DEVBASEDIR/README $PKGTMP
 cd $PKGTMP
-tar czf MailScanner-${VERSION}.deb.tar.gz *
-mv -f MailScanner-${VERSION}.deb.tar.gz $FILEOUT
+tar czf MailScanner-${FULLMSVER}.deb.tar.gz *
+mv -f MailScanner-${FULLMSVER}.deb.tar.gz $FILEOUT
 
 rm -rf $PKGTMP
 rm -rf $WORK
