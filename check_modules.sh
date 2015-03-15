@@ -7,7 +7,7 @@
 # Jerry Benton <mailscanner@mailborder.com>
 # 27 FEB 2015
 
-# check for curl
+# check for perldoc
 if [ ! -x /usr/bin/perldoc ]; then
 	clear
 	echo;
