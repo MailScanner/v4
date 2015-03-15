@@ -60,8 +60,6 @@ fi
 
 # copy old ms files if this is an upgrade
 if [ -d "/usr/lib/MailScanner" ]; then
-	rm -rf /usr/share/MailScanner/MailScanner/CustomFunctions/*
-	cp -uf /usr/lib/MailScanner/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
 	rm -rf /usr/lib/MailScanner
 fi
 

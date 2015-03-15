@@ -91,6 +91,31 @@ if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
     
     # set this to automatically answer conffiles questions
     CONFFILES="--force-confold"
+    
+    # back up their stuff
+    SAVEDIR="$HOME/ms_upgrade/saved.$$";
+    mkdir -p $SAVEDIR
+    
+    if [ -d "/usr/lib/MailScanner" ]; then
+    	mkdir -p $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
+    	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
+    	clear
+    	echo;
+    	echo "I have copied /usr/lib/MailScanner/MailScanner/CustomFunctions/* to";
+    	echo "$SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions";
+    	timewait 3;
+    fi
+    
+    if [ -d "/etc/MailScanner/CustomFunctions" ]; then
+    	mkdir -p $SAVEDIR/etc/MailScanner/CustomFunctions
+    	cp -f /etc/MailScanner/CustomFunctions* $SAVEDIR/etc/MailScanner/CustomFunctions
+    	clear
+    	echo;
+    	echo "I have copied /etc/MailScanner/CustomFunctions/* to";
+    	echo "$SAVEDIR/etc/MailScanner/CustomFunctions";
+    	timewait 3;
+    fi
+    
 else
 	# new install
 	CONFFILES=
