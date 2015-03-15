@@ -67,10 +67,6 @@ fi
 
 # this is not in the new mailscanner package. move it
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
-	if [ ! -h "/etc/MailScanner/CustomFunctions" ]; then
-		rm -rf /usr/share/MailScanner/MailScanner/CustomFunctions/*
-		cp -uf /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
-	fi
 	rm -rf /etc/MailScanner/CustomFunctions
 	ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/CustomFunctions
 fi
