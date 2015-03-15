@@ -1,0 +1,13 @@
+You may upgrade your installation by running ./install.sh as root.
+
+WARNING: 	Back up the files in these directories if you have made
+			modifications:
+			
+			/etc/MailScanner/CustomFunctions/
+			/usr/share/MailScanner/MailScanner/CustomFunctions/
+			/usr/lib/MailScanner/MailScanner/CustomFunctions/
+			
+WARNING:	These directories will be deleted when upgrading!
+			
+			/etc/MailScanner/CustomFunctions/
+			/usr/lib/MailScanner/MailScanner/CustomFunctions/
