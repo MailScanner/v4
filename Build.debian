@@ -223,6 +223,7 @@ find . -type f -exec chmod 0644 {} \;
 find . -type d -exec chmod 0755 {} \;
 chmod +x $WORK/usr/sbin/*
 chmod +x $WORK/DEBIAN/postinst
+chmod +x $WORK/DEBIAN/preinst
 chmod +x $WORK/DEBIAN/postrm
 chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
 chmod +x $WORK/etc/cron.daily/mailscanner
