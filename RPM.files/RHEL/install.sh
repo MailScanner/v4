@@ -429,7 +429,7 @@ if [ "$NICETOHAVE" = "1" ]; then
 	ARMOD+=('Net::DNS');			ARMOD+=('Net::LDAP');			ARMOD+=('Net::DNS::Resolver::Programmable');
 	ARMOD+=('NetAddr::IP');			ARMOD+=('Parse::RecDescent');	ARMOD+=('Test::Harness');
 	ARMOD+=('Test::Manifest');		ARMOD+=('Text::Balanced');		ARMOD+=('URI');	
-	ARMOD+=('version');				ARMOD+=('Digest');				ARMOD+=('Digest');	
+	ARMOD+=('version');				
 fi
 
 # add to array if the user is installing spamassassin

@@ -182,6 +182,37 @@ else
 	CAVOPTION=
 fi
 
+# ask if the user wants missing modules installed via CPAN
+clear
+echo;
+echo "Do you want to install missing perl modules via CPAN?"; echo;
+echo "I will attempt to install Perl modules via apt, but some may not be unavailable during the";
+echo "installation process. Missing modules will likely cause MailScanner to malfunction.";
+echo;
+echo "Recommended: Y (yes)"; echo;
+read -r -p "Install missing Perl modules via CPAN? [n/Y] : " response
+
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    # user wants to use CPAN for missing modules
+	CPANOPTION=1
+	
+	# rpm install will fail if the modules were not installed via RPM
+	# so i am setting the --nodeps flag here since the user elected to 
+	# use CPAN to remediate the modules
+	NODEPS='--nodeps';
+elif [ -z $response ]; then 
+	 # user wants to use CPAN for missing modules
+	CPANOPTION=1
+	
+	# rpm install will fail if the modules were not installed via RPM
+	# so i am setting the --nodeps flag here since the user elected to 
+	# use CPAN to remediate the modules
+	NODEPS='--nodeps';
+else
+    # user does not want to use CPAN
+    CPANOPTION=0
+fi
+
 # ask if the user wants to ignore dependencies. they are automatically ignored
 # if the user elected the CPAN option as explained above
 clear
@@ -203,7 +234,7 @@ else
 fi
 
 # base system packages
-BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl unrar-free antiword libarchive-zip-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl";
+BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar-free antiword libarchive-zip-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl";
 
 # the array of perl modules needed
 ARMOD=();
@@ -238,16 +269,21 @@ ARMOD+=('DBI');					ARMOD+=('Digest');				ARMOD+=('Encode::Detect');
 ARMOD+=('Error');				ARMOD+=('ExtUtils::CBuilder');	ARMOD+=('ExtUtils::ParseXS');
 ARMOD+=('Getopt::Long');		ARMOD+=('Inline');				ARMOD+=('IO::String');	
 ARMOD+=('IO::Zlib');			ARMOD+=('IP::Country');			ARMOD+=('Mail::SPF');
-								ARMOD+=('Module::Build');		ARMOD+=('Net::CIDR::Lite');
+ARMOD+=('Mail::SPF::Query');	ARMOD+=('Module::Build');		ARMOD+=('Net::CIDR::Lite');
 ARMOD+=('Net::DNS');			ARMOD+=('Net::LDAP');			ARMOD+=('Net::DNS::Resolver::Programmable');
 ARMOD+=('NetAddr::IP');			ARMOD+=('Parse::RecDescent');	ARMOD+=('Test::Harness');
 ARMOD+=('Test::Manifest');		ARMOD+=('Text::Balanced');		ARMOD+=('URI');	
-ARMOD+=('version');				ARMOD+=('Digest');				
+ARMOD+=('version');							
 
 
 # add to array if the user is installing spamassassin
 if [ $SA == 1 ]; then
 	ARMOD+=('Mail::SpamAssassin');
+fi
+
+# enable if using CPAN
+if [ $CPANOPTION == 1 ]; then
+	ARMOD+=('Mail::ClamAV');
 fi
 
 # logging starts here
@@ -308,6 +344,21 @@ if [ $SA == 1 ]; then
 	perl -pi -e 's/ENABLED=0/'$SOUT'/;' /etc/default/spamassassin
 fi
 
+# create the cpan config if there isn't one and the user
+# elected to use CPAN
+if [ $CPANOPTION == 1 ]; then
+	# user elected to use CPAN option
+	if [ ! -f '/root/.cpan/CPAN/MyConfig.pm' ]; then
+		echo;
+		echo "CPAN config missing. Creating one ..."; echo;
+		mkdir -p /root/.cpan/CPAN
+		cd /root/.cpan/CPAN
+		$CURL -O https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
+		cd $THISCURRPMDIR
+		timewait 1
+	fi
+fi
+
 # now check for missing perl modules and install them via cpan
 # if the user elected to do so
 clear; echo;
@@ -315,6 +366,20 @@ echo "Checking Perl Modules ... "; echo;
 timewait 2
 # used to trigger a wait if something this missing
 PMODWAIT=0
+
+# remediate
+if [ $CPANOPTION == 1 ]; then
+for i in "${ARMOD[@]}"
+do
+	perldoc -l $i >/dev/null 2>&1
+	if [ $? != 0 ]; then
+		clear
+		echo "$i is missing. Installing via CPAN ..."; echo;
+		timewait 1
+		perl -MCPAN -e "CPAN::Shell->force(qw(install $i ));"
+	fi
+done
+fi
 
 # check and notify of any missing modules
 for i in "${ARMOD[@]}"

@@ -127,4 +127,7 @@ if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 	ln -s /usr/share/MailScanner/MailScanner/CustomConfig.pm /etc/MailScanner/CustomConfig.pm
 fi
 
+# softlink for custom functions
+ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/custom
+
 exit 0
