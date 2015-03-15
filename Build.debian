@@ -237,9 +237,11 @@ gzip -9 $WORK/usr/share/doc/mailscanner/changelog.Debian
 PKGTMP="/tmp/deb.$$/";
 mkdir -p $PKGTMP/MailScanner-${FULLMSVER}
 fakeroot dpkg -b $WORK $PKGTMP/MailScanner-${FULLMSVER}/mailscanner-$FULLMSVER-noarch.deb
+cp $DEVBASEDIR/Debian.files/install.sh $PKGTMP/MailScanner-${FULLMSVER}
 cp $DEVBASEDIR/ChangeLog $PKGTMP/MailScanner-${FULLMSVER}
 cp $DEVBASEDIR/COPYING $PKGTMP/MailScanner-${FULLMSVER}
 cp $DEVBASEDIR/README $PKGTMP/MailScanner-${FULLMSVER}
+chmod +x $PKGTMP/MailScanner-${FULLMSVER}/install.sh
 cd $PKGTMP
 tar czf MailScanner-${FULLMSVER}.deb.tar.gz *
 mv -f MailScanner-${FULLMSVER}.deb.tar.gz $FILEOUT
