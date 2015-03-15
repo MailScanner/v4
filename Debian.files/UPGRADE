@@ -14,6 +14,6 @@ WARNING: Back up the files in these directories if you have made
 WARNING: These directories will be deleted when upgrading!
 			
 			/etc/MailScanner/CustomFunctions/
-			/usr/lib/MailScanner/MailScanner/CustomFunctions/
+			/usr/lib/MailScanner
 
 
