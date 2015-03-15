@@ -130,4 +130,6 @@ fi
 # softlink for custom functions
 ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/custom
 
+update-rc.d mailscanner defaults
+
 exit 0
