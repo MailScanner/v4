@@ -7,6 +7,18 @@
 # Jerry Benton <mailscanner@mailborder.com>
 # 27 FEB 2015
 
+# check for curl
+if [ ! -x /usr/bin/perldoc ]; then
+	clear
+	echo;
+	echo "The perldoc command cannot be found. I need this program to check your";
+	echo "modules. Install it or edit this script to point to the correct location.";
+	echo;
+	exit 1
+else
+	PERLDOC='/usr/bin/perldoc';
+fi
+
 # the array of perl modules needed
 ARMOD=();
 ARMOD+=('Archive::Tar'); 		ARMOD+=('Archive::Zip');		ARMOD+=('bignum');				
@@ -51,7 +63,7 @@ ARMOD2+=('version');
 
 for i in "${ARMOD[@]}"
 do
-	perldoc -l $i >/dev/null 2>&1
+	$PERLDOC -l $i >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		echo "WARNING: $i => Missing";
 	else
@@ -61,7 +73,7 @@ done
 
 for i in "${ARMOD2[@]}"
 do
-	perldoc -l $i >/dev/null 2>&1
+	$PERLDOC -l $i >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		echo "OPTIONAL: $i => Missing";
 	else
