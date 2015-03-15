@@ -1,11 +1,9 @@
-03/02/2015 Changes in    v4.85.2-1
+03/14/2015 Changes in    v4.85.2-1
 ==================================
 * Updates *
 - Moved structure to /usr/share/MailScanner to comply with 
   Filesystem Hierarchy Standard (FHS)
-- Added MailWatch.pm to CustomFunctions
 - Added phishing.safe.sites.custom to allow for easier maintenance 
-
 * Fixes *
 - PFDiskStore.pm updated 
 

@@ -36,7 +36,7 @@ ARMOD+=('Sys::Syslog'); 		ARMOD+=('Env'); 				ARMOD+=('File::ShareDir::Install')
 
 # These are optional
 ARMOD2=();
-ARMOD2+=('Mail::SpamAssassin'); 	ARMOD2+=('Mail::ClamAV');
+ARMOD2+=('Mail::SpamAssassin'); 	
 ARMOD2+=('bignum');					ARMOD2+=('Business::ISBN');		ARMOD2+=('Business::ISBN::Data');
 ARMOD2+=('Data::Dump');				ARMOD2+=('DB_File');			ARMOD2+=('DBD::SQLite');
 ARMOD2+=('DBI');					ARMOD2+=('Digest');				ARMOD2+=('Encode::Detect');
@@ -47,7 +47,7 @@ ARMOD2+=('Mail::SPF::Query');		ARMOD2+=('Module::Build');		ARMOD2+=('Net::CIDR::
 ARMOD2+=('Net::DNS');				ARMOD2+=('Net::LDAP');			ARMOD2+=('Net::DNS::Resolver::Programmable');
 ARMOD2+=('NetAddr::IP');			ARMOD2+=('Parse::RecDescent');	ARMOD2+=('Test::Harness');
 ARMOD2+=('Test::Manifest');			ARMOD2+=('Text::Balanced');		ARMOD2+=('URI');	
-ARMOD2+=('version');				ARMOD2+=('Digest');				ARMOD2+=('Digest');	
+ARMOD2+=('version');					
 
 for i in "${ARMOD[@]}"
 do

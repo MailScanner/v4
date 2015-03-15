@@ -281,11 +281,6 @@ if [ $SA == 1 ]; then
 	ARMOD+=('Mail::SpamAssassin');
 fi
 
-# enable if using CPAN
-if [ $CPANOPTION == 1 ]; then
-	ARMOD+=('Mail::ClamAV');
-fi
-
 # logging starts here
 (
 clear
