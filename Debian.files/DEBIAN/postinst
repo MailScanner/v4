@@ -60,13 +60,13 @@ fi
 
 # copy old ms files if this is an upgrade
 if [ -d "/usr/lib/MailScanner" ]; then
-	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
+	cp -uf /usr/lib/MailScanner/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
 	rm -rf /usr/lib/MailScanner
 fi
 
 # this is not in the new mailscanner package. move it
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
-	cp -f /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
+	cp -uf /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
 	rm -rf /etc/MailScanner/CustomFunctions
 	ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/CustomFunctions
 fi
@@ -122,10 +122,12 @@ fi
 
 # upgrade correction
 if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
-	cp -f /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/MailScanner/CustomConfig.pm
+	cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/MailScanner/CustomConfig.pm
 	rm -f /etc/MailScanner/CustomConfig.pm
 	ln -s /usr/share/MailScanner/MailScanner/CustomConfig.pm /etc/MailScanner/CustomConfig.pm
 fi
+
+rm -f /etc/MailScanner/*.original323
 
 # softlink for custom functions
 ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/custom
