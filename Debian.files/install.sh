@@ -263,6 +263,7 @@ echo "Installing required base system utilities ..."; echo;
 timewait 2
 
 # install base packages
+$APTGET update
 $APTGET -yf install $BASEPACKAGES
 
 # install this separate in case it conflicts
@@ -354,7 +355,7 @@ echo;
 echo "Installing the MailScanner .deb package ... ";
 
 # install the mailscanner package
-dpkg -i $CONFFILES $NODEPS mailscanner*noarch.rpm
+dpkg -i $CONFFILES $NODEPS $THISCURRPMDIR/mailscanner*.deb
 
 if [ $? != 0 ]; then
 	echo;
