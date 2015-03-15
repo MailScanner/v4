@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# preinst script for mailscanner
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+
+# this makes copies of original conf files. 
+# the postinst script will move them back
+if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
+
+cp -f /etc/default/mailscanner /etc/default/mailscanner.original323
+
+while read f 
+do
+  cp /etc/MailScanner/$f /etc/MailScanner/$f.original323
+done << EOF
+filename.rules.conf
+filetype.rules.conf
+archives.filename.rules.conf
+archives.filetype.rules.conf
+MailScanner.conf
+spam.assassin.prefs.conf
+spam.lists.conf
+virus.scanners.conf
+phishing.safe.sites.conf
+phishing.bad.sites.conf
+country.domains.conf
+EOF
+
+fi
+
+case "$1" in
+    configure)
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+

@@ -422,6 +422,13 @@ fi
 exit 0
 
 %postun
+
+# copy old ms files if this is an upgrade
+if [ -d "/usr/lib/MailScanner" ]; then
+	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
+	rm -rf /usr/lib/MailScanner
+fi
+
 if [ "$1" -ge "1" ]; then
     # We are being upgraded or replaced, not deleted
     echo 'To upgrade your MailScanner.conf and languages.conf files automatically, run'
@@ -429,6 +436,11 @@ if [ "$1" -ge "1" ]; then
     echo '    upgrade_languages_conf'
     #service MailScanner restart >/dev/null 2>&1
 fi
+
+# symlink
+rm -rf /etc/MailScanner/CustomFunctions
+ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/CustomFunctions
+
 exit 0
 
 %files
