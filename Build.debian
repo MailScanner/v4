@@ -234,12 +234,12 @@ for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
 gzip -9 $WORK/usr/share/doc/mailscanner/changelog.Debian
 
 # create a working dir for package
-PKGTMP="/tmp/deb.$$/MailScanner-${FULLMSVER}";
-mkdir -p $PKGTMP/
-fakeroot dpkg -b $WORK $PKGTMP/mailscanner-$FULLMSVER-noarch.deb
-cp $DEVBASEDIR/ChangeLog $PKGTMP
-cp $DEVBASEDIR/COPYING $PKGTMP
-cp $DEVBASEDIR/README $PKGTMP
+PKGTMP="/tmp/deb.$$/";
+mkdir -p $PKGTMP/MailScanner-${FULLMSVER}
+fakeroot dpkg -b $WORK $PKGTMP/MailScanner-${FULLMSVER}/mailscanner-$FULLMSVER-noarch.deb
+cp $DEVBASEDIR/ChangeLog $PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/COPYING $PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/README $PKGTMP/MailScanner-${FULLMSVER}
 cd $PKGTMP
 tar czf MailScanner-${FULLMSVER}.deb.tar.gz *
 mv -f MailScanner-${FULLMSVER}.deb.tar.gz $FILEOUT
