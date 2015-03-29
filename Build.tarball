@@ -160,7 +160,7 @@ cp $BUILDROOT/$VERSION-$RELEASE.tar.gz $BUILDROOT/$INSTALL/perl-tar
 chmod 0644 $BUILDROOT/$INSTALL/perl-tar/*tar.gz
 
 cd $BUILDROOT
-tar czf MailScanner-$VERSION-$RELEASE.tar.gz $INSTALL
+tar czf MailScanner-$FULLMSVER.tar.gz $INSTALL
 rm -rf $BUILDROOT/$VERSION-$RELEASE.tar.gz
 rm -rf $BUILDROOT/$VERSION-$RELEASE
 rm -rf $BUILDROOT/$INSTALL
