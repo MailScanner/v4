@@ -27,7 +27,8 @@ QUICKPEEK=/usr/sbin/Quick.Peek
 
 run_mailscanner=0
 run_nice=0
-stopped_lockfile=/var/lock/MailScanner.off
+#stopped_lockfile=/var/lock/MailScanner.off
+stopped_lockfile=/var/lock/MailScanner/mailscanner.off
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$PNAME ] && . /etc/default/$PNAME
@@ -108,7 +109,7 @@ do_start()
   # Set lockfile to inform cronjobs about the running daemon
 	RETVAL="$?"
 	if [ $RETVAL -eq 0 ]; then
-	    touch /var/lock/subsys/mailscanner
+	    touch /run/lock/MailScanner/mailscanner
 	    rm -f $stopped_lockfile
 	fi
 
@@ -130,7 +131,7 @@ do_stop()
 
   # Remove lockfile for cronjobs
 	if [ $RETVAL -eq 0 ]; then
-	    rm -f /var/lock/subsys/mailscanner
+	    rm -f /run/lock/MailScanner/mailscanner
 	    touch $stopped_lockfile
 	fi
 

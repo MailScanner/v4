@@ -198,6 +198,7 @@ s./opt/MailScanner/etc./etc/MailScanner.;
 s./opt/MailScanner/lib./usr/share/MailScanner.;
 s./opt/MailScanner/bin./usr/share/MailScanner.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
+s+Clamd Socket = /tmp/clamd.socket+Clamd Socket = /var/run/clamav/clamd.ctl+;
 EOF
 perl -pi - $WORK/usr/sbin/check_mailscanner $WORK/usr/sbin/mailscanner_create_locks $WORK/usr/sbin/processing_messages_alert <<EOF
 s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
