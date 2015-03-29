@@ -164,3 +164,4 @@ tar czf mailscanner-$MSVERSION-$MSBUILD.tar.gz $INSTALL
 rm -rf $BUILDROOT/$VERSION-$RELEASE.tar.gz
 rm -rf $BUILDROOT/$VERSION-$RELEASE
 rm -rf $BUILDROOT/$INSTALL
+mv mailscanner-$MSVERSION-$MSBUILD.tar.gz MailScanner-$MSVERSION-$MSBUILD.tar.gz
