@@ -368,7 +368,7 @@ else
 fi
 
 # Create the incoming and quarantine dirs if needed
-for F in incoming quarantine incoming/Locks
+for F in incoming quarantine incoming/Locks;
 do
   if [ \! -d /var/spool/MailScanner/$F ]; then
     mkdir -p /var/spool/MailScanner/$F
