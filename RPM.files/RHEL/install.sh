@@ -700,6 +700,12 @@ done
 # will pause if a perl module was missing
 timewait $PMODWAIT
 
+# postfix fix
+if [ -f "/etc/postfix/master.cf" ]; then
+	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
+	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
+fi
+
 # get the public signing key for the mailscanner rpm
 cd /tmp
 rm -f jb_ms_rpm_public.key

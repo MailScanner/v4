@@ -447,6 +447,12 @@ if [ -f '/etc/freshclam.conf' ]; then
 	fi
 fi
 
+# postfix fix
+if [ -f "/etc/postfix/master.cf" ]; then
+	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
+	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
+fi
+
 clear
 echo;
 echo "Installing the MailScanner .deb package ... ";

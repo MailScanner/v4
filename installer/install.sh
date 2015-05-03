@@ -451,4 +451,10 @@ if [ \! -d /var/spool/MailScanner ]; then
 	echo "created the working directories and quarantine for you in /var/spool.";
 fi
 
+# postfix fix
+if [ -f "/etc/postfix/master.cf" ]; then
+	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
+	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
+fi
+
 ) 2>&1 | tee mailscanner-install.log
