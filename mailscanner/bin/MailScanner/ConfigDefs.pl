@@ -310,7 +310,7 @@ PhishingWhitelist	/etc/MailScanner/phishing.safe.sites.conf
 PhishingBlacklist	/etc/MailScanner/phishing.bad.sites.conf
 pidfile			/var/run/MailScanner.pid
 SecondLevelList         /etc/MailScanner/country.domains.conf
-#spamassassinprefsfile	/etc/MailScanner/spam.assassin.prefs.conf
+spamassassinprefsfile	/etc/MailScanner/spam.assassin.prefs.conf
 SpamListDefinitions	/etc/MailScanner/spam.lists.conf
 mcpspamassassinprefsfile /etc/MailScanner/mcp/mcp.spam.assassin.prefs.conf
 VirusScannerDefinitions	/etc/MailScanner/virus.scanners.conf
