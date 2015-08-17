@@ -427,8 +427,8 @@ exit 0
 
 %files
 %defattr (644,root,root)
-%attr(700,root,root) %dir /var/spool/mqueue
-%attr(700,root,root) %dir /var/spool/mqueue.in
+%attr(700,root,mail) %dir /var/spool/mqueue
+%attr(700,root,mail) %dir /var/spool/mqueue.in
 %attr(750,root,root) %dir /var/spool/MailScanner/incoming
 %attr(750,root,root) %dir /var/spool/MailScanner/quarantine
 %attr(700,root,root) /var/run/MailScanner.pid
