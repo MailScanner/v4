@@ -3002,7 +3002,7 @@ sub UnpackRar {
 
   my($zip, @members, $member, $name, $fh, $safename, $memb, $check, $junk,
      $unrar,$IsEncrypted, $PipeTimeOut, $PipeReturn,$NameTwo, $HasErrors,
-     $member2, $Stuff, $BeginInfo, $EndInfo, $ParseLine, $what, $nopathname);
+     $member2, $Stuff, $BeginInfo, $EndInfo, $ParseLine, $what, $nopathname, $UnrarVersion);
 
   # Timeout value for unrar is currently the same as that of the file
   # command + 20. Julian, when you add the filetimeout to the config file
@@ -3011,91 +3011,165 @@ sub UnpackRar {
   $PipeTimeOut = MailScanner::Config::Value('unrartimeout');
   $unrar = MailScanner::Config::Value('unrarcommand');
   return 1 unless $unrar && -x $unrar;
+  
+  # Get unrar version
+  $UnrarVersion = (split /\ /, (split /\n/, SafePipe("$unrar --help 2>&1",$PipeTimeOut))[1])[1];
 
-  #MailScanner::Log::WarnLog("UnPackRar Testing : %s", $zipname);
+  # Check for version 4 or 5 of unrar.  
+  # Future versions of unrar will need tested
+  return 1 unless $UnrarVersion >= 4.0 && $UnrarVersion < 6.0;
 
-  # This part lists the archive contents and makes the list of
-  # file names within. "This is a list verbose option"
-  $memb = SafePipe("$unrar v -p- '$explodeinto/$zipname' 2>&1",
+  # Unrar Version 4x file parse
+  if ($UnrarVersion >= 4.0 && $UnrarVersion < 5.0) {
+    #MailScanner::Log::WarnLog("UnPackRar Testing : %s", $zipname);
+
+    # This part lists the archive contents and makes the list of
+    # file names within. "This is a list verbose option"
+    $memb = SafePipe("$unrar v -p- '$explodeinto/$zipname' 2>&1",
                    $PipeTimeOut);
 
-  $junk = "";
-  $Stuff = "";
-  $BeginInfo = 0;
-  $EndInfo = 0;
-  $ParseLine = 1;
-  $memb =~ s/\r//gs;
-  my @test = split /\n/, $memb;
-  $memb = '';
+    $junk = "";
+    $Stuff = "";
+    $BeginInfo = 0;
+    $EndInfo = 0;
+    $ParseLine = 1;
+    $memb =~ s/\r//gs;
+    my @test = split /\n/, $memb;
+    $memb = '';
 
-  # Have to parse the output from the 'v' command and parse the information
-  # between the ----------------------------- lines
-  foreach $what (@test) {
-    #print STDERR "Processing \"$what\"\n";
-    # If we haven't hit any ------- lines at all, and we are prompted for
-    # a password, then the whole archive is password-protected.
-    unless ($BeginInfo || $EndInfo) {
-      if ($what =~ /^Encrypted file:/i && !$allowpasswords) {
-        MailScanner::Log::WarnLog("Password Protected RAR Found");
-        return "password";
+    # Have to parse the output from the 'v' command and parse the information
+    # between the ----------------------------- lines
+    foreach $what (@test) {
+      #print STDERR "Processing \"$what\"\n";
+      # If we haven't hit any ------- lines at all, and we are prompted for
+      # a password, then the whole archive is password-protected.
+      unless ($BeginInfo || $EndInfo) {
+        if ($what =~ /^Encrypted file:/i && !$allowpasswords) {
+          MailScanner::Log::WarnLog("Password Protected RAR Found");
+          return "password";
+        }
+      }
+
+      # Have we already hit the beginng and now find another ------ string?
+      # If so then we are at the end
+      $EndInfo = 1 if $what =~ /-{40,}$/ && $BeginInfo;
+
+      # if we are after the begning but haven't reached the end,
+      # then process this line
+      if ($BeginInfo && !$EndInfo) {
+        # If we are on line one then it's the file name with full path
+        # otherwise we are on the info line containing the attributes
+        if ($ParseLine eq 1) {
+          $junk = $what;
+          $junk =~ s/^\s+|\s+$//g;
+          chomp($junk);
+          $ParseLine = 2;
+        } else {
+          $Stuff = $what;
+          $Stuff =~ s/^\s+|\s+$//g;
+          # Need to remove redundant spaces from our info line and
+          # split it into it's components
+          chomp($Stuff);
+          $Stuff =~ s/\s{2,}/ /g;
+          my ($RSize,$RPacked,$RRatio,$RDate,$RTime,$RAttrib,$RCrc,$RMeth,$RVer)
+             = split /\s/, $Stuff;
+          # If RAttrib doesn't begin with d then it's a file and we
+          # add it to our $memb string, otherwise we ignore the directory
+          # only entries
+          #MailScanner::Log::WarnLog("UnPackRar InfoLine :%s:", $Stuff);
+          #MailScanner::Log::WarnLog("UnPackRar Looking at ATTRIB :->%s<-:",
+          #                          $RAttrib);
+          $memb .= "$junk\n" if $RAttrib !~ /^d|^.D/;
+          $junk = '';
+          $Stuff = '';
+          $ParseLine = 1;
+        }
+      }
+      # If we have a line full of ---- and $BeginInfo is not set then
+      # we are at the first and we need to set $BeginInfo so next pass
+      # begins processing file information
+      if ($what =~ /-{40,}$/ && ! $BeginInfo) {
+        $BeginInfo = 1;
       }
     }
 
-    # Have we already hit the beginng and now find another ------ string?
-    # If so then we are at the end
-    $EndInfo = 1 if $what =~ /-{40,}$/ && $BeginInfo;
+    # Remove returns from the output string, exit if the archive is empty
+    # or the output is empty
+
+    $memb =~ s/\r//gs;
+    return 1 if $memb ne '' &&
+                $memb =~ /(No files to extract|^COMMAND_TIMED_OUT$)/si;
+
+    return 0 if $memb eq ''; # JKF If no members it probably wasn't a Rar self-ext
+    #MailScanner::Log::DebugLog("Unrar : Archive Testing Completed On : %s",
+    #                           $memb);
+
+    @members = split /\n/, $memb;
+
+  # Unrar Version 5x file parse
+  } elsif ($UnrarVersion >= 5.0 && $UnrarVersion < 6.0) {
+    # This part lists the archive contents and makes the list of
+    # file names within. "This is a list verbose option"
+    $memb = SafePipe("$unrar v -p- '$explodeinto/$zipname' 2>&1",
+                   $PipeTimeOut);
+
+    $Stuff = "";
+    $BeginInfo = 0;
+    $EndInfo = 0;
+    $memb =~ s/\r//gs;
+    my @test = split /\n/, $memb;
+    $memb = '';
+
+    # Have to parse the output from the 'v' command and parse the information
+    # between the ----------------------------- lines
+    foreach $what (@test) {
+      # If we haven't hit any ------- lines at all, and we are prompted for
+      # a password, then the whole archive is password-protected.
+      unless ($BeginInfo || $EndInfo) {
+        if ($what =~ /^Encrypted file:/i && !$allowpasswords) {
+          MailScanner::Log::WarnLog("Password Protected RAR Found");
+          return "password";
+        }
+      }
+
+      # Have we already hit the beginng and now find another ------ string?
+      # If so then we are at the end
+      $EndInfo = 1 if $what =~ /^-/ && $BeginInfo;
   
-    # if we are after the begning but haven't reached the end,
-    # then process this line
-    if ($BeginInfo && !$EndInfo) {
-      # If we are on line one then it's the file name with full path
-      # otherwise we are on the info line containing the attributes
-      if ($ParseLine eq 1) {
-        $junk = $what;
-        $junk =~ s/^\s+|\s+$//g;
-        chomp($junk);
-        $ParseLine = 2;
-      } else {
+      # if we are after the begning but haven't reached the end,
+      # then process this line
+      if ($BeginInfo && !$EndInfo) {
+        # Parse Line
         $Stuff = $what;
         $Stuff =~ s/^\s+|\s+$//g;
-        # Need to remove redundant spaces from our info line and
-        # split it into it's components
         chomp($Stuff);
-        $Stuff =~ s/\s{2,}/ /g;
-        my ($RSize,$RPacked,$RRatio,$RDate,$RTime,$RAttrib,$RCrc,$RMeth,$RVer)
-           = split /\s/, $Stuff;
-        # If RAttrib doesn't begin with d then it's a file and we
-        # add it to our $memb string, otherwise we ignore the directory
-        # only entries
-        #MailScanner::Log::WarnLog("UnPackRar InfoLine :%s:", $Stuff);
-        #MailScanner::Log::WarnLog("UnPackRar Looking at ATTRIB :->%s<-:",
-        #                          $RAttrib);
-        $memb .= "$junk\n" if $RAttrib !~ /^d|^.D/;
-        $junk = '';
+        my ($RAttrib,$RSize,$RPacked,$RRatio,$RDate,$RTime,$RCrc,$RName) = split /\s+/, $Stuff;
+        $memb .= "$RName\n";
         $Stuff = '';
-        $ParseLine = 1;
+      }
+      # If we have a line full of ---- and $BeginInfo is not set then
+      # we are at the first and we need to set $BeginInfo so next pass
+      # begins processing file information
+      if ($what =~ /^-/ && ! $BeginInfo) {
+        $BeginInfo = 1;
       }
     }
-    # If we have a line full of ---- and $BeginInfo is not set then
-    # we are at the first and we need to set $BeginInfo so next pass
-    # begins processing file information
-    if ($what =~ /-{40,}$/ && ! $BeginInfo) {
-      $BeginInfo = 1;
-    }
+
+    # Remove returns from the output string, exit if the archive is empty
+    # or the output is empty
+
+    $memb =~ s/\r//gs;
+    return 1 if $memb ne '' &&
+                $memb =~ /(No files to extract|^COMMAND_TIMED_OUT$)/si;
+
+    return 0 if $memb eq ''; # JKF If no members it probably wasn't a Rar self-ext
+    #MailScanner::Log::DebugLog("Unrar : Archive Testing Completed On : %s",
+    #                           $memb);
+
+    @members = split /\n/, $memb;  
+
   }
 
-  # Remove returns from the output string, exit if the archive is empty
-  # or the output is empty
-
-  $memb =~ s/\r//gs;
-  return 1 if $memb ne '' &&
-              $memb =~ /(No files to extract|^COMMAND_TIMED_OUT$)/si;
-
-  return 0 if $memb eq ''; # JKF If no members it probably wasn't a Rar self-ext
-  #MailScanner::Log::DebugLog("Unrar : Archive Testing Completed On : %s",
-  #                           $memb);
-
-  @members = split /\n/, $memb;
   $fh = new FileHandle;
 
   foreach $member2 (@members) {
