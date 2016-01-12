@@ -24,7 +24,8 @@
 # set your options here
 #
 CONFIGDIR='/opt/MailScanner/etc';
-THEURL='http://phishing.mailborder.com/phishing.bad.sites.conf';
+#CONFIGDIR='/etc/MailScanner';
+THEURL='http://phishing.mailscanner.info/phishing.bad.sites.conf';
 
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/etc:/usr/local/bin:/usr/sfw/bin
@@ -48,8 +49,8 @@ if [ ! -f $CONFIGDIR/phishing.bad.sites.custom ]; then
 	echo '#' >> $CONFIGDIR/phishing.bad.sites.custom
 fi
 
-wget --no-check-certificate -O $CONFIGDIR/phishing.bad.sites.conf.master $THEURL || \
 curl --compressed -o $CONFIGDIR/phishing.bad.sites.conf.master $THEURL || \
+wget --no-check-certificate -O $CONFIGDIR/phishing.bad.sites.conf.master $THEURL || \
 ( logger -p mail.warn -t update.bad.phishing.sites Cannot find wget or curl, update failed. ; echo Cannot find wget or curl to do phishing sites update. ; exit 1 )
 
 if [ -s phishing.bad.sites.conf.master ]; then
