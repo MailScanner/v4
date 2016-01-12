@@ -50,7 +50,7 @@ if [ $run_mailscanner = 0 ]; then
 
 	After you are done you will have to edit /etc/default/mailscanner as
 	well. There you will have to set the variable run_mailscanner to 1,
-	and then type "/etc/init.d/mailscanner start" to start the mailscanner
+	and then type "/etc/init.d/MailScanner start" to start the mailscanner
 	daemon.
 
 	EOF

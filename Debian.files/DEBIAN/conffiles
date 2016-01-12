@@ -20,7 +20,7 @@
 /etc/cron.daily/mailscanner
 /etc/cron.hourly/mailscanner
 /etc/default/mailscanner
-/etc/init.d/mailscanner
+/etc/init.d/MailScanner
 /etc/logcheck/ignore.d.server/mailscanner
 /etc/logcheck/ignore.d.workstation/mailscanner
 /etc/MailScanner/reports/ca/deleted.content.message.txt
