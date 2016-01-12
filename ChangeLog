@@ -1,3 +1,10 @@
+01/12/2016 Changes in    v4.85.2-4
+==================================
+*Updates*
+- Updated Messages.pm to support unrar version 5x
+- Updated RPM spec file to remove sendmail conflict
+- Replaced ScamNailer update_bad_phishing_emails with new version
+  
 05/03/2015 Changes in    v4.85.2-3
 ==================================
 *Updates*
