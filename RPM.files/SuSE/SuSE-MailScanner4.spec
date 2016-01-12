@@ -1021,6 +1021,9 @@ exit 0
 %doc %attr(755,root,root) doc
 
 %changelog
+* Tue January 12 2016 Jerry Benton <mailscanner@mailborder.com>
+- Updated group permissions for sendmail directories
+
 * Sun Mar 1 2015 Jerry Benton <mailscanner@mailborder.com>
 - Moved structure to /usr/share/MailScanner
 

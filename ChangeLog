@@ -4,6 +4,7 @@
 - Updated Messages.pm to support unrar version 5x
 - Updated RPM spec file to remove sendmail conflict
 - Replaced ScamNailer update_bad_phishing_emails with new version
+- Changed Debian package init.d script from mailscanner to MailScanner
   
 05/03/2015 Changes in    v4.85.2-3
 ==================================

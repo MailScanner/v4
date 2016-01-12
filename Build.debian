@@ -84,10 +84,10 @@ mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/
 cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/
 cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/
-cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/
+cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/
-chmod +x $WORK/etc/init.d/mailscanner $WORK/etc/cron.hourly/mailscanner $WORK/etc/cron.daily/mailscanner
+chmod +x $WORK/etc/init.d/MailScanner $WORK/etc/cron.hourly/mailscanner $WORK/etc/cron.daily/mailscanner
 
 # etc/MailScanner
 cp $DEVBASEDIR/mailscanner/etc/*.conf $WORK/etc/MailScanner/
@@ -229,7 +229,7 @@ chmod +x $WORK/DEBIAN/postrm
 chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
 chmod +x $WORK/etc/cron.daily/mailscanner
 chmod +x $WORK/etc/cron.hourly/mailscanner
-chmod +x $WORK/etc/init.d/mailscanner
+chmod +x $WORK/etc/init.d/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
 gzip -9 $WORK/usr/share/doc/mailscanner/changelog.Debian
