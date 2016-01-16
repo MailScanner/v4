@@ -3011,13 +3011,18 @@ sub UnpackRar {
   $PipeTimeOut = MailScanner::Config::Value('unrartimeout');
   $unrar = MailScanner::Config::Value('unrarcommand');
   return 1 unless $unrar && -x $unrar;
-  
-  # Get unrar version
-  $UnrarVersion = (split /\ /, (split /\n/, SafePipe("$unrar --help 2>&1",$PipeTimeOut))[1])[1];
 
-  # Check for version 4 or 5 of unrar.  
+  # Get unrar version
+  # Unrar Version 5.21 (and possibly others in the future do not use --help, grab without --help here)
+  $UnrarVersion = (split /\ /, (split /\n/, SafePipe("$unrar 2>&1",$PipeTimeOut))[1])[1];
+
+  # Check for version 4 or 5 of unrar.
   # Future versions of unrar will need tested
-  return 1 unless $UnrarVersion >= 4.0 && $UnrarVersion < 6.0;
+  # If unrar itself does not output version, grab again using --help as a fail safe
+  $UnrarVersion = (split /\ /, (split /\n/, SafePipe("$unrar --help 2>&1",$PipeTimeOut))[1])[1] unless  $UnrarVersion =~ /^\d+\.\d*$/;
+
+  # Check version
+  return 1 unless $UnrarVersion =~ /^\d+\.\d*$/ && ( $UnrarVersion >= 4.0 && $UnrarVersion < 6.0 );
 
   # Unrar Version 4x file parse
   if ($UnrarVersion >= 4.0 && $UnrarVersion < 5.0) {
@@ -7893,7 +7898,7 @@ sub WordDecoderKeep7Bit {
 ## A filename is evil unless it only contains any of the following:
 ##  \%\(\)\+\,\-\.0-9\=A-Z_a-z\x80-\xFF
 ## To get the correct pattern match string, do this:
-## print '\x00-\x1F\x7F' . quotemeta(' !"£$&') . quotemeta("'") .
+## print '\x00-\x1F\x7F' . quotemeta(' !"Â£$&') . quotemeta("'") .
 ##       quotemeta('*/:/<>?@[\]^`{|}~') . "\n";
 ## print ' ' . quotemeta('%()+,-.') . '0-9' . quotemeta('=') .
 ##       'A-Z' . quotemeta('_') . 'a-z' . quotemeta('{}') . '\x80-\xFF' . "\n";
