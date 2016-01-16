@@ -1,3 +1,9 @@
+01/16/2016 Changes in    v4.85.3-2
+==================================
+*Updates*
+- Changed Debian installer to use unrar instead of unrar-free
+- Revised update to Message.pm for unrar compatibility
+
 01/12/2016 Changes in    v4.85.3-1
 ==================================
 *Updates*
