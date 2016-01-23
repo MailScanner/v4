@@ -1,0 +1,56 @@
+# This is a list of the names of the virus scanning engines, along with the
+# filename of the command or script to run to invoke each one.
+# Three fields:
+#  1.  Name of virus scanner as known by MailScanner. Do not change this.
+#  2.  Location of -wrapper script. You should not need to change this.
+#  3.  Installation directory of virus scanner. This does not usually include
+#      any "bin" directory in the path to the scanner program itself.
+# You can test a -wrapper script with a command like this:
+#      /var/lib/MailScanner/wrapper/f-secure-wrapper /opt/f-secure/fsav /tmp
+# That command will attempt to scan /tmp using F-Secure. If it works you
+# should see some sensible output. If it fails, you will probably just see
+# an error message such as "Command not found" or similar.
+#
+# updated 23 Jan 2016 - J Benton
+#
+antivir		/var/lib/MailScanner/wrapper/antivir-wrapper	/usr/lib/AntiVir
+avast		/var/lib/MailScanner/wrapper/avast-wrapper	/usr
+avastd		/var/lib/MailScanner/wrapper/avastd-wrapper	/usr
+avg			/var/lib/MailScanner/wrapper/avg-wrapper	/usr/local
+bitdefender	/var/lib/MailScanner/wrapper/bitdefender-wrapper /opt/BitDefender
+clamav		/var/lib/MailScanner/wrapper/clamav-wrapper	/usr
+clamd		/bin/false				/usr/local
+clamavmodule	/bin/false				/tmp
+command		/var/lib/MailScanner/wrapper/command-wrapper	/usr
+css			/var/lib/MailScanner/wrapper/css-wrapper	/opt/SYMCScan
+drweb		/var/lib/MailScanner/wrapper/drweb-wrapper	/opt/drweb
+esets		/var/lib/MailScanner/wrapper/esets-wrapper	/usr/sbin
+etrust		/var/lib/MailScanner/wrapper/etrust-wrapper	/opt/eTrustAntivirus
+f-prot		/var/lib/MailScanner/wrapper/f-prot-wrapper	/usr/local/f-prot
+f-prot-6	/var/lib/MailScanner/wrapper/f-prot-6-wrapper	/opt/f-prot
+f-protd-6	/bin/false				/opt/f-prot
+f-secure	/var/lib/MailScanner/wrapper/f-secure-wrapper	/opt/f-secure/fsav
+generic		/var/lib/MailScanner/wrapper/generic-wrapper	/
+inoculan	/var/lib/MailScanner/wrapper/inoculan-wrapper	/usr/local/inoculan
+inoculate	/var/lib/MailScanner/wrapper/inoculate-wrapper	/usr/local/av
+# Kaspersky 5.5: your kaspersky-4.5 path should be /opt/kav/5.5
+# Kaspersky 4.5 and newer
+kaspersky-4.5	/var/lib/MailScanner/wrapper/kaspersky-wrapper	/opt/kav
+kaspersky	/var/lib/MailScanner/wrapper/kaspersky-wrapper	/opt/AVP
+kavdaemonclient	/var/lib/MailScanner/wrapper/kavdaemonclient-wrapper /usr/local
+mcafee		/var/lib/MailScanner/wrapper/mcafee-wrapper	/usr/local/uvscan
+mcafee6		/var/lib/MailScanner/wrapper/mcafee6-wrapper	/usr/local/uvscan
+# Now updated to handle nod32 2.01 and upwards
+#nod32-1.99	/var/lib/MailScanner/wrapper/nod32-wrapper	/usr/local/nod32
+nod32-1.99	/var/lib/MailScanner/wrapper/nod32-wrapper	/usr/sbin
+nod32		/var/lib/MailScanner/wrapper/nod32-wrapper	/usr/local/nod32
+none		/bin/false				/tmp
+norman		/var/lib/MailScanner/wrapper/norman-wrapper	/usr/bin
+panda		/var/lib/MailScanner/wrapper/panda-wrapper	/usr
+rav			/var/lib/MailScanner/wrapper/rav-wrapper	/usr/local/rav8
+sophos		/var/lib/MailScanner/wrapper/sophos-wrapper	/opt/sophos-av
+sophossavi	/bin/false				/tmp
+symscanengine	/var/lib/MailScanner/wrapper/symscanengine-wrapper /opt/SYMCScan
+trend		/var/lib/MailScanner/wrapper/trend-wrapper	/pack/trend
+vba32		/var/lib/MailScanner/wrapper/vba32-wrapper	/opt/vba/vbacl
+vexira		/var/lib/MailScanner/wrapper/vexira-wrapper	/usr/local/vexira

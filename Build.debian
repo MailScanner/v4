@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# FHS revision
+# Jerry Benton
+# 23 Jan 2016
+
 # Checked and updated to be more streamlined by
 # Jerry Benton
 # 24 FEB 2015
@@ -74,8 +78,12 @@ mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/sbin
 #mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
-mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/MailScanner/CustomFunctions}
-mkdir -p $WORK/etc/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
+#mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/MailScanner/CustomFunctions}
+mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/MailScanner,share/lintian/overrides,share/MailScanner/perl,share/MailScanner/custom}
+mkdir -p $WORK/var/lib/MailScanner/autoupdate
+mkdir -p $WORK/var/lib/MailScanner/wrapper
+#mkdir -p $WORK/etc/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
+mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
 mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 
@@ -95,6 +103,7 @@ cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf.with.mcp $WORK/etc/MailScanner/
 cp $DEVBASEDIR/mailscanner/etc/conf.d/README $WORK/etc/MailScanner/conf.d/
 cp $DEVBASEDIR/mailscanner/etc/mcp/* $WORK/etc/MailScanner/mcp/
 mv $WORK/etc/MailScanner/mailscanner.conf $WORK/etc/MailScanner/MailScanner.conf
+cp -f $DEVBASEDIR/mailscanner/etc/virus.scanners.conf.new $WORK/etc/MailScanner/virus.scanners.conf
 
 # etc/MailScanner/rules
 while read f 
@@ -113,7 +122,8 @@ for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
 do
 	while read f
 	do
-		cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/etc/MailScanner/reports/$lang
+		#cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/etc/MailScanner/reports/$lang
+		cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/usr/share/MailScanner/reports/$lang
 	done << EOF
 deleted.content.message.txt
 deleted.filename.message.txt
@@ -167,36 +177,38 @@ cp $DEVBASEDIR/man/*.8 $WORK/usr/share/man/man8/
 cp $DEVBASEDIR/man/*.5 $WORK/usr/share/man/man5/
 
 # usr/share/doc
-cp $DEVBASEDIR/README $WORK/usr/share/doc/mailscanner/
-cp $DEVBASEDIR/Debian.files/changelog.Debian $WORK/usr/share/doc/mailscanner/
-cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/mailscanner/
-cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/mailscanner/
+cp $DEVBASEDIR/README $WORK/usr/share/doc/MailScanner/
+cp $DEVBASEDIR/Debian.files/changelog.Debian $WORK/usr/share/doc/MailScanner/
+cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/MailScanner/
+cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/MailScanner/
 
 # /usr/share/linitian/overrides
 cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/
 
 # wrappers and updates
-cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
+#cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
+cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,.prf} $WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/*{-autoupdate} $WORK/var/lib/MailScanner/autoupdate
 
 # perl modules 
 cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/MailScanner/CustomFunctions/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/perl/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/custom/
 
 # set correct paths
-perl -pi - $WORK/usr/share/MailScanner/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
+perl -pi - $WORK/usr/share/MailScanner/perl/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
 s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
 s./opt/MailScanner/bin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
 s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
 s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
+s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
 s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
 s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/share/MailScanner.;
-s./opt/MailScanner/bin./usr/share/MailScanner.;
+s./opt/MailScanner/lib./var/lib/MailScanner.;
+s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 s+Clamd Socket = /tmp/clamd.socket+Clamd Socket = /var/run/clamav/clamd.ctl+;
 EOF
@@ -205,11 +217,11 @@ s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s./opt/MailScanner/var./var/run.;
 s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
 s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
+s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
 s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
 s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
 s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/share/MailScanner.;
+s./opt/MailScanner/lib./var/lib/MailScanner.;
 s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
@@ -226,9 +238,10 @@ chmod +x $WORK/usr/sbin/*
 chmod +x $WORK/DEBIAN/postinst
 chmod +x $WORK/DEBIAN/preinst
 chmod +x $WORK/DEBIAN/postrm
-chmod +x $WORK/usr/share/MailScanner/*{-wrapper,-autoupdate}
-chmod +x $WORK/etc/cron.daily/mailscanner
-chmod +x $WORK/etc/cron.hourly/mailscanner
+chmod +x $WORK/var/lib/MailScanner/autoupdate/*{-autoupdate}
+chmod +x $WORK/var/lib/MailScanner/wrapper/*{-wrapper}
+#chmod +x $WORK/etc/cron.daily/mailscanner
+#chmod +x $WORK/etc/cron.hourly/mailscanner
 chmod +x $WORK/etc/init.d/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done

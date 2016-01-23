@@ -15,7 +15,7 @@
 PATH=/usr/sbin:/usr/bin:/bin:/sbin
 DESC="mail spam/virus scanner"
 NAME=MailScanner
-PNAME=mailscanner
+PNAME=MailScanner
 DAEMON=/usr/sbin/$NAME
 STARTAS=MailScanner
 SCRIPTNAME=/etc/init.d/$PNAME

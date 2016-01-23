@@ -35,6 +35,10 @@ if id -u vscan >/dev/null 2>&1; then
 	usermod -a -G mtagroup vscan >/dev/null 2>&1
 fi
 
+if id -u sophosav >/dev/null 2>&1; then
+	usermod -a -G mtagroup sophosav >/dev/null 2>&1
+fi
+
 if id -u Debian-exim >/dev/null 2>&1; then
 	usermod -a -G mtagroup Debian-exim >/dev/null 2>&1
 fi
@@ -65,6 +69,7 @@ fi
 
 # this is not in the new mailscanner package. move it
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
+	cp -f /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
 	rm -rf /etc/MailScanner/CustomFunctions
 	ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/CustomFunctions
 fi
@@ -130,6 +135,6 @@ rm -f /etc/MailScanner/*.original323
 # softlink for custom functions
 ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/custom
 
-update-rc.d mailscanner defaults
+update-rc.d MailScanner defaults
 
 exit 0
