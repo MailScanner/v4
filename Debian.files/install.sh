@@ -244,17 +244,20 @@ if [ -d "/usr/lib/MailScanner" ]; then
 	echo;
 	echo "I have copied /usr/lib/MailScanner/MailScanner/CustomFunctions/* to";
 	echo "$SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions";
+	echo "Copy your required custom functions to: /usr/share/MailScanner/custom";
 	echo;
+	rm -rf /usr/lib/MailScanner/MailScanner
 	timewait 3;
 fi
 
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
 	mkdir -p $SAVEDIR/etc/MailScanner/CustomFunctions
-	cp -f /etc/MailScanner/CustomFunctions* $SAVEDIR/etc/MailScanner/CustomFunctions
+	cp -f /etc/MailScanner/CustomFunctions/* $SAVEDIR/etc/MailScanner/CustomFunctions
 	clear
 	echo;
 	echo "I have copied /etc/MailScanner/CustomFunctions/* to";
 	echo "$SAVEDIR/etc/MailScanner/CustomFunctions";
+	echo "Copy your required custom functions to: /usr/share/MailScanner/custom";
 	echo;
 	timewait 3;
 fi
@@ -267,6 +270,7 @@ if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 	echo "I have copied /etc/MailScanner/CustomConfig.pm to";
 	echo "$SAVEDIR/etc/MailScanner/CustomConfig.pm";
 	echo;
+	rm -f /etc/MailScanner/CustomConfig.pm
 	timewait 3;
 fi
 
