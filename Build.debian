@@ -245,7 +245,7 @@ chmod +x $WORK/var/lib/MailScanner/wrapper/*{-wrapper}
 chmod +x $WORK/etc/init.d/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
-gzip -9 $WORK/usr/share/doc/mailscanner/changelog.Debian
+gzip -9 $WORK/usr/share/doc/MailScanner/changelog.Debian
 
 # create a working dir for package
 PKGTMP="/tmp/deb.$$/";
