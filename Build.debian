@@ -188,7 +188,7 @@ cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/sh
 # wrappers and updates
 #cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
 cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,.prf} $WORK/var/lib/MailScanner/wrapper
-cp $DEVBASEDIR/mailscanner/lib/*{-autoupdate} $WORK/var/lib/MailScanner/autoupdate
+cp $DEVBASEDIR/mailscanner/lib/*-autoupdate $WORK/var/lib/MailScanner/autoupdate
 
 # perl modules 
 cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/
