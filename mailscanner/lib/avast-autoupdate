@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 
 #
 # Avast updater. Original code by Julian Field. Timeout code by

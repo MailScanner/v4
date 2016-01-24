@@ -3,10 +3,14 @@
 *Updates*
 - Moved directory structure to:
  MailScanner Perl Modules: 	/usr/share/MailScanner/perl
- Custom Perl Modules		/usr/share/MailScanner/custom
- AV Wrappers: 				/usr/share/MailScanner/wrapper
- Autoupdate Scripts: 		/usr/share/MailScanner/autoupdate
+ Custom Perl Modules		/usr/share/MailScanner/perl/custom
  Reports: 					/usr/share/MailScanner/reports
+ AV Wrappers: 				/var/lib/MailScanner/wrapper
+ Autoupdate Scripts: 		/var/lib/MailScanner/autoupdate
+
+- Updated all scripts to use
+  #!/usr/bin/perl
+  for better portability across OS platforms
 - Renamed  /etc/init.d/mailscanner to /etc/init.d/MailScanner 
  in debian package
 - Updated virus.scanners.conf with new directory structure and updated

@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 
 # script to update rav automatically
 # based on sophos update script by jkf

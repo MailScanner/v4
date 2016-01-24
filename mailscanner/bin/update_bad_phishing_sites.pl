@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 use strict; 
 use Net::DNS::Resolver;
 use LWP::UserAgent;

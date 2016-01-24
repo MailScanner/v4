@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 
 # specify complete path+name for RAV program
 #my $ravprogram = '/usr/local/rav8/bin/ravlin8';

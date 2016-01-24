@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 
 # JKF 2009-08-26 Replace the functionality of lines like this:
 # MTA=`perl -n -e 'print "$_" if chomp && s/^\s*MTA\s*=\s*([a-zA-Z]+).*$/$1/ && ($_=lc($_))' /etc/MailScanner/MailScanner.conf`
