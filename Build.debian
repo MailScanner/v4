@@ -262,7 +262,7 @@ tar czf MailScanner-${FULLMSVER}.deb.tar.gz *
 mv -f MailScanner-${FULLMSVER}.deb.tar.gz $FILEOUT
 
 rm -rf $PKGTMP
-#rm -rf $WORK
+rm -rf $WORK
 
 
 
