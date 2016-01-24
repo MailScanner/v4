@@ -1,4 +1,4 @@
-# Main configuration file for the MailScanner Email Virus Scanner
+# Main configuration file for the MailScanner E-Mail Virus Scanner
 #
 # READ THIS FIRST!
 # Instead of making changes directly to this file, you should put your
@@ -1077,7 +1077,7 @@ Known Web Bug Servers = msgtag.com
 # If this is not specified, the the old value of "MailScannerWebBug" is used,
 # which of course is not an image and may well upset layout of the email.
 # This can also be the filename of a ruleset.
-Web Bug Replacement = https://s3.amazonaws.com/msv4/images/spacer.gif
+Web Bug Replacement = https://s3.amazonaws.com/mailscanner/images/1x1spacer.gif
 
 # Do you want to allow <Object Codebase=...> or <Object Data=...> tags
 # in email messages?

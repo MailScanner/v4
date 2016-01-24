@@ -302,7 +302,7 @@ SQLDebug		0	no	0	yes	1
 # These should be checked for dir existence
 [Simple,Dir]
 incomingworkdir		/var/spool/MailScanner/incoming
-lockfiledir		/var/spool/MailScanner/incoming/Locks
+lockfiledir		/var/lock/MailScanner
 
 # Check the first word of these for file existence
 [Simple,File]
@@ -360,8 +360,8 @@ qmailintdhashnumber		1
 # filename containing a list of directories.
 [Simple,Other]
 cachetiming		1800,300,10800,172800,600
-ClamWatchFiles		/usr/local/share/clamav/*.cvd
-CustomFunctionsDir	/usr/share/MailScanner/MailScanner/CustomFunctions
+ClamWatchFiles		/var/lib/clamav/*.cvd
+CustomFunctionsDir	/usr/share/MailScanner/perl/custom
 FileCommand		/usr/bin/file
 FirstCheck		mcp
 getipfromheader		0
@@ -385,7 +385,7 @@ QuarantinePerms		0600
 RunAsUser		0
 RunAsGroup		0
 SACache			/var/spool/MailScanner/incoming/SpamAssassin.cache.db
-SAVIWatchFiles		/usr/local/Sophos/ide/*.zip
+SAVIWatchFiles		/opt/sophos-av/lib/sav/*.ide
 SophosAllowedErrors	
 sophoside		
 sophoslib		
@@ -492,34 +492,34 @@ WarnOtherSenders	1	no	0	yes	1
 # JKF 19/12/2007 WarnPasswordSenders    1       no      0       yes     1
 
 [First,File]
-DeletedContentMessage	/etc/MailScanner/reports/en/deleted.content.message.txt
-DeletedFilenameMessage	/etc/MailScanner/reports/en/deleted.filename.message.txt
-DeletedSizeMessage	/etc/MailScanner/reports/en/deleted.size.message.txt
-DeletedVirusMessage	/etc/MailScanner/reports/en/deleted.virus.message.txt
-DisinfectedReportText	/etc/MailScanner/reports/en/disinfected.report.txt
-inlinehtmlsig		/etc/MailScanner/reports/en/inline.sig.html
-inlinehtmlwarning	/etc/MailScanner/reports/en/inline.warning.html
-inlinespamwarning	/etc/MailScanner/reports/en/inline.spam.warning.txt
-inlinetextsig		/etc/MailScanner/reports/en/inline.sig.txt
-inlinetextwarning	/etc/MailScanner/reports/en/inline.warning.txt
+DeletedContentMessage	/usr/share/MailScanner/reports/en/deleted.content.message.txt
+DeletedFilenameMessage	/usr/share/MailScanner/reports/en/deleted.filename.message.txt
+DeletedSizeMessage	/usr/share/MailScanner/reports/en/deleted.size.message.txt
+DeletedVirusMessage	/usr/share/MailScanner/reports/en/deleted.virus.message.txt
+DisinfectedReportText	/usr/share/MailScanner/reports/en/disinfected.report.txt
+inlinehtmlsig		/usr/share/MailScanner/reports/en/inline.sig.html
+inlinehtmlwarning	/usr/share/MailScanner/reports/en/inline.warning.html
+inlinespamwarning	/usr/share/MailScanner/reports/en/inline.spam.warning.txt
+inlinetextsig		/usr/share/MailScanner/reports/en/inline.sig.txt
+inlinetextwarning	/usr/share/MailScanner/reports/en/inline.warning.txt
 languagestrings		
-recipientmcpreport	/etc/MailScanner/reports/en/recipient.mcp.report.txt
-recipientspamreport	/etc/MailScanner/reports/en/recipient.spam.report.txt
-rejectionreport		/etc/MailScanner/reports/en/message.rejection.report.txt
-sendercontentreport 	/etc/MailScanner/reports/en/sender.content.report.txt
-# JKF 19/12/2007 senderpasswordreport   /etc/MailScanner/reports/en/sender.password.report.txt
-sendererrorreport 	/etc/MailScanner/reports/en/sender.error.report.txt
-senderfilenamereport	/etc/MailScanner/reports/en/sender.filename.report.txt
-SenderRBLSpamReport	/etc/MailScanner/reports/en/sender.spam.rbl.report.txt
-SenderSASpamReport	/etc/MailScanner/reports/en/sender.spam.sa.report.txt
-SenderSAMCPReport	/etc/MailScanner/reports/en/sender.mcp.report.txt
-SenderSizeReport	/etc/MailScanner/reports/en/sender.size.report.txt
-SenderBothSpamReport	/etc/MailScanner/reports/en/sender.spam.report.txt
-sendervirusreport 	/etc/MailScanner/reports/en/sender.virus.report.txt
-StoredContentMessage	/etc/MailScanner/reports/en/stored.content.message.txt
-StoredFilenameMessage	/etc/MailScanner/reports/en/stored.filename.message.txt
-StoredSizeMessage	/etc/MailScanner/reports/en/stored.size.message.txt
-StoredVirusMessage	/etc/MailScanner/reports/en/stored.virus.message.txt
+recipientmcpreport	/usr/share/MailScanner/reports/en/recipient.mcp.report.txt
+recipientspamreport	/usr/share/MailScanner/reports/en/recipient.spam.report.txt
+rejectionreport		/usr/share/MailScanner/reports/en/message.rejection.report.txt
+sendercontentreport 	/usr/share/MailScanner/reports/en/sender.content.report.txt
+# JKF 19/12/2007 senderpasswordreport   /usr/share/MailScanner/reports/en/sender.password.report.txt
+sendererrorreport 	/usr/share/MailScanner/reports/en/sender.error.report.txt
+senderfilenamereport	/usr/share/MailScanner/reports/en/sender.filename.report.txt
+SenderRBLSpamReport	/usr/share/MailScanner/reports/en/sender.spam.rbl.report.txt
+SenderSASpamReport	/usr/share/MailScanner/reports/en/sender.spam.sa.report.txt
+SenderSAMCPReport	/usr/share/MailScanner/reports/en/sender.mcp.report.txt
+SenderSizeReport	/usr/share/MailScanner/reports/en/sender.size.report.txt
+SenderBothSpamReport	/usr/share/MailScanner/reports/en/sender.spam.report.txt
+sendervirusreport 	/usr/share/MailScanner/reports/en/sender.virus.report.txt
+StoredContentMessage	/usr/share/MailScanner/reports/en/stored.content.message.txt
+StoredFilenameMessage	/usr/share/MailScanner/reports/en/stored.filename.message.txt
+StoredSizeMessage	/usr/share/MailScanner/reports/en/stored.size.message.txt
+StoredVirusMessage	/usr/share/MailScanner/reports/en/stored.virus.message.txt
 
 [First,Command]
 Sendmail		/usr/sbin/sendmail
@@ -571,7 +571,7 @@ HighSpamSubjectText		{Spam?}
 Hostname			the MailScanner
 IDHeader			X-MailScanner-ID:
 InfoHeader			
-InfoValue			Please contact the ISP for more information
+InfoValue			Please contact an administrator for more information
 IPVerHeader			
 LocalPostmaster			postmaster
 MailHeader			X-MailScanner:
@@ -591,9 +591,9 @@ MCPSubjectText			{MCP?}
 SpamSubjectText			{Spam?}
 SpamStarsHeader			X-MailScanner-SpamScore:
 MCPHeader			X-MailScanner-MCPCheck:
-UnscannedHeader			Not scanned: please contact your Internet E-Mail Service Provider for details
+UnscannedHeader			Not scanned: please contact your administrator for details
 VirusSubjectText		{Virus?}
-WebBugURL			http://www.mailscanner.info/images/1x1spacer.gif
+WebBugURL			https://s3.amazonaws.com/msv4/images/spacer.gif
 HamActions		deliver header "X-Spam-Status: No"
 SpamActions		deliver header "X-Spam-Status: Yes"
 HighScoreSpamActions	deliver header "X-Spam-Status: Yes"

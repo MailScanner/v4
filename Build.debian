@@ -79,7 +79,7 @@ mkdir -p $WORK/var/{spool/MailScanner/archive,spool/MailScanner/quarantine,spool
 mkdir -p $WORK/usr/sbin
 #mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
 #mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/MailScanner/CustomFunctions}
-mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/MailScanner,share/lintian/overrides,share/MailScanner/perl,share/MailScanner/custom}
+mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/MailScanner,share/lintian/overrides,share/MailScanner/perl/MailScanner,share/MailScanner/perl/custom}
 mkdir -p $WORK/var/lib/MailScanner/autoupdate
 mkdir -p $WORK/var/lib/MailScanner/wrapper
 #mkdir -p $WORK/etc/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
@@ -191,13 +191,13 @@ cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,.prf} $WORK/var/lib/MailScanner/wrappe
 cp $DEVBASEDIR/mailscanner/lib/*-autoupdate $WORK/var/lib/MailScanner/autoupdate
 
 # perl modules 
-cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/perl/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/custom/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/perl/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/perl/MailScanner/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/MailScanner/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/perl/custom/
 
 # set correct paths
-perl -pi - $WORK/usr/share/MailScanner/perl/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
+perl -pi - $WORK/usr/share/MailScanner/perl/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
 s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
@@ -262,7 +262,7 @@ tar czf MailScanner-${FULLMSVER}.deb.tar.gz *
 mv -f MailScanner-${FULLMSVER}.deb.tar.gz $FILEOUT
 
 rm -rf $PKGTMP
-rm -rf $WORK
+#rm -rf $WORK
 
 
 

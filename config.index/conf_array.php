@@ -476,13 +476,13 @@ Archive Mail = /var/spool/MailScanner/archive',
     'external' => 'customfunctionsdir',
     'type' => 'other',
     'ruleset' => 'no',
-    'default' => '/usr/share/MailScanner/MailScanner/CustomFunctions',
+    'default' => '/usr/share/MailScanner/custom',
     'name' => 'Custom Functions Dir',
     'desc' => ' Where to put the code for your "Custom Functions". No code in this
  directory should be over-written by the installation or upgrade process.
  All files starting with "." or ending with ".rpmnew" will be ignored,
  all other files will be compiled and may be used with Custom Functions.',
-    'value' => ' /opt/MailScanner/lib/MailScanner/CustomFunctions',
+    'value' => ' /opt/MailScanner/lib/MailScanner/custom',
   ),
   'gstimeout' => 
   array (
@@ -1828,7 +1828,7 @@ Ignored Web Bug Filenames = spacer pixel.gif pixel.png',
     'external' => 'monitorsforsophosupdates',
     'type' => 'other',
     'ruleset' => 'no',
-    'default' => '/usr/local/Sophos/ide/*.zip',
+    'default' => '/opt/sophos-av/lib/sav/*.ide',
     'name' => 'Monitors For Sophos Updates',
     'desc' => ' SophosSAVI only: monitor each of these files for changes in size to
  detect when a Sophos update has happened. The date of the Sophos Lib Dir
