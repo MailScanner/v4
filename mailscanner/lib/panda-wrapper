@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl -w
 
 #
 #   MailScanner - SMTP E-Mail Virus Scanner

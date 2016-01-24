@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 #Inoculan - Virus Scanner
 #update script of AntiVir adapted by W-Mark Kubacki; wmark@hurrikane.de

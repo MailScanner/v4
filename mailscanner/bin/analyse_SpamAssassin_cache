@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 # If this script fails to find your SpamAssassin.cache.db file then put
 # the filename on the command-line.
