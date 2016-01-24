@@ -91,7 +91,7 @@ mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 # cron, default, init.d, logcheck
 cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/
 cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/
-cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/
+cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/
