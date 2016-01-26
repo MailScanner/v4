@@ -372,7 +372,7 @@ $APTGET -y install tnef $CAVOPTION $SAOPTION
 if [ $CAV == 1 ]; then
 	COUT='#Example';
 	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
-	/usr/bin/freshclam
+	freshclam
 fi
 
 # enable spamassassin
