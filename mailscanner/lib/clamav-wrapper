@@ -178,4 +178,3 @@ if [ "$retval" = "40" ]; then
 else
   exit $retval
 fi
-

@@ -431,19 +431,31 @@ timewait $PMODWAIT
 
 # fix the clamav wrapper if the user does not exist
 if [ -f '/etc/freshclam.conf' ]; then
+	
+	DISTROCAVUSER='ClamUser="clamav"';
+	DISTROCAVGRP='ClamGroup="clamav"';
+	
+	# check for common users and add to the mtagroup
 	if id -u clam >/dev/null 2>&1; then
-		#clam is being used instead of clamav
-		OLDCAVUSR='ClamUser="clamav"';
-		NEWCAVUSR='ClamUser="clam"'
-	
-		OLDCAVGRP='ClamGroup="clamav"';
-		NEWCAVGRP='ClamGroup="clam"';
-	
-		perl -pi -e 's/'$OLDCAVUSR'/'$NEWCAVUSR'/;' /usr/share/MailScanner/clamav-wrapper
-		perl -pi -e 's/'$OLDCAVGRP'/'$NEWCAVGRP'/;' /usr/share/MailScanner/clamav-wrapper
-		
-		freshclam
+		CAVUSR='ClamUser="clam"';
 	fi
+
+	if id -u clamav >/dev/null 2>&1; then
+		CAVUSR='ClamUser="clamav"';
+	fi
+	
+	if getent group clamav >/dev/null 2>&1; then
+		CAVGRP='ClamGroup="clamav"';
+	fi
+	
+	if getent group clam >/dev/null 2>&1; then
+		CAVGRP='ClamGroup="clam"';
+	fi
+	
+	perl -pi -e 's/'$DISTROCAVUSER'/'$CAVUSR'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
+	perl -pi -e 's/'$DISTROCAVGRP'/'$CAVGRP'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
+
+	freshclam
 fi
 
 # postfix fix
