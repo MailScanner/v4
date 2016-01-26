@@ -232,7 +232,7 @@ chmod +x $WORK/usr/sbin/*
 chmod +x $WORK/DEBIAN/postinst
 chmod +x $WORK/DEBIAN/preinst
 chmod +x $WORK/DEBIAN/postrm
-chmod +x $WORK/var/lib/MailScanner/autoupdate/*-autoupdate
+chmod +x $WORK/var/lib/MailScanner/wrapper/*-autoupdate
 chmod +x $WORK/var/lib/MailScanner/wrapper/*-wrapper
 chmod +x $WORK/etc/init.d/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done

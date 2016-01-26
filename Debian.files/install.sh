@@ -502,6 +502,9 @@ else
 
 	fi
 	
+	/usr/sbin/update_phishing_sites &
+	/usr/sbin/update_bad_phishing_sites &
+	
 	echo;
 	echo '----------------------------------------------------------';
 	echo 'Installation Complete'; echo;
