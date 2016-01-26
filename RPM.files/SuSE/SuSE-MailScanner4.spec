@@ -1,4 +1,4 @@
-%define name    mailscanner
+%define name    MailScanner
 %define version VersionNumberHere
 %define release ReleaseNumberHere
 
@@ -447,8 +447,10 @@ exit 0
 %attr(700,root,mail) %dir /var/spool/mqueue/.hoststat
 %attr(700,root,mail) %dir /var/spool/mqueue.in
 %attr(700,root,mail) %dir /var/spool/mqueue.in/.hoststat
-#%attr(700,root,root) %dir /var/spool/MailScanner/incoming
-#%attr(700,root,root) %dir /var/spool/MailScanner/quarantine
+%attr(750,root,root) %dir /var/lib/MailScanner
+%attr(750,root,root) %dir /var/spool/MailScanner/archive
+%attr(750,root,root) %dir /var/spool/MailScanner/incoming
+%attr(750,root,root) %dir /var/spool/MailScanner/quarantine
 %attr(700,root,root) /var/run/MailScanner.pid
 %attr(755,root,root) /usr/sbin/df2mbox
 %attr(755,root,root) /usr/sbin/d2mbox

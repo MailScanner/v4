@@ -8,7 +8,7 @@
 #
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >
-# 21 JAN 2016
+# 26 JAN 2016
 
 # clear the screen. yay!
 clear

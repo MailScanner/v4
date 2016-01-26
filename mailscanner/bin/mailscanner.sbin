@@ -30,7 +30,7 @@
 #      United Kingdom
 #
 # 	Updated: 	Jerry Benton <mailscanner@mailborder.com>
-#				13 FEB 2015
+#				26 JAN 2016
 
 use strict;
 no strict 'subs';

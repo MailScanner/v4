@@ -1,75 +1,28 @@
 #!/bin/bash
 #
-# cron script to clean up mailscanner files
+# cron script to clean up MailScanner quarantine
 #
-# $Id: local-clock,v 1.5 2002/03/13 02:18:38 bcwhite Exp $
-#
-# Written by Brian White <bcwhite@precidia.com>
+# Written by Jerry Benton <mailscanner@mailborder.com>
 #
 
-# how many days to keep quarantined messages
+# how many days to keep quarantined messages if not defined
 q_days=30
 
-# test existens of directories #435998
-if [[ ! -d /var/spool/MailScanner ]]; then
-		exit 0
+# bail if directory not present
+if [[ ! -d /var/spool/MailScanner/quarantine ]]; then
+	exit 0
 fi
 
 # load user-defaults
-if [[ -f /etc/default/mailscanner ]]; then
-    . /etc/default/mailscanner
+if [[ -f /etc/default/MailScanner ]]; then
+    . /etc/default/MailScanner
 fi
 
 # go to mailscanner spool directory
-cd /var/spool/MailScanner
+cd /var/spool/MailScanner/quarantine
 
 # remove old files and directories
-find quarantine -type f -ctime +$q_days    -exec rm -f {} \; >/dev/null 2>&1
-find quarantine -type d -depth -mindepth 1 -exec rmdir {} \; >/dev/null 2>&1
+find . -type f -mtime +$q_days -exec rm -f {} \; >/dev/null 2>&1
+find . -type d -empty -delete >/dev/null 2>&1
 
-# exit if exim4 isn't installed #406643
-if [ ! -x /usr/sbin/exim ]; then
-		exit 0
-fi
-
-# bug #401329 on pre 4.55.10-4 installations with exim
-# cron.daily/exim4-base cleans up /var/spool/exim4_incoming
-# so we have to clean up /var/spool/exim
-# on post 4.55.10-4 the following should do nothing
-
-# what cron.daily/exim4-base should do
-SPOOLDIRDEFAULT="/var/spool/exim4"
-# what cron.daily/exim4-base does
-SPOOLDIR="$(/usr/sbin/exim4 -bP spool_directory | sed 's/.*=[[:space:]]\(.*\)/\1/')"
-
-# if exim-base doesn't do what it should
-if [ "$SPOOLDIR" != "$SPOOLDIRDEFAULT" ]; then
-
-		# and there is the default spool directory
-		if [ -d "$SPOOLDIRDEFAULT" ]; then
-
-        # do what exim-base should have done
-        # run tidydb as Debian-exim:Debian-exim.
-			if [ -x /usr/sbin/exim_tidydb ]; then
-				cd $SPOOLDIRDEFAULT/db || exit 1
-				if ! find $SPOOLDIRDEFAULT/db -maxdepth 1 -name '*.lockfile' -or -type f \
-						-printf '%f\0' | \
-						xargs -0r -n 1 \
-						start-stop-daemon --start --exec /usr/sbin/exim_tidydb \
-						--chuid Debian-exim:Debian-exim -- $SPOOLDIRDEFAULT > /dev/null; then
-		# if we reach this, invoking exim_tidydb from start-stop-daemon has
-		# failed, most probably because of libpam-tmpdir being in use
-		# (see #373786 and #376165)
-						find $SPOOLDIRDEFAULT/db -maxdepth 1 -name '*.lockfile' -or -type f \
-								-printf '%f\0' | \
-								su - --shell /bin/bash \
-								--command "xargs -0r -n 1 /usr/sbin/exim_tidydb $SPOOLDIRDEFAULT > /dev/null" \
-								Debian-exim
-				fi
-			fi
-
-		fi
-fi
-
-# exit cleanly
 exit 0
