@@ -234,6 +234,32 @@ else
 	NODEPS=
 fi
 
+# ask if the user wants to add a ramdisk
+clear
+echo;
+echo "Do you want to create a RAMDISK?"; echo;
+echo "This will create a mount in /etc/fstab that attaches the processing"; 
+echo "directory /var/spool/MailScanner/incoming to a RAMDISK, which greatly"; 
+echo "increases processing speed at the cost of the reservation of some of";
+echo "the system RAM.";
+echo;
+echo "Specify a size in MB or leave blank for none.";
+echo;
+echo "Example: 1024"; echo;
+read -r -p "Specify a RAMDISK size? [0] : " RAMDISKSIZE
+
+if [[ $RAMDISKSIZE =~ ^[0-9]+$ ]]; then
+	if [ $RAMDISKSIZE != 0 ]; then
+		# user wants ramdisk
+		RAMDISK=1
+	else
+		RAMDISK=0
+	fi
+else
+	# no ramdisk
+	RAMDISK=0
+fi
+
 # back up their stuff
 SAVEDIR="$HOME/ms_upgrade/saved.$$";
 
@@ -520,8 +546,18 @@ else
 
 	fi
 	
-	/usr/sbin/update_phishing_sites &
-	/usr/sbin/update_bad_phishing_sites &
+	# create ramdisk
+	if [ $RAMDISK == 1 ]; then
+		if [ -d '/var/spool/MailScanner/incoming' ]; then
+			echo "Creating the ramdisk ...";
+			echo;
+			mount -t tmpfs -o size=${RAMDISKSIZE}M tmpfs /var/spool/MailScanner/incoming
+			echo "tmpfs /var/spool/MailScanner/incoming tmpfs rw,size=${RAMDISKSIZE}M,mode=750 0 0" >> /etc/fstab
+		fi
+	fi
+	
+	/usr/sbin/update_phishing_sites & >/dev/null 2>&1;
+	/usr/sbin/update_bad_phishing_sites & >/dev/null 2>&1;
 	
 	if [ -d '/etc/clamav' ]; then
 		/usr/bin/freshclam &
