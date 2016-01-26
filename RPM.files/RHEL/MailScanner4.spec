@@ -431,7 +431,7 @@ exit 0
 %attr(700,root,mail) %dir /var/spool/mqueue
 %attr(700,root,mail) %dir /var/spool/mqueue.in
 %attr(750,root,root) %dir /var/spool/MailScanner/archive
-%attr(750,root,root) %dir /var/spool/MailScanner/incoming
+%attr(755,root,root) %dir /var/spool/MailScanner/incoming
 %attr(750,root,root) %dir /var/spool/MailScanner/quarantine
 %attr(700,root,root) /var/run/MailScanner.pid
 %attr(755,root,root) /usr/sbin/df2mbox
