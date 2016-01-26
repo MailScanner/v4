@@ -6,15 +6,17 @@
   Custom Perl Modules			/usr/share/MailScanner/perl/custom
   Reports: 						/usr/share/MailScanner/reports
   AV Wrappers and Autoupdate:	/var/lib/MailScanner/wrapper
-
 - Renamed /etc/init.d/mailscanner to /etc/init.d/MailScanner 
   in Debian package
 - Restructured Debian /etc/init.d/MailScanner script 
-- Fixed broken or missing /var/lock/subsys in init scripts
+- Added check/fix for missing /var/lock/subsys in init scripts
 - Updated virus.scanners.conf with new directory structure and updated
   current location of clamav installations
 - Updated country.domains.conf
-
+- Added group creation of mtagroup which includes relevant system users
+  for processing mail
+- Changed distro default Incoming Work Group = mtagroup
+- Changed distro default Incoming Work Permissions = 0660
 
 01/16/2016 Changes in    v4.85.3-2
 ==================================
