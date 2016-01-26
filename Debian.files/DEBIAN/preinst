@@ -21,7 +21,13 @@ set -e
 # the postinst script will move them back
 if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 
-cp -f /etc/default/mailscanner /etc/default/mailscanner.original323
+if [ -f "/etc/default/mailscanner" ]; then
+	cp -f /etc/default/mailscanner /etc/default/MailScanner.original323
+fi
+
+if [ -f "/etc/default/MailScanner" ]; then
+	cp -f /etc/default/MailScanner /etc/default/MailScanner.original323
+fi
 
 while read f 
 do

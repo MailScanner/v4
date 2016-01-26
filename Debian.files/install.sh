@@ -462,7 +462,7 @@ echo;
 echo "Installing the MailScanner .deb package ... ";
 
 # install the mailscanner package
-dpkg -i $CONFFILES $NODEPS $THISCURRPMDIR/mailscanner-*-noarch.deb
+dpkg -i $CONFFILES $NODEPS $THISCURRPMDIR/MailScanner-*-noarch.deb
 
 if [ $? != 0 ]; then
 	echo;

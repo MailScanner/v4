@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for mailscanner
+# postinst script for MailScanner
 #
 # see: dh_installdeb(1)
 
@@ -62,7 +62,7 @@ if [ ! -d "/var/spool/mqueue.in" ]; then
 	perl -pi -e 's{Incoming Queue Dir = /var/spool/mqueue.in}{Incoming Queue Dir = /var/spool/mqueue}g;' /etc/MailScanner/MailScanner.conf
 fi
 
-# copy old ms files if this is an upgrade
+# this is an upgrade
 if [ -d "/usr/lib/MailScanner" ]; then
 	rm -rf /usr/lib/MailScanner
 fi
@@ -71,19 +71,16 @@ fi
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
 	cp -f /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/perl/custom/
 	rm -rf /etc/MailScanner/CustomFunctions
-	ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/CustomFunctions
 fi
 
 # this is not in the new mailscanner package.
 if [ -d "/etc/MailScanner/autoupdate" ]; then
 	rm -rf /etc/MailScanner/autoupdate
-	ln -s /usr/share/MailScanner/MailScanner/autoupdate/ /etc/MailScanner/autoupdate
 fi
 
 # this is not in the new mailscanner package.
 if [ -d "/etc/MailScanner/wrapper" ]; then
 	rm -rf /etc/MailScanner/wrapper
-	ln -s /usr/share/MailScanner/MailScanner/wrapper/ /etc/MailScanner/wrapper
 fi
 
 
@@ -118,16 +115,15 @@ EOF
 fi
 
 # upgrade
-if [ -f "/etc/default/mailscanner.original323" ]; then
-	rm -f /etc/default/mailscanner
-	mv /etc/default/mailscanner.original323 /etc/default/mailscanner
+if [ -f "/etc/default/MailScanner.original323" ]; then
+	rm -f /etc/default/MailScanner
+	mv /etc/default/MailScanner.original323 /etc/default/MailScanner
 fi
 
 # upgrade correction
 if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
-	cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/MailScanner/CustomConfig.pm
+	cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/perl/MailScanner/CustomConfig.pm
 	rm -f /etc/MailScanner/CustomConfig.pm
-	ln -s /usr/share/MailScanner/MailScanner/CustomConfig.pm /etc/MailScanner/CustomConfig.pm
 fi
 
 rm -f /etc/MailScanner/*.original323

@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: mailscanner
+Upstream-Name: MailScanner
 Maintainer: Jerry Benton <mailscanner@mailborder.com>
 Source: https://github.com/MailScanner/v4
 

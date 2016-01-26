@@ -65,7 +65,7 @@ if [ ! -f '/tmp/MailScanner.conf.index.html' ]; then
 fi
 
 # our working directory
-WORK="/tmp/mailscanner-$FULLMSVER";
+WORK="/tmp/MailScanner-$FULLMSVER";
 
 # delete work tmp if already exists
 if [ -d $WORK ]; then
@@ -77,8 +77,6 @@ mkdir -p $WORK
 mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/sbin
-#mkdir -p $WORK/usr/{share/man/man8,share/doc/mailscanner/examples/rules,share/doc/mailscanner/examples/mcp,share/doc/mailscanner/examples/CustomFunctions,share/doc/mailscanner/examples/conf.d}
-#mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/mailscanner,share/lintian/overrides,share/MailScanner/MailScanner/CustomFunctions}
 mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/MailScanner,share/lintian/overrides,share/MailScanner/perl/MailScanner,share/MailScanner/perl/custom}
 mkdir -p $WORK/var/lib/MailScanner/autoupdate
 mkdir -p $WORK/var/lib/MailScanner/wrapper
@@ -89,13 +87,13 @@ mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 
 # etc
 # cron, default, init.d, logcheck
-cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/
-cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/
+cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/
-cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/
-chmod +x $WORK/etc/init.d/MailScanner $WORK/etc/cron.hourly/mailscanner $WORK/etc/cron.daily/mailscanner
+cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/MailScanner
+chmod +x $WORK/etc/init.d/MailScanner $WORK/etc/cron.hourly/MailScanner $WORK/etc/cron.daily/MailScanner
 
 # etc/MailScanner
 cp $DEVBASEDIR/mailscanner/etc/*.conf $WORK/etc/MailScanner/
@@ -122,7 +120,6 @@ for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
 do
 	while read f
 	do
-		#cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/etc/MailScanner/reports/$lang
 		cp $DEVBASEDIR/mailscanner/etc/reports/$lang/$f $WORK/usr/share/MailScanner/reports/$lang
 	done << EOF
 deleted.content.message.txt
@@ -183,7 +180,7 @@ cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/MailScanner/
 cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/MailScanner/
 
 # /usr/share/linitian/overrides
-cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/
+cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/MailScanner
 
 # wrappers and updates
 #cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
@@ -240,8 +237,6 @@ chmod +x $WORK/DEBIAN/preinst
 chmod +x $WORK/DEBIAN/postrm
 chmod +x $WORK/var/lib/MailScanner/autoupdate/*-autoupdate
 chmod +x $WORK/var/lib/MailScanner/wrapper/*-wrapper
-#chmod +x $WORK/etc/cron.daily/mailscanner
-#chmod +x $WORK/etc/cron.hourly/mailscanner
 chmod +x $WORK/etc/init.d/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
@@ -250,7 +245,7 @@ gzip -9 $WORK/usr/share/doc/MailScanner/changelog.Debian
 # create a working dir for package
 PKGTMP="/tmp/deb.$$/";
 mkdir -p $PKGTMP/MailScanner-${FULLMSVER}
-fakeroot dpkg -b $WORK $PKGTMP/MailScanner-${FULLMSVER}/mailscanner-$FULLMSVER-noarch.deb
+fakeroot dpkg -b $WORK $PKGTMP/MailScanner-${FULLMSVER}/MailScanner-$FULLMSVER-noarch.deb
 cp $DEVBASEDIR/Debian.files/install.sh $PKGTMP/MailScanner-${FULLMSVER}
 cp $DEVBASEDIR/ChangeLog $PKGTMP/MailScanner-${FULLMSVER}
 cp $DEVBASEDIR/COPYING $PKGTMP/MailScanner-${FULLMSVER}
