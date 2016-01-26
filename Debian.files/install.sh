@@ -455,7 +455,7 @@ if [ -f '/etc/freshclam.conf' ]; then
 	perl -pi -e 's/'$DISTROCAVUSER'/'$CAVUSR'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
 	perl -pi -e 's/'$DISTROCAVGRP'/'$CAVGRP'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
 
-	freshclam
+	/usr/bin/freshclam &
 fi
 
 # postfix fix
