@@ -503,11 +503,6 @@ if [ -f "/etc/postfix/master.cf" ]; then
 	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
 fi
 
-# create symlink for spamasassin
-if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
-	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/MailScanner.cf 
-fi
-
 clear
 echo;
 echo "Installing the MailScanner .deb package ... ";
@@ -544,6 +539,11 @@ else
 		mv -f /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.old.$$
 		mv -f /etc/MailScanner/MailScanner.new  /etc/MailScanner/MailScanner.conf
 
+	fi
+	
+	# create symlink for spamasassin
+	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
+		ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/MailScanner.cf 
 	fi
 	
 	# create ramdisk

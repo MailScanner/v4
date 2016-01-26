@@ -17,6 +17,7 @@
   for processing mail
 - Changed distro default Incoming Work Group = mtagroup
 - Changed distro default Incoming Work Permissions = 0660
+- Added option to create RAMDISK during installation
 
 01/16/2016 Changes in    v4.85.3-2
 ==================================
