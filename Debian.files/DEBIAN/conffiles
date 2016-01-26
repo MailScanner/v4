@@ -17,12 +17,12 @@
 /etc/MailScanner/spam.assassin.prefs.conf
 /etc/MailScanner/spam.lists.conf
 /etc/MailScanner/virus.scanners.conf
-/etc/cron.daily/mailscanner
-/etc/cron.hourly/mailscanner
+/etc/cron.daily/MailScanner
+/etc/cron.hourly/MailScanner
 /etc/default/MailScanner
 /etc/init.d/MailScanner
-/etc/logcheck/ignore.d.server/mailscanner
-/etc/logcheck/ignore.d.workstation/mailscanner
+/etc/logcheck/ignore.d.server/MailScanner
+/etc/logcheck/ignore.d.workstation/MailScanner
 /usr/share/MailScanner/reports/ca/deleted.content.message.txt
 /usr/share/MailScanner/reports/ca/deleted.filename.message.txt
 /usr/share/MailScanner/reports/ca/deleted.size.message.txt
