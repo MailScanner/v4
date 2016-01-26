@@ -40,6 +40,9 @@ SENDMAIL_OUT_ARGS="-L sendmail-out -Am -q30m -om"
 SENDMAIL="/usr/sbin/sendmail"
 RESTART_DELAY=10
 
+# if /var/lock/subsys is missing
+[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+
 # Check for existence of needed config files and read them
 test -s /etc/sysconfig/mail && \
       . /etc/sysconfig/mail

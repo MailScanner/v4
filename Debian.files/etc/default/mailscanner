@@ -28,4 +28,4 @@ export HOSTNAME
 # Lockfile to inform scripts if MailScanner was stopped by hand
 # and should not be started automaticly
 #
-stopped_lockfile=/var/lock/MailScanner/mailscanner.off
+stopped_lockfile=/var/lock/subsys/MailScanner.off

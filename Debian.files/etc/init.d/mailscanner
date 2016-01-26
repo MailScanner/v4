@@ -13,7 +13,7 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/usr/sbin:/usr/bin:/bin:/sbin
-DESC="mail spam/virus scanner"
+DESC="email processor - "
 NAME=MailScanner
 PNAME=MailScanner
 DAEMON=/usr/sbin/$NAME
@@ -25,10 +25,12 @@ QUICKPEEK=/usr/sbin/Quick.Peek
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
+# if /var/lock/subsys is missing
+[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+
 run_mailscanner=0
 run_nice=0
-#stopped_lockfile=/var/lock/MailScanner.off
-stopped_lockfile=/var/lock/MailScanner/mailscanner.off
+stopped_lockfile=/var/lock/subsys/MailScanner.off
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$PNAME ] && . /etc/default/$PNAME
@@ -45,52 +47,20 @@ if [ $run_mailscanner = 0 ]; then
     if [ -z "$satisfy_nitpicking_on_removal" ]; then
 	cat <<-EOF
 
-	Please edit the file /etc/MailScanner/MailScanner.conf according to
-	your needs.  Then configure sendmail or exim for use with mailscanner.
+	Edit the file /etc/MailScanner/MailScanner.conf according to
+	your needs. When complete, edit /etc/default/MailScanner and set 
+	the variable to enable MailScanner to run:
 
-	After you are done you will have to edit /etc/default/mailscanner as
-	well. There you will have to set the variable run_mailscanner to 1,
-	and then type "/etc/init.d/MailScanner start" to start the mailscanner
-	daemon.
+	run_mailscanner = 1
 
 	EOF
     fi
     exit 0
 fi
 
-# sanity check for permissions
-fail()
-{
-    echo >&2 "$0: $1"
-    exit 1
-}
-
-check_dir()
-{
-    if [ ! -d $1 ]; then
-	mkdir -p "$1" || \
-	    fail "directory $1: does not exist and cannot be created"
-    fi
-    actual="$(stat -c %U $1)"
-    if [ "$actual" != "$2" ]; then
-	chown -R "$2" "$1" || \
-	    fail "directory $1: wrong owner (expected $2 but is $actual)"
-    fi
-    actual="$(stat -c %G $1)"
-    if [ "$actual" != "$3" ]; then
-	chgrp -R "$3" "$1" || \
-	    fail "directory $1: wrong group (expected $3 but is $actual)"
-    fi
-}
-
 user=`${QUICKPEEK} RunAsUser ${CONFFILE}`
 group=`${QUICKPEEK} RunAsGroup ${CONFFILE}`
 PIDFILE=`${QUICKPEEK} pidfile ${CONFFILE}`
-
-check_dir /var/spool/MailScanner       ${user:-mail} ${group:-mail}
-check_dir /var/lib/MailScanner         ${user:-mail} ${group:-mail}
-check_dir /var/run/MailScanner         ${user:-mail} ${group:-mail}
-check_dir /var/lock/MailScanner ${user:-mail} ${group:-mail}
 
 #
 # Function that starts the daemon/service
@@ -109,10 +79,9 @@ do_start()
   # Set lockfile to inform cronjobs about the running daemon
 	RETVAL="$?"
 	if [ $RETVAL -eq 0 ]; then
-	    touch /run/lock/MailScanner/mailscanner
+	    touch /run/lock/MailScanner
 	    rm -f $stopped_lockfile
 	fi
-
 }
 
 #
@@ -131,10 +100,10 @@ do_stop()
 
   # Remove lockfile for cronjobs
 	if [ $RETVAL -eq 0 ]; then
-	    rm -f /run/lock/MailScanner/mailscanner
+		log_daemon_msg "$NAME stopped"
+	    rm -f /run/lock/MailScanner
 	    touch $stopped_lockfile
 	fi
-
 	return "$RETVAL"
 }
 
@@ -189,9 +158,7 @@ case "$1" in
 	;;
   *)
 	echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
-	#echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
 	exit 3
 	;;
 esac
-
 :

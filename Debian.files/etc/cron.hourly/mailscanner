@@ -6,11 +6,11 @@
 # it wasn't stopped by hand (see $stopped_lockfile)
 
 run_mailscanner=0;
-stopped_lockfile=/var/lock/MailScanner/mailscanner.off;
+stopped_lockfile=/var/lock/subsys/MailScanner.off;
 
-if [ -f /etc/default/mailscanner ];
+if [ -f /etc/default/MailScanner ];
 then
-	. /etc/default/mailscanner;
+	. /etc/default/MailScanner;
 fi;
 
 [ $run_mailscanner = 0 ] && exit 0;

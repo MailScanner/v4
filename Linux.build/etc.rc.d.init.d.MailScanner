@@ -28,6 +28,9 @@ fi
 # Check that networking is up.
 [ ${NETWORKING} = "no" ] && exit 0
 
+# if /var/lock/subsys is missing
+[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+
 [ -f /opt/MailScanner/bin/check_mailscanner ] || exit 0
 [ -f /usr/sbin/sendmail ] || exit 0
 
@@ -86,7 +89,7 @@ case "$1" in
 	echo -n '         MailScanner:       '
 	/opt/MailScanner/bin/check_mailscanner >/dev/null
 	RETVAL=$?
-	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/mailscanner
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/MailScanner
 	success
 	echo
 	;;
