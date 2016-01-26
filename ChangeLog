@@ -5,8 +5,7 @@
   MailScanner Perl Modules: 	/usr/share/MailScanner/perl/MailScanner
   Custom Perl Modules			/usr/share/MailScanner/perl/custom
   Reports: 						/usr/share/MailScanner/reports
-  AV Wrappers: 					/var/lib/MailScanner/wrapper
-  Autoupdate Scripts: 			/var/lib/MailScanner/autoupdate
+  AV Wrappers and Autoupdate:	/var/lib/MailScanner/wrapper
 
 - Renamed /etc/init.d/mailscanner to /etc/init.d/MailScanner 
   in Debian package

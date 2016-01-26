@@ -78,9 +78,7 @@ mkdir -p $WORK/{var,usr,etc}
 mkdir -p $WORK/var/{spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming}
 mkdir -p $WORK/usr/sbin
 mkdir -p $WORK/usr/{share/man/man8,share/man/man5,share/doc/MailScanner,share/lintian/overrides,share/MailScanner/perl/MailScanner,share/MailScanner/perl/custom}
-mkdir -p $WORK/var/lib/MailScanner/autoupdate
 mkdir -p $WORK/var/lib/MailScanner/wrapper
-#mkdir -p $WORK/etc/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p $WORK/etc/{default,cron.daily,cron.hourly,init.d,logcheck/ignore.d.workstation,logcheck/ignore.d.server,MailScanner}
 mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
@@ -183,9 +181,8 @@ cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/MailScanner/
 cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/MailScanner
 
 # wrappers and updates
-#cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,-autoupdate,.prf} $WORK/usr/share/MailScanner
 cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,.prf} $WORK/var/lib/MailScanner/wrapper
-cp $DEVBASEDIR/mailscanner/lib/*-autoupdate $WORK/var/lib/MailScanner/autoupdate
+cp $DEVBASEDIR/mailscanner/lib/*-autoupdate $WORK/var/lib/MailScanner/wrapper
 
 # perl modules 
 cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/perl/
