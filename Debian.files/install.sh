@@ -372,7 +372,6 @@ $APTGET -y install tnef $CAVOPTION $SAOPTION
 if [ $CAV == 1 ]; then
 	COUT='#Example';
 	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
-	freshclam &
 fi
 
 # create the cpan config if there isn't one and the user
@@ -456,14 +455,15 @@ if [ -d '/etc/clamav' ]; then
 	perl -pi -e 's/'$DISTROCAVGRP'/'$CAVGRP'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
 
 	if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
-		DEFAULTAPPARMOR='#include <local/usr.sbin.clamd>';
-		APPARMORFIX='include <local/usr.sbin.clamd>';
-		
-		# enable include directory
-		perl -pi -e 's/'$DEFAULTAPPARMOR'/'$APPARMORFIX'/;' /etc/apparmor.d/usr.sbin.clamd
-		
+				
 		# add to include for clamd
 		if [ -f '/etc/apparmor.d/local/usr.sbin.clamd' ]; then
+			DEFAULTAPPARMOR='#include <local\/usr.sbin.clamd>';
+			APPARMORFIX=' include local\/usr.sbin.clamd';
+
+			# enable include directory
+			sed -i "s/${DEFAULTAPPARMOR}/${APPARMORFIX}/g" /etc/apparmor.d/usr.sbin.clamd
+			
 			echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
 		fi
 	fi
@@ -474,6 +474,11 @@ fi
 if [ -f "/etc/postfix/master.cf" ]; then
 	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
 	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
+fi
+
+# create symlink for spamasassin
+if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/MailScanner.cf 
 fi
 
 clear
@@ -515,8 +520,11 @@ else
 	fi
 	
 	/usr/sbin/update_phishing_sites &
-	/usr/sbin/update_bad_phishing_sites &	
-	/usr/bin/freshclam &
+	/usr/sbin/update_bad_phishing_sites &
+	
+	if [ -d '/etc/clamav' ]; then
+		/usr/bin/freshclam &
+	fi	
 	
 	echo;
 	echo '----------------------------------------------------------';
