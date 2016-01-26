@@ -69,9 +69,9 @@ fi
 
 # this is not in the new mailscanner package. move it
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
-	cp -f /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/MailScanner/CustomFunctions/
+	cp -f /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/perl/custom/
 	rm -rf /etc/MailScanner/CustomFunctions
-	ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/CustomFunctions
+	ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/CustomFunctions
 fi
 
 # this is not in the new mailscanner package.
@@ -133,7 +133,7 @@ fi
 rm -f /etc/MailScanner/*.original323
 
 # softlink for custom functions
-ln -s /usr/share/MailScanner/MailScanner/CustomFunctions/ /etc/MailScanner/custom
+ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 
 update-rc.d MailScanner defaults
 
