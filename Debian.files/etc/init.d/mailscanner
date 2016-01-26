@@ -1,15 +1,15 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          MailScanner
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
+# Required-Start:    $local_fs $network $syslog
+# Required-Stop:     $local_fs $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Controls mailscanner instances
-# Description:       MailScanner is a queue-based spam/virus filter
+# Short-Description: starts the Mailscanner daemon
+# Description:       starts MailScanner using start-stop-daemon
 ### END INIT INFO
 
-# Author: Simon Walter <simon.walter@hp-factory.de>
+# Author: Jerry Benton <mailscanner@mailborder.com>
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/usr/sbin:/usr/bin:/bin:/sbin
@@ -21,6 +21,9 @@ STARTAS=MailScanner
 SCRIPTNAME=/etc/init.d/$PNAME
 CONFFILE=/etc/MailScanner/MailScanner.conf
 QUICKPEEK=/usr/sbin/Quick.Peek
+run_mailscanner=0
+run_nice=0
+stopped_lockfile=/var/lock/subsys/MailScanner.off
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -28,15 +31,14 @@ QUICKPEEK=/usr/sbin/Quick.Peek
 # if /var/lock/subsys is missing
 [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
 
-run_mailscanner=0
-run_nice=0
-stopped_lockfile=/var/lock/subsys/MailScanner.off
-
 # Read configuration variable file if it is present
 [ -r /etc/default/$PNAME ] && . /etc/default/$PNAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
+
+# make this script show Starting / Stopping / etc ...
+VERBOSE=yes
 
 # Define LSB log_* functions.
 # Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
@@ -71,15 +73,13 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --startas $STARTAS --pidfile $PIDFILE --test > /dev/null \
-		|| return 1
-	start-stop-daemon --start --quiet --nicelevel $run_nice --exec $DAEMON --pidfile $PIDFILE -- $DAEMON_ARGS \
-		|| return 2
+	start-stop-daemon --start --quiet --startas $STARTAS --pidfile $PIDFILE --test > /dev/null || return 1
+	start-stop-daemon --start --quiet --nicelevel $run_nice --exec $DAEMON --pidfile $PIDFILE -- $DAEMON_ARGS || return 2
 
   # Set lockfile to inform cronjobs about the running daemon
 	RETVAL="$?"
 	if [ $RETVAL -eq 0 ]; then
-	    touch /run/lock/MailScanner
+	    touch /run/lock/subsys/MailScanner
 	    rm -f $stopped_lockfile
 	fi
 }
@@ -100,8 +100,7 @@ do_stop()
 
   # Remove lockfile for cronjobs
 	if [ $RETVAL -eq 0 ]; then
-		log_daemon_msg "$NAME stopped"
-	    rm -f /run/lock/MailScanner
+	    rm -f /run/lock/subsys/MailScanner
 	    touch $stopped_lockfile
 	fi
 	return "$RETVAL"
@@ -132,8 +131,10 @@ case "$1" in
 		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
 	esac
 	;;
+  status)
+	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	;;
   reload|force-reload)
-	
 	log_daemon_msg "Reloading $DESC" "$NAME"
 	do_reload
 	log_end_msg $?
@@ -157,7 +158,7 @@ case "$1" in
 	esac
 	;;
   *)
-	echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart|reload|force-reload}" >&2
 	exit 3
 	;;
 esac

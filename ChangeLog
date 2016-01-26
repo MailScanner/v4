@@ -1,21 +1,20 @@
-01/23/2016 Changes in    v4.85.3-3
+01/26/2016 Changes in    v4.86.1-1
 ==================================
 *Updates*
 - Moved directory structure to:
- MailScanner Perl Modules: 	/usr/share/MailScanner/perl
+ MailScanner Perl Modules: 	/usr/share/MailScanner/perl/MailScanner
  Custom Perl Modules		/usr/share/MailScanner/perl/custom
  Reports: 					/usr/share/MailScanner/reports
  AV Wrappers: 				/var/lib/MailScanner/wrapper
  Autoupdate Scripts: 		/var/lib/MailScanner/autoupdate
 
-- Updated all scripts to use
-  #!/usr/bin/perl
-  for better portability across OS platforms
 - Renamed  /etc/init.d/mailscanner to /etc/init.d/MailScanner 
- in debian package
+ in Debian package
+ - Restructured Debian /etc/init.d/MailScanner script 
+- Fixed broken /var/lock/subsys in init scripts
 - Updated virus.scanners.conf with new directory structure and updated
  current location of clamav installations
-
+ - Updated country.domains.conf
 
 01/16/2016 Changes in    v4.85.3-2
 ==================================
