@@ -4,9 +4,11 @@
 
 You may upgrade your installation by running ./install.sh as root.
 
-WARNING: The directory structure change in 4.86.1-1. A new config 
-		 file will be placed in 
-		 /etc/MailScanner/conf.d/z_48611_upgrade.conf	
-		 to make sure the new directory structure is applied. 
+WARNING: 
+
+The directory structure changed in 4.86.1-1. A new config 
+file will be placed in 
+/etc/MailScanner/conf.d/z_48611_upgrade.conf	
+to make sure the new directory structure is applied. 
 
 

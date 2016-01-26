@@ -6,7 +6,7 @@
 #MailScanner\[[0-9]+\]: Disinfection completed at [0-9]+ bytes per second
 #MailScanner\[[0-9]+\]: Infected message [^ ]+ came from [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+
 #MailScanner\[[0-9]+\]: MCP Checks completed at [0-9]+ bytes per second
-#MailScanner\[[0-9]+\]: MailScanner E-Mail Virus Scanner version [^ ]+ starting...
+#MailScanner\[[0-9]+\]: MailScanner Email Processor version [^ ]+ starting...
 #MailScanner\[[0-9]+\]: MailScanner child dying of old age
 #MailScanner\[[0-9]+\]: New Batch: Scanning [0-9]+ messages, [0-9]+ bytes
 #MailScanner\[[0-9]+\]: Requeue: [[:alnum:].]+ to [[:alnum:].]+

@@ -1,4 +1,4 @@
-# Main configuration file for the MailScanner E-Mail Virus Scanner
+# Main configuration file for the MailScanner Email Processor
 #
 # It's good practice to check through configuration files to make sure
 # they fit with your system and your needs, whatever you expect them to

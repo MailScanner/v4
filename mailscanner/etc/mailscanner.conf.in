@@ -1,4 +1,4 @@
-# Main configuration file for the MailScanner E-Mail Virus Scanner
+# Main configuration file for the MailScanner Email Processor
 #
 # This file generated from
 # $Id: mailscanner.conf.in 2849 2005-01-16 15:16:11Z jkf $

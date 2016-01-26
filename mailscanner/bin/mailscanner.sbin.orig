@@ -411,7 +411,7 @@ if ($WantLintOnly || $WantLintLiteOnly) {
   # Start logging to syslog/stderr
   MailScanner::Log::WarningsOnly() if $WantLintLiteOnly;
   StartLogging($ConfFile);
-  my $logbanner = "MailScanner E-Mail Virus Scanner version " .
+  my $logbanner = "MailScanner Email Processor version " .
                   $MailScanner::Config::MailScannerVersion .
                   " checking configuration...\n";
   MailScanner::Log::Configure($logbanner, 'stderr');
@@ -1431,7 +1431,7 @@ sub StartLogging {
   $procname =~ s#^.*/##;
   $procname =~ s#\.conf$##;
 
-  my $logbanner = "MailScanner E-Mail Virus Scanner version " .
+  my $logbanner = "MailScanner Email Processor version " .
                   $MailScanner::Config::MailScannerVersion . " starting...";
 
   MailScanner::Log::Configure($logbanner, 'syslog'); #'stderr');
