@@ -375,12 +375,6 @@ if [ $CAV == 1 ]; then
 	freshclam
 fi
 
-# enable spamassassin
-if [ $SA == 1 ]; then
-	SOUT='ENABLED=1';
-	perl -pi -e 's/ENABLED=0/'$SOUT'/;' /etc/default/spamassassin
-fi
-
 # create the cpan config if there isn't one and the user
 # elected to use CPAN
 if [ $CPANOPTION == 1 ]; then
