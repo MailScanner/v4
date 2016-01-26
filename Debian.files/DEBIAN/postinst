@@ -83,12 +83,12 @@ if [ -d "/etc/MailScanner/wrapper" ]; then
 	rm -rf /etc/MailScanner/wrapper
 fi
 
-
-install -d -omail -gmtagroup -m0775 /var/run/MailScanner
-install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/archive
-install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/incoming
-install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/incoming
-install -d -omail -gmtagroup -m0775 /var/spool/MailScanner/quarantine
+# lock down some directory permissions
+install -d -omail -gmtagroup -m0755 /var/run/MailScanner
+install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/archive
+install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/incoming
+install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/incoming
+install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/quarantine
 
 # upgrade
 if [ -f "/etc/MailScanner/MailScanner.conf.original323" ]; then
