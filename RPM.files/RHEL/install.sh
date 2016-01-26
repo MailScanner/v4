@@ -540,7 +540,7 @@ if [ $CPANOPTION == 1 ]; then
 		echo "CPAN config missing. Creating one ..."; echo;
 		mkdir -p /root/.cpan/CPAN
 		cd /root/.cpan/CPAN
-		$CURL -O https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
+		$CURL -O https://www.mailscanner.info/MyConfig.pm
 		cd $THISCURRPMDIR
 		timewait 1
 	fi

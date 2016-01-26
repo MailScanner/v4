@@ -372,6 +372,7 @@ $APTGET -y install tnef $CAVOPTION $SAOPTION
 if [ $CAV == 1 ]; then
 	COUT='#Example';
 	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
+	/usr/bin/freshclam
 fi
 
 # enable spamassassin
@@ -389,7 +390,7 @@ if [ $CPANOPTION == 1 ]; then
 		echo "CPAN config missing. Creating one ..."; echo;
 		mkdir -p /root/.cpan/CPAN
 		cd /root/.cpan/CPAN
-		$CURL -O https://s3.amazonaws.com/mailscanner/install/cpan/MyConfig.pm
+		$CURL -O https://www.mailscanner.info/MyConfig.pm
 		cd $THISCURRPMDIR
 		timewait 1
 	fi
