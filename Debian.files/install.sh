@@ -430,11 +430,11 @@ done
 timewait $PMODWAIT
 
 # fix the clamav wrapper if the user does not exist
-if [ -f '/etc/freshclam.conf' ]; then
+if [ -d '/etc/clamav' ]; then
 	
 	DISTROCAVUSER='ClamUser="clamav"';
 	DISTROCAVGRP='ClamGroup="clamav"';
-	
+		
 	# check for common users and add to the mtagroup
 	if id -u clam >/dev/null 2>&1; then
 		CAVUSR='ClamUser="clam"';
@@ -455,6 +455,19 @@ if [ -f '/etc/freshclam.conf' ]; then
 	perl -pi -e 's/'$DISTROCAVUSER'/'$CAVUSR'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
 	perl -pi -e 's/'$DISTROCAVGRP'/'$CAVGRP'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
 
+	if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
+		DEFAULTAPPARMOR='#include <local/usr.sbin.clamd>';
+		APPARMORFIX='include <local/usr.sbin.clamd>';
+		
+		# enable include directory
+		perl -pi -e 's/'$DEFAULTAPPARMOR'/'$APPARMORFIX'/;' /etc/apparmor.d/usr.sbin.clamd
+		
+		# add to include for clamd
+		if [ -f '/etc/apparmor.d/local/usr.sbin.clamd' ]; then
+			echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
+		fi
+	fi
+	
 	/usr/bin/freshclam &
 fi
 
