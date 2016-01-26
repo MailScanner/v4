@@ -467,8 +467,7 @@ if [ -d '/etc/clamav' ]; then
 			echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
 		fi
 	fi
-	
-	/usr/bin/freshclam &
+
 fi
 
 # postfix fix
@@ -516,7 +515,8 @@ else
 	fi
 	
 	/usr/sbin/update_phishing_sites &
-	/usr/sbin/update_bad_phishing_sites &
+	/usr/sbin/update_bad_phishing_sites &	
+	/usr/bin/freshclam &
 	
 	echo;
 	echo '----------------------------------------------------------';
