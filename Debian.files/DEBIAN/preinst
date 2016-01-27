@@ -102,13 +102,13 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	# /etc/MailScanner/spam.lists.conf
 	if [ -f "/etc/MailScanner/spam.lists.conf" ]; then
 		# new version in 4.86.1
-		mv -f /etc/MailScanner/spam.lists.conf /etc/MailScanner/spam.lists.conf.old
+		cp -f /etc/MailScanner/spam.lists.conf /etc/MailScanner/spam.lists.conf.old
 	fi
 	
 	# /etc/MailScanner/virus.scanners.conf
 	if [ -f "/etc/MailScanner/virus.scanners.conf" ]; then
 		# new version in 4.86.1
-		mv -f /etc/MailScanner/virus.scanners.conf /etc/MailScanner/virus.scanners.conf.old
+		cp -f /etc/MailScanner/virus.scanners.conf /etc/MailScanner/virus.scanners.conf.old
 	fi
 
 while read f 
