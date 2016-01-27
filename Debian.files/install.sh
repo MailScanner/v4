@@ -596,6 +596,11 @@ else
 	echo 'See http://www.mailscanner.info for more information and  '
 	echo 'support via the MailScanner mailing list.'
 	echo;
+	echo 'NOTE! If this was an upgrade, edit /etc/default/MailScanner'
+	echo;
+	echo 'New Install: Set your preferences in /etc/MailScanner/MailScanner.conf'
+	echo 'and then edit /etc/default/MailScanner to enable';
+	echo;
 fi 
 
 ) 2>&1 | tee mailscanner-install.log

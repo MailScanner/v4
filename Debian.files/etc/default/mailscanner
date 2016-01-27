@@ -1,8 +1,3 @@
-#
-# Uncomment this line once MailScanner has been fully configured.
-#
-#run_mailscanner=1
-
 # If you are using a ramdisk, this will sync the "Incoming Work Dir"
 # (which is where your ramdisk should be mounted if anywhere)
 # to a saved state directory upon stopping the MailScanner service 
@@ -10,10 +5,16 @@
 #ramdisk_sync=1
 
 #
+# Uncomment this line once MailScanner has been fully configured.
+#
+#run_mailscanner=1
+
+
+#
 # This sets how many days files will remain in the "quarantine" area before
 # being automatically removed.
 #
-q_days=7
+q_days=30
 
 #
 # This sets how much the priority of the mailscanner daemon should be
