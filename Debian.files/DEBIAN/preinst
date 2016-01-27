@@ -17,17 +17,17 @@ set -e
 # the debian-policy package
 
 
-# this makes copies of original conf files. 
-# the postinst script will move them back
+# handle old files and updates
 if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 
 	# create if missing
 	[ -d "/etc/MailScanner/conf.d" ] || mkdir -p /etc/MailScanner/conf.d
 
-	# we need to ensure that the new directory structure is applied
-	echo 'Monitors for ClamAV Updates = /usr/local/share/clamav/*.cld /usr/local/share/clamav/*.cvd /var/lib/clamav/*.inc/* /var/lib/clamav/*.?db /var/lib/clamav/*.cvd' > /etc/MailScanner/conf.d/z_48611_upgrade.conf
-	echo 'Spam List =' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
-	echo 'Web Bug Replacement = https://s3.amazonaws.com/msv4/images/spacer.gif' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
+	# we need to ensure that the old spam list names do not get used
+	# remove this in version post 4.86.1
+	OLD="Spam List.*";
+	NEW="Spam List = ";
+	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 			
 	if [ -f "/etc/default/mailscanner" ]; then
 		cp -f /etc/default/mailscanner /etc/default/MailScanner.original323
@@ -89,25 +89,6 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 		cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/perl/MailScanner/CustomConfig.pm
 		rm -f /etc/MailScanner/CustomConfig.pm
-	fi
-	
-	# 4.86.1 only - remove later
-	# /etc/MailScanner/reports
-	if [ -f "/etc/MailScanner/country.domains.conf" ]; then
-		# new version in 4.86.1
-		rm -f /etc/MailScanner/country.domains.conf
-	fi
-	
-	# /etc/MailScanner/spam.lists.conf
-	if [ -f "/etc/MailScanner/spam.lists.conf" ]; then
-		# new version in 4.86.1
-		cp -f /etc/MailScanner/spam.lists.conf /etc/MailScanner/spam.lists.conf.old
-	fi
-	
-	# /etc/MailScanner/virus.scanners.conf
-	if [ -f "/etc/MailScanner/virus.scanners.conf" ]; then
-		# new version in 4.86.1
-		cp -f /etc/MailScanner/virus.scanners.conf /etc/MailScanner/virus.scanners.conf.old
 	fi
 
 while read f 

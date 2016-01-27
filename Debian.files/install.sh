@@ -477,8 +477,8 @@ if [ -d '/etc/clamav' ]; then
 		CAVGRP='ClamGroup="clam"';
 	fi
 	
-	perl -pi -e 's/'$DISTROCAVUSER'/'$CAVUSR'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
-	perl -pi -e 's/'$DISTROCAVGRP'/'$CAVGRP'/;' /var/lib/MailScanner/wrapper/clamav-wrapper
+	sed -i "s/${DISTROCAVUSER}/${CAVUSR}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
+	sed -i "s/${DISTROCAVGRP}/${CAVGRP}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
 
 	if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
 				
@@ -494,6 +494,11 @@ if [ -d '/etc/clamav' ]; then
 			echo '/var/spool/MailScanner/incoming/** ix,' >> /etc/apparmor.d/local/usr.sbin.clamd
 		fi
 	fi
+	
+	# fix old style clamav Monitors if preset in old mailscanner.conf
+	CAVOLD='Monitors for ClamAV Updates.*';
+	CAVNEW='Monitors for ClamAV Updates = \/usr\/local\/share\/clamav\/\*\.cld \/usr\/local\/share\/clamav\/\*\.cvd \/var\/lib\/clamav\/\*\.inc\/\* \/var\/lib\/clamav\/\*\.\?db \/var\/lib\/clamav\/\*\.cvd';
+	sed -i "s/${CAVOLD}/${CAVNEW}/g" /etc/MailScanner/MailScanner.conf
 
 fi
 
@@ -530,16 +535,16 @@ else
 		echo;
 		timewait 1
 		
-		# fix old style clamav Monitors if preset in old mailscanner.conf
-		CAVOLD='Monitors for ClamAV Updates = /usr/local/share/clamav/*.cld /usr/local/share/clamav/*.cvd';
-		CAVNEW='Monitors for ClamAV Updates = /usr/local/share/clamav/*.cld /usr/local/share/clamav/*.cvd /var/lib/clamav/*.inc/* /var/lib/clamav/*.?db /var/lib/clamav/*.cvd';
-		perl -pi -e 's/'$CAVOLD'/'$CAVNEW'/;' /etc/MailScanner/MailScanner.conf
-		
 		upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.dpkg-dist > /etc/MailScanner/MailScanner.new
 		mv -f /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.old.$$
 		mv -f /etc/MailScanner/MailScanner.new  /etc/MailScanner/MailScanner.conf
 
 	fi
+	
+	# update web bug link
+	OLD="Web Bug Replacement.*";
+	NEW="Web Bug Replacement = https://s3.amazonaws.com/msv4/images/spacer.gif";
+	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 	
 	# create symlink for spamasassin
 	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
