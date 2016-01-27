@@ -25,12 +25,10 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	[ -d "/etc/MailScanner/conf.d" ] || mkdir -p /etc/MailScanner/conf.d
 
 	# we need to ensure that the new directory structure is applied
-	echo '%report-dir% = /usr/share/MailScanner/reports/en' > /etc/MailScanner/conf.d/z_48611_upgrade.conf
-	echo 'Custom Functions Dir = /usr/share/MailScanner/perl/custom' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
-	echo 'Monitors for ClamAV Updates = /usr/local/share/clamav/*.cld /usr/local/share/clamav/*.cvd /var/lib/clamav/*.inc/* /var/lib/clamav/*.?db /var/lib/clamav/*.cvd' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
+	echo 'Monitors for ClamAV Updates = /usr/local/share/clamav/*.cld /usr/local/share/clamav/*.cvd /var/lib/clamav/*.inc/* /var/lib/clamav/*.?db /var/lib/clamav/*.cvd' > /etc/MailScanner/conf.d/z_48611_upgrade.conf
 	echo 'Spam List =' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
 	echo 'Web Bug Replacement = https://s3.amazonaws.com/msv4/images/spacer.gif' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
-		
+			
 	if [ -f "/etc/default/mailscanner" ]; then
 		cp -f /etc/default/mailscanner /etc/default/MailScanner.original323
 	fi

@@ -103,4 +103,14 @@ ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 
 update-rc.d MailScanner defaults
 
+# fix reports directory
+OLDTHING='\/etc\/MailScanner\/reports';
+NEWTHING='\/usr\/share\/MailScanner\/reports';
+sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+
+# fix custom functions directory
+OLDTHING='\/usr\/share\/MailScanner\/MailScanner\/CustomFunctions';
+NEWTHING='\/usr\/share\/MailScanner\/perl\/custom';
+sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+	
 exit 0

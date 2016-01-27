@@ -569,6 +569,7 @@ else
 		echo;
 		echo "An upgrade was detected. Note that these items have changed:";
 		echo "- spam.lists.conf";
+		echo "- virus.scanners.conf";
 		echo "- country.domains.conf";
 		echo "- the MailScanner directory structure";
 		echo;
