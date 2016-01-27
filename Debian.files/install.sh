@@ -543,7 +543,7 @@ else
 	
 	# update web bug link
 	OLD="Web Bug Replacement.*";
-	NEW="Web Bug Replacement = https://s3.amazonaws.com/msv4/images/spacer.gif";
+	NEW="Web Bug Replacement = https\:\/\/s3\.amazonaws\.com\/msv4\/images\/spacer\.gif";
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 	
 	# create symlink for spamasassin
@@ -567,21 +567,6 @@ else
 	if [ -d '/etc/clamav' ]; then
 		/usr/bin/freshclam 
 	fi
-	
-	if [ -f "/etc/MailScanner/conf.d/z_48611_upgrade.conf" ]; then
-		echo;
-		echo "WARNING WARNING WARNING WARNING";
-		echo;
-		echo "An upgrade was detected. Note that these items have changed:";
-		echo "- spam.lists.conf";
-		echo "- virus.scanners.conf";
-		echo "- country.domains.conf";
-		echo "- the MailScanner directory structure";
-		echo;
-		echo "The file /etc/MailScanner/conf.d/z_48611_upgrade.conf has been";
-		echo "created to address some key items you should check!";
-		echo;
-	fi	
 	
 	echo;
 	echo '----------------------------------------------------------';
