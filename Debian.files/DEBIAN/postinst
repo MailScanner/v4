@@ -62,27 +62,6 @@ if [ ! -d "/var/spool/mqueue.in" ]; then
 	perl -pi -e 's{Incoming Queue Dir = /var/spool/mqueue.in}{Incoming Queue Dir = /var/spool/mqueue}g;' /etc/MailScanner/MailScanner.conf
 fi
 
-# this is an upgrade
-if [ -d "/usr/lib/MailScanner" ]; then
-	rm -rf /usr/lib/MailScanner
-fi
-
-# this is not in the new mailscanner package. move it
-if [ -d "/etc/MailScanner/CustomFunctions" ]; then
-	cp -f /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/perl/custom/
-	rm -rf /etc/MailScanner/CustomFunctions
-fi
-
-# this is not in the new mailscanner package.
-if [ -d "/etc/MailScanner/autoupdate" ]; then
-	rm -rf /etc/MailScanner/autoupdate
-fi
-
-# this is not in the new mailscanner package.
-if [ -d "/etc/MailScanner/wrapper" ]; then
-	rm -rf /etc/MailScanner/wrapper
-fi
-
 # lock down some directory permissions
 install -d -omail -gmtagroup -m0755 /var/run/MailScanner
 install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/archive
@@ -132,5 +111,18 @@ rm -f /etc/MailScanner/*.original323
 ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 
 update-rc.d MailScanner defaults
+
+if [ -f "/etc/MailScanner/conf.d/z_48611_upgrade.conf" ]; then
+	echo "WARNING WARNING WARNING WARNING";
+	echo;
+	echo "An upgrade was detected. Note that these items have changed:";
+	echo "- spam.lists.conf";
+	echo "- country.domains.conf";
+	echo "- the MailScanner directory structure";
+	echo;
+	echo "The file /etc/MailScanner/conf.d/z_48611_upgrade.conf has been";
+	echo "created to address some key items you should check!";
+	echo;
+fi
 
 exit 0

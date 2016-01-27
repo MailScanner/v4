@@ -22,12 +22,13 @@ set -e
 if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 
 	# create if missing
-	[ -d /etc/MailScanner/conf.d ] || mkdir -p /etc/MailScanner/conf.d
+	[ -d "/etc/MailScanner/conf.d" ] || mkdir -p /etc/MailScanner/conf.d
 
 	# we need to ensure that the new directory structure is applied
 	echo '%report-dir% = /usr/share/MailScanner/reports/en' > /etc/MailScanner/conf.d/z_48611_upgrade.conf
 	echo 'Custom Functions Dir = /usr/share/MailScanner/perl/custom' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
 	echo 'Monitors for ClamAV Updates = /usr/local/share/clamav/*.cld /usr/local/share/clamav/*.cvd /var/lib/clamav/*.inc/* /var/lib/clamav/*.?db /var/lib/clamav/*.cvd' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
+	echo 'Spam List =' >> /etc/MailScanner/conf.d/z_48611_upgrade.conf
 		
 	if [ -f "/etc/default/mailscanner" ]; then
 		cp -f /etc/default/mailscanner /etc/default/MailScanner.original323
@@ -35,6 +36,66 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 
 	if [ -f "/etc/default/MailScanner" ]; then
 		cp -f /etc/default/MailScanner /etc/default/MailScanner.original323
+	fi
+	
+	# /usr/lib/MailScanner
+	if [ -d "/usr/lib/MailScanner" ]; then
+		rm -rf /usr/lib/MailScanner
+	fi
+
+	# /etc/MailScanner/CustomFunctions
+	if [ -d "/etc/MailScanner/CustomFunctions" ]; then
+		mkdir -p /usr/share/MailScanner/perl/custom/
+		cp -rf /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/perl/custom/
+		rm -rf /etc/MailScanner/CustomFunctions
+	fi
+
+	# /etc/MailScanner/custom
+	if [ -d "/etc/MailScanner/custom" ]; then
+		mkdir -p /usr/share/MailScanner/perl/custom/
+		cp -rf /etc/MailScanner/custom/* /usr/share/MailScanner/perl/custom/
+		rm -rf /etc/MailScanner/custom
+	fi
+
+	# /etc/MailScanner/Custom
+	if [ -d "/etc/MailScanner/Custom" ]; then
+		mkdir -p /usr/share/MailScanner/perl/custom/
+		cp -rf /etc/MailScanner/Custom/* /usr/share/MailScanner/perl/custom/
+		rm -rf /etc/MailScanner/Custom
+	fi
+
+	# /usr/share/MailScanner/MailScanner
+	if [ -d "/usr/share/MailScanner/MailScanner" ]; then
+		rm -rf /usr/share/MailScanner/MailScanner
+	fi
+
+	# /etc/MailScanner/autoupdate
+	if [ -d "/etc/MailScanner/autoupdate" ]; then
+		rm -rf /etc/MailScanner/autoupdate
+	fi
+
+	# /etc/MailScanner/wrapper
+	if [ -d "/etc/MailScanner/wrapper" ]; then
+		rm -rf /etc/MailScanner/wrapper
+	fi
+
+	# /etc/MailScanner/reports
+	if [ -d "/etc/MailScanner/reports" ]; then
+		mkdir -p /usr/share/MailScanner/reports/
+		cp -rf /etc/MailScanner/reports/* /usr/share/MailScanner/reports/
+		rm -rf /etc/MailScanner/reports/
+	fi
+	
+	# /etc/MailScanner/reports
+	if [ -f "/etc/MailScanner/country.domains.conf" ]; then
+		# new version in 4.86.1
+		rm -f /etc/MailScanner/country.domains.conf
+	fi
+	
+	# /etc/MailScanner/spam.lists.conf
+	if [ -f "/etc/MailScanner/spam.lists.conf" ]; then
+		# new version in 4.86.1
+		mv -f /etc/MailScanner/spam.lists.conf /etc/MailScanner/spam.lists.conf.old
 	fi
 
 while read f 
@@ -53,7 +114,6 @@ phishing.safe.sites.conf
 phishing.bad.sites.conf
 country.domains.conf
 EOF
-
 fi
 
 exit 0
