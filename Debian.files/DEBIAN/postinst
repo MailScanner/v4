@@ -84,12 +84,14 @@ archives.filename.rules.conf
 archives.filetype.rules.conf
 MailScanner.conf
 spam.assassin.prefs.conf
-spam.lists.conf
 virus.scanners.conf
 phishing.safe.sites.conf
 phishing.bad.sites.conf
-country.domains.conf
 EOF
+
+# removed for 4.86.1 - add back later
+#spam.lists.conf
+#country.domains.conf
 
 fi
 

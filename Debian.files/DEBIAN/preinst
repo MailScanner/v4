@@ -86,6 +86,7 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 		rm -rf /etc/MailScanner/reports/
 	fi
 	
+	# 4.86.1 only - remove later
 	# /etc/MailScanner/reports
 	if [ -f "/etc/MailScanner/country.domains.conf" ]; then
 		# new version in 4.86.1
