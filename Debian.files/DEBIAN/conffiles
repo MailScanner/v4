@@ -11,7 +11,6 @@
 /etc/MailScanner/rules/max.message.size.rules
 /etc/MailScanner/rules/spam.whitelist.rules
 /etc/MailScanner/spam.assassin.prefs.conf
-
 /etc/cron.daily/MailScanner
 /etc/cron.hourly/MailScanner
 /etc/default/MailScanner
