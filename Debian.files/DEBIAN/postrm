@@ -5,6 +5,5 @@ set -e
 
 # unregister the old startup script
 update-rc.d -f MailScanner remove
-update-rc.d -f ramdisk remove
 
 exit 0

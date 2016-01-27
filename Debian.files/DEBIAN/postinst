@@ -58,6 +58,10 @@ if [ -d "/var/spool/exim4.in" ]; then
 	install -d -oDebian-exim -gmtagroup -m0750 /var/spool/exim4.in/msglog
 fi
 
+if [ ! -d "/var/spool/mqueue.in" ]; then
+	perl -pi -e 's{Incoming Queue Dir = /var/spool/mqueue.in}{Incoming Queue Dir = /var/spool/mqueue}g;' /etc/MailScanner/MailScanner.conf
+fi
+
 # lock down some directory permissions
 install -d -omail -gmtagroup -m0755 /var/run/MailScanner
 install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/archive
@@ -102,6 +106,5 @@ rm -f /etc/MailScanner/*.original323
 ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 
 update-rc.d MailScanner defaults
-update-rc.d ramdisk defaults
-	
+
 exit 0

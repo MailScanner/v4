@@ -88,9 +88,7 @@ mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/default/ramdisk $WORK/etc/default/ramdisk
 cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/init.d/ramdisk $WORK/etc/init.d/ramdisk
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/MailScanner
 
@@ -236,7 +234,6 @@ chmod +x $WORK/DEBIAN/postrm
 chmod +x $WORK/var/lib/MailScanner/wrapper/*-autoupdate
 chmod +x $WORK/var/lib/MailScanner/wrapper/*-wrapper
 chmod +x $WORK/etc/init.d/MailScanner
-chmod +x $WORK/etc/init.d/ramdisk
 chmod +x $WORK/etc/cron.daily/MailScanner
 chmod +x $WORK/etc/cron.hourly/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done

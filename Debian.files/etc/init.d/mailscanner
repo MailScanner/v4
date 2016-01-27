@@ -16,15 +16,18 @@
 PATH=/usr/sbin:/usr/bin:/bin:/sbin
 DESC="email processor - "
 NAME=MailScanner
-PNAME=MailScanner
 DAEMON=/usr/sbin/$NAME
-STARTAS=MailScanner
-SCRIPTNAME=/etc/init.d/$PNAME
+SCRIPTNAME=/etc/init.d/$NAME
 CONFFILE=/etc/MailScanner/MailScanner.conf
 QUICKPEEK=/usr/sbin/Quick.Peek
 run_mailscanner=0
+ramdisk_sync=0
 run_nice=0
 stopped_lockfile=/var/lock/subsys/MailScanner.off
+
+RUNUSER=`${QUICKPEEK} RunAsUser ${CONFFILE}`
+RUNGROUP=`${QUICKPEEK} RunAsGroup ${CONFFILE}`
+PIDFILE=`${QUICKPEEK} PIDfile ${CONFFILE}`
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -33,7 +36,7 @@ stopped_lockfile=/var/lock/subsys/MailScanner.off
 [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$PNAME ] && . /etc/default/$PNAME
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -61,21 +64,43 @@ if [ $run_mailscanner = 0 ]; then
     exit 0
 fi
 
-user=`${QUICKPEEK} RunAsUser ${CONFFILE}`
-group=`${QUICKPEEK} RunAsGroup ${CONFFILE}`
-PIDFILE=`${QUICKPEEK} pidfile ${CONFFILE}`
+# load this stuff if ramdisk_sync is enabled
+if [ $ramdisk_sync == 1]; then
+	PERSIST_STORE=/var/spool/MailScanner/ramdisk_save
+	WORKPERM=`${QUICKPEEK} IncomingWorkPermissions ${CONFFILE}`
+	RAMDISK=`${QUICKPEEK} IncomingWorkDir ${CONFFILE}`
+	RDUSER=`${QUICKPEEK} IncomingWorkUser ${CONFFILE}`
+	RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${CONFFILE}`
+
+	# check to make sure these are set
+	if [ -z ${RAMDISK} ]; then
+		RAMDISK="/var/spool/MailScanner/incoming"
+	fi
+
+	if [ -z ${RDUSER} ]; then
+		RDUSER="mail"
+	fi
+
+	if [ -z ${RDGROUP} ]; then
+		RDGROUP="mtagroup"
+	fi
+
+	if [ `echo $WORKPERM | sed 's/^[-+0-9][0-9]*//' | wc -c` != 1 ]; then
+		WORKPERM="0660"
+	fi
+fi
 
 #
 # Function that starts the daemon/service
 #
 do_start()
-{
+{	
 	# Return
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --startas $STARTAS --pidfile $PIDFILE --test > /dev/null || return 1
-	start-stop-daemon --start --quiet --nicelevel $run_nice --exec $DAEMON --pidfile $PIDFILE -- $DAEMON_ARGS || return 2
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --chuid ${RUNUSER}:${RUNGROUP} --test > /dev/null || return 1
+	start-stop-daemon --start --quiet --nicelevel $run_nice --exec $DAEMON --chuid ${RUNUSER}:${RUNGROUP} --pidfile $PIDFILE || return 2
 
   # Set lockfile to inform cronjobs about the running daemon
 	RETVAL="$?"
@@ -118,7 +143,30 @@ do_reload() {
 case "$1" in
   start)
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	
+	if [ $ramdisk_sync == 1]; then
+		# make sure this is a RAMDISK tmpfs
+		FSTYPE=$(df -P -T ${RAMDISK}|tail -n +2 | awk '{print $2}')
+
+		if [ $FSTYPE == tmpfs ]; then
+			# if /var/spool/MailScanner/ramdisk_save is missing
+			[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
+			
+			log_daemon_msg "Syncing ramdisk from persistent store"
+			
+			# sync
+			rsync --quiet --archive ${PERSIST_STORE}/ ${RAMDISK}
+	
+			# make sure ramdisk permissions are correct
+			chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
+			chmod 0750 ${RAMDISK}
+			find ${RAMDISK} -type d -exec chmod 0750 {} \;
+			find ${RAMDISK} -type f -exec chmod ${WORKPERM} {} \;
+		fi
+	fi
+	
 	do_start
+	
 	case "$?" in
 		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
 		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
@@ -126,7 +174,30 @@ case "$1" in
 	;;
   stop)
 	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	
 	do_stop
+	
+	if [ $ramdisk_sync == 1]; then
+		# make sure this is a RAMDISK tmpfs
+		FSTYPE=$(df -P -T ${RAMDISK}|tail -n +2 | awk '{print $2}')
+
+		if [ $FSTYPE == tmpfs ]; then
+			# if /var/spool/MailScanner/ramdisk_save is missing
+			[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
+			
+			log_daemon_msg "Syncing ramdisk to persistent store"
+			
+			# make sure ramdisk permissions are correct
+			chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
+			chmod 0750 ${RAMDISK}
+			find ${RAMDISK} -type d -exec chmod 0750 {} \;
+			find ${RAMDISK} -type f -exec chmod ${WORKPERM} {} \;
+	
+			# sync
+			rsync --quiet --archive --delete --recursive --force ${RAMDISK}/ ${PERSIST_STORE}
+		fi
+	fi
+	
 	case "$?" in
 		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
 		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;

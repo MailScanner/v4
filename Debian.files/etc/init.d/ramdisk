@@ -21,6 +21,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 PERSIST_STORE=/var/spool/MailScanner/ramdisk_save
 CONFFILE=/etc/MailScanner/MailScanner.conf
 QUICKPEEK=/usr/sbin/Quick.Peek
+WORKPERM=`${QUICKPEEK} IncomingWorkPermissions ${CONFFILE}`
 RAMDISK=`${QUICKPEEK} IncomingWorkDir ${CONFFILE}`
 RDUSER=`${QUICKPEEK} IncomingWorkUser ${CONFFILE}`
 RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${CONFFILE}`
@@ -37,6 +38,10 @@ fi
 
 if [ -z ${RDGROUP} ]; then
 	RDGROUP="mtagroup"
+fi
+
+if [ `echo $WORKPERM | sed 's/^[-+0-9][0-9]*//' | wc -c` != 1 ]; then
+	WORKPERM="0660"
 fi
 
 # Exit if the rsync package is not installed
@@ -81,7 +86,7 @@ if [ $FSTYPE != tmpfs ]; then
 	exit 1
 fi
 
-# if /var/spool/MailScanner/ramdisk_sync is missing
+# if /var/spool/MailScanner/ramdisk_save is missing
 [ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
 
 #
@@ -96,7 +101,7 @@ do_start_sync()
 	chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
 	chmod 0750 ${RAMDISK}
 	find ${RAMDISK} -type d -exec chmod 0750 {} \;
-	find ${RAMDISK} -type f -exec chmod 0660 {} \;
+	find ${RAMDISK} -type f -exec chmod ${WORKPERM} {} \;
 }
 
 #
@@ -109,7 +114,7 @@ do_stop_sync()
 	chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
 	chmod 0750 ${RAMDISK}
 	find ${RAMDISK} -type d -exec chmod 0750 {} \;
-	find ${RAMDISK} -type f -exec chmod 0660 {} \;
+	find ${RAMDISK} -type f -exec chmod ${WORKPERM} {} \;
 	
 	# sync
 	rsync --quiet --archive --delete --recursive --force ${RAMDISK}/ ${PERSIST_STORE}
