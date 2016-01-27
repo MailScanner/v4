@@ -11,9 +11,7 @@
 /etc/MailScanner/rules/max.message.size.rules
 /etc/MailScanner/rules/spam.whitelist.rules
 /etc/MailScanner/spam.assassin.prefs.conf
-;removed for 4.86.1
-;/etc/MailScanner/spam.lists.conf
-;/etc/MailScanner/virus.scanners.conf
+
 /etc/cron.daily/MailScanner
 /etc/cron.hourly/MailScanner
 /etc/default/MailScanner
