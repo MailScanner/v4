@@ -555,6 +555,12 @@ else
 	OLDTHING='\/usr\/share\/MailScanner\/MailScanner\/CustomFunctions';
 	NEWTHING='\/usr\/share\/MailScanner\/perl\/custom';
 	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+	
+	# we need to ensure that the old spam list names do not get used
+	# remove this in version post 4.86.1
+	OLD="Spam List = .*";
+	NEW="Spam List = # see the new spam.lists.conf for options";
+	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 
 	# create symlink for spamasassin
 	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
