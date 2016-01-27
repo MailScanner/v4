@@ -556,11 +556,11 @@ else
 		fi
 	fi
 	
-	/usr/sbin/update_phishing_sites & >/dev/null 2>&1;
-	/usr/sbin/update_bad_phishing_sites & >/dev/null 2>&1;
+	/usr/sbin/update_phishing_sites
+	/usr/sbin/update_bad_phishing_sites
 	
 	if [ -d '/etc/clamav' ]; then
-		/usr/bin/freshclam &
+		/usr/bin/freshclam 
 	fi
 	
 	if [ -f "/etc/MailScanner/conf.d/z_48611_upgrade.conf" ]; then
