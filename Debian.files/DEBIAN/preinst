@@ -23,14 +23,6 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	# create if missing
 	[ -d "/etc/MailScanner/conf.d" ] || mkdir -p /etc/MailScanner/conf.d
 			
-	if [ -f "/etc/default/mailscanner" ]; then
-		cp -f /etc/default/mailscanner /etc/default/MailScanner.original323
-	fi
-
-	if [ -f "/etc/default/MailScanner" ]; then
-		cp -f /etc/default/MailScanner /etc/default/MailScanner.original323
-	fi
-	
 	# /usr/lib/MailScanner
 	if [ -d "/usr/lib/MailScanner" ]; then
 		rm -rf /usr/lib/MailScanner
