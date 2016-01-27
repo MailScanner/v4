@@ -496,7 +496,7 @@ if [ -d '/etc/clamav' ]; then
 	fi
 	
 	# fix old style clamav Monitors if preset in old mailscanner.conf
-	CAVOLD='Monitors for ClamAV Updates.*';
+	CAVOLD='^Monitors for ClamAV Updates.*';
 	CAVNEW='Monitors for ClamAV Updates = \/usr\/local\/share\/clamav\/\*\.cld \/usr\/local\/share\/clamav\/\*\.cvd \/var\/lib\/clamav\/\*\.inc\/\* \/var\/lib\/clamav\/\*\.\?db \/var\/lib\/clamav\/\*\.cvd';
 	sed -i "s/${CAVOLD}/${CAVNEW}/g" /etc/MailScanner/MailScanner.conf
 
@@ -542,7 +542,7 @@ else
 	fi
 	
 	# update web bug link
-	OLD="Web Bug Replacement.*";
+	OLD="^Web Bug Replacement.*";
 	NEW="Web Bug Replacement = https\:\/\/s3\.amazonaws\.com\/msv4\/images\/spacer\.gif";
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 	
@@ -558,7 +558,7 @@ else
 	
 	# we need to ensure that the old spam list names do not get used
 	# remove this in version post 4.86.1
-	OLD="Spam List = .*";
+	OLD="^Spam List = .*";
 	NEW="Spam List = # see the new spam.lists.conf for options";
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 
