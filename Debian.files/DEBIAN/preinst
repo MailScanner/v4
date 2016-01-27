@@ -26,7 +26,7 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	# we need to ensure that the old spam list names do not get used
 	# remove this in version post 4.86.1
 	OLD="Spam List.*";
-	NEW="Spam List = ";
+	NEW="Spam List = # see the new spam.lists.conf for options";
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 			
 	if [ -f "/etc/default/mailscanner" ]; then

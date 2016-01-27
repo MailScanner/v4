@@ -13,7 +13,8 @@
 - Updated virus.scanners.conf with new directory structure and updated
   current location of clamav installations
 - Updated country.domains.conf
-- Updated spam.lists.conf with stuff from this decade
+- Updated spam.lists.conf with stuff from this decade. You will need to
+  redefine your "Spam List =" to an item on the new list.
 - Added group creation of mtagroup which includes relevant system users
   for processing mail
 - Changed distro default Incoming Work Group = mtagroup

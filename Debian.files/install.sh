@@ -546,6 +546,16 @@ else
 	NEW="Web Bug Replacement = https\:\/\/s3\.amazonaws\.com\/msv4\/images\/spacer\.gif";
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 	
+	# fix reports directory
+	OLDTHING='\/etc\/MailScanner\/reports';
+	NEWTHING='\/usr\/share\/MailScanner\/reports';
+	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+
+	# fix custom functions directory
+	OLDTHING='\/usr\/share\/MailScanner\/MailScanner\/CustomFunctions';
+	NEWTHING='\/usr\/share\/MailScanner\/perl\/custom';
+	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+
 	# create symlink for spamasassin
 	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
 		ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/MailScanner.cf 
