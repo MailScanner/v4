@@ -86,6 +86,12 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 		rm -rf /etc/MailScanner/reports/
 	fi
 	
+	# /etc/MailScanner/CustomConfig.pm
+	if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
+		cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/perl/MailScanner/CustomConfig.pm
+		rm -f /etc/MailScanner/CustomConfig.pm
+	fi
+	
 	# 4.86.1 only - remove later
 	# /etc/MailScanner/reports
 	if [ -f "/etc/MailScanner/country.domains.conf" ]; then
@@ -98,10 +104,16 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 		# new version in 4.86.1
 		mv -f /etc/MailScanner/spam.lists.conf /etc/MailScanner/spam.lists.conf.old
 	fi
+	
+	# /etc/MailScanner/virus.scanners.conf
+	if [ -f "/etc/MailScanner/virus.scanners.conf" ]; then
+		# new version in 4.86.1
+		mv -f /etc/MailScanner/virus.scanners.conf /etc/MailScanner/virus.scanners.conf.old
+	fi
 
 while read f 
 do
-  cp /etc/MailScanner/$f /etc/MailScanner/$f.original323
+  cp -f /etc/MailScanner/$f /etc/MailScanner/$f.original323
 done << EOF
 filename.rules.conf
 filetype.rules.conf
@@ -109,12 +121,14 @@ archives.filename.rules.conf
 archives.filetype.rules.conf
 MailScanner.conf
 spam.assassin.prefs.conf
-spam.lists.conf
-virus.scanners.conf
 phishing.safe.sites.conf
 phishing.bad.sites.conf
-country.domains.conf
 EOF
 fi
+
+# removed for 4.86.1 - add back later
+# spam.lists.conf
+# country.domains.conf
+# virus.scanners.conf
 
 exit 0
