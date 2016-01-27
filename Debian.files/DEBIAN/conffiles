@@ -14,6 +14,7 @@
 /etc/cron.daily/MailScanner
 /etc/cron.hourly/MailScanner
 /etc/default/MailScanner
+/etc/default/ramdisk
 /etc/logcheck/ignore.d.server/MailScanner
 /etc/logcheck/ignore.d.workstation/MailScanner
 /usr/share/MailScanner/reports/ca/deleted.content.message.txt

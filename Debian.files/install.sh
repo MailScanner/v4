@@ -574,12 +574,10 @@ else
 			echo;
 			mount -t tmpfs -o size=${RAMDISKSIZE}M tmpfs /var/spool/MailScanner/incoming
 			echo "tmpfs /var/spool/MailScanner/incoming tmpfs rw,size=${RAMDISKSIZE}M 0 0" >> /etc/fstab
-			echo "Enabling RAMDISK daemon ...";
-			OLD="^S#run_ramdisk=1";
+			echo "Enabling ramdisk daemon ...";
+			OLD="^#run_ramdisk=1";
 			NEW="run_ramdisk=1";
 			sed -i "s/${OLD}/${NEW}/g" /etc/default/ramdisk
-			update-rc.d ramdisk defaults
-			update-rc.d ramdisk enable
 		fi
 	fi
 	

@@ -18,15 +18,19 @@ PATH=/usr/sbin:/usr/bin:/bin:/sbin
 DESC="sync - "
 NAME="ramdisk"
 SCRIPTNAME=/etc/init.d/$NAME
-RAMDISK=/var/spool/MailScanner/incoming
-PERSIST_STORE=/var/spool/MailScanner/ramdisk_store
-run_ramdisk=0
+PERSIST_STORE=/var/spool/MailScanner/ramdisk_save
 CONFFILE=/etc/MailScanner/MailScanner.conf
 QUICKPEEK=/usr/sbin/Quick.Peek
+RAMDISK=`${QUICKPEEK} IncomingWorkDir ${CONFFILE}`
 RDUSER=`${QUICKPEEK} IncomingWorkUser ${CONFFILE}`
 RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${CONFFILE}`
+run_ramdisk=0
 
 # check to make sure these are set
+if [ -z ${RAMDISK} ]; then
+	RAMDISK="/var/spool/MailScanner/incoming"
+fi
+
 if [ -z ${RDUSER} ]; then
 	RDUSER="mail"
 fi
@@ -40,17 +44,6 @@ fi
 
 # exit if /var/spool/MailScanner/incoming is missing
 [ -d ${RAMDISK} ] || exit 0
-
-# make sure this is a RAMDISK
-FSTYPE=$(df -P -T /var/spool/MailScanner/incoming/|tail -n +2 | awk '{print $2}')
-
-if [ $FSTYPE != tmpfs ]; then
-	echo $RAMDISK is not a RAMDISK
-	exit
-fi
-
-# if /var/spool/MailScanner/ramdisk_sync is missing
-[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -79,6 +72,17 @@ if [ $run_ramdisk != 1 ]; then
 
     exit 0
 fi
+
+# make sure this is a RAMDISK tmpfs
+FSTYPE=$(df -P -T /var/spool/MailScanner/incoming/|tail -n +2 | awk '{print $2}')
+
+if [ $FSTYPE != tmpfs ]; then
+	echo $RAMDISK is not a RAMDISK
+	exit 1
+fi
+
+# if /var/spool/MailScanner/ramdisk_sync is missing
+[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
 
 #
 # Function that syncs when server comes up
@@ -110,7 +114,6 @@ do_stop_sync()
 	# sync
 	rsync --quiet --archive --delete --recursive --force ${RAMDISK}/ ${PERSIST_STORE}
 }
-
 
 case "$1" in
   start)

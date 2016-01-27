@@ -93,7 +93,6 @@ cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/init.d/ramdisk $WORK/etc/init.d/ramdisk
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/MailScanner
 cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/MailScanner
-chmod +x $WORK/etc/init.d/MailScanner $WORK/etc/cron.hourly/MailScanner $WORK/etc/cron.daily/MailScanner $WORK/etc/init.d/ramdisk
 
 # etc/MailScanner
 cp $DEVBASEDIR/mailscanner/etc/*.conf $WORK/etc/MailScanner/
@@ -237,6 +236,9 @@ chmod +x $WORK/DEBIAN/postrm
 chmod +x $WORK/var/lib/MailScanner/wrapper/*-autoupdate
 chmod +x $WORK/var/lib/MailScanner/wrapper/*-wrapper
 chmod +x $WORK/etc/init.d/MailScanner
+chmod +x $WORK/etc/init.d/ramdisk
+chmod +x $WORK/etc/cron.daily/MailScanner
+chmod +x $WORK/etc/cron.hourly/MailScanner
 for f in $WORK/usr/share/man/man8/*.8 ; do gzip -9 "$f"; done
 for f in $WORK/usr/share/man/man5/*.5 ; do gzip -9 "$f"; done
 gzip -9 $WORK/usr/share/doc/MailScanner/changelog.Debian

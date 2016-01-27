@@ -102,5 +102,6 @@ rm -f /etc/MailScanner/*.original323
 ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 
 update-rc.d MailScanner defaults
+update-rc.d ramdisk defaults
 	
 exit 0
