@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          MailScanner RAMDISK sync
+# Provides:          ramdisk
 # Required-Start:    $local_fs 
 # Required-Stop:     $local_fs 
 # Default-Start:     2 3 4 5
@@ -21,6 +21,19 @@ SCRIPTNAME=/etc/init.d/$NAME
 RAMDISK=/var/spool/MailScanner/incoming
 PERSIST_STORE=/var/spool/MailScanner/ramdisk_store
 run_ramdisk=0
+CONFFILE=/etc/MailScanner/MailScanner.conf
+QUICKPEEK=/usr/sbin/Quick.Peek
+RDUSER=`${QUICKPEEK} IncomingWorkUser ${CONFFILE}`
+RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${CONFFILE}`
+
+# check to make sure these are set
+if [ -z ${RDUSER} ]; then
+	RDUSER="mail"
+fi
+
+if [ -z ${RDGROUP} ]; then
+	RDGROUP="mtagroup"
+fi
 
 # Exit if the rsync package is not installed
 [ -x "/usr/bin/rsync" ] || exit 0
@@ -33,6 +46,7 @@ FSTYPE=$(df -P -T /var/spool/MailScanner/incoming/|tail -n +2 | awk '{print $2}'
 
 if [ $FSTYPE != tmpfs ]; then
 	echo $RAMDISK is not a RAMDISK
+	exit
 fi
 
 # if /var/spool/MailScanner/ramdisk_sync is missing
@@ -52,7 +66,7 @@ VERBOSE=yes
 . /lib/lsb/init-functions
 
 # Don't start if ramdisk is not configured
-if [ $run_ramdisk = 0 ]; then
+if [ $run_ramdisk != 1 ]; then
 	cat <<-EOF
 
 	Create a ramdisk for /var/spool/MailScanner/incoming
@@ -71,7 +85,14 @@ fi
 #
 do_start_sync()
 {
+	# sync
 	rsync --quiet --archive ${PERSIST_STORE}/ ${RAMDISK}
+	
+	# make sure ramdisk permissions are correct
+	chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
+	chmod 0750 ${RAMDISK}
+	find ${RAMDISK} -type d -exec chmod 0750 {} \;
+	find ${RAMDISK} -type f -exec chmod 0660 {} \;
 }
 
 #
@@ -79,6 +100,14 @@ do_start_sync()
 #
 do_stop_sync()
 {
+	
+	# make sure ramdisk permissions are correct
+	chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
+	chmod 0750 ${RAMDISK}
+	find ${RAMDISK} -type d -exec chmod 0750 {} \;
+	find ${RAMDISK} -type f -exec chmod 0660 {} \;
+	
+	# sync
 	rsync --quiet --archive --delete --recursive --force ${RAMDISK}/ ${PERSIST_STORE}
 }
 
@@ -92,8 +121,12 @@ case "$1" in
     echo "Persisting ramdisk contents"
     do_stop_sync
     ;;
+  restart)
+    echo "Persisting ramdisk contents"
+    do_stop_sync
+    ;;
   *)
-    echo "Usage: /etc/init.d/ramdisk {start|stop|sync}"
+    echo "Usage: /etc/init.d/ramdisk {start|stop|restart|sync}"
     exit 1
     ;;
 esac
