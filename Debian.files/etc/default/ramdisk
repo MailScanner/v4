@@ -1,0 +1,7 @@
+#
+# Uncomment this line if you are using a ramdisk for
+# /var/spool/MailScanner/incoming and want it to sync
+# before and after a reboot
+#
+#run_ramdisk=1
+

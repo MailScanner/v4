@@ -1,0 +1,100 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          MailScanner RAMDISK sync
+# Required-Start:    $local_fs 
+# Required-Stop:     $local_fs 
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: sync MailScanner RAMDISK
+# Description:       upon a clean shutdown this daemon will sync the MailScanner
+#					 RAMDISK and then restore it when the server comes back up
+### END INIT INFO
+
+# Author: Jerry Benton <mailscanner@mailborder.com>
+# 26 JAN 2016
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/usr/sbin:/usr/bin:/bin:/sbin
+DESC="sync - "
+NAME="ramdisk"
+SCRIPTNAME=/etc/init.d/$NAME
+RAMDISK=/var/spool/MailScanner/incoming
+PERSIST_STORE=/var/spool/MailScanner/ramdisk_store
+run_ramdisk=0
+
+# Exit if the rsync package is not installed
+[ -x "/usr/bin/rsync" ] || exit 0
+
+# exit if /var/spool/MailScanner/incoming is missing
+[ -d ${RAMDISK} ] || exit 0
+
+# make sure this is a RAMDISK
+FSTYPE=$(df -P -T /var/spool/MailScanner/incoming/|tail -n +2 | awk '{print $2}')
+
+if [ $FSTYPE != tmpfs ]; then
+	echo $RAMDISK is not a RAMDISK
+fi
+
+# if /var/spool/MailScanner/ramdisk_sync is missing
+[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# make this script show Starting / Stopping / etc ...
+VERBOSE=yes
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+# Don't start if ramdisk is not configured
+if [ $run_ramdisk = 0 ]; then
+	cat <<-EOF
+
+	Create a ramdisk for /var/spool/MailScanner/incoming
+	When complete, edit /etc/default/ramdisk and set 
+	the variable to enable ramdisk sync to run:
+
+	run_ramdisk = 1
+
+	EOF
+
+    exit 0
+fi
+
+#
+# Function that syncs when server comes up
+#
+do_start_sync()
+{
+	rsync --quiet --archive ${PERSIST_STORE}/ ${RAMDISK}
+}
+
+#
+# Function that syncs when server goes down
+#
+do_stop_sync()
+{
+	rsync --quiet --archive --delete --recursive --force ${RAMDISK}/ ${PERSIST_STORE}
+}
+
+
+case "$1" in
+  start)
+    echo "Restoring ramdisk contents"
+    do_start_sync
+    ;;
+  sync|stop)
+    echo "Persisting ramdisk contents"
+    do_stop_sync
+    ;;
+  *)
+    echo "Usage: /etc/init.d/ramdisk {start|stop|sync}"
+    exit 1
+    ;;
+esac
+:

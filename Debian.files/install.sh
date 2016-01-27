@@ -301,7 +301,7 @@ if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 fi
 
 # base system packages
-BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl";
+BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl rsync";
 
 # the array of perl modules needed
 ARMOD=();
@@ -574,6 +574,10 @@ else
 			echo;
 			mount -t tmpfs -o size=${RAMDISKSIZE}M tmpfs /var/spool/MailScanner/incoming
 			echo "tmpfs /var/spool/MailScanner/incoming tmpfs rw,size=${RAMDISKSIZE}M,mode=750 0 0" >> /etc/fstab
+			echo "Enabling RAMDISK daemon ...";
+			OLD="^S#run_ramdisk=1";
+			NEW="run_ramdisk=1";
+			sed -i "s/${OLD}/${NEW}/g" /etc/default/ramdisk
 		fi
 	fi
 	

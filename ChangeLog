@@ -20,6 +20,8 @@
 - Changed distro default Incoming Work Group = mtagroup
 - Changed distro default Incoming Work Permissions = 0660
 - Added option to create RAMDISK during installation
+- Added RAMDISK daemon to save and restore contents during reboot
+  and power up if RAMDISK is enabled
 
 01/16/2016 Changes in    v4.85.3-2
 ==================================
