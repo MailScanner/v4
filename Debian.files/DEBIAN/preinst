@@ -29,21 +29,21 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	fi
 
 	# /etc/MailScanner/CustomFunctions
-	if [[ -d "/etc/MailScanner/CustomFunctions" && ! -L "/etc/MailScanner/CustomFunctions" ]]; then
+	if [ -d "/etc/MailScanner/CustomFunctions" -a ! -L "/etc/MailScanner/CustomFunctions" ]; then
 		mkdir -p /usr/share/MailScanner/perl/custom/
 		cp -rf /etc/MailScanner/CustomFunctions/* /usr/share/MailScanner/perl/custom/
 		rm -rf /etc/MailScanner/CustomFunctions
 	fi
 
 	# /etc/MailScanner/custom
-	if [[ -d "/etc/MailScanner/custom" && ! -L "/etc/MailScanner/custom" ]]; then
+	if [ -d "/etc/MailScanner/custom" -a ! -L "/etc/MailScanner/custom" ]; then
 		mkdir -p /usr/share/MailScanner/perl/custom/
 		cp -rf /etc/MailScanner/custom/* /usr/share/MailScanner/perl/custom/
 		rm -rf /etc/MailScanner/custom
 	fi
 
 	# /etc/MailScanner/Custom
-	if [[ -d "/etc/MailScanner/Custom" && ! -L "/etc/MailScanner/Custom" ]]; then
+	if [ -d "/etc/MailScanner/Custom" -a ! -L "/etc/MailScanner/Custom" ]; then
 		mkdir -p /usr/share/MailScanner/perl/custom/
 		cp -rf /etc/MailScanner/Custom/* /usr/share/MailScanner/perl/custom/
 		rm -rf /etc/MailScanner/Custom
@@ -65,14 +65,14 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 	fi
 
 	# /etc/MailScanner/reports
-	if [[ -d "/etc/MailScanner/reports" && ! -L "/etc/MailScanner/reports" ]]; then
+	if [ -d "/etc/MailScanner/reports" -a ! -L "/etc/MailScanner/reports" ]; then
 		mkdir -p /usr/share/MailScanner/reports/
 		cp -rf /etc/MailScanner/reports/* /usr/share/MailScanner/reports/
 		rm -rf /etc/MailScanner/reports/
 	fi
 	
 	# /etc/MailScanner/CustomConfig.pm
-	if [[ -f "/etc/MailScanner/CustomConfig.pm" && ! -L "/etc/MailScanner/CustomConfig.pm" ]]; then
+	if [ -f "/etc/MailScanner/CustomConfig.pm" -a ! -L "/etc/MailScanner/CustomConfig.pm" ]; then
 		cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/perl/MailScanner/CustomConfig.pm
 		rm -f /etc/MailScanner/CustomConfig.pm
 	fi

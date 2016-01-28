@@ -324,7 +324,7 @@ timewait 2
 
 # install base packages
 $APTGET update
-$APTGET -yf install $BASEPACKAGES
+#$APTGET -yf install $BASEPACKAGES
 
 # install this separate in case it conflicts
 if [ "x$MTAOPTION" != "x" ]; then

@@ -105,7 +105,7 @@ fi
 rm -f /etc/MailScanner/*.original323
 
 # softlink for custom functions
-if [[ -d '/usr/share/MailScanner/perl/custom' && ! -L '/etc/MailScanner/custom' ]]; then
+if [ -d '/usr/share/MailScanner/perl/custom' -a ! -L '/etc/MailScanner/custom' ]; then
 	ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 fi
 
@@ -225,7 +225,7 @@ if [ -L '/etc/spamassassin/MailScanner.cf' ]; then
 fi
 
 # create symlink for spamasassin
-if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/mailscanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' && ! -f '/etc/spamassassin/mailscanner.cf' ]]; then
+if [ -d '/etc/spamassassin' -a ! -L '/etc/spamassassin/mailscanner.cf' -a -f '/etc/MailScanner/spam.assassin.prefs.conf' -a ! -f '/etc/spamassassin/mailscanner.cf' ]; then
 	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/mailscanner.cf 
 fi
 
@@ -286,7 +286,7 @@ if [ -f "/etc/postfix/master.cf" ]; then
 	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
 	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
 fi
-	
+		
 update-rc.d MailScanner defaults
 
 exit 0
