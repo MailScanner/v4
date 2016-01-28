@@ -103,7 +103,9 @@ fi
 rm -f /etc/MailScanner/*.original323
 
 # softlink for custom functions
-ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
+if [[ -d '/usr/share/MailScanner/perl/custom' && ! -L '/etc/MailScanner/custom' ]]; then
+	ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
+fi
 
 # remove old files if present
 if [ -f '/etc/default/mailscanner' ]; then

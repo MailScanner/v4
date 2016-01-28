@@ -303,7 +303,7 @@ if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 fi
 
 # base system packages
-BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl ${RSYNC}";
+BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libconfig-yaml-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl ${RSYNC}";
 
 # the array of perl modules needed
 ARMOD=();
@@ -510,9 +510,18 @@ else
 	NEW="Spam List = # see the new spam.lists.conf for options";
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 
+	# remove old link if present
+	if [[ -d '/etc/spamassassin' && -L '/etc/spamassassin/mailscanner.cf' ]]; then
+		rm -f /etc/spamassassin/mailscanner.cf
+	fi
+	
+	if [[ -L '/etc/spamassassin/MailScanner.cf' ]]; then
+		rm -f /etc/spamassassin/MailScanner.cf
+	fi
+	
 	# create symlink for spamasassin
-	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/MailScanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
-		ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/MailScanner.cf 
+	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/mailscanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
+		ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/mailscanner.cf 
 	fi
 	
 	# create ramdisk
