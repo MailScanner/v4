@@ -223,6 +223,7 @@ cp -rf $DEVBASEDIR/Debian.files/DEBIAN/ $WORK
 perl -pi -e 's/DebianVersionHere/'$FULLMSVER'/;' $WORK/DEBIAN/control
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/etc/MailScanner/MailScanner.conf
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/usr/sbin/MailScanner
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/DEBIAN/postinst
 
 cd $WORK
 find . -type f -exec chmod 0644 {} \;

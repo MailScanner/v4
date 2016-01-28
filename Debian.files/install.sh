@@ -41,21 +41,11 @@ else
 	APTGET='/usr/bin/apt-get';
 fi
 
-# basic test to see if we can ping google
-if ping -c 1 8.8.8.8 > /dev/null; then
-	# got a return on the single ping request
-    CONNECTTEST=
-else
-	# a ping return isn't required, but it may signal a problem with the network connection. this simply warns the user
-    CONNECTTEST="WARNING: I was unable to ping outside of your network. \nYou may ignore this warning if you have confirmed your connection is valid."
-fi
-
 # user info screen before the install process starts
 echo "MailScanner Installation for Debian Based Systems"; echo; echo;
 echo "This will INSTALL or UPGRADE the required software for MailScanner on Debian based systems";
 echo "via the Apt package manager. Supported distributions are Debian 6,7 and associated variants";
 echo "such as Ubuntu. Internet connectivity is required for this installation script to execute."; echo;
-echo -e $CONNECTTEST
 echo;
 echo "You may press CTRL + C at any time to abort the installation. Note that you may see";
 echo "some errors during the perl module installation. You may safely ignore errors regarding";
@@ -130,29 +120,6 @@ elif [ $response == 3 ]; then
     MTAOPTION="exim4-base";        
 else
 	MTAOPTION=
-fi
-
-# ask if the user wants spamassassin installed
-clear
-echo;
-echo "Do you want to install or update Spamassassin?"; echo;
-echo "This package is recommended unless you have your own spam detection solution.";
-echo;
-echo "Recommended: Y (yes)"; echo;
-read -r -p "Install or update Spamassassin? [n/Y] : " response
-
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    # user wants SA installed
-    SA=1
-    SAOPTION="spamassassin"
-elif [ -z $response ]; then    
-	# user wants SA installed
-    SA=1
-    SAOPTION="spamassassin"
-else
-    # user does not want SA
-	SA=0
-	SAOPTION=
 fi
 
 # clamav
@@ -252,10 +219,8 @@ if [[ $RAMDISKSIZE =~ ^[0-9]+$ ]]; then
 	if [ $RAMDISKSIZE != 0 ]; then
 		# user wants ramdisk
 		RAMDISK=1
-		RSYNC="rsync"
 	else
 		RAMDISK=0
-		RSYNC=
 	fi
 else
 	# no ramdisk
@@ -265,7 +230,7 @@ fi
 # back up their stuff
 SAVEDIR="$HOME/ms_upgrade/saved.$$";
 
-if [ -d "/usr/lib/MailScanner" ]; then
+if [ -d "/usr/lib/MailScanner/MailScanner/CustomFunctions" ]; then
 	mkdir -p $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
 	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
 	clear
@@ -303,7 +268,7 @@ if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 fi
 
 # base system packages
-BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libconfig-yaml-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl ${RSYNC}";
+BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libconfig-yaml-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl";
 
 # the array of perl modules needed
 ARMOD=();
@@ -330,6 +295,7 @@ ARMOD+=('Socket'); 				ARMOD+=('Storable'); 	 	 	ARMOD+=('Test::Harness');
 ARMOD+=('Test::Pod');			ARMOD+=('Test::Simple');		ARMOD+=('Time::HiRes');			
 ARMOD+=('Time::localtime'); 	ARMOD+=('Sys::Hostname::Long');	ARMOD+=('Sys::SigAction');		
 ARMOD+=('Sys::Syslog'); 		ARMOD+=('Env'); 				ARMOD+=('File::ShareDir::Install');
+ARMOD+=('Mail::SpamAssassin');
 
 # not required but nice to have
 ARMOD+=('bignum');				ARMOD+=('Business::ISBN');		ARMOD+=('Business::ISBN::Data');
@@ -343,12 +309,6 @@ ARMOD+=('Net::DNS');			ARMOD+=('Net::LDAP');			ARMOD+=('Net::DNS::Resolver::Prog
 ARMOD+=('NetAddr::IP');			ARMOD+=('Parse::RecDescent');	ARMOD+=('Test::Harness');
 ARMOD+=('Test::Manifest');		ARMOD+=('Text::Balanced');		ARMOD+=('URI');	
 ARMOD+=('version');							
-
-
-# add to array if the user is installing spamassassin
-if [ $SA == 1 ]; then
-	ARMOD+=('Mail::SpamAssassin');
-fi
 
 # logging starts here
 (
@@ -389,17 +349,19 @@ fi
 # some items may not be available depending on the distribution 
 # release but those items will be checked after this and installed
 # via cpan if the user elected to do so.
-clear
-echo;
-echo "Installing tnef, Clam AV (if elected), and Spamassassin (if elected) via apt ... "; echo;
-timewait 3
-# the tnef below is a dummy placeholder. leave it there!
-$APTGET -y install tnef $CAVOPTION $SAOPTION
+
 
 # fix the stupid line in /etc/freshclam.conf that disables freshclam 
 if [ $CAV == 1 ]; then
+	clear
+	echo;
+	echo "Installing Clam AV (if elected), via apt ... "; echo;
+	timewait 3
+	$APTGET -y install $CAVOPTION
 	COUT='#Example';
-	perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
+	if [ -f "/etc/freshclam.conf" ]; then
+		perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
+	fi
 fi
 
 # create the cpan config if there isn't one and the user
@@ -483,45 +445,12 @@ else
 		echo;
 		timewait 1
 		
-		upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.dpkg-dist > /etc/MailScanner/MailScanner.new
-		mv -f /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.old.$$
-		mv -f /etc/MailScanner/MailScanner.new  /etc/MailScanner/MailScanner.conf
+		if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+			upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.dpkg-dist > /etc/MailScanner/MailScanner.new
+			mv -f /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.old.$$
+			mv -f /etc/MailScanner/MailScanner.new  /etc/MailScanner/MailScanner.conf
+		fi
 
-	fi
-	
-	# update web bug link
-	OLD="^Web Bug Replacement.*";
-	NEW="Web Bug Replacement = https\:\/\/s3\.amazonaws\.com\/msv4\/images\/spacer\.gif";
-	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
-	
-	# fix reports directory
-	OLDTHING='\/etc\/MailScanner\/reports';
-	NEWTHING='\/usr\/share\/MailScanner\/reports';
-	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
-
-	# fix custom functions directory
-	OLDTHING='\/usr\/share\/MailScanner\/MailScanner\/CustomFunctions';
-	NEWTHING='\/usr\/share\/MailScanner\/perl\/custom';
-	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
-	
-	# we need to ensure that the old spam list names do not get used
-	# remove this in version post 4.86.1
-	OLD="^Spam List = .*";
-	NEW="Spam List = # see the new spam.lists.conf for options";
-	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
-
-	# remove old link if present
-	if [[ -d '/etc/spamassassin' && -L '/etc/spamassassin/mailscanner.cf' ]]; then
-		rm -f /etc/spamassassin/mailscanner.cf
-	fi
-	
-	if [[ -L '/etc/spamassassin/MailScanner.cf' ]]; then
-		rm -f /etc/spamassassin/MailScanner.cf
-	fi
-	
-	# create symlink for spamasassin
-	if [[ -d '/etc/spamassassin' && ! -L '/etc/spamassassin/mailscanner.cf' && -f '/etc/MailScanner/spam.assassin.prefs.conf' ]]; then
-		ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/mailscanner.cf 
 	fi
 	
 	# create ramdisk
@@ -532,64 +461,12 @@ else
 			mount -t tmpfs -o size=${RAMDISKSIZE}M tmpfs /var/spool/MailScanner/incoming
 			echo "tmpfs /var/spool/MailScanner/incoming tmpfs rw,size=${RAMDISKSIZE}M 0 0" >> /etc/fstab
 			echo "Enabling ramdisk sync ...";
-			OLD="^#ramdisk_sync=1";
-			NEW="ramdisk_sync=1";
-			sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
-		fi
-	fi
-	
-	# fix the clamav wrapper if the user does not exist
-	if [ -d '/etc/clamav' ]; then
-	
-		DISTROCAVUSER='ClamUser="clamav"';
-		DISTROCAVGRP='ClamGroup="clamav"';
-		
-		# check for common users and add to the mtagroup
-		if id -u clam >/dev/null 2>&1; then
-			CAVUSR='ClamUser="clam"';
-		fi
-
-		if id -u clamav >/dev/null 2>&1; then
-			CAVUSR='ClamUser="clamav"';
-		fi
-	
-		if getent group clamav >/dev/null 2>&1; then
-			CAVGRP='ClamGroup="clamav"';
-		fi
-	
-		if getent group clam >/dev/null 2>&1; then
-			CAVGRP='ClamGroup="clam"';
-		fi
-	
-		sed -i "s/${DISTROCAVUSER}/${CAVUSR}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
-		sed -i "s/${DISTROCAVGRP}/${CAVGRP}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
-
-		if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
-				
-			# add to include for clamd
-			if [ -f '/etc/apparmor.d/local/usr.sbin.clamd' ]; then
-				DEFAULTAPPARMOR='#include <local\/usr.sbin.clamd>';
-				APPARMORFIX=' include local\/usr.sbin.clamd';
-
-				# enable include directory
-				sed -i "s/${DEFAULTAPPARMOR}/${APPARMORFIX}/g" /etc/apparmor.d/usr.sbin.clamd
-			
-				echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
-				echo '/var/spool/MailScanner/incoming/** ix,' >> /etc/apparmor.d/local/usr.sbin.clamd
+			if [ -f '/etc/default/MailScanner' ]; then
+				OLD="^#ramdisk_sync=1";
+				NEW="ramdisk_sync=1";
+				sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
 			fi
 		fi
-	
-		# fix old style clamav Monitors if preset in old mailscanner.conf
-		CAVOLD='^Monitors for ClamAV Updates.*';
-		CAVNEW='Monitors for ClamAV Updates = \/usr\/local\/share\/clamav\/\*\.cld \/usr\/local\/share\/clamav\/\*\.cvd \/var\/lib\/clamav\/\*\.inc\/\* \/var\/lib\/clamav\/\*\.\?db \/var\/lib\/clamav\/\*\.cvd';
-		sed -i "s/${CAVOLD}/${CAVNEW}/g" /etc/MailScanner/MailScanner.conf
-
-	fi
-
-	# postfix fix
-	if [ -f "/etc/postfix/master.cf" ]; then
-		sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
-		sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
 	fi
 		
 	/usr/sbin/update_phishing_sites
