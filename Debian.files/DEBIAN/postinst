@@ -216,11 +216,11 @@ if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
 fi
 
 # remove old link if present
-if [[ -L '/etc/spamassassin/mailscanner.cf' ]]; then
+if [ -L '/etc/spamassassin/mailscanner.cf' ]; then
 	rm -f /etc/spamassassin/mailscanner.cf
 fi
 
-if [[ -L '/etc/spamassassin/MailScanner.cf' ]]; then
+if [ -L '/etc/spamassassin/MailScanner.cf' ]; then
 	rm -f /etc/spamassassin/MailScanner.cf
 fi
 
