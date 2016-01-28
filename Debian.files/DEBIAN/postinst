@@ -105,6 +105,76 @@ rm -f /etc/MailScanner/*.original323
 # softlink for custom functions
 ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 
+# remove old files if present
+if [ -f '/etc/default/mailscanner' ]; then
+	rm -f /etc/default/mailscanner
+fi
+
+# remove old files if present
+if [ -f '/etc/cron.daily/mailscanner' ]; then
+	rm -f /etc/cron.daily/mailscanner
+fi
+
+# remove old files if present
+if [ -f '/etc/cron.hourly/mailscanner' ]; then
+	rm -f /etc/cron.hourly/mailscanner
+fi
+
+# remove old files if present
+if [ -f '/etc/init.d/mailscanner' ]; then
+	update-rc.d -f mailscanner remove
+	rm -f /etc/init.d/mailscanner
+fi
+
+# update any cron jobs that reference old files
+if [ -d '/etc/cron.hourly' ]; then
+	for file in /etc/cron.hourly/*
+	do
+		if [ -f $file ]; then
+			OLD='\/etc\/default\/mailscanner';
+			NEW='\/etc\/default\/MailScanner';
+			sed -i "s/${OLD}/${NEW}/g" $file
+		fi
+		
+	done;
+fi
+
+# update any cron jobs that reference old files
+if [ -d '/etc/cron.daily' ]; then
+	for file in /etc/cron.daily/*
+	do
+		if [ -f $file ]; then
+			OLD='\/etc\/default\/mailscanner';
+			NEW='\/etc\/default\/MailScanner';
+			sed -i "s/${OLD}/${NEW}/g" $file
+		fi
+	done;
+fi
+
+# update any cron jobs that reference old files
+if [ -d '/etc/cron.weekly' ]; then
+	for file in /etc/cron.weekly/*
+	do
+		if [ -f $file ]; then
+			OLD='\/etc\/default\/mailscanner';
+			NEW='\/etc\/default\/MailScanner';
+			sed -i "s/${OLD}/${NEW}/g" $file
+		fi
+	done;
+fi
+
+# update any cron jobs that reference old files
+if [ -d '/etc/cron.monthly' ]; then
+	for file in /etc/cron.monthly/*
+	do
+		if [ -f $file ]; then
+			OLD='\/etc\/default\/mailscanner';
+			NEW='\/etc\/default\/MailScanner';
+			sed -i "s/${OLD}/${NEW}/g" $file
+		fi
+	done;
+fi
+	
 update-rc.d MailScanner defaults
 
 exit 0

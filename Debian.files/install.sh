@@ -582,7 +582,7 @@ else
 			sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
 		fi
 	fi
-	
+		
 	/usr/sbin/update_phishing_sites
 	/usr/sbin/update_bad_phishing_sites
 	
