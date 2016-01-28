@@ -456,60 +456,6 @@ done
 # will pause if a perl module was missing
 timewait $PMODWAIT
 
-# fix the clamav wrapper if the user does not exist
-if [ -d '/etc/clamav' ]; then
-	
-	DISTROCAVUSER='ClamUser="clamav"';
-	DISTROCAVGRP='ClamGroup="clamav"';
-		
-	# check for common users and add to the mtagroup
-	if id -u clam >/dev/null 2>&1; then
-		CAVUSR='ClamUser="clam"';
-	fi
-
-	if id -u clamav >/dev/null 2>&1; then
-		CAVUSR='ClamUser="clamav"';
-	fi
-	
-	if getent group clamav >/dev/null 2>&1; then
-		CAVGRP='ClamGroup="clamav"';
-	fi
-	
-	if getent group clam >/dev/null 2>&1; then
-		CAVGRP='ClamGroup="clam"';
-	fi
-	
-	sed -i "s/${DISTROCAVUSER}/${CAVUSR}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
-	sed -i "s/${DISTROCAVGRP}/${CAVGRP}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
-
-	if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
-				
-		# add to include for clamd
-		if [ -f '/etc/apparmor.d/local/usr.sbin.clamd' ]; then
-			DEFAULTAPPARMOR='#include <local\/usr.sbin.clamd>';
-			APPARMORFIX=' include local\/usr.sbin.clamd';
-
-			# enable include directory
-			sed -i "s/${DEFAULTAPPARMOR}/${APPARMORFIX}/g" /etc/apparmor.d/usr.sbin.clamd
-			
-			echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
-			echo '/var/spool/MailScanner/incoming/** ix,' >> /etc/apparmor.d/local/usr.sbin.clamd
-		fi
-	fi
-	
-	# fix old style clamav Monitors if preset in old mailscanner.conf
-	CAVOLD='^Monitors for ClamAV Updates.*';
-	CAVNEW='Monitors for ClamAV Updates = \/usr\/local\/share\/clamav\/\*\.cld \/usr\/local\/share\/clamav\/\*\.cvd \/var\/lib\/clamav\/\*\.inc\/\* \/var\/lib\/clamav\/\*\.\?db \/var\/lib\/clamav\/\*\.cvd';
-	sed -i "s/${CAVOLD}/${CAVNEW}/g" /etc/MailScanner/MailScanner.conf
-
-fi
-
-# postfix fix
-if [ -f "/etc/postfix/master.cf" ]; then
-	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
-	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
-fi
-
 clear
 echo;
 echo "Installing the MailScanner .deb package ... ";
@@ -581,6 +527,60 @@ else
 			NEW="ramdisk_sync=1";
 			sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
 		fi
+	fi
+	
+	# fix the clamav wrapper if the user does not exist
+	if [ -d '/etc/clamav' ]; then
+	
+		DISTROCAVUSER='ClamUser="clamav"';
+		DISTROCAVGRP='ClamGroup="clamav"';
+		
+		# check for common users and add to the mtagroup
+		if id -u clam >/dev/null 2>&1; then
+			CAVUSR='ClamUser="clam"';
+		fi
+
+		if id -u clamav >/dev/null 2>&1; then
+			CAVUSR='ClamUser="clamav"';
+		fi
+	
+		if getent group clamav >/dev/null 2>&1; then
+			CAVGRP='ClamGroup="clamav"';
+		fi
+	
+		if getent group clam >/dev/null 2>&1; then
+			CAVGRP='ClamGroup="clam"';
+		fi
+	
+		sed -i "s/${DISTROCAVUSER}/${CAVUSR}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
+		sed -i "s/${DISTROCAVGRP}/${CAVGRP}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
+
+		if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
+				
+			# add to include for clamd
+			if [ -f '/etc/apparmor.d/local/usr.sbin.clamd' ]; then
+				DEFAULTAPPARMOR='#include <local\/usr.sbin.clamd>';
+				APPARMORFIX=' include local\/usr.sbin.clamd';
+
+				# enable include directory
+				sed -i "s/${DEFAULTAPPARMOR}/${APPARMORFIX}/g" /etc/apparmor.d/usr.sbin.clamd
+			
+				echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
+				echo '/var/spool/MailScanner/incoming/** ix,' >> /etc/apparmor.d/local/usr.sbin.clamd
+			fi
+		fi
+	
+		# fix old style clamav Monitors if preset in old mailscanner.conf
+		CAVOLD='^Monitors for ClamAV Updates.*';
+		CAVNEW='Monitors for ClamAV Updates = \/usr\/local\/share\/clamav\/\*\.cld \/usr\/local\/share\/clamav\/\*\.cvd \/var\/lib\/clamav\/\*\.inc\/\* \/var\/lib\/clamav\/\*\.\?db \/var\/lib\/clamav\/\*\.cvd';
+		sed -i "s/${CAVOLD}/${CAVNEW}/g" /etc/MailScanner/MailScanner.conf
+
+	fi
+
+	# postfix fix
+	if [ -f "/etc/postfix/master.cf" ]; then
+		sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
+		sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
 	fi
 		
 	/usr/sbin/update_phishing_sites
