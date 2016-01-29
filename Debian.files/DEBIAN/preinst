@@ -76,5 +76,6 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 		cp -uf /etc/MailScanner/CustomConfig.pm /usr/share/MailScanner/perl/MailScanner/CustomConfig.pm
 		rm -f /etc/MailScanner/CustomConfig.pm
 	fi
+fi
 
 exit 0
