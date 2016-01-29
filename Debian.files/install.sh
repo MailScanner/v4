@@ -354,7 +354,6 @@ for i in "${BASEPACKAGES[@]}"
 do
 	$APTGET -yf install $i	
 done
-fi
 
 # install this separate in case it conflicts
 if [ "x$MTAOPTION" != "x" ]; then
@@ -481,13 +480,20 @@ else
 		if [ -d '/var/spool/MailScanner/incoming' ]; then
 			echo "Creating the ramdisk ...";
 			echo;
-			mount -t tmpfs -o size=${RAMDISKSIZE}M tmpfs /var/spool/MailScanner/incoming
-			echo "tmpfs /var/spool/MailScanner/incoming tmpfs rw,size=${RAMDISKSIZE}M 0 0" >> /etc/fstab
-			echo "Enabling ramdisk sync ...";
-			if [ -f '/etc/default/MailScanner' ]; then
-				OLD="^#ramdisk_sync=1";
-				NEW="ramdisk_sync=1";
-				sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
+			DISK="/var/spool/MailScanner/incoming";
+			FSTYPE=$(df -P -T ${DISK}|tail -n +2 | awk '{print $2}')
+
+			if [ $FSTYPE != tmpfs ]; then
+				mount -t tmpfs -o size=${RAMDISKSIZE}M tmpfs ${DISK}
+				echo "tmpfs ${DISK} tmpfs rw,size=${RAMDISKSIZE}M 0 0" >> /etc/fstab
+				echo "Enabling ramdisk sync ...";
+				if [ -f '/etc/default/MailScanner' ]; then
+					OLD="^#ramdisk_sync=1";
+					NEW="ramdisk_sync=1";
+					sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
+				fi
+			else
+				echo "${DISK} is already a RAMDISK!";
 			fi
 		fi
 	fi

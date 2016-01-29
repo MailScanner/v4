@@ -71,39 +71,6 @@ install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/incoming
 install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/incoming
 install -d -omail -gmtagroup -m0750 /var/spool/MailScanner/quarantine
 
-# upgrade
-if [ -f "/etc/MailScanner/MailScanner.conf.original323" ]; then
-
-cp -f /etc/MailScanner/MailScanner.conf /etc/MailScanner/MailScanner.conf.dpkg-dist
-
-while read f 
-do
-  mv -f /etc/MailScanner/$f.original323 /etc/MailScanner/$f
-done << EOF
-filename.rules.conf
-filetype.rules.conf
-archives.filename.rules.conf
-archives.filetype.rules.conf
-MailScanner.conf
-spam.assassin.prefs.conf
-phishing.safe.sites.conf
-phishing.bad.sites.conf
-EOF
-
-# removed for 4.86.1 - add back later
-#spam.lists.conf
-#country.domains.conf
-#virus.scanners.conf
-fi
-
-# upgrade
-if [ -f "/etc/default/MailScanner.original323" ]; then
-	rm -f /etc/default/MailScanner
-	mv /etc/default/MailScanner.original323 /etc/default/MailScanner
-fi
-
-rm -f /etc/MailScanner/*.original323
-
 # softlink for custom functions
 if [ -d '/usr/share/MailScanner/perl/custom' -a ! -L '/etc/MailScanner/custom' ]; then
 	ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
