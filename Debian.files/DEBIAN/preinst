@@ -41,6 +41,11 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 		cp -rf /etc/MailScanner/custom/* /usr/share/MailScanner/perl/custom/
 		rm -rf /etc/MailScanner/custom
 	fi
+	
+	# /etc/MailScanner/custom symlink
+	if [ -L "/etc/MailScanner/custom" ]; then
+		rm -f /etc/MailScanner/custom
+	fi
 
 	# /etc/MailScanner/Custom
 	if [ -d "/etc/MailScanner/Custom" -a ! -L "/etc/MailScanner/Custom" ]; then
