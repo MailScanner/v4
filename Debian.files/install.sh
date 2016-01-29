@@ -268,7 +268,28 @@ if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
 fi
 
 # base system packages
-BASEPACKAGES="curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libconfig-yaml-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl";
+BASEPACKAGES=();					BASEPACKAGES+=('perl-doc');						BASEPACKAGES+=('libmailtools-perl');
+BASEPACKAGES+=('curl');				BASEPACKAGES+=('libnet-cidr-lite-perl');		BASEPACKAGES+=('libmime-tools-perl');
+BASEPACKAGES+=('wget');				BASEPACKAGES+=('libtest-manifest-perl');		BASEPACKAGES+=('libnet-cidr-perl');
+BASEPACKAGES+=('tar');				BASEPACKAGES+=('libdata-dump-perl');			BASEPACKAGES+=('libsys-syslog-perl');
+BASEPACKAGES+=('binutils');			BASEPACKAGES+=('libbusiness-isbn-perl');		BASEPACKAGES+=('libio-stringy-perl');
+BASEPACKAGES+=('unrar');			BASEPACKAGES+=('libdbd-mysql-perl');			BASEPACKAGES+=('perl-modules');
+BASEPACKAGES+=('gcc');				BASEPACKAGES+=('libconvert-tnef-perl');			BASEPACKAGES+=('libdbd-mysql-perl');
+BASEPACKAGES+=('make');				BASEPACKAGES+=('libdbd-sqlite3-perl');			BASEPACKAGES+=('libencode-detect-perl');
+BASEPACKAGES+=('patch');			BASEPACKAGES+=('libfilesys-df-perl');			BASEPACKAGES+=('libc6-dev');
+BASEPACKAGES+=('antiword');			BASEPACKAGES+=('libarchive-zip-perl');			BASEPACKAGES+=('libconfig-yaml-perl');
+BASEPACKAGES+=('pyzor');			BASEPACKAGES+=('libole-storage-lite-perl');		BASEPACKAGES+=('libsys-sigaction-perl');
+BASEPACKAGES+=('razor');			BASEPACKAGES+=('libinline-perl');				BASEPACKAGES+=('libmail-imapclient-perl');
+BASEPACKAGES+=('tnef');				BASEPACKAGES+=('libmail-spf-perl');				BASEPACKAGES+=('libtest-pod-coverage-perl');
+BASEPACKAGES+=('gzip');				BASEPACKAGES+=('libnetaddr-ip-perl');			BASEPACKAGES+=('libfile-sharedir-install-perl');
+BASEPACKAGES+=('unzip');			BASEPACKAGES+=('libnet-ldap-perl');				BASEPACKAGES+=('libsys-hostname-long-perl');
+BASEPACKAGES+=('openssl');			BASEPACKAGES+=('libmail-dkim-perl');			BASEPACKAGES+=('libhtml-tokeparser-simple-perl');
+BASEPACKAGES+=('perl');				BASEPACKAGES+=('libbusiness-isbn-data-perl');	BASEPACKAGES+=('libnet-dns-resolver-programmable-perl');
+	
+# install these from array above in case one of the 
+# packages produce an error
+#
+#"curl wget tar binutils libc6-dev gcc make patch gzip unzip openssl perl perl-doc libdbd-mysql-perl libconvert-tnef-perl libdbd-sqlite3-perl libfilesys-df-perl libmailtools-perl libmime-tools-perl libnet-cidr-perl libsys-syslog-perl libio-stringy-perl perl-modules libdbd-mysql-perl libencode-detect-perl unrar antiword libarchive-zip-perl libconfig-yaml-perl libole-storage-lite-perl libsys-sigaction-perl pyzor razor tnef libinline-perl libmail-imapclient-perl libtest-pod-coverage-perl libfile-sharedir-install-perl libmail-spf-perl libnetaddr-ip-perl libsys-hostname-long-perl libhtml-tokeparser-simple-perl libmail-dkim-perl libnet-ldap-perl libnet-dns-resolver-programmable-perl libnet-cidr-lite-perl libtest-manifest-perl libdata-dump-perl libbusiness-isbn-data-perl libbusiness-isbn-perl";
 
 # the array of perl modules needed
 ARMOD=();
@@ -319,16 +340,38 @@ echo;
 timewait 1
 
 # install the basics
-echo "Installing required base system utilities ..."; echo;
+echo "Installing required system packages ..."; echo;
 timewait 2
 
-# install base packages
+# install required perl and base packages that are available via apt
+#
+# some items may not be available depending on the distribution 
+# release but those items will be checked after this and installed
+# via cpan if the user elected to do so.
 $APTGET update
-#$APTGET -yf install $BASEPACKAGES
+
+for i in "${BASEPACKAGES[@]}"
+do
+	$APTGET -yf install $i	
+done
+fi
 
 # install this separate in case it conflicts
 if [ "x$MTAOPTION" != "x" ]; then
 	$APTGET -yf install $MTAOPTION
+fi
+
+# fix the stupid line in /etc/freshclam.conf that disables freshclam 
+if [ $CAV == 1 ]; then
+	clear
+	echo;
+	echo "Installing Clam AV via apt ... "; echo;
+	timewait 3
+	$APTGET -y install $CAVOPTION
+	COUT='#Example';
+	if [ -f "/etc/freshclam.conf" ]; then
+		perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
+	fi
 fi
 
 # check for curl
@@ -342,26 +385,6 @@ if [ ! -x /usr/bin/curl ]; then
 	exit 1
 else
 	CURL='/usr/bin/curl';
-fi
-
-# install required perl packages that are available via apt
-#
-# some items may not be available depending on the distribution 
-# release but those items will be checked after this and installed
-# via cpan if the user elected to do so.
-
-
-# fix the stupid line in /etc/freshclam.conf that disables freshclam 
-if [ $CAV == 1 ]; then
-	clear
-	echo;
-	echo "Installing Clam AV (if elected), via apt ... "; echo;
-	timewait 3
-	$APTGET -y install $CAVOPTION
-	COUT='#Example';
-	if [ -f "/etc/freshclam.conf" ]; then
-		perl -pi -e 's/Example/'$COUT'/;' /etc/freshclam.conf
-	fi
 fi
 
 # create the cpan config if there isn't one and the user
