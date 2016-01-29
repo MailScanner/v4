@@ -493,7 +493,7 @@ else
 					sed -i "s/${OLD}/${NEW}/g" /etc/default/MailScanner
 				fi
 			else
-				echo "${DISK} is already a RAMDISK!";
+				echo "${DISK} is already a RAMDISK!"; echo;
 			fi
 		fi
 	fi
