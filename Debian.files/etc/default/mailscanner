@@ -3,10 +3,21 @@
 #
 #run_mailscanner=1
 
-# MailScanner config
+# MailScanner configuration file
 # by default the file /etc/MailScanner/MailScanner.conf is used to pull
-# various settings. You may set another location such as custom file. 
+# various settings for the daemon and permissions for working directories. 
+# You may set a different custom file here.
+#
 # Example: /etc/MailScanner/conf.d/my.conf
+#
+# Important: to ensure correct permissions are set automatically when
+# the MailScanner daemon starts, make sure that these items are included:
+#
+#	Incoming Work User
+#	Incoming Work Group
+#	Incoming Work Dir
+#	Incoming Work Permissions
+#
 # ms_conf=/etc/MailScanner/MailScanner.conf
 
 # RAMDISK Management
@@ -16,12 +27,12 @@
 # and then restore it when the MailScanner service starts again.
 #ramdisk_sync=1
 
-
-
 # RAMDISK Persistent Store
 # The location to store and retrieve the ramdisk contents during
-# normal startup and shutdown of the MailScanner process or server. 
-#ramdisk_store=/var/spool/MailScanner/ramdisk_save
+# normal startup and shutdown of the MailScanner process or server.
+# This is ignored if you are not using a ramdisk for the 
+# "Incoming Work Dir" setting. 
+#ramdisk_store=/var/spool/MailScanner/ramdisk_store
 
 #
 # This sets how many days files will remain in the "quarantine" area before

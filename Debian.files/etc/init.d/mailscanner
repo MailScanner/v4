@@ -24,7 +24,7 @@ run_mailscanner=0
 ramdisk_sync=0
 run_nice=0
 ms_conf=/etc/MailScanner/MailScanner.conf
-ramdisk_store=/var/spool/MailScanner/ramdisk_save
+ramdisk_store=/var/spool/MailScanner/ramdisk_store
 stopped_lockfile=/var/lock/subsys/MailScanner.off
 
 # /etc/default/$PNAME filename
@@ -62,45 +62,39 @@ VERBOSE=yes
 
 # Don't start if MailScanner is not configured
 if [ $run_mailscanner = 0 ]; then
- 
 	cat <<-EOF
-
 	Edit the file /etc/MailScanner/MailScanner.conf according to
 	your needs. When complete, edit /etc/default/MailScanner and set 
 	the variable to enable MailScanner to run:
 
 	run_mailscanner = 1
-
 	EOF
-
     exit 0
 fi
 
-# load this stuff if ramdisk_sync is enabled
-if [ $ramdisk_sync = 1 ]; then
-	
-	WORKPERM=`${QUICKPEEK} IncomingWorkPermissions ${ms_conf}`
-	ramdisk_mount=`${QUICKPEEK} IncomingWorkDir ${ms_conf}`
-	RDUSER=`${QUICKPEEK} IncomingWorkUser ${ms_conf}`
-	RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${ms_conf}`
+# work directory ownership and permissions
+WORKPERM=`${QUICKPEEK} IncomingWorkPermissions ${ms_conf}`
+work_dir=`${QUICKPEEK} IncomingWorkDir ${ms_conf}`
+RDUSER=`${QUICKPEEK} IncomingWorkUser ${ms_conf}`
+RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${ms_conf}`
 
-	# check to make sure these are set
-	if [ -z ${ramdisk_mount} ]; then
-		ramdisk_mount="/var/spool/MailScanner/incoming"
-	fi
-
-	if [ -z ${RDUSER} ]; then
-		RDUSER="mail"
-	fi
-
-	if [ -z ${RDGROUP} ]; then
-		RDGROUP="mtagroup"
-	fi
-
-	if [ `echo $WORKPERM | sed 's/^[-+0-9][0-9]*//' | wc -c` != 1 ]; then
-		WORKPERM="0660"
-	fi
+# check to make sure these are set
+if [ -z ${work_dir} ]; then
+	work_dir="/var/spool/MailScanner/incoming"
 fi
+
+if [ -z ${RDUSER} ]; then
+	RDUSER="mail"
+fi
+
+if [ -z ${RDGROUP} ]; then
+	RDGROUP="mtagroup"
+fi
+
+if [ `echo $WORKPERM | sed 's/^[-+0-9][0-9]*//' | wc -c` != 1 ]; then
+	WORKPERM="0660"
+fi
+
 
 #
 # Function that starts the daemon/service
@@ -114,7 +108,7 @@ do_start()
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $STARTAS --test > /dev/null || return 1
 	start-stop-daemon --start --quiet --nicelevel $run_nice --exec $DAEMON ${RUNAS} --pidfile $PIDFILE || return 2
 
-  # Set lockfile to inform cronjobs about the running daemon
+  	# Set lockfile to inform cronjobs about the running daemon
 	RETVAL="$?"
 	if [ $RETVAL -eq 0 ]; then
 	    touch /run/lock/subsys/MailScanner
@@ -136,7 +130,7 @@ do_stop()
 	RETVAL="$?"
 	[ "$RETVAL" = 2 ] && return 2
 
-  # Remove lockfile for cronjobs
+  	# Remove lockfile for cronjobs
 	if [ $RETVAL -eq 0 ]; then
 	    rm -f /run/lock/subsys/MailScanner
 	    touch $stopped_lockfile
@@ -157,24 +151,23 @@ case "$1" in
 	
 	if [ $ramdisk_sync = 1 ]; then
 		# make sure this is a RAMDISK tmpfs
-		FSTYPE=$(df -P -T ${ramdisk_mount}|tail -n +2 | awk '{print $2}');
+		FSTYPE=$(df -P -T ${work_dir}|tail -n +2 | awk '{print $2}');
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
 			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
 			
-			log_daemon_msg "Syncing ramdisk from persistent store"
-			
 			# sync
-			rsync --quiet --archive ${ramdisk_store}/ ${ramdisk_mount}
-	
-			# make sure ramdisk permissions are correct
-			chown -R ${RDUSER}:${RDGROUP} ${ramdisk_mount}
-			chmod 0750 ${ramdisk_mount}
-			find ${ramdisk_mount} -type d -exec chmod 0750 {} \;
-			find ${ramdisk_mount} -type f -exec chmod ${WORKPERM} {} \;
+			log_daemon_msg "Syncing ramdisk from persistent store"			
+			rsync --quiet --archive ${ramdisk_store}/ ${work_dir}
 		fi
 	fi
+	
+	# make sure work_dir permissions are correct
+	chown -R ${RDUSER}:${RDGROUP} ${work_dir}
+	chmod 0750 ${work_dir}
+	find ${work_dir} -type d -exec chmod 0750 {} \;
+	find ${work_dir} -type f -exec chmod ${WORKPERM} {} \;
 	
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
 	
@@ -193,28 +186,21 @@ case "$1" in
 	
 	if [ $ramdisk_sync = 1 ]; then
 		# make sure this is a RAMDISK tmpfs
-		FSTYPE=$(df -P -T ${ramdisk_mount}|tail -n +2 | awk '{print $2}');
+		FSTYPE=$(df -P -T ${work_dir}|tail -n +2 | awk '{print $2}');
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
 			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
 			
-			log_daemon_msg "Syncing ramdisk to persistent store"
-			
-			# make sure ramdisk permissions are correct
-			chown -R ${RDUSER}:${RDGROUP} ${ramdisk_mount}
-			chmod 0750 ${ramdisk_mount}
-			find ${ramdisk_mount} -type d -exec chmod 0750 {} \;
-			find ${ramdisk_mount} -type f -exec chmod ${WORKPERM} {} \;
-	
 			# sync
-			rsync --quiet --archive --delete --recursive --force ${ramdisk_mount}/ ${ramdisk_store}
+			log_daemon_msg "Syncing ramdisk to persistent store"
+			rsync --quiet --archive --delete --recursive --force ${work_dir}/ ${ramdisk_store}
 		fi
 	fi
 	
-	case "$?" in
-		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+case "$?" in
+	0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+	2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
 	esac
 	;;
   status)
