@@ -153,14 +153,6 @@ if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
 	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 fi
 
-# version
-OLD="^MailScanner Version Number.*";
-NEW="MailScanner Version Number = ${MSVERSION}";
-if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
-	#sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
-	NOTHING=
-fi
-
 # fix reports directory
 OLDTHING='\/etc\/MailScanner\/reports';
 NEWTHING='\/usr\/share\/MailScanner\/reports';
