@@ -155,7 +155,7 @@ case "$1" in
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store} -m 750
+			[ -d ${ramdisk_store} ] || mkdir -m 750 -p ${ramdisk_store} 
 			
 			# sync
 			log_daemon_msg "Syncing ramdisk from persistent store"			
@@ -190,7 +190,7 @@ case "$1" in
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store} -m 750
+			[ -d ${ramdisk_store} ] || mkdir -m 750 -p ${ramdisk_store} 
 			
 			# sync
 			log_daemon_msg "Syncing ramdisk to persistent store"
