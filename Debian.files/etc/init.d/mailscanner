@@ -45,7 +45,7 @@ fi
 [ -x "$DAEMON" ] || exit 0
 
 # if /var/lock/subsys is missing
-[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys -m 750
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$PNAME ] && . /etc/default/$PNAME
@@ -155,7 +155,7 @@ case "$1" in
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
+			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store} -m 750
 			
 			# sync
 			log_daemon_msg "Syncing ramdisk from persistent store"			
@@ -190,7 +190,7 @@ case "$1" in
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
+			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store} -m 750
 			
 			# sync
 			log_daemon_msg "Syncing ramdisk to persistent store"
