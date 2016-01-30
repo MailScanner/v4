@@ -157,9 +157,9 @@ case "$1" in
 	
 	if [ $ramdisk_sync = 1 ]; then
 		# make sure this is a RAMDISK tmpfs
-		FSTYPE=$(df -P -T ${RAMDISK}|tail -n +2 | awk '{print $2}')
+		FSTYPE=$(df -P -T ${ramdisk_mount}|tail -n +2 | awk '{print $2}');
 
-		if [ $FSTYPE = tmpfs ]; then
+		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
 			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
 			
@@ -193,9 +193,9 @@ case "$1" in
 	
 	if [ $ramdisk_sync = 1 ]; then
 		# make sure this is a RAMDISK tmpfs
-		FSTYPE=$(df -P -T ${RAMDISK}|tail -n +2 | awk '{print $2}')
+		FSTYPE=$(df -P -T ${ramdisk_mount}|tail -n +2 | awk '{print $2}');
 
-		if [ $FSTYPE = tmpfs ]; then
+		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
 			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
 			
