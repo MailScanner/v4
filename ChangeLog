@@ -1,4 +1,4 @@
-01/26/2016 Changes in    v4.86.1-1
+01/30/2016 Changes in    v4.86.1-1
 ==================================
 *Updates*
 - Moved directory structure to:
@@ -22,6 +22,8 @@
 - Added option to create RAMDISK during installation
 - Added RAMDISK daemon to save and restore contents during reboot
   and power up if RAMDISK is enabled
+- Removed dead virus scanners from virus.scanners.conf
+- Removed dead virus scanners from SweepViruses.pm
 
 01/16/2016 Changes in    v4.85.3-2
 ==================================

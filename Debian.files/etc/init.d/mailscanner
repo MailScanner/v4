@@ -16,19 +16,25 @@
 PATH=/usr/sbin:/usr/bin:/bin:/sbin
 DESC="email processor - "
 NAME=MailScanner
+STARTAS=MailScanner
 DAEMON=/usr/sbin/$NAME
-SCRIPTNAME=/etc/init.d/$NAME
 CONFFILE=/etc/MailScanner/MailScanner.conf
 QUICKPEEK=/usr/sbin/Quick.Peek
 run_mailscanner=0
 ramdisk_sync=0
 run_nice=0
+ms_conf=/etc/MailScanner/MailScanner.conf
+ramdisk_store=/var/spool/MailScanner/ramdisk_save
 stopped_lockfile=/var/lock/subsys/MailScanner.off
+
+# /etc/default/$PNAME filename
+PNAME=MailScanner
 
 RUNUSER=`${QUICKPEEK} RunAsUser ${CONFFILE}`
 RUNGROUP=`${QUICKPEEK} RunAsGroup ${CONFFILE}`
 PIDFILE=`${QUICKPEEK} PIDfile ${CONFFILE}`
 
+# daemon user:group to run as
 if [ -n ${RUNUSER} ] && [ -n ${RUNGROUP} ]; then
 	RUNAS="--chuid ${RUNUSER}:${RUNGROUP}"
 else
@@ -42,7 +48,7 @@ fi
 [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+[ -r /etc/default/$PNAME ] && . /etc/default/$PNAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -72,15 +78,15 @@ fi
 
 # load this stuff if ramdisk_sync is enabled
 if [ $ramdisk_sync = 1 ]; then
-	PERSIST_STORE=/var/spool/MailScanner/ramdisk_save
-	WORKPERM=`${QUICKPEEK} IncomingWorkPermissions ${CONFFILE}`
-	RAMDISK=`${QUICKPEEK} IncomingWorkDir ${CONFFILE}`
-	RDUSER=`${QUICKPEEK} IncomingWorkUser ${CONFFILE}`
-	RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${CONFFILE}`
+	
+	WORKPERM=`${QUICKPEEK} IncomingWorkPermissions ${ms_conf}`
+	ramdisk_mount=`${QUICKPEEK} IncomingWorkDir ${ms_conf}`
+	RDUSER=`${QUICKPEEK} IncomingWorkUser ${ms_conf}`
+	RDGROUP=`${QUICKPEEK} IncomingWorkGroup ${ms_conf}`
 
 	# check to make sure these are set
-	if [ -z ${RAMDISK} ]; then
-		RAMDISK="/var/spool/MailScanner/incoming"
+	if [ -z ${ramdisk_mount} ]; then
+		ramdisk_mount="/var/spool/MailScanner/incoming"
 	fi
 
 	if [ -z ${RDUSER} ]; then
@@ -105,7 +111,7 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $DAEMON ${RUNAS} --test > /dev/null || return 1
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $STARTAS --test > /dev/null || return 1
 	start-stop-daemon --start --quiet --nicelevel $run_nice --exec $DAEMON ${RUNAS} --pidfile $PIDFILE || return 2
 
   # Set lockfile to inform cronjobs about the running daemon
@@ -142,7 +148,7 @@ do_stop()
 # Function that sends a SIGHUP to the daemon/service
 #
 do_reload() {
-	start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --exec $DAEMON
+	start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE
 	return 0
 }
 
@@ -155,18 +161,18 @@ case "$1" in
 
 		if [ $FSTYPE = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
+			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
 			
 			log_daemon_msg "Syncing ramdisk from persistent store"
 			
 			# sync
-			rsync --quiet --archive ${PERSIST_STORE}/ ${RAMDISK}
+			rsync --quiet --archive ${ramdisk_store}/ ${ramdisk_mount}
 	
 			# make sure ramdisk permissions are correct
-			chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
-			chmod 0750 ${RAMDISK}
-			find ${RAMDISK} -type d -exec chmod 0750 {} \;
-			find ${RAMDISK} -type f -exec chmod ${WORKPERM} {} \;
+			chown -R ${RDUSER}:${RDGROUP} ${ramdisk_mount}
+			chmod 0750 ${ramdisk_mount}
+			find ${ramdisk_mount} -type d -exec chmod 0750 {} \;
+			find ${ramdisk_mount} -type f -exec chmod ${WORKPERM} {} \;
 		fi
 	fi
 	
@@ -191,18 +197,18 @@ case "$1" in
 
 		if [ $FSTYPE = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ -d ${PERSIST_STORE} ] || mkdir -p ${PERSIST_STORE}
+			[ -d ${ramdisk_store} ] || mkdir -p ${ramdisk_store}
 			
 			log_daemon_msg "Syncing ramdisk to persistent store"
 			
 			# make sure ramdisk permissions are correct
-			chown -R ${RDUSER}:${RDGROUP} ${RAMDISK}
-			chmod 0750 ${RAMDISK}
-			find ${RAMDISK} -type d -exec chmod 0750 {} \;
-			find ${RAMDISK} -type f -exec chmod ${WORKPERM} {} \;
+			chown -R ${RDUSER}:${RDGROUP} ${ramdisk_mount}
+			chmod 0750 ${ramdisk_mount}
+			find ${ramdisk_mount} -type d -exec chmod 0750 {} \;
+			find ${ramdisk_mount} -type f -exec chmod ${WORKPERM} {} \;
 	
 			# sync
-			rsync --quiet --archive --delete --recursive --force ${RAMDISK}/ ${PERSIST_STORE}
+			rsync --quiet --archive --delete --recursive --force ${ramdisk_mount}/ ${ramdisk_store}
 		fi
 	fi
 	
@@ -238,7 +244,7 @@ case "$1" in
 	esac
 	;;
   *)
-	echo "Usage: $SCRIPTNAME {start|stop|status|restart|reload|force-reload}" >&2
+	echo "Usage: service $NAME {start|stop|status|restart|reload|force-reload}" >&2
 	exit 3
 	;;
 esac

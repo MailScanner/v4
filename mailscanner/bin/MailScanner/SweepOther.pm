@@ -38,7 +38,7 @@ no  strict 'subs'; # Allow bare words for parameter %'s
 use MIME::Head;
 use DirHandle;
 use HTML::TokeParser;
-use POSIX qw(:signal_h setsid); # For Solaris 9 SIG bug workaround
+use POSIX; # qw(:signal_h setsid); # For Solaris 9 SIG bug workaround
 
 use vars qw($VERSION);
 
@@ -117,30 +117,31 @@ sub ScanBatch {
       #print STDERR "Checking for Happy virus in $DirEntry ($id)\n";
 
       # X-Spanska: header ==> "Happy" virus
-      if (grep /^X-Spanska:/i, @headers) {
-        MailScanner::Log::NoticeLog("Other Checks: Found Happy virus in %s", $id);
-        $message->{otherreports}{""} .= "\"Happy\" virus\n";
-        $message->{othertypes}{""}   .= "v";
-        $counter++;
-        $message->{otherinfected}++;
-      }
+      #if (grep /^X-Spanska:/i, @headers) {
+      #  MailScanner::Log::NoticeLog("Other Checks: Found Happy virus in %s", $id);
+      #  $message->{otherreports}{""} .= "\"Happy\" virus\n";
+      #  $message->{othertypes}{""}   .= "v";
+       # $counter++;
+       # $message->{otherinfected}++;
+      #}
 
       #print STDERR "Checking for long MIME boundary\n";
       #print STDERR "Entity = " . $message->{entity} . "\n";
       #print STDERR "Boundary = \"" . $message->{entity}->head->multipart_boundary . "\"\n";
 
-      # MIME content boundary longer than 138 ==> Eudora exploit
+      # MIME content boundary longer than RFC 2046 standard of 70 characters.
+      # allowing a bit more to account for -- strings
       if ($message->{entity} &&
-          length($message->{entity}->head->multipart_boundary)>=138) {
-        MailScanner::Log::NoticeLog("Other Checks: Found Eudora " .
-                                  "long-MIME-boundary exploit in %s", $id);
+          length($message->{entity}->head->multipart_boundary)>=80) {
+        MailScanner::Log::NoticeLog("Other Checks: Found multipart boundary " .
+                                  "violation of RFC 2046 limit of 70 charaters in %s", $id);
         $message->{otherreports}{""} .= 
           MailScanner::Config::LanguageValue($message,'eudoralongmime') . "\n";
         $message->{othertypes}{""}   .= "v";
         $counter++;
         # And actually try to replace the MIME boundary with a short one
         $message->{entity}->head->mime_attr("Content-type.boundary" =>
-                   "__MailScanner_found_Eudora_long_boundary_attack__");
+                   "__RFC_2046_boundary_violation_replacement__");
         $message->{otherinfected}++;
       }
 
@@ -570,7 +571,7 @@ sub CheckFileContentTypes {
   MailScanner::Log::DebugLog("Completed checking by $filecommand -i");
 
   # Catch failures other than the alarm
-  MailScanner::Log::DieLog("File mime-type checker failed with real error: $@")
+  MailScanner::Log::DieLog("File mime-type check failed with real error: $@")
     if $@ and $@ !~ /Command Timed Out/;
 
   #print STDERR "pid = $pid and \@ = $@\n";

@@ -85,20 +85,20 @@ mkdir -p $WORK/etc/MailScanner/{rules,mcp,conf.d}
 
 # etc
 # cron, default, init.d, logcheck
-cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner $WORK/etc/cron.daily/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner $WORK/etc/cron.hourly/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/default/mailscanner $WORK/etc/default/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner $WORK/etc/init.d/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner $WORK/etc/logcheck/ignore.d.server/MailScanner
-cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner $WORK/etc/logcheck/ignore.d.workstation/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/cron.daily/mailscanner 						$WORK/etc/cron.daily/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/cron.hourly/mailscanner 					$WORK/etc/cron.hourly/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/default/mailscanner 						$WORK/etc/default/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/init.d/mailscanner 							$WORK/etc/init.d/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.server/mailscanner 		$WORK/etc/logcheck/ignore.d.server/MailScanner
+cp $DEVBASEDIR/Debian.files/etc/logcheck/ignore.d.workstation/mailscanner 	$WORK/etc/logcheck/ignore.d.workstation/MailScanner
 
 # etc/MailScanner
-cp $DEVBASEDIR/mailscanner/etc/*.conf $WORK/etc/MailScanner/
-cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf.with.mcp $WORK/etc/MailScanner/
-cp $DEVBASEDIR/mailscanner/etc/conf.d/README $WORK/etc/MailScanner/conf.d/
-cp $DEVBASEDIR/mailscanner/etc/mcp/* $WORK/etc/MailScanner/mcp/
-mv $WORK/etc/MailScanner/mailscanner.conf $WORK/etc/MailScanner/MailScanner.conf
-cp -f $DEVBASEDIR/mailscanner/etc/virus.scanners.conf.new $WORK/etc/MailScanner/virus.scanners.conf
+cp $DEVBASEDIR/mailscanner/etc/*.conf 										$WORK/etc/MailScanner/
+cp $DEVBASEDIR/mailscanner/etc/mailscanner.conf.with.mcp 					$WORK/etc/MailScanner/
+cp $DEVBASEDIR/mailscanner/etc/conf.d/README 								$WORK/etc/MailScanner/conf.d/
+cp $DEVBASEDIR/mailscanner/etc/mcp/* 										$WORK/etc/MailScanner/mcp/
+mv $WORK/etc/MailScanner/mailscanner.conf 									$WORK/etc/MailScanner/MailScanner.conf
+cp -f $DEVBASEDIR/mailscanner/etc/virus.scanners.conf 						$WORK/etc/MailScanner/virus.scanners.conf
 
 # etc/MailScanner/rules
 while read f 
@@ -150,44 +150,48 @@ EOF
 done
 
 # usr/sbin
-cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/d2mbox $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/df2mbox $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/check_mailscanner $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin $WORK/usr/sbin/MailScanner
-cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_emails $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/update_spamassassin $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/usr/sbin/
-cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache 		$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/d2mbox 							$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/df2mbox 							$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/check_mailscanner 				$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin 				$WORK/usr/sbin/MailScanner
+cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks 		$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek 						$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert 		$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek 						$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_emails 		$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites 			$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_spamassassin 				$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites 		$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners 			$WORK/usr/sbin/
+cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf 		$WORK/usr/sbin/
 
 # usr/share/man
 cp $DEVBASEDIR/man/*.8 $WORK/usr/share/man/man8/
 cp $DEVBASEDIR/man/*.5 $WORK/usr/share/man/man5/
 
 # usr/share/doc
-cp $DEVBASEDIR/README $WORK/usr/share/doc/MailScanner/
-cp $DEVBASEDIR/Debian.files/changelog.Debian $WORK/usr/share/doc/MailScanner/
-cp /tmp/MailScanner.conf.index.html $WORK/usr/share/doc/MailScanner/
-cp $DEVBASEDIR/Debian.files/copyright $WORK/usr/share/doc/MailScanner/
+cp $DEVBASEDIR/README 								$WORK/usr/share/doc/MailScanner/
+cp $DEVBASEDIR/Debian.files/changelog.Debian 		$WORK/usr/share/doc/MailScanner/
+cp /tmp/MailScanner.conf.index.html 				$WORK/usr/share/doc/MailScanner/
+cp $DEVBASEDIR/Debian.files/copyright 				$WORK/usr/share/doc/MailScanner/
 
 # /usr/share/linitian/overrides
 cp $DEVBASEDIR/Debian.files/usr/share/lintian/overrides/mailscanner $WORK/usr/share/lintian/overrides/MailScanner
 
 # wrappers and updates
-cp $DEVBASEDIR/mailscanner/lib/*{-wrapper,.prf} $WORK/var/lib/MailScanner/wrapper
-cp $DEVBASEDIR/mailscanner/lib/*-autoupdate $WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/avg-*		 	$WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/bitdefender-*	$WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/clamav-*			$WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/f-secure-*		$WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/generic-*		$WORK/var/lib/MailScanner/wrapper
+cp $DEVBASEDIR/mailscanner/lib/sophos-*			$WORK/var/lib/MailScanner/wrapper
 
 # perl modules 
-cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm $WORK/usr/share/MailScanner/perl/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm $WORK/usr/share/MailScanner/perl/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/MailScanner/
-cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm $WORK/usr/share/MailScanner/perl/custom/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner.pm 						$WORK/usr/share/MailScanner/perl/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/*.pm 					$WORK/usr/share/MailScanner/perl/MailScanner/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/ConfigDefs.pl 			$WORK/usr/share/MailScanner/perl/MailScanner/
+cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm 	$WORK/usr/share/MailScanner/perl/custom/
 
 # set correct paths
 perl -pi - $WORK/usr/share/MailScanner/perl/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
@@ -245,11 +249,11 @@ gzip -9 $WORK/usr/share/doc/MailScanner/changelog.Debian
 PKGTMP="/tmp/deb.$$/";
 mkdir -p $PKGTMP/MailScanner-${FULLMSVER}
 fakeroot dpkg -b $WORK $PKGTMP/MailScanner-${FULLMSVER}/MailScanner-$FULLMSVER-noarch.deb
-cp $DEVBASEDIR/Debian.files/install.sh $PKGTMP/MailScanner-${FULLMSVER}
-cp $DEVBASEDIR/ChangeLog $PKGTMP/MailScanner-${FULLMSVER}
-cp $DEVBASEDIR/COPYING $PKGTMP/MailScanner-${FULLMSVER}
-cp $DEVBASEDIR/Debian.files/UPGRADE $PKGTMP/MailScanner-${FULLMSVER}
-cp $DEVBASEDIR/README $PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/Debian.files/install.sh 			$PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/ChangeLog 						$PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/COPYING 							$PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/Debian.files/UPGRADE 			$PKGTMP/MailScanner-${FULLMSVER}
+cp $DEVBASEDIR/README 							$PKGTMP/MailScanner-${FULLMSVER}
 chmod +x $PKGTMP/MailScanner-${FULLMSVER}/install.sh
 cd $PKGTMP
 tar czf MailScanner-${FULLMSVER}.deb.tar.gz *
@@ -257,6 +261,3 @@ mv -f MailScanner-${FULLMSVER}.deb.tar.gz $FILEOUT
 
 rm -rf $PKGTMP
 rm -rf $WORK
-
-
-

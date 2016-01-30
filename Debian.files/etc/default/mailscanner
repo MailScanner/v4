@@ -1,14 +1,27 @@
+#
+# Uncomment this line once MailScanner has been fully configured.
+#
+#run_mailscanner=1
+
+# MailScanner config
+# by default the file /etc/MailScanner/MailScanner.conf is used to pull
+# various settings. You may set another location such as custom file. 
+# Example: /etc/MailScanner/conf.d/my.conf
+# ms_conf=/etc/MailScanner/MailScanner.conf
+
+# RAMDISK Management
 # If you are using a ramdisk, this will sync the "Incoming Work Dir"
 # (which is where your ramdisk should be mounted if anywhere)
 # to a saved state directory upon stopping the MailScanner service 
 # and then restore it when the MailScanner service starts again.
 #ramdisk_sync=1
 
-#
-# Uncomment this line once MailScanner has been fully configured.
-#
-#run_mailscanner=1
 
+
+# RAMDISK Persistent Store
+# The location to store and retrieve the ramdisk contents during
+# normal startup and shutdown of the MailScanner process or server. 
+#ramdisk_store=/var/spool/MailScanner/ramdisk_save
 
 #
 # This sets how many days files will remain in the "quarantine" area before

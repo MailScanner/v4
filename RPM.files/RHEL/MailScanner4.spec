@@ -15,11 +15,6 @@ License:     GPLv2+
 Vendor:      MailScanner Community
 Packager:    Jerry Benton <mailscanner@mailborder.com>
 URL:         http://www.mailscanner.info
-#Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-IO-stringy >= 1.211, perl-MailTools >= 1.46, perl-Convert-TNEF
-#Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412, perl-Convert-TNEF
-#Requires:    sendmail, perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-#Requires:    perl >= 5.005, tnef >= 1.1.1, perl-MIME-tools >= 5.412
-#Requires:    perl >= 5.005, perl-MIME-tools >= 5.412
 Requires:     perl >= 5.005, binutils, gcc, glibc-devel, libaio, make, man-pages, man-pages-overrides, patch, rpm, tar, time, unzip, which, zip, openssl-devel, perl(Archive::Zip), perl(bignum), perl(Carp), perl(Compress::Zlib), perl(Compress::Raw::Zlib), perl(Convert::TNEF), perl(Data::Dumper), perl(Date::Parse), perl(DBD::SQLite), perl(DBI), perl(Digest::HMAC), perl(Digest::MD5), perl(Digest::SHA1), perl(DirHandle), perl(ExtUtils::MakeMaker), perl(Fcntl), perl(File::Basename), perl(File::Copy), perl(File::Path), perl(File::Spec), perl(File::Temp), perl(FileHandle), perl(Filesys::Df), perl(Getopt::Long), perl(Inline::C), perl(IO), perl(IO::File), perl(IO::Pipe), perl(IO::Stringy), perl(HTML::Entities), perl(HTML::Parser), perl(HTML::Tagset), perl(HTML::TokeParser), perl(Mail::Field), perl(Mail::Header), perl(Mail::IMAPClient), perl(Mail::Internet), perl(Math::BigInt), perl(Math::BigRat), perl(MIME::Base64), perl(MIME::Decoder), perl(MIME::Decoder::UU), perl(MIME::Head), perl(MIME::Parser), perl(MIME::QuotedPrint), perl(MIME::Tools), perl(MIME::WordDecoder), perl(Net::CIDR), perl(Net::DNS), perl(Net::IP), perl(OLE::Storage_Lite), perl(Pod::Escapes), perl(Pod::Simple), perl(POSIX), perl(Scalar::Util), perl(Socket), perl(Storable), perl(Test::Harness), perl(Test::Pod), perl(Test::Simple), perl(Time::HiRes), perl(Time::localtime), perl(Sys::Hostname::Long), perl(Sys::SigAction), perl(Sys::Syslog)
 Provides:	  perl(MailScanner), perl(MailScanner::Antiword), perl(MailScanner::BinHex), perl(MailScanner::Config), perl(MailScanner::ConfigSQL), perl(MailScanner::CustomConfig), perl(MailScanner::FileInto), perl(MailScanner::GenericSpam), perl(MailScanner::LinksDump), perl(MailScanner::Lock), perl(MailScanner::Log), perl(MailScanner::Mail), perl(MailScanner::MCP), perl(MailScanner::MCPMessage), perl(MailScanner::Message), perl(MailScanner::MessageBatch), perl(MailScanner::Quarantine), perl(MailScanner::Queue), perl(MailScanner::RBLs), perl(MailScanner::MCPMessage), perl(MailScanner::Message), perl(MailScanner::MCP), perl(MailScanner::SA), perl(MailScanner::Sendmail), perl(MailScanner::SMDiskStore), perl(MailScanner::SweepContent), perl(MailScanner::SweepOther), perl(MailScanner::SweepViruses), perl(MailScanner::TNEF), perl(MailScanner::Unzip), perl(MailScanner::WorkArea), perl(MIME::Parser::MailScanner)
 #Source:      %{name}-%{version}-%{release}.tgz
@@ -55,7 +50,7 @@ based Linux distributions.
 %build
 
 %install
-perl -pi - bin/MailScanner/ConfigDefs.pl bin/MailScanner/CustomConfig.pm etc/MailScanner.conf etc/virus.scanners.conf bin/mailscanner bin/Sophos.install bin/clean.SA.cache bin/update_virus_scanners bin/update_phishing_sites bin/update_bad_phishing_sites <<EOF
+perl -pi - bin/MailScanner/ConfigDefs.pl bin/MailScanner/CustomConfig.pm etc/MailScanner.conf etc/virus.scanners.conf bin/mailscanner bin/clean.SA.cache bin/update_virus_scanners bin/update_phishing_sites bin/update_bad_phishing_sites <<EOF
 s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
@@ -65,8 +60,8 @@ s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
 s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
 s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
 s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/share/MailScanner.;
-s./opt/MailScanner/bin./usr/share/MailScanner.;
+s./opt/MailScanner/lib./var/lib/MailScanner.;
+s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 perl -pi - check_MailScanner bin/mailscanner_create_locks bin/processing_messages_alert <<EOF
@@ -78,7 +73,7 @@ s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
 s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
 s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
 s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/share/MailScanner.;
+s./opt/MailScanner/lib./var/lib/MailScanner.;
 s./opt/MailScanner/bin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
@@ -88,74 +83,38 @@ gzip doc/MailScanner.8 doc/MailScanner.conf.5
 mkdir -p $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d
 mkdir -p ${RPM_BUILD_ROOT}/usr/sbin/
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man8
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man5
-#mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man1
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/cy+en
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/de
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/en
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/fr
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/es
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/nl
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/pt_br
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/dk
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/sk
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/it
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/ro
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/se
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/cz
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/hu
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/ca
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/rules
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/mcp
-# mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/
-# mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/MailScanner
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/
-mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/custom/
-# mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/
-mkdir -p ${RPM_BUILD_ROOT}/etc/cron.hourly
-mkdir -p ${RPM_BUILD_ROOT}/etc/cron.daily
-mkdir -p ${RPM_BUILD_ROOT}/etc/sysconfig
-mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue
-mkdir -p ${RPM_BUILD_ROOT}/var/spool/mqueue.in
-mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/archive
-mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/incoming
-mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/quarantine
-mkdir -p ${RPM_BUILD_ROOT}/var/run
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/{man8,man5}
+mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner{conf.d,rules,mcp}
+mkdir -p ${RPM_BUILD_ROOT}/etc/{cron.hourly,cron.daily,sysconfig}
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/{MailScanner,custom}
+mkdir -p ${RPM_BUILD_ROOT}/var/{lib/MailScanner/wrapper,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming/Locks,spool/mqueue,spool/mqueue.in,run}
 
-install bin/df2mbox            ${RPM_BUILD_ROOT}/usr/sbin/df2mbox
-install bin/d2mbox             ${RPM_BUILD_ROOT}/usr/sbin/d2mbox
-install bin/mailscanner        ${RPM_BUILD_ROOT}/usr/sbin/MailScanner
-install bin/mailscanner_create_locks ${RPM_BUILD_ROOT}/usr/sbin/mailscanner_create_locks
-install bin/processing_messages_alert ${RPM_BUILD_ROOT}/usr/sbin/processing_messages_alert
-install check_MailScanner      ${RPM_BUILD_ROOT}/usr/sbin/check_mailScanner
-#ln -s   check_MailScanner      ${RPM_BUILD_ROOT}/usr/sbin/check_mailscanner
-#install bin/Sophos.install     ${RPM_BUILD_ROOT}/usr/sbin/Sophos.install
-install bin/Quick.Peek         ${RPM_BUILD_ROOT}/usr/sbin/Quick.Peek
-install bin/update_virus_scanners ${RPM_BUILD_ROOT}/usr/sbin/update_virus_scanners
-install bin/update_spamassassin ${RPM_BUILD_ROOT}/usr/sbin/update_spamassassin
-install bin/update_phishing_sites ${RPM_BUILD_ROOT}/usr/sbin/update_phishing_sites
-install bin/update_bad_phishing_sites ${RPM_BUILD_ROOT}/usr/sbin/update_bad_phishing_sites
-install bin/analyse_SpamAssassin_cache ${RPM_BUILD_ROOT}/usr/sbin/analyse_SpamAssassin_cache
-#ln -sf analyse_SpamAssassin_cache ${RPM_BUILD_ROOT}/usr/sbin/analyze_SpamAssassin_cache
-install bin/upgrade_MailScanner_conf ${RPM_BUILD_ROOT}/usr/sbin/upgrade_MailScanner_conf
-#ln -sf upgrade_MailScanner_conf ${RPM_BUILD_ROOT}/usr/sbin/upgrade_languages_conf
-install update_spamassassin.opts.rh ${RPM_BUILD_ROOT}/etc/sysconfig/update_spamassassin
-install MailScanner.opts.rh    ${RPM_BUILD_ROOT}/etc/sysconfig/MailScanner
-install MailScanner.init.rh    ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d/MailScanner
-install check_MailScanner.cron ${RPM_BUILD_ROOT}/etc/cron.hourly/check_MailScanner
-install update_virus_scanners.cron ${RPM_BUILD_ROOT}/etc/cron.hourly/update_virus_scanners
-install update_phishing_sites.cron ${RPM_BUILD_ROOT}/etc/cron.daily/update_phishing_sites
-install update_bad_phishing_sites.cron ${RPM_BUILD_ROOT}/etc/cron.hourly/update_bad_phishing_sites
-install clean.quarantine.cron  ${RPM_BUILD_ROOT}/etc/cron.daily/clean.quarantine
-install update_spamassassin.cron  ${RPM_BUILD_ROOT}/etc/cron.daily/update_spamassassin
-install processing_messages_alert.cron  ${RPM_BUILD_ROOT}/etc/cron.hourly/processing_messages_alert
-#install clean.SA.cache.cron  ${RPM_BUILD_ROOT}/etc/cron.daily/clean.SA.cache
-install doc/MailScanner.8.gz   ${RPM_BUILD_ROOT}/usr/share/man/man8/
-install doc/MailScanner.conf.5.gz ${RPM_BUILD_ROOT}/usr/share/man/man5/
+install MailScanner.init.rh    				${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d/MailScanner
+install bin/df2mbox            				${RPM_BUILD_ROOT}/usr/sbin/df2mbox
+install bin/d2mbox             				${RPM_BUILD_ROOT}/usr/sbin/d2mbox
+install bin/mailscanner        				${RPM_BUILD_ROOT}/usr/sbin/MailScanner
+install bin/mailscanner_create_locks 		${RPM_BUILD_ROOT}/usr/sbin/mailscanner_create_locks
+install bin/processing_messages_alert 		${RPM_BUILD_ROOT}/usr/sbin/processing_messages_alert
+install check_MailScanner      				${RPM_BUILD_ROOT}/usr/sbin/check_mailScanner
+install bin/Quick.Peek         				${RPM_BUILD_ROOT}/usr/sbin/Quick.Peek
+install bin/update_virus_scanners 			${RPM_BUILD_ROOT}/usr/sbin/update_virus_scanners
+install bin/update_spamassassin 			${RPM_BUILD_ROOT}/usr/sbin/update_spamassassin
+install bin/update_phishing_sites 			${RPM_BUILD_ROOT}/usr/sbin/update_phishing_sites
+install bin/update_bad_phishing_sites 		${RPM_BUILD_ROOT}/usr/sbin/update_bad_phishing_sites
+install bin/analyse_SpamAssassin_cache 		${RPM_BUILD_ROOT}/usr/sbin/analyse_SpamAssassin_cache
+install bin/upgrade_MailScanner_conf 		${RPM_BUILD_ROOT}/usr/sbin/upgrade_MailScanner_conf
+install update_spamassassin.opts.rh 		${RPM_BUILD_ROOT}/etc/sysconfig/update_spamassassin
+install MailScanner.opts.rh    				${RPM_BUILD_ROOT}/etc/sysconfig/MailScanner
+install check_MailScanner.cron 				${RPM_BUILD_ROOT}/etc/cron.hourly/check_MailScanner
+install update_virus_scanners.cron 			${RPM_BUILD_ROOT}/etc/cron.hourly/update_virus_scanners
+install processing_messages_alert.cron  	${RPM_BUILD_ROOT}/etc/cron.hourly/processing_messages_alert
+install update_phishing_sites.cron 			${RPM_BUILD_ROOT}/etc/cron.daily/update_phishing_sites
+install update_bad_phishing_sites.cron 		${RPM_BUILD_ROOT}/etc/cron.daily/update_bad_phishing_sites
+install clean.quarantine.cron  				${RPM_BUILD_ROOT}/etc/cron.daily/clean.quarantine
+install update_spamassassin.cron  			${RPM_BUILD_ROOT}/etc/cron.daily/update_spamassassin
+install doc/MailScanner.8.gz   				${RPM_BUILD_ROOT}/usr/share/man/man8/
+install doc/MailScanner.conf.5.gz 			${RPM_BUILD_ROOT}/usr/share/man/man5/
 
 while read f 
 do
@@ -179,11 +138,11 @@ install etc/conf.d/README ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d/
 while read f
 do
   install etc/mcp/$f ${RPM_BUILD_ROOT}/etc/MailScanner/mcp/
-done << EOF2
+done << EOF
 10_example.cf
 mcp.spam.assassin.prefs.conf
 v320.pre
-EOF2
+EOF
 
 
 for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
@@ -235,7 +194,7 @@ EOF
 
 while read f 
 do
-  install lib/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner
+  install lib/$f ${RPM_BUILD_ROOT}/var/lib/MailScanner/wrapper
 done << EOF
 antivir-autoupdate
 antivir-wrapper
@@ -298,7 +257,6 @@ EOF
 
 install bin/MailScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/
 
-#BinHex.pm
 while read f 
 do
   install bin/MailScanner/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/
@@ -340,11 +298,11 @@ ZMailer.pm
 ZMDiskStore.pm
 EOF
 
-install bin/MailScanner/CustomFunctions/GenericSpamScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/CustomAction.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/CustomFunctions
-install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/MailScanner/CustomFunctions
+install bin/MailScanner/CustomFunctions/GenericSpamScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/custom
+install bin/MailScanner/CustomFunctions/MyExample.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/custom
+install bin/MailScanner/CustomFunctions/CustomAction.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/custom
+install bin/MailScanner/CustomFunctions/Ruleset-from-Function.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/custom
+install bin/MailScanner/CustomFunctions/ZMRouterDirHash.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/custom
 
 install var/run/MailScanner.pid ${RPM_BUILD_ROOT}/var/run/
 
@@ -354,51 +312,143 @@ rm -rf ${RPM_BUILD_ROOT}
 %pre
 
 %post
-echo
-# Create the SpasAssassin sym-link to mailscanner.cf
-SADIR=`perl -MMail::SpamAssassin -e 'print Mail::SpamAssassin->new->first_existing_path(@Mail::SpamAssassin::site_rules_path)' 2>/dev/null`
-if [ "x$SADIR" = "x" ]; then
-  echo No SpamAssassin installation found.
-else
-  #mkdir -p ${RPM_BUILD_ROOT}${SADIR}
-  if [ -e ${SADIR}/mailscanner.cf ]; then
-    echo Leaving mailscanner.cf link or file alone.
-  else
-    ln -s -f /etc/MailScanner/spam.assassin.prefs.conf ${SADIR}/mailscanner.cf
-  fi
-  echo SpamAssassin site rules found in ${SADIR}
+
+# update web bug link
+OLD="^Web Bug Replacement.*";
+NEW="Web Bug Replacement = https\:\/\/s3\.amazonaws\.com\/msv4\/images\/spacer\.gif";
+if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
+fi
+
+# fix reports directory
+OLDTHING='\/etc\/MailScanner\/reports';
+NEWTHING='\/usr\/share\/MailScanner\/reports';
+if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+fi
+
+# fix custom functions directory
+OLDTHING='\/usr\/share\/MailScanner\/MailScanner\/CustomFunctions';
+NEWTHING='\/usr\/share\/MailScanner\/perl\/custom';
+if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+	sed -i "s/${OLDTHING}/${NEWTHING}/g" /etc/MailScanner/MailScanner.conf
+fi
+
+# we need to ensure that the old spam list names do not get used
+# remove this in version post 4.86.1
+OLD="^Spam List = .*";
+NEW="Spam List = # see the new spam.lists.conf for options";
+if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
+fi
+
+# remove old link if present
+if [ -L '/etc/spamassassin/mailscanner.cf' ]; then
+	rm -f /etc/spamassassin/mailscanner.cf
+fi
+
+if [ -L '/etc/spamassassin/MailScanner.cf' ]; then
+	rm -f /etc/spamassassin/MailScanner.cf
+fi
+
+# create symlink for spamasassin
+if [ -d '/etc/spamassassin' -a ! -L '/etc/spamassassin/mailscanner.cf' -a -f '/etc/MailScanner/spam.assassin.prefs.conf' -a ! -f '/etc/spamassassin/mailscanner.cf' ]; then
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/mailscanner.cf 
+fi
+
+# fix the clamav wrapper if the user does not exist
+if [ -d '/etc/clamav' ]; then
+
+	DISTROCAVUSER='ClamUser="clamav"';
+	DISTROCAVGRP='ClamGroup="clamav"';
+	
+	# check for common users and add to the mtagroup
+	if id -u clam >/dev/null 2>&1; then
+		CAVUSR='ClamUser="clam"';
+	fi
+
+	if id -u clamav >/dev/null 2>&1; then
+		CAVUSR='ClamUser="clamav"';
+	fi
+
+	if getent group clamav >/dev/null 2>&1; then
+		CAVGRP='ClamGroup="clamav"';
+	fi
+
+	if getent group clam >/dev/null 2>&1; then
+		CAVGRP='ClamGroup="clam"';
+	fi
+
+	if [ -f '/var/lib/MailScanner/wrapper/clamav-wrapper' ]; then
+		sed -i "s/${DISTROCAVUSER}/${CAVUSR}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
+		sed -i "s/${DISTROCAVGRP}/${CAVGRP}/g" /var/lib/MailScanner/wrapper/clamav-wrapper
+	fi
+	
+	if [ -f '/etc/apparmor.d/usr.sbin.clamd' ]; then
+			
+		# add to include for clamd
+		if [ -f '/etc/apparmor.d/local/usr.sbin.clamd' ]; then
+			DEFAULTAPPARMOR='#include <local\/usr.sbin.clamd>';
+			APPARMORFIX=' include local\/usr.sbin.clamd';
+
+			# enable include directory
+			sed -i "s/${DEFAULTAPPARMOR}/${APPARMORFIX}/g" /etc/apparmor.d/usr.sbin.clamd
+		
+			echo '/var/spool/MailScanner/incoming/** krw,' >> /etc/apparmor.d/local/usr.sbin.clamd
+			echo '/var/spool/MailScanner/incoming/** ix,' >> /etc/apparmor.d/local/usr.sbin.clamd
+		fi
+	fi
+
+	# fix old style clamav Monitors if preset in old mailscanner.conf
+	CAVOLD='^Monitors for ClamAV Updates.*';
+	CAVNEW='Monitors for ClamAV Updates = \/usr\/local\/share\/clamav\/\*\.cld \/usr\/local\/share\/clamav\/\*\.cvd \/var\/lib\/clamav\/\*\.inc\/\* \/var\/lib\/clamav\/\*\.\?db \/var\/lib\/clamav\/\*\.cvd';
+	if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
+		sed -i "s/${CAVOLD}/${CAVNEW}/g" /etc/MailScanner/MailScanner.conf
+	fi
+
+fi
+
+# postfix fix
+if [ -f "/etc/postfix/master.cf" ]; then
+	sed -i "s/pickup    unix/pickup    fifo/g" /etc/postfix/master.cf
+	sed -i "s/qmgr      unix/qmgr      fifo/g" /etc/postfix/master.cf
+fi
+
+
+# softlink for custom functions
+if [ -d '/usr/share/MailScanner/perl/custom' -a ! -L '/etc/MailScanner/custom' ]; then
+	ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/custom
 fi
 
 # Create the incoming and quarantine dirs if needed
-for F in incoming quarantine incoming/Locks;
+for F in archive incoming quarantine incoming/Locks;
 do
-  if [ \! -d /var/spool/MailScanner/$F ]; then
+  if [ ! -d /var/spool/MailScanner/$F ]; then
     mkdir -p /var/spool/MailScanner/$F
-    chown root.root /var/spool/MailScanner/$F
-    chmod 0755 /var/spool/MailScanner/$F
+    chown mail.mtagroup /var/spool/MailScanner/$F
+    chmod 0750 /var/spool/MailScanner/$F
   fi
 done
 
 # Sort out the rc.d directories
 chkconfig --add MailScanner
-#chkconfig MailScanner off
-#chkconfig --level 2 sendmail off # To fix bug in some RedHat dist's
+
 echo
 echo To activate MailScanner run the following commands:
 echo
 echo    service sendmail stop
 echo    chkconfig sendmail off
 echo    chkconfig MailScanner on
-#echo    chkconfig --level 2345 MailScanner on
 echo    service MailScanner start
 echo
 echo Note that you will need to replace the 'sendmail' option
 echo above with your respective MTA. Sendmail, Postfix, Exim, etc.
 echo
 echo If you are using Clam AV, ensure that you check that the user
-echo and group specified in /usr/share/MailScanner/clamav-wrapper
+echo and group specified in /var/lib/MailScanner/wrapper/clamav-wrapper
 echo matches the user specified in /etc/passwd.
 echo
+
 %preun
 if [ $1 = 0 ]; then
     # We are being deleted, not upgraded
@@ -409,14 +459,10 @@ fi
 exit 0
 
 %postun
-# copy old ms files if this is an upgrade
+# delete old ms files if this is an upgrade
 if [ -d "/usr/lib/MailScanner" ]; then
 	rm -rf /usr/lib/MailScanner
 fi
-
-# symlink
-rm -rf /etc/MailScanner/CustomFunctions
-ln -s /usr/share/MailScanner/perl/custom/ /etc/MailScanner/CustomFunctions
 
 if [ "$1" -ge "1" ]; then
     # We are being upgraded or replaced, not deleted
@@ -435,6 +481,7 @@ exit 0
 %attr(750,root,root) %dir /var/spool/MailScanner/archive
 %attr(750,root,root) %dir /var/spool/MailScanner/incoming
 %attr(750,root,root) %dir /var/spool/MailScanner/quarantine
+%attr(750,root,root) %dir /var/spool/MailScanner/incoming/Locks
 %attr(700,root,root) /var/run/MailScanner.pid
 %attr(755,root,root) /usr/sbin/df2mbox
 %attr(755,root,root) /usr/sbin/d2mbox
@@ -466,7 +513,6 @@ exit 0
 %config(noreplace) %attr(644,root,root) /etc/sysconfig/update_spamassassin
 
 %doc /usr/share/man/man8/MailScanner.8.gz
-#%doc /usr/share/man/man1/MailScanner.1.gz
 %doc /usr/share/man/man5/MailScanner.conf.5.gz
 
 /etc/MailScanner/conf.d/README
@@ -958,7 +1004,6 @@ exit 0
 
 /usr/share/MailScanner/MailScanner.pm
 
-#/usr/share/MailScanner/perl/MailScanner/BinHex.pm
 /usr/share/MailScanner/perl/MailScanner/Antiword.pm
 /usr/share/MailScanner/perl/MailScanner/ConfigDefs.pl
 /usr/share/MailScanner/perl/MailScanner/Config.pm

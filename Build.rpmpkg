@@ -60,9 +60,9 @@ if [ -z "$DEVBASEDIR" ]; then
 fi
 
 # create this if missing
-if [ ! -f '/tmp/MailScanner.conf.index.html' ]; then
+#if [ ! -f '/tmp/MailScanner.conf.index.html' ]; then
 	sh $DEVBASEDIR/config.index/make.sh
-fi
+#fi
 
 # the source directory
 SRCDIR=$DEVBASEDIR/RPM.files/RHEL
@@ -88,36 +88,39 @@ fi
 
 # make working dir and subs
 mkdir -p $WORK
-mkdir -p $WORK/{bin,doc,etc,lib,var/run}
-mkdir -p $WORK/etc/{conf.d}
-mkdir -p $WORK/bin/MailScanner/CustomFunctions
-# /etc/ reports,rules,mcp will get created below
+mkdir -p ${WORK}/etc/rc.d/init.d
+mkdir -p ${WORK}/usr/sbin/
+mkdir -p ${WORK}/usr/share/man/{man8,man5}
+mkdir -p ${WORK}/etc/MailScanner{conf.d,rules,mcp}
+mkdir -p ${WORK}/etc/{cron.hourly,cron.daily,sysconfig}
+mkdir -p ${WORK}/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
+mkdir -p ${WORK}/usr/share/MailScanner/perl/{MailScanner,custom}
+mkdir -p ${WORK}/var/{lib/MailScanner/wrapper,spool/MailScanner/archive,spool/MailScanner/quarantine,spool/MailScanner/incoming/Locks,spool/mqueue,spool/mqueue.in,run}
 
 # var
 touch $WORK/var/run/MailScanner.pid
 
 # base
-cp $DEVBASEDIR/mailscanner/bin/check_mailscanner $WORK/check_MailScanner
-cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron $WORK/
-cp $DEVBASEDIR/RPM.files/common/MailScanner.init.rh $WORK/
-cp $DEVBASEDIR/RPM.files/common/MailScanner.opts.rh $WORK/
-cp $DEVBASEDIR/RPM.files/common/update_spamassassin.opts.rh $WORK/
-cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron $WORK/
-cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron $WORK/
-cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron $WORK/
-cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron $WORK/
-cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron $WORK/
-cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron $WORK/
+cp $DEVBASEDIR/mailscanner/bin/check_mailscanner 				$WORK/check_MailScanner
+cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron 			$WORK/
+cp $DEVBASEDIR/RPM.files/common/MailScanner.init.rh 			$WORK/
+cp $DEVBASEDIR/RPM.files/common/MailScanner.opts.rh 			$WORK/
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.opts.rh 	$WORK/
+cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron 		$WORK/
+cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron 		$WORK/
+cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron 	$WORK/
+cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron 			$WORK/
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron 		$WORK/
+cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron 	$WORK/
 
 # doc dir
-cp $DEVBASEDIR/man/*[12345678] $WORK/doc/
-cp $DEVBASEDIR/COPYING $WORK/doc/
-cp /tmp/MailScanner.conf.index.html $WORK/doc/
+cp $DEVBASEDIR/man/*[12345678] 			$WORK/doc/
+cp $DEVBASEDIR/COPYING 					$WORK/doc/
+cp /tmp/MailScanner.conf.index.html 	$WORK/doc/
 
 # lib dir
-cp $DEVBASEDIR/mailscanner/lib/*{wrapper,update} $WORK/lib/
-#cp $DEVBASEDIR/mailscanner/lib/mcafee-autoupdate.old $WORK/lib/
-cp $DEVBASEDIR/mailscanner/lib/kaspersky.prf $WORK/lib/
+cp $DEVBASEDIR/mailscanner/lib/*{wrapper,update} 	$WORK/lib/
+cp $DEVBASEDIR/mailscanner/lib/kaspersky.prf 		$WORK/lib/
 
 # etc dir
 for F in filename.rules.conf filetype.rules.conf archives.filename.rules.conf archives.filetype.rules.conf spam.assassin.prefs.conf spam.lists.conf virus.scanners.conf phishing.safe.sites.conf phishing.bad.sites.conf country.domains.conf
@@ -129,21 +132,20 @@ cp $DEVBASEDIR/mailscanner/etc/conf.d/README $WORK/etc/conf.d/
 (cd $DEVBASEDIR/mailscanner/etc&& tar cf - reports rules mcp ) | ( cd $WORK/etc && tar xBpf - )
 
 # bin dir
-cp $DEVBASEDIR/mailscanner/bin/Sophos.install.linux $WORK/bin/Sophos.install
-cp $DEVBASEDIR/mailscanner/bin/Quick.Peek $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/df2mbox $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/d2mbox $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/getPERLLIB $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/update_spamassassin $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf $WORK/bin/
-cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin $WORK/bin/mailscanner
+cp $DEVBASEDIR/mailscanner/bin/Quick.Peek 					$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/df2mbox 						$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/d2mbox 						$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/CheckModuleVersion 			$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/getPERLLIB 					$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/mailscanner_create_locks 	$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_virus_scanners 		$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_spamassassin 			$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_phishing_sites 		$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/update_bad_phishing_sites 	$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/processing_messages_alert 	$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/analyse_SpamAssassin_cache 	$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/upgrade_MailScanner_conf 	$WORK/bin/
+cp $DEVBASEDIR/mailscanner/bin/mailscanner.sbin 			$WORK/bin/mailscanner
 
 # links
 cd $WORK/bin

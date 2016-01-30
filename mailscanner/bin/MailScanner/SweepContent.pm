@@ -258,9 +258,11 @@ sub FixMaliciousSubjects {
 
   my $subject = $message->{subject};
   my $newsubject = $subject;
-  $newsubject =~ s/\s{20,}.*\..{1,4}\s*$//; # Delete file extensions at end of filename
-  $newsubject =~ s/\s*$//g;
-  $newsubject =~ s/\s{20,}//g;
+	# will break things like dkim 
+	# j benton 30 jan 2016
+  #$newsubject =~ s/\s{20,}.*\..{1,4}\s*$//; # Delete file extensions at end of filename
+  #$newsubject =~ s/\s*$//g;
+  #$newsubject =~ s/\s{20,}//g;
 
   # If it has changed then force an update
   #print STDERR "Message metadata is:\n" . join("\n", @{$message->{metadata}}) . "\n";

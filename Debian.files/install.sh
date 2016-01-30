@@ -230,8 +230,30 @@ fi
 # back up their stuff
 SAVEDIR="$HOME/ms_upgrade/saved.$$";
 
+if [ -f "/etc/default/mailscanner" ]; then
+	mkdir -p ${SAVEDIR}/etc/default
+	cp -f /etc/default/mailscanner ${SAVEDIR}/etc/default/mailscanner
+	clear
+	echo;
+	echo "I have copied /etc/default/mailscanner to";
+	echo "${SAVEDIR}/etc/default/mailscanner";
+	echo;
+	timewait 3;
+fi
+
+if [ -f "/etc/default/MailScanner" ]; then
+	mkdir -p ${SAVEDIR}/etc/default
+	cp -f /etc/default/MailScanner ${SAVEDIR}/etc/default/MailScanner
+	clear
+	echo;
+	echo "I have copied /etc/default/MailScanner to";
+	echo "${SAVEDIR}/etc/default/MailScanner";
+	echo;
+	timewait 3;
+fi
+
 if [ -d "/usr/lib/MailScanner/MailScanner/CustomFunctions" ]; then
-	mkdir -p $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
+	mkdir -p ${SAVEDIR}/usr/lib/MailScanner/MailScanner/CustomFunctions
 	cp -f /usr/lib/MailScanner/MailScanner/CustomFunctions/* $SAVEDIR/usr/lib/MailScanner/MailScanner/CustomFunctions
 	clear
 	echo;
@@ -244,7 +266,7 @@ if [ -d "/usr/lib/MailScanner/MailScanner/CustomFunctions" ]; then
 fi
 
 if [ -d "/etc/MailScanner/CustomFunctions" ]; then
-	mkdir -p $SAVEDIR/etc/MailScanner/CustomFunctions
+	mkdir -p ${SAVEDIR}/etc/MailScanner/CustomFunctions
 	cp -f /etc/MailScanner/CustomFunctions/* $SAVEDIR/etc/MailScanner/CustomFunctions
 	clear
 	echo;
@@ -256,7 +278,7 @@ if [ -d "/etc/MailScanner/CustomFunctions" ]; then
 fi
 
 if [ -f "/etc/MailScanner/CustomConfig.pm" ]; then
-	mkdir -p $SAVEDIR/etc/MailScanner
+	mkdir -p ${SAVEDIR}/etc/MailScanner
 	cp -f /etc/MailScanner/CustomConfig.pm $SAVEDIR/etc/MailScanner/
 	clear
 	echo;

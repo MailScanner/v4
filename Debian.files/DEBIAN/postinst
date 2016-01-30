@@ -157,7 +157,7 @@ fi
 OLD="^MailScanner Version Number.*";
 NEW="MailScanner Version Number = ${MSVERSION}";
 if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
-	sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
+	#sed -i "s/${OLD}/${NEW}/g" /etc/MailScanner/MailScanner.conf
 fi
 
 # fix reports directory
@@ -211,12 +211,20 @@ if [ -d '/etc/clamav' ]; then
 		CAVUSR='ClamUser="clamav"';
 	fi
 
+	if id -u clamscan >/dev/null 2>&1; then
+		CAVUSR='ClamUser="clamscan"';
+	fi
+	
 	if getent group clamav >/dev/null 2>&1; then
 		CAVGRP='ClamGroup="clamav"';
 	fi
 
 	if getent group clam >/dev/null 2>&1; then
 		CAVGRP='ClamGroup="clam"';
+	fi
+	
+	if getent group clamscan >/dev/null 2>&1; then
+		CAVGRP='ClamGroup="clamscan"';
 	fi
 
 	if [ -f '/var/lib/MailScanner/wrapper/clamav-wrapper' ]; then

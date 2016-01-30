@@ -2,7 +2,7 @@
 
 # clamav-wrapper --	invoke ClamAV for use with mailscanner
 #
-# Adrian Bridgett <adrian@smop.co.uk>, 14/12/01
+# Written by: Jerry Benton <mailscanner@mailborder.com>
 #
 #   MailScanner - SMTP E-Mail Virus Scanner
 #   Copyright (C) 2001  Julian Field
@@ -23,40 +23,38 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#   The author, Julian Field, can be contacted by email at
-#      Jules@JulianField.net
-#   or by paper mail at
-#      Julian Field
-#      Dept of Electronics & Computer Science
-#      University of Southampton
-#      Southampton
-#      SO17 1BJ
-#      United Kingdom
-#
-#
-# Modifications by Kevin Spicer <kevin@kevinspicer.co.uk> to get
-# external unpackers working correctly.  9 Nov 2003
-# Removed --unzip from ScanOptions, as its already in ExtraScanOptions
-# (Clam usually uses own unzipper, -unzip just allows it to use external
-# program so should be in ExtraScanOptions as it could cause a failure)
-# Separate all unpackers and add missing ones.
-# Add tmpdir (and check for it) in MailScanner incoming dir 
-# (to take advantage of ramdisk) - needed by external unpacker
 
-######  IF YOU ARE RUNNING MAILSCANNER AS ROOT ######
-# You need to set the following in MailScanner.conf so that external 
-# unpackers can be used...
-#   Incoming Work Group = clamav
-#   Incoming Work Permissions = 0640
+# this passed from the CLI
+# ./scanner-wrapper /path/to/av/bin /thing/to/scan
+ClamScan=$1/bin/clamscan
+shift
 
-# You may want to check this script for bash-isms
+# defaults
+QUICKPEEK=/usr/sbin/Quick.Peek
 
-#TempDir="/tmp/clamav.$$"
-TempDir=$(mktemp) || { echo "$0: Cannot make name for temporary dir" >&2; exit 1; }
-ClamUser="clamav"
-ClamGroup="clamav"
+# the place where Incoming Work User, Group, Directory, and Permissions
+# would be assigned by default
+ms_conf=/etc/MailScanner/MailScanner.conf
 
-ScanOptions=""
+# Read configuration variable file if it is present to get a different
+# ms_conf
+[ -r /etc/default/MailScanner ] && . /etc/default/MailScanner
+[ -r /etc/sysconfig/MailScanner ] && . /etc/sysconfig/MailScanner
+
+# get incoming work directory
+IWD=`${QUICKPEEK} IncomingWorkDir ${ms_conf}`
+ClamUser=`${QUICKPEEK} IncomingWorkUser ${ms_conf}`
+ClamGroup=`${QUICKPEEK} IncomingWorkGroup ${ms_conf}`
+
+if [ -z ${ClamUser} ]; then
+	ClamUser="clamav"
+fi
+
+if [ -z ${ClamGroup} ]; then
+	ClamGroup="mtagroup"
+fi
+
+# see below for options
 ExtraScanOptions=""
 
 # Extra options we try to pass to clam but we handle it failing
@@ -124,57 +122,59 @@ ExtraScanOptions=""
 # Uncomment next line if you need to disable Clam's DoS protection
 #ExtraScanOptions="--max-files=0 --max-space=0 --max-recursion=0 $ExtraScanOptions"
 
-ClamScan=$1/bin/clamscan
-shift
 
-if [ ! -x $ClamScan ]; then
-  ClamScan=/usr/bin/clamscan
+# if the base incoming work directory exists, check if ramdisk	
+if [ -d ${IWD} ]; then
+	FSTYPE=$(df -P -T ${IWD}|tail -n +2 | awk '{print $2}')
+	if [ ${FSTYPE} = tmpfs ]; then
+		# use ramdisk for base tmp
+		IWD="${IWD}/clamav-tmp"
+	else
+		# not ramdisk, just use /tmp for base
+		IWD=/tmp/clamav-tmp
+	fi
+else
+	# work directory does not exist, so just use /tmp as base tmp
+	IWD=/tmp/clamav-tmp
 fi
 
-if [ "x$1" = "x-IsItInstalled" ]; then
-  rm -f ${TempDir}
-  [ -x $ClamScan ] && exit 0
-  exit 1
-fi
+# create our base tmp directory if missing
+[ -d ${IWD} ] || mkdir -p ${IWD}
 
-# Add this for Solaris users so they can find whoami
-PATH=$PATH:/usr/ucb
-export PATH
-
-# Check if the tmpdir exists, if so delete so we start with a clean slate
-if [ -x "${TempDir}" ]; then
-	rm -rf ${TempDir} >/dev/null 2>&1
-fi
-
-# Make the Temp dir
-umask 0077
-mkdir "${TempDir}" >/dev/null 2>&1
+# create our working tmp directory in the base tmp directory
+TempDir=`mktemp -d --tmpdir=${IWD}`
 
 # In case we get interupted....
 trap "rm -rf ${TempDir}" EXIT
 
-if [ $? ]; then 
-  ExtraScanOptions="$ExtraScanOptions --tempdir=${TempDir}"
-  # If we are root chown it to the clamav user/group
-  if [ `whoami` = "root" ]; then
-    chown ${ClamUser}:${ClamGroup} "${TempDir}"
-  fi
- fi
+# passed at cli
+if [ ! -x ${ClamScan} ]; then
+  ClamScan=/usr/bin/clamscan
+fi
 
+# used by SweepViruses.pm to check if this program is installed
+if [ "x$1" = "x-IsItInstalled" ]; then
+  [ -x $ClamScan ] && exit 0
+  exit 1
+fi
+
+# bail if we cannot find clamscan
+if [ ! -x ${ClamScan} ]; then
+  rm -rf ${TempDir}
+  exit 1
+fi
+
+# ScanOptions is for this script
+ScanOptions=" --tempdir=${TempDir}"
+
+# ExtraScanOptions from user settings above
 $ClamScan $ExtraScanOptions $ScanOptions "$@"
 
 retval=$?
 
 #Clean up the temp directory
-if [ -x "${TempDir}" ]; then
+if [ -d ${TempDir} ]; then
 	rm -rf ${TempDir}
 fi
-trap '' EXIT
 
-if [ "$retval" = "40" ]; then
-  # Clam complained we passed an illegal command-line option
-	# (As this calls without external unpackers the temp dir isn't used)
-  exec $ClamScan $ScanOptions "$@"
-else
-  exit $retval
-fi
+exit $retval

@@ -340,9 +340,8 @@ This is probably not what you want.
 
 In your /opt/MailScanner/etc/MailScanner.conf file, set
     Virus Scanners = clamav
-Then download
-    http://www.sng.ecs.soton.ac.uk/mailscanner/files/4/install-Clam-SA.tar.gz
-Unpack it, "cd" into the directory and run ./install.sh
+Then install it with your package manager or download it directly from
+http://www.clamav.net
 
 EONONE
 }
