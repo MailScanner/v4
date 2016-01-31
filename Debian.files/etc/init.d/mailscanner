@@ -17,7 +17,6 @@ DESC="email processor - "
 NAME=MailScanner
 STARTAS=MailScanner
 DAEMON=/usr/sbin/$NAME
-CONFFILE=/etc/MailScanner/MailScanner.conf
 QUICKPEEK=/usr/sbin/Quick.Peek
 run_mailscanner=0
 ramdisk_sync=0
@@ -31,9 +30,9 @@ stopped_lockfile=/var/lock/subsys/MailScanner.off
 # /etc/default/$PNAME filename
 PNAME=MailScanner
 
-RUNUSER=`${QUICKPEEK} RunAsUser ${CONFFILE}`
-RUNGROUP=`${QUICKPEEK} RunAsGroup ${CONFFILE}`
-PIDFILE=`${QUICKPEEK} PIDfile ${CONFFILE}`
+RUNUSER=`${QUICKPEEK} RunAsUser ${ms_conf}`
+RUNGROUP=`${QUICKPEEK} RunAsGroup ${ms_conf}`
+PIDFILE=`${QUICKPEEK} PIDfile ${ms_conf}`
 
 # daemon user:group to run as
 if [ -n ${RUNUSER} ] && [ -n ${RUNGROUP} ]; then
