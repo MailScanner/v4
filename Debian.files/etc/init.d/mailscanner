@@ -83,14 +83,29 @@ if [ -z ${work_dir} ]; then
 	work_dir="/var/spool/MailScanner/incoming"
 fi
 
+# if the work user is empty
 if [ -z ${RDUSER} ]; then
-	RDUSER="mail"
+	# if the run user is also empty
+	if [ -z ${RUNUSER} ]; then
+		RDUSER="mail"
+	else
+		# use the Run As User for the Work User
+		RDUSER=${RUNUSER}
+	fi
 fi
 
+# if the work group is empty
 if [ -z ${RDGROUP} ]; then
-	RDGROUP="mtagroup"
+	# if the run group is also empty
+	if [ -z ${RUNGROUP} ]; then
+		RDGROUP="mtagroup"
+	else
+		# use the Run As Group for the Work Group
+		RDGROUP=${RUNGROUP}
+	fi
 fi
 
+# if work permissions are not set or incorrectly set
 if [ `echo $WORKPERM | sed 's/^[-+0-9][0-9]*//' | wc -c` != 1 ]; then
 	WORKPERM="0660"
 fi
