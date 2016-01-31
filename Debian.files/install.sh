@@ -208,7 +208,7 @@ echo "Do you want to create a RAMDISK?"; echo;
 echo "This will create a mount in /etc/fstab that attaches the processing"; 
 echo "directory /var/spool/MailScanner/incoming to a RAMDISK, which greatly"; 
 echo "increases processing speed at the cost of the reservation of some of";
-echo "the system RAM. The size depends on the number of MailScanner childs,";
+echo "the system RAM. The size depends on the number of MailScanner children,";
 echo "the number of messages per batch, and incoming email volume."
 echo;
 echo "Specify a size in MB or leave blank for none.";
