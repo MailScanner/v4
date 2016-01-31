@@ -10,9 +10,8 @@
 ### END INIT INFO
 
 # Author: Jerry Benton <mailscanner@mailborder.com>
-# 26 JAN 2016
+# 30 JAN 2016
 
-# PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/usr/sbin:/usr/bin:/bin:/sbin
 DESC="email processor - "
 NAME=MailScanner
@@ -57,7 +56,6 @@ fi
 VERBOSE=yes
 
 # Define LSB log_* functions.
-# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
 . /lib/lsb/init-functions
 
 # Don't start if MailScanner is not configured
