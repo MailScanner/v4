@@ -155,7 +155,7 @@ case "$1" in
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ ! -d ${ramdisk_store} ]; then
+			if [ ! -d ${ramdisk_store} ]; then
 				mkdir -p ${ramdisk_store} 
 				chmod 0750 ${ramdisk_store}
 			fi
@@ -193,7 +193,7 @@ case "$1" in
 
 		if [ ${FSTYPE} = tmpfs ]; then
 			# if /var/spool/MailScanner/ramdisk_save is missing
-			[ ! -d ${ramdisk_store} ]; then
+			if [ ! -d ${ramdisk_store} ]; then
 				mkdir -p ${ramdisk_store} 
 				chmod 0750 ${ramdisk_store}
 			fi
