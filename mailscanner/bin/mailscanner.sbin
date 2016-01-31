@@ -1781,6 +1781,9 @@ sub CreateProcessingDatabase {
     $MailScanner::ProcDBH->do("CREATE TABLE archive (id TEXT, count INT, nexttime INT)");
     print STDERR "Created Processing Attempts Database successfully\n"
       if $WantLint;
+    my $paDB = MailScanner::Config::QuickPeek($ConfFile,
+                                              'processingattemptsdatabase');
+    chmod 0660, $paDB;                                          
     my $rows = $MailScanner::ProcDBH->selectrow_array("SELECT COUNT(*) FROM processing");
     print STDERR "There " . ($rows==1?'is':'are') . " $rows message" . ($rows==1?'':'s') . " in the Processing Attempts Database\n" if $WantLint;
     MailScanner::Log::InfoLog("Found %d messages in the Processing Attempts Database", $rows) unless $WantLint;

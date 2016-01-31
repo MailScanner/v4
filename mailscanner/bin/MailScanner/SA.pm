@@ -223,6 +223,9 @@ sub initialise {
             $MailScanner::SA::cachedbh->do("CREATE UNIQUE INDEX md5_uniq ON cache(md5)");
             $MailScanner::SA::cachedbh->do("CREATE INDEX last_seen_idx ON cache(last)");
             $MailScanner::SA::cachedbh->do("CREATE INDEX first_seen_idx ON cache(first)");
+            my $sacDB = MailScanner::Config::QuickPeek($ConfFile,
+                                              'sacache');
+		    chmod 0660, $sacDB; 
             $SQLiteInstalled = 1;
             SetCacheTimes();
             # Now expire all the old tokens
