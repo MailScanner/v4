@@ -79,7 +79,7 @@ sub CreateTempDir {
     unlink $satmpdir;
     mkdir $satmpdir or warn "Could not create SpamAssassin temporary directory $satmpdir, $!";
   }
-  chmod 0700, $satmpdir unless $satmpdir =~ /^\/tmp/;
+  chmod 0750, $satmpdir unless $satmpdir =~ /^\/tmp/;
   chown $runasuser, -1, $satmpdir;
 
   $ENV{'TMPDIR'} = $satmpdir;
@@ -175,7 +175,6 @@ sub initialise {
     # Now we have the path built, try to find the SpamAssassin modules
     unless (eval "require Mail::SpamAssassin") {
       MailScanner::Log::WarnLog("You want to use SpamAssassin but have not installed it.");
-      MailScanner::Log::WarnLog("Please download http://www.sng.ecs.soton.ac.uk/mailscanner/files/4/install-Clam-SA.tar.gz and unpack it and run ./install.sh to install it, then restart MailScanner.");
       MailScanner::Log::WarnLog("I will run without SpamAssassin for now, you will not detect much spam until you install SpamAssassin.");
       $SpamAssassinInstalled = 0;
       return;

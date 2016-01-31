@@ -447,6 +447,7 @@ if ($WantLintOnly || $WantLintLiteOnly) {
   $gname = MailScanner::Config::Value('runasgroup');
   $qgname= MailScanner::Config::Value('quarantinegroup');
   $igname= MailScanner::Config::Value('workgroup');
+
   $uid   = $uname?getpwnam($uname):0;
   $gid   = $gname?getgrnam($gname):0;
   $qgid  = $qgname?getgrnam($qgname):0;

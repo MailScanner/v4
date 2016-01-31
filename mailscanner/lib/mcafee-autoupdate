@@ -379,7 +379,7 @@ do
         # fetch and extract dat files
         run mkdir $NEWVER
         run cd $NEWVER
-        run chmod 700 .
+        run chmod 750 .
         if ! run wget $wgetverbosity --tries=$try --waitretry=$INTERVAL --passive-ftp --progress=dot:mega $FTPDIR/$DISTARC
         then retry
         fi

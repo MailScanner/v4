@@ -139,7 +139,7 @@ sub InternalDecoder {
 
   # Make the temporary tnef files be created under /tmp for easy removal.
   my $tempdir = tempdir();
-  chmod 0700, $tempdir;
+  chmod 0750, $tempdir;
   %parms = ( ignore_checksum => "true",
              output_dir      => $tempdir,
              output_to_core  => "NONE" );
