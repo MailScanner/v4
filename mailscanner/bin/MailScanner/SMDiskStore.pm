@@ -329,8 +329,8 @@ sub ReadBody {
       push @{$body}, $lastlineread;
       #print STDERR "Line read is ****" . $_ . "****\n";
     }
-    # A user reports SpamAssassin fails if the body doesn't end with newline
-    if ($body->[@{$body}-1] =~ /^.*\z/) {
+    # A user reports SpamAssassin fails if the body doesn't end with an empty line
+    if ($body->[@{$body}-1] !~ /^$/) {
       push @{$body}, "\n";
     }
     return;
@@ -354,8 +354,8 @@ sub ReadBody {
     #print STDERR "Line read2 is ****" . $line . "****\n";
   }
   $lastlineread = $line;
-  # A user reports SpamAssassin fails if the body doesn't end with newline
-  if ($body->[@{$body}-1] =~ /^.*\z/) {
+  # A user reports SpamAssassin fails if the body doesn't end with an empty line
+  if ($body->[@{$body}-1] !~ /^$/) {
     push @{$body}, "\n";
   }
 
@@ -411,8 +411,8 @@ sub ReadBody {
       $lastlineread = <$dh>;
       #print STDERR "Added $lastlineread";
     }
-    # A user reports SpamAssassin fails if the body doesn't end with newline
-    if ($body->[@{$body}-1] =~ /^.*\z/) {
+    # A user reports SpamAssassin fails if the body doesn't end with an empty line
+    if ($body->[@{$body}-1] !~ /^$/) {
       push @{$body}, "\n";
     }
 
