@@ -23,6 +23,8 @@ run_mailscanner=0
 ramdisk_sync=0
 run_nice=0
 ms_conf=/etc/MailScanner/MailScanner.conf
+ms_core=/usr/share/MailScanner
+ms_lib=/var/lib/MailScanner
 ramdisk_store=/var/spool/MailScanner/ramdisk_store
 stopped_lockfile=/var/lock/subsys/MailScanner.off
 
@@ -35,7 +37,7 @@ PIDFILE=`${QUICKPEEK} PIDfile ${CONFFILE}`
 
 # daemon user:group to run as
 if [ -n ${RUNUSER} ] && [ -n ${RUNGROUP} ]; then
-	RUNAS=" --chuid ${RUNUSER}:${RUNGROUP}"
+	RUNAS="--chuid ${RUNUSER}:${RUNGROUP}"
 else
 	RUNAS=
 fi
@@ -108,7 +110,7 @@ if [ `echo $WORKPERM | sed 's/^[-+0-9][0-9]*//' | wc -c` != 1 ]; then
 	WORKPERM="0660"
 fi
 
-
+RUNAS=
 #
 # Function that starts the daemon/service
 #
@@ -120,7 +122,7 @@ do_start()
 	#   2 if daemon could not be started
 	start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $STARTAS --test > /dev/null \
 	|| return 1
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --nicelevel $run_nice --exec $DAEMON -- \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --nicelevel $run_nice --exec $DAEMON \
 	$RUNAS \
 	|| return 2
 
@@ -187,6 +189,8 @@ case "$1" in
 	chmod 0750 ${work_dir}
 	find ${work_dir} -type d -exec chmod 0750 {} \;
 	find ${work_dir} -type f -exec chmod ${WORKPERM} {} \;
+	find ${ms_core} -type f -exec chmod 0644 {} \;
+	find ${ms_lib} -type f -exec chmod 0644 {} \;
 	
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
 	

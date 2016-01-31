@@ -60,3 +60,11 @@ export HOSTNAME
 # and should not be started automaticly
 #
 stopped_lockfile=/var/lock/subsys/MailScanner.off
+
+#
+# The Mailscanner share directory
+ms_core=/usr/share/MailScanner
+
+#
+# The MailScanner lib directory
+ms_lib=/var/lib/MailScanner
