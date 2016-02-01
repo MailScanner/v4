@@ -178,11 +178,13 @@ do_perms()
 	find ${ms_core} -type f -exec chmod 0644 {} \;
 	
 	# incoming
-	chmod 0755 ${work_dir}
-	chmod 0755 ${ramdisk_store}
+	chmod 0775 ${work_dir}
+	if [ -d ${ramdisk_store} ];then 
+		chmod 0755 ${ramdisk_store}
+	fi
 	
 	# set owner:group
-	chown -R ${RDUSER}:${RDGROUP} ${work_dir}
+	#chown -R ${RDUSER}:${RDGROUP} ${work_dir}
 	
 	# processing.db and spamassassin.cache.db
 	#chmod 0660 ${work_dir}/*.db
