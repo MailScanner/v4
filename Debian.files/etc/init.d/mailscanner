@@ -3,7 +3,7 @@
 # Provides:          MailScanner
 # Required-Start:    $local_fs $network $syslog
 # Required-Stop:     $local_fs $network $syslog
-# Default-Start:     2 3 5
+# Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: starts the Mailscanner daemon
 # Description:       starts MailScanner using start-stop-daemon
@@ -23,7 +23,6 @@ ramdisk_sync=0
 run_nice=0
 ms_conf=/etc/MailScanner/MailScanner.conf
 ms_core=/usr/share/MailScanner
-ms_lib=/var/lib/MailScanner
 ramdisk_store=/var/spool/MailScanner/ramdisk_store
 stopped_lockfile=/var/lock/subsys/MailScanner.off
 
@@ -36,7 +35,7 @@ PIDFILE=`${QUICKPEEK} PIDfile ${ms_conf}`
 
 # daemon user:group to run as
 if [ -n ${RUNUSER} ] && [ -n ${RUNGROUP} ]; then
-	RUNAS="--chuid ${RUNUSER}:${RUNGROUP}"
+	RUNAS="chuid ${RUNUSER}:${RUNGROUP}"
 else
 	RUNAS=
 fi
@@ -118,11 +117,17 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --startas $STARTAS --test > /dev/null \
-	|| return 1
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --nicelevel $run_nice --exec $DAEMON \
-	$RUNAS \
-	|| return 2
+	start-stop-daemon --start --quiet --startas $STARTAS --exec $DAEMON --pidfile $PIDFILE --test > /dev/null \
+		|| return 1
+	
+	# if not running and there is a pid, remove it
+	if [ -f ${PIDFILE} ]; then
+		rm -f ${PIDFILE}
+	fi
+	
+	start-stop-daemon --start --quiet --nicelevel $run_nice --pidfile $PIDFILE --exec $DAEMON --  \
+		$RUNAS \
+		|| return 2
 
   	# Set lockfile to inform cronjobs about the running daemon
 	RETVAL="$?"
@@ -142,7 +147,7 @@ do_stop()
 	#   1 if daemon was already stopped
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/10/TERM/20 --pidfile $PIDFILE
+	start-stop-daemon --stop --signal 15 --quiet --retry=TERM/10/TERM/20 --pidfile $PIDFILE
 	RETVAL="$?"
 	[ "$RETVAL" = 2 ] && return 2
 
@@ -151,20 +156,37 @@ do_stop()
 	    rm -f /run/lock/subsys/MailScanner
 	    touch $stopped_lockfile
 	fi
+	
+	# remove pid file
+	rm -f $PIDFILE
+	
 	return "$RETVAL"
 }
 
 #
 # Function that sends a SIGHUP to the daemon/service
 #
-do_reload() {
+do_reload()
+{
 	start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE
 	return 0
 }
 
+do_perms()
+{
+	# make sure share and lib permissions are correct
+	find ${ms_core} -type f -exec chmod 0644 {} \;
+	
+	# incoming
+	chmod 0750 ${work_dir}
+	chmod 0750 ${ramdisk_store}
+	
+	# processing.db and spamassassin.cache.db
+	chmod 0660 ${work_dir}/*.db
+}
+
 case "$1" in
   start)
-	
 	if [ $ramdisk_sync = 1 ]; then
 		# make sure this is a RAMDISK tmpfs
 		FSTYPE=$(df -P -T ${work_dir}|tail -n +2 | awk '{print $2}');
@@ -181,14 +203,11 @@ case "$1" in
 			rsync --quiet --archive ${ramdisk_store}/ ${work_dir}
 		fi
 	fi
-	
-	# make sure share and lib permissions are correct
-	find ${ms_core} -type f -exec chmod 0644 {} \;
-	find ${ms_lib} -type f -exec chmod 0644 {} \;
-		
+			
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
 	
 	do_start
+	do_perms
 	
 	case "$?" in
 		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
@@ -196,7 +215,6 @@ case "$1" in
 	esac
 	;;
   stop)
-  
 	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
 	
 	do_stop
@@ -218,21 +236,28 @@ case "$1" in
 			rsync --quiet --archive --delete --recursive --force ${work_dir}/ ${ramdisk_store}
 		fi
 	fi
-	
-case "$?" in
-	0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-	2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
 	esac
 	;;
   status)
-	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	status_of_proc -p ${PIDFILE} ${DAEMON} ${NAME} && exit 0 || exit $?
 	;;
-  reload|force-reload)
+  reload)
+	#
+	# If do_reload() is not implemented then leave this commented out
+	# and leave 'force-reload' as an alias for 'restart'.
+	#
 	log_daemon_msg "Reloading $DESC" "$NAME"
 	do_reload
 	log_end_msg $?
 	;;
-  restart)
+  restart|force-reload)
+	#
+	# If the "reload" option is implemented then remove the
+	# 'force-reload' alias
+	#
 	log_daemon_msg "Restarting $DESC" "$NAME"
 	do_stop
 	case "$?" in
@@ -245,14 +270,15 @@ case "$?" in
 		esac
 		;;
 	  *)
-	  	# Failed to stop
+		# Failed to stop
 		log_end_msg 1
 		;;
 	esac
 	;;
   *)
-	echo "Usage: service $NAME {start|stop|status|restart|reload|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|status|reload|restart|force-reload}" >&2
 	exit 3
 	;;
 esac
+
 :
