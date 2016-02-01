@@ -426,7 +426,7 @@ do
   if [ ! -d /var/spool/MailScanner/$F ]; then
     mkdir -p /var/spool/MailScanner/$F
     chown mail.mtagroup /var/spool/MailScanner/$F
-    chmod 0750 /var/spool/MailScanner/$F
+    chmod 0755 /var/spool/MailScanner/$F
   fi
 done
 
@@ -478,10 +478,10 @@ exit 0
 %attr(755,root,root) %dir /var/lib/MailScanner/wrapper
 %attr(700,root,mail) %dir /var/spool/mqueue
 %attr(700,root,mail) %dir /var/spool/mqueue.in
-%attr(750,root,root) %dir /var/spool/MailScanner/archive
-%attr(750,root,root) %dir /var/spool/MailScanner/incoming
-%attr(750,root,root) %dir /var/spool/MailScanner/quarantine
-%attr(750,root,root) %dir /var/spool/MailScanner/incoming/Locks
+%attr(755,root,root) %dir /var/spool/MailScanner/archive
+%attr(755,root,root) %dir /var/spool/MailScanner/incoming
+%attr(755,root,root) %dir /var/spool/MailScanner/quarantine
+%attr(755,root,root) %dir /var/spool/MailScanner/incoming/Locks
 %attr(700,root,root) /var/run/MailScanner.pid
 %attr(755,root,root) /usr/sbin/df2mbox
 %attr(755,root,root) /usr/sbin/d2mbox

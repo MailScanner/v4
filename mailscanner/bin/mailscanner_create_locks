@@ -73,7 +73,7 @@ foreach $lockfname ('MS.bayes.rebuild.lock', 'MS.bayes.starting.lock') {
 
 # Set perms and ownership of /v/s/M/i/Locks to
 # drwxr-x--- root run-as-group
-chmod 0750, $locksdirname unless $locksdirname =~ /^\/tmp/;
+chmod 0755, $locksdirname unless $locksdirname =~ /^\/tmp/;
 chown -1, $ldgid, $locksdirname;
 # Set perms and ownership of /v/s/M/i/Locks/*.lock to
 # -rw------- run-as-user run-as-group

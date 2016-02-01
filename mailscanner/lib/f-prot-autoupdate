@@ -107,7 +107,7 @@ if (-e _) {
   mkdir $TempDir, 0700 or BailOut("Could not create $TempDir directory, $!");
 }
 # Check file permissions of TempDir are correct
-chmod 0750, $TempDir
+chmod 0755, $TempDir
   or BailOut("Could not set perms of $TempDir. Check you own it");
 CleanTempDir(); # Clean up the contents of TempDir
 

@@ -79,7 +79,7 @@ sub CreateTempDir {
     unlink $satmpdir;
     mkdir $satmpdir or warn "Could not create SpamAssassin temporary directory $satmpdir, $!";
   }
-  chmod 0750, $satmpdir unless $satmpdir =~ /^\/tmp/;
+  chmod 0755, $satmpdir unless $satmpdir =~ /^\/tmp/;
   chown $runasuser, -1, $satmpdir;
 
   $ENV{'TMPDIR'} = $satmpdir;
