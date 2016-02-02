@@ -33,13 +33,6 @@ RUNUSER=`${QUICKPEEK} RunAsUser ${ms_conf}`
 RUNGROUP=`${QUICKPEEK} RunAsGroup ${ms_conf}`
 PIDFILE=`${QUICKPEEK} PIDfile ${ms_conf}`
 
-# daemon user:group to run as
-if [ -n ${RUNUSER} ] && [ -n ${RUNGROUP} ]; then
-	RUNAS="chuid ${RUNUSER}:${RUNGROUP}"
-else
-	RUNAS=
-fi
-
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
