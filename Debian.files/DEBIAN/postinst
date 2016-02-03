@@ -176,17 +176,17 @@ if [ -f '/etc/MailScanner/MailScanner.conf' ]; then
 fi
 
 # remove old link if present
-if [ -L '/etc/spamassassin/mailscanner.cf' ]; then
-	rm -f /etc/spamassassin/mailscanner.cf
+if [ -L '/etc/mail/spamassassin/mailscanner.cf' ]; then
+	rm -f /etc/mail/spamassassin/mailscanner.cf
 fi
 
-if [ -L '/etc/spamassassin/MailScanner.cf' ]; then
-	rm -f /etc/spamassassin/MailScanner.cf
+if [ -L '/etc/mail/spamassassin/MailScanner.cf' ]; then
+	rm -f /etc/mail/spamassassin/MailScanner.cf
 fi
 
 # create symlink for spamasassin
-if [ -d '/etc/spamassassin' -a ! -L '/etc/spamassassin/mailscanner.cf' -a -f '/etc/MailScanner/spam.assassin.prefs.conf' -a ! -f '/etc/spamassassin/mailscanner.cf' ]; then
-	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/spamassassin/mailscanner.cf 
+if [ -d '/etc/mail/spamassassin' -a ! -L '/etc/spamassassin/mailscanner.cf' -a -f '/etc/MailScanner/spam.assassin.prefs.conf' -a ! -f '/etc/spamassassin/mailscanner.cf' ]; then
+	ln -s /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin/mailscanner.cf 
 fi
 
 # fix the clamav wrapper if the user does not exist
