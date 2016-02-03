@@ -34,7 +34,7 @@ if [ -z "$PIDS" ]; then
 		rm -f $PIDFILE
 	fi
 	
-	/usr/bin/service MailScanner restart >/dev/null 2>&1;
+	/usr/bin/service MailScanner start >/dev/null 2>&1;
 fi
 
 exit 0;
