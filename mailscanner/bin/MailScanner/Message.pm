@@ -397,15 +397,15 @@ sub new {
 
   # Decide if we want to scan this message at all
   $this->{scanmail} = MailScanner::Config::Value('scanmail', $this);
-  if ($this->{scanmail} =~ /[12]/) {
+  if ($this->{scanmail} =~ /[1]/) {
     $this->{scanmail} = 1;
+    $this->{scanvirusonly} = 0;
+  } elsif ($this->{scanmail} =~ /[2]/) {
+  	$this->{scanmail} = 1;
+  	$this->{scanvirusonly} = 1;
   } else {
     # Make sure it is set to something, and not left as undef.
     $this->{scanmail} = 0;
-  }
-  if ($this->{scanmail} !~ /1/) {
-    $this->{scanvirusonly} = 1;
-  } else {
     $this->{scanvirusonly} = 0;
   }
 
@@ -926,21 +926,26 @@ sub HandleHamAndSpam {
   $this->{actions} = 'deliver';
 
   # Get a space-separated list of all the actions
-  if ($HamSpam eq 'nonspam') {
-    #print STDERR "Looking up hamactions\n";
-    $actions = MailScanner::Config::Value('hamactions', $this);
-    # Fast bail-out if it's just the simple "deliver" case that 99% of
-    # people will use
-    # Can't do this with SA rule actions: return if $actions eq 'deliver';
+  if ($this->{scanvirusonly} =~ /[1]/) {
+  	# the message was not spam scanned
+  	$actions = MailScanner::Config::Value('VirusScanOnlyActions', $this);
   } else {
-    # It must be spam as it's not ham
-    if ($this->{ishigh}) {
-      #print STDERR "Looking up highscorespamactions\n";
-      $actions = MailScanner::Config::Value('highscorespamactions', $this);
-    } else {
-      #print STDERR "Looking up spamactions\n";
-      $actions = MailScanner::Config::Value('spamactions', $this);
-    }
+	  if ($HamSpam eq 'nonspam') {
+		#print STDERR "Looking up hamactions\n";
+		$actions = MailScanner::Config::Value('hamactions', $this);
+		# Fast bail-out if it's just the simple "deliver" case that 99% of
+		# people will use
+		# Can't do this with SA rule actions: return if $actions eq 'deliver';
+	  } else {
+		# It must be spam as it's not ham
+		if ($this->{ishigh}) {
+		  #print STDERR "Looking up highscorespamactions\n";
+		  $actions = MailScanner::Config::Value('highscorespamactions', $this);
+		} else {
+		  #print STDERR "Looking up spamactions\n";
+		  $actions = MailScanner::Config::Value('spamactions', $this);
+		}
+	  }
   }
 
   # Find all the bits in quotes, with their spaces

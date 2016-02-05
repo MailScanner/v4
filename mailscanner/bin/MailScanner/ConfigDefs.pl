@@ -597,6 +597,7 @@ WebBugURL			https://s3.amazonaws.com/msv4/images/spacer.gif
 HamActions		deliver header "X-Spam-Status: No"
 SpamActions		deliver header "X-Spam-Status: Yes"
 HighScoreSpamActions	deliver header "X-Spam-Status: Yes"
+VirusScanOnlyActions	deliver header "X-Spam-Status: Unscanned"
 NonMCPActions		deliver
 MCPActions		deliver
 HighScoreMCPActions	deliver
