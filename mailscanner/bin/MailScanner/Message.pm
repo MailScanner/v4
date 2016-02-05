@@ -926,26 +926,21 @@ sub HandleHamAndSpam {
   $this->{actions} = 'deliver';
 
   # Get a space-separated list of all the actions
-  if ($this->{scanvirusonly} =~ /[1]/) {
-  	# the message was not spam scanned
-  	$actions = MailScanner::Config::Value('VirusScanOnlyActions', $this);
-  } else {
-	  if ($HamSpam eq 'nonspam') {
-		#print STDERR "Looking up hamactions\n";
-		$actions = MailScanner::Config::Value('hamactions', $this);
-		# Fast bail-out if it's just the simple "deliver" case that 99% of
-		# people will use
-		# Can't do this with SA rule actions: return if $actions eq 'deliver';
-	  } else {
-		# It must be spam as it's not ham
-		if ($this->{ishigh}) {
-		  #print STDERR "Looking up highscorespamactions\n";
-		  $actions = MailScanner::Config::Value('highscorespamactions', $this);
-		} else {
-		  #print STDERR "Looking up spamactions\n";
-		  $actions = MailScanner::Config::Value('spamactions', $this);
-		}
-	  }
+  if ($HamSpam eq 'nonspam') {
+	#print STDERR "Looking up hamactions\n";
+	$actions = MailScanner::Config::Value('hamactions', $this);
+	# Fast bail-out if it's just the simple "deliver" case that 99% of
+	# people will use
+	# Can't do this with SA rule actions: return if $actions eq 'deliver';
+  } else {	
+	# It must be spam as it's not ham
+	if ($this->{ishigh}) {
+	  #print STDERR "Looking up highscorespamactions\n";
+	  $actions = MailScanner::Config::Value('highscorespamactions', $this);
+	} else {
+	  #print STDERR "Looking up spamactions\n";
+	  $actions = MailScanner::Config::Value('spamactions', $this);
+	}
   }
 
   # Find all the bits in quotes, with their spaces
