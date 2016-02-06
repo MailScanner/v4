@@ -8,6 +8,8 @@
 run_mailscanner=0;
 stopped_lockfile=/var/lock/subsys/MailScanner.off
 QUICKPEEK=/usr/sbin/Quick.Peek
+# Default for MailScanner.conf
+ms_conf=/etc/MailScanner/MailScanner.conf
 
 # get settings
 if [ -f /etc/default/MailScanner ]; then
