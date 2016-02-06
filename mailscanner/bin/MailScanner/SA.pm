@@ -37,7 +37,7 @@ no  strict 'subs'; # Allow bare words for parameter %'s
 #use English; # Needed for $PERL_VERSION to work in all versions of Perl
 
 use IO::Pipe;
-use POSIX; # qw(:signal_h); # For Solaris 9 SIG bug workaround
+use POSIX qw(:signal_h); # For Solaris 9 SIG bug workaround
 use DBI;
 use Compress::Zlib;
 

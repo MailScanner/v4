@@ -38,7 +38,7 @@ no  strict 'subs'; # Allow bare words for parameter %'s
 use MIME::Head;
 use DirHandle;
 use HTML::TokeParser;
-use POSIX; # qw(:signal_h setsid); # For Solaris 9 SIG bug workaround
+use POSIX qw(:signal_h setsid); # For Solaris 9 SIG bug workaround
 
 use vars qw($VERSION);
 
