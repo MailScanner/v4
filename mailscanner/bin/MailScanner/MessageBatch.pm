@@ -758,6 +758,28 @@ sub QuarantineInfections {
   }
 }
 
+# Store all the denial-of-service message in the quarantine if they want me to.
+# Quarantine decision has to be done on a per-message basis.
+sub QuarantineDenialOfService {
+  my $this = shift;
+
+  my($id, $message);
+
+  while(($id, $message) = each %{$this->{messages}}) {
+    next unless $message->{denialofservice};
+    next if $message->{quarantinedinfections}; # Optimisation
+    next if MailScanner::Config::Value ('quarantinedenialofservice', $message) !~
+            /1/;
+
+	# force full message store
+	$message->{allreports}{""} .= ' denialofservice';
+
+    $global::MS->{quar}->StoreInfections($message);
+    MailScanner::Log::NoticeLog("Quarantining DoS message for %s", $id);
+  }
+}
+
+
 # Store all the disarmed files in the quarantine if they want me to.
 # Quarantine decision has to be done on a per-message basis.
 sub QuarantineModifiedBody {

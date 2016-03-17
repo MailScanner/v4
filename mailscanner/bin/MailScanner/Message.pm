@@ -6812,6 +6812,7 @@ sub DisarmHTMLTree {
     #print STDERR "Disarmed = " . join(', ',@disarmed) . "\n";
     if (@disarmed) {
       $this->{bodymodified} = 1;
+      $this->{denialofservice} = 1 if grep(/^denialofservice$/, @disarmed);
       $DisarmHTMLChangedMessage = 1;
       $counter++;
     }
@@ -6928,6 +6929,7 @@ sub DisarmHTMLEntity {
                                 $newname);
       exit 1;
     }
+
     select $outfh;
     if ($DisarmPhishing) {
       HTML::Parser->new(api_version => 3,
@@ -7034,9 +7036,8 @@ sub DisarmHTMLEntity {
     $report = $report2 if $report2 && $report2 ne 'htmlparserattack';
     print $outfh $report . "\n\nAttack in: $oldname\n";
     $outfh->close;
-    #print STDERR "HTML::Parser was killed by the message, " .
-    #             "$newname has been overwritten\n";
-    return ('KILLED');
+    
+    push @DisarmDoneSomething, 'denialofservice';
   }
 
   #print STDERR "Results of HTML::Parser are " . join(',',@DisarmDoneSomething) . "\n";
