@@ -6,9 +6,9 @@
 #
 # Set-up variables to allow MailScanner functions to be returned
 #
-MSLIB=/usr/share/MailScanner
+MSLIB=/usr/share/MailScanner/perl
 MSCONF=/etc/MailScanner/MailScanner.conf
-#CMD="perl -I$MSLIB -MMailScanner::Config"
+CMD="perl -I$MSLIB -MMailScanner::Config"
 
 #
 # Are you running Postfix, sendmail, Exim or ZMailer?
