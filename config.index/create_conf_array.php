@@ -60,7 +60,7 @@ if($fh) {
 
   // Handle section headings
   if(preg_match('/^\[(.*)\]$/',$line,$smatch)) {
-   $sarray = split(',',$smatch[1]);
+   $sarray = explode(',',$smatch[1]);
    $category = strtolower($sarray[0]);
    $type = strtolower($sarray[1]);
    unset($smatch);
