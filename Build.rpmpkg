@@ -25,6 +25,12 @@ if [ -z "$RPMOUT" ]; then
 	export RPMOUT;
 fi
 
+# if not set from the "Build.all" script
+if [ -z "$RPMBUILDDIR" ]; then
+	RPMBUILDDIR="$HOME/rpmbuild";
+	export RPMBUILDDIR;
+fi
+
 # check to see if the output directory exists
 if [ ! -d "$RPMOUT" ]; then
 	mkdir -p $RPMOUT
@@ -73,7 +79,7 @@ VERSION=$MSVERSION-$BUILD
 export VERSION BUILD
 
 # setup rpm development dirs
-mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+mkdir -p $RPMBUILDDIR/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
 # create build output base dir 
 mkdir -p $RPMOUT
@@ -178,9 +184,9 @@ perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/etc/MailScanner.conf
 perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $WORK/bin/mailscanner
 
 # do the same for MailScanner4.spec
-cp -f $DEVBASEDIR/RPM.files/RHEL/MailScanner4.spec ~/rpmbuild/SPECS/MailScanner.spec
-perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' ~/rpmbuild/SPECS/MailScanner.spec
-perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' ~/rpmbuild/SPECS/MailScanner.spec
+cp -f $DEVBASEDIR/RPM.files/RHEL/MailScanner4.spec $RPMBUILDDIR/SPECS/MailScanner.spec
+perl -pi -e 's/VersionNumberHere/'$MSVERSION'/;' $RPMBUILDDIR/SPECS/MailScanner.spec
+perl -pi -e 's/ReleaseNumberHere/'$MSBUILD'/;' $RPMBUILDDIR/SPECS/MailScanner.spec
 
 # remove svn and git and mac stuff
 find $WORK -name '.svn' -exec rm -rf {} \;
@@ -202,7 +208,7 @@ set -x
 # Build the src tarball for RPM construction
 cd $WORK
 cd ..
-tar czf ~/rpmbuild/SOURCES/MailScanner-${MSVERSION}.tgz MailScanner-${MSVERSION}
+tar czf $RPMBUILDDIR/SOURCES/MailScanner-${MSVERSION}.tgz MailScanner-${MSVERSION}
 
 # return to where i started
 cd $THISCURDIR
@@ -221,10 +227,10 @@ find $RPMOUT/MailScanner-$VERSION -name 'README' -exec chmod 644 {} \;
 
 # Build the RPM and SRPMS
 # extra define statements help make the rpm backwards compatible
-rpmbuild -ba --sign --define "_binary_filedigest_algorithm  1"  --define "_binary_payload 1" ~/rpmbuild/SPECS/MailScanner.spec
+rpmbuild -ba --sign --define "_topdir $RPMBUILDDIR" --define "_binary_filedigest_algorithm  1"  --define "_binary_payload 1" $RPMBUILDDIR/SPECS/MailScanner.spec
 
 # copy the rpm built to the output dir
-cp ~/rpmbuild/RPMS/noarch/MailScanner-${VERSION}.noarch.rpm $RPMOUT/MailScanner-$VERSION
+cp $RPMBUILDDIR/RPMS/noarch/MailScanner-${VERSION}.noarch.rpm $RPMOUT/MailScanner-$VERSION
 cd $RPMOUT
 tar czf MailScanner-${VERSION}.rpm.tar.gz MailScanner-$VERSION
 rm -rf $RPMOUT/MailScanner-$VERSION
