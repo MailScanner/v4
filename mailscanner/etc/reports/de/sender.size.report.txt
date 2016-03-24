@@ -1,22 +1,22 @@
 From: "$postmastername" <$localpostmaster>
 To: $from
-Subject: Oversized email rejected
+Subject: Zu große Email wurde abgeleht
 X-%org-name%-MailScanner: generated
 
-Our email content filters have been triggered by a message you sent:-
-  To: $to
-  Subject: $subject
-  Date: $date
-This message has been rejected. The filters said this:
+Unsere Spam-Detektoren wurden durch eine Nachricht von Ihnen ausgelöst:
+  An: $to
+  Betreff: $subject
+  Datum: $date
+Diese Nachricht wurde abgeleht. Die ausgelösten Spamfilter sind:
 $report.
 
-This message, or an attachment it contained, was too large and has been
-removed ($size > $maxmessagesize).
+Ihre Nachricht oder deren Anhang war zu groß ($size > $maxmessagesize) 
+und wurde gelöscht.
 
-Please try compressing the attachment file before sending it.
+Bitte versuchen Sie die Anhänge vor dem Senden zu komprimieren.
 
-If you have any questions about this, or you believe you have received
-this message in error, please contact the site system administrators.
+Wenn Sie Fragen haben oder glauben, diese Nachricht zu Unrecht erhalten zu
+haben, kontaktieren Sie bitte die Systemadministratoren.
 
 -- 
 MailScanner

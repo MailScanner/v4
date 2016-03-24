@@ -83,14 +83,14 @@
 "NoticeNonPasswordProtected" = "Non-password-protected Archive Detected";
 /* # NoticePrefix = The following e-mails were found to have */
 "# NoticePrefix" = "The following e-mails were found to have";
-"NoticePrefix" = "Die folgenden E-Mails besassen";
+"NoticePrefix" = "Die folgenden E-Mails besa&szlig;en";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
 "PossibleFraudStart" = "<font color=\"red\"><b>MailScanner hat einen m&ouml;glichen T&auml;uschungsversuch durch";
 "PossibleFraudEnd" = "festgestellt.</b></font>";
 /* # NumericLinkWarning = <font color="red"><b>MailScanner Warnung: numerical links are often malicious:</b></font> */
 "# NumericLinkWarning" = "<font color=\"red\"><b>MailScanner Warnung: numerical links are often malicious:</b></font>";
-"NumericLinkWarning" = "<font color=\"red\"><b>MailScanner Warnung: nummerische Links sind oftmals  arglistig:</b></font>";
+"NumericLinkWarning" = "<font color=\"red\"><b>MailScanner Warnung: nummerische Links sind oftmals schädlich:</b></font>";
 /* # Used in "From:" header of many reports */
 "PostmasterName" = "MailScanner";
 /* # GSDisabled = Custom Spam Scanner disabled due to repeated failures */
@@ -103,15 +103,15 @@
 "cached" = "zwischen gespeichert";
 "notcached" = "nicht zwischen gespeichert";
 /* # Used when testing message size against Max Spam Check Size */
-"skippedastoobig" = "not spam (too large)";
+"skippedastoobig" = "kein Spam (zu groß)";
 /* # Used in the watermarking spam report */
 "watermarked" = "watermarked";
-"NoticeSizeInfected" = "Attachment detected outside size limits";
+"NoticeSizeInfected" = "Anhang außerhalb der Gr&ouml;&szlig;enbeschr&auml;nkung entdeckt";
 /* # Used in Phishing Fraud attack detections. The "End" must close all the */
 /* # HTML highlighting done in the "Start". */
-"DefiniteFraudStart" = "<font color=\"red\"><b>MailScanner has detected definite fraud in the website at";
-"DefiniteFraudEnd" = ". Do <i>not</i> trust this website:</b></font>";
+"DefiniteFraudStart" = "<font color=\"red\"><b>MailScanner hat einen eindeutigen Betrugsversuch auf der Webseite";
+"DefiniteFraudEnd" = " entdeckt. Sie sollten dieser Webseite <i>nicht</i> vertrauen:</b></font>";
 /* # Used in reports of attacks on HTML::Parser (used for analysing HTML messages) */
-"HTMLParserAttack" = "MailScanner was attacked by a Denial Of Service attack, and has therefore \ndeleted this part of the message. Please contact your e-mail providers \nfor more information if you need it, giving them the whole of this report.";
+"HTMLParserAttack" = "MailScanner hat einen Denial Of Service Angriff entdeckt, und daher diesen \nTeil der Nachricht gel&ouml;scht. Für weiter Informationen kontaktieren Sie bitte \nIhren E-Mail-Provider unter Angabe dieses vollst&auml;ndigen Berichts.";
 /* # Used in reports of messages that have caused MailScanner to crash */
-"KilledMailScanner" = "Message attempted to kill MailScanner";
+"KilledMailScanner" = "Nachricht versuchte MailScanner zum Abst&uuml;rzen zu bringen";

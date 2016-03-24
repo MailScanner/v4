@@ -1,18 +1,16 @@
-This is a message from the MailScanner E-Mail Virus Protection Service
+Dies ist eine Nachricht vom MailScanner E-Mail-Virus-Schutzdienst
 ----------------------------------------------------------------------
-The original e-mail message was too large, and has been removed.
+Die ursprüngliche Nachricht oder deren Anhang war zu groß und wurde daher entfernt.
 
-You should try compressing any or all of the attachments before sending
-message.
+Bitte versuchen Sie die Anhänge vor dem Senden zu komprimieren.
 
-Due to limitations placed on us by the Regulation of Investigatory Powers
-Act 2000, we were unable to keep a copy of the original attachment.
+Aus datenschutzrechtlichen Gründen halten wir keine Kopie des Originalanhangs
+vor. Bitte bitten Sie den Absender der Nachricht um die Zusendung einer
+virenfreien Datei.
 
-The content filters found this:
+Zu Ihrer Information die Meldung des Virenscanners am $date:
 $report
--- 
+--
 Postmaster
 %org-long-name%
 %web-site%
-
-
