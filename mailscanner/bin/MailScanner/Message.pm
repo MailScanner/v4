@@ -8025,16 +8025,23 @@ sub extract
                        $lines->[1] =~ /\A$FIELD_NAME/o;
  # JKF End mod here
 
-    while(@$lines && $lines->[0] =~ /^($FIELD_NAME|From )/o)
-    {    my $tag  = $1;
-         my $line = shift @$lines;
-         $line   .= shift @$lines
-             while @$lines && $lines->[0] =~ /^[ \t]+/o;
+    while(@$lines)
+    {
+        unless ($lines->[0] =~ /^($FIELD_NAME|From )/o) {
+            if ($lines->[0] =~ /^$/o){
+                last;
+            }
+            shift @$lines;
+            next;
+        }
+        my $tag  = $1;
+        my $line = shift @$lines;
+        $line   .= shift @$lines
+            while @$lines && $lines->[0] =~ /^[ \t]+/o;
 
-         ($tag, $line) = _fmt_line $self, $tag, $line;
+        ($tag, $line) = _fmt_line $self, $tag, $line;
 
-         _insert $self, $tag, $line, -1
-             if defined $line;
+        _insert $self, $tag, $line, -1 if defined $line;
     }
 
     shift @$lines
