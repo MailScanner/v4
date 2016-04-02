@@ -8050,6 +8050,46 @@ sub extract
     $self;
 }
 
+#
+# Over-ride the read function similar to extract but reads from file
+# Only change is my comment below. MAS
+#
+
+sub read
+{   my ($self, $fd) = @_;
+
+    $self->empty;
+
+    my ($tag, $line);
+    my $ln = '';
+    while(1)
+    {   $ln = <$fd>;
+
+        if(defined $ln && defined $line && $ln =~ /\A[ \t]+/o)
+        {   $line .= $ln;
+            next;
+        }
+
+        if(defined $line)
+        {   ($tag, $line) = _fmt_line $self, $tag, $line;
+            _insert $self, $tag, $line, -1
+                if defined $line;
+        }
+
+        # MAS - Change begins here
+        if ( defined $ln && $ln =~ /^($FIELD_NAME|From )/o ) {
+
+            ($tag, $line) = ($1, $ln);
+        } elsif ($ln =~ /^$/) {
+            # Only stop on empty line - just drop a non-header,
+            # non continuation line
+            last;
+        } # MAS End of change
+    }
+
+    $self;
+}
+
 ##
 ## Over-ride the MIME boundary extracting code so that we fail to parse
 ## messages with an empty MIME boundary. Best I can do for now.
