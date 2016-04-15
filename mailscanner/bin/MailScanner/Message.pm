@@ -3408,6 +3408,7 @@ sub SafePipe {
 # Return 1 if an error occurred, else 0.
 # Return 0 on success.
 # Return "password" if a member was password-protected.
+my $zipadd = 0;
 sub UnpackZip {
   my($this, $zipname, $explodeinto, $allowpasswords, $insistpasswords, $onlycheckencryption, $touchfiles) = @_;
 
@@ -3446,8 +3447,9 @@ sub UnpackZip {
     $name = $member->fileName();
     # Trim off any leading directory path
     $name =~ s#^.*/##;
-    $safename = $this->MakeNameSafe('z'.$name, $explodeinto);
-    #print STDERR "MakeNameSafe(z + $name) = $safename\n";
+    $zipadd = ($zipadd + 1) % 100;
+    $safename = $this->MakeNameSafe('z'.$zipadd.$name, $explodeinto);
+    #print STDERR "MakeNameSafe(z + $zipadd + $name) = $safename\n";
     $this->{file2parent}{$name} = $zipname;
     $this->{file2parent}{$safename} = $zipname;
     $this->{file2safefile}{$name} = $safename;
