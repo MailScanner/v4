@@ -30,7 +30,7 @@ Installation instructions for FreeBSD
 2. Run the ./install.sh script.
 		
 
-3. Edit /opt/MailScanner/etc/MailScanner.conf
+3. Edit /etc/MailScanner/MailScanner.conf
 
    Replace /usr/lib/sendmail with /usr/sbin/sendmail for Sendmail & Sendmail2
 
@@ -47,22 +47,22 @@ Installation instructions for FreeBSD
    Add the following text to the end of the file
 
    # MailScanner starts here
-   mta_start_script="/opt/MailScanner/bin/rc.MailScanner"
+   mta_start_script="/usr/sbin/rc.MailScanner"
    MailScanner_incoming_queue="/var/spool/mqueue.in"
    MailScanner_queue_time="15m"
-   MailScanner_check="/opt/MailScanner/bin/check_mailscanner"
+   MailScanner_check="/usr/sbin/check_mailscanner"
    MailScanner_pidfile="/opt/MailScanner/var/MailScanner.pid"
    # MailScanner ends here
 
-6. Setup /opt/MailScanner/bin/rc.MailScanner
+6. Setup /usr/sbin/rc.MailScanner
 
-   cp ./FreeBSD/rc.MailScanner /opt/MailScanner/bin/rc.MailScanner
-   chmod a=rx /opt/MailScanner/bin/rc.MailScanner
+   cp ./FreeBSD/rc.MailScanner /usr/sbin/rc.MailScanner
+   chmod a=rx /usr/sbin/rc.MailScanner
 
 MailScanner should now be started when the system boots.
 To start and stop MailScanner manually, use
 
-   /opt/MailScanner/bin/rc.MailScanner start
+   /usr/sbin/rc.MailScanner start
 and
-   /opt/MailScanner/bin/rc.MailScanner stop
+   /usr/sbin/rc.MailScanner stop
 

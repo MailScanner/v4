@@ -240,7 +240,7 @@ sub Value {
 
   #print STDERR "*** 5 $name\n" if $name eq 'languagestrings';
 
-    #return '/etc/MailScanner/reports/cz/languages.conf' if $name eq 'languagestrings';
+    #return '/usr/share/MailScanner/reports/cz/languages.conf' if $name eq 'languagestrings';
   my($directiona, $iporaddra, $regexp2a, $valuea, @results);
   if ($category =~ /first/i) {
 
@@ -254,7 +254,7 @@ sub Value {
 
     # If there is no ruleset either, then return the default
     #print STDERR "There are rules for languagestrings\n" if $name eq 'languagestrings';
-    #return '/etc/MailScanner/reports/cz/languages.conf' if $name eq 'languagestrings';
+    #return '/usr/share/MailScanner/reports/cz/languages.conf' if $name eq 'languagestrings';
     return $Defaults{$name} unless $RuleScalars{$name};
 
     foreach $rule (@{$rulelist}) {

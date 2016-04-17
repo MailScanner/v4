@@ -69,11 +69,11 @@ if [ -f "/etc/MailScanner/MailScanner.conf" ]; then
 		rm -rf /etc/MailScanner/wrapper
 	fi
 
-	# /etc/MailScanner/reports
-	if [ -d "/etc/MailScanner/reports" -a ! -L "/etc/MailScanner/reports" ]; then
+	# /usr/share/MailScanner/reports
+	if [ -d "/usr/share/MailScanner/reports" -a ! -L "/usr/share/MailScanner/reports" ]; then
 		mkdir -p /usr/share/MailScanner/reports/
-		cp -rf /etc/MailScanner/reports/* /usr/share/MailScanner/reports/
-		rm -rf /etc/MailScanner/reports/
+		cp -rf /usr/share/MailScanner/reports/* /usr/share/MailScanner/reports/
+		rm -rf /usr/share/MailScanner/reports/
 	fi
 	
 	# /etc/MailScanner/CustomConfig.pm

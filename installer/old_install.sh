@@ -367,13 +367,13 @@ SADIR=`$PERL -MMail::SpamAssassin -e 'print Mail::SpamAssassin->new->first_exist
 if [ "x$SADIR" = "x" ]; then
   echo No SpamAssassin installation found.
 else
-  if [ -d /opt/MailScanner/etc ]; then
+  if [ -d /etc/MailScanner ]; then
     if [ -e ${SADIR}/mailscanner.cf ]; then
       echo Leaving mailscanner.cf link or file alone.
     else
-      ln -s -f /opt/MailScanner/etc/spam.assassin.prefs.conf ${SADIR}/mailscanner.cf
+      ln -s -f /etc/MailScanner/spam.assassin.prefs.conf ${SADIR}/mailscanner.cf
     fi
-    echo Good, the link was created to /opt/MailScanner/etc
+    echo Good, the link was created to /etc/MailScanner
   elif [ -d /usr/local/MailScanner/etc ]; then
     if [ -e ${SADIR}/mailscanner.cf ]; then
       echo Leaving mailscanner.cf link or file alone.
@@ -410,12 +410,12 @@ timewait 5
 echo
 echo 'I strongly recommend you create a few root cron jobs:'
 echo
-echo '37      5 * * * /opt/MailScanner/bin/update_phishing_sites'
-echo '07      * * * * /opt/MailScanner/bin/update_bad_phishing_sites'
-#echo '37      4 * * * /opt/MailScanner/bin/clean.SA.cache'
-echo '58     23 * * * /opt/MailScanner/bin/clean.quarantine'
-echo '42      * * * * /opt/MailScanner/bin/update_virus_scanners'
-echo '3,23,43 * * * * /opt/MailScanner/bin/check_mailscanner'
+echo '37      5 * * * /usr/sbin/update_phishing_sites'
+echo '07      * * * * /usr/sbin/update_bad_phishing_sites'
+#echo '37      4 * * * /usr/sbin/clean.SA.cache'
+echo '58     23 * * * /usr/sbin/clean.quarantine'
+echo '42      * * * * /usr/sbin/update_virus_scanners'
+echo '3,23,43 * * * * /usr/sbin/check_mailscanner'
 echo
 
 timewait 10

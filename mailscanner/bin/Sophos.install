@@ -53,8 +53,8 @@ else
     MSETC=/usr/local/MailScanner/etc/virus.scanners.conf
   elif [ -f /usr/local/etc/virus.scanners.conf ]; then
     MSETC=/usr/local/etc/virus.scanners.conf
-  elif [ -f /opt/MailScanner/etc/virus.scanners.conf ]; then
-    MSETC=/opt/MailScanner/etc/virus.scanners.conf
+  elif [ -f /etc/MailScanner/virus.scanners.conf ]; then
+    MSETC=/etc/MailScanner/virus.scanners.conf
   else
     echo 'Cannot find your virus.scanners.conf file.'
     echo 'When this has finished, you will have to edit it'
@@ -144,7 +144,7 @@ fi
 
 
 SOPHOS=/usr/local/Sophos
-SCRIPTS=/opt/MailScanner/lib
+SCRIPTS=/var/lib/MailScanner
 COMPD=linux.intel.libc6.tar.Z
 DISTRIB=linux.intel.libc6.tar
 

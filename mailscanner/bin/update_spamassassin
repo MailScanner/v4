@@ -9,9 +9,7 @@
 SAUPDATE=/usr/bin/sa-update
 SACOMPILE=/usr/bin/sa-compile
 SAUPDATEARGS=""
-if [ -f /etc/sysconfig/update_spamassassin ] ; then
-        . /etc/sysconfig/update_spamassassin
-fi
+
 export SAUPDATE
 export SACOMPILE
 export SAUPDATEARGS

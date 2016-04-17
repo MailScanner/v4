@@ -171,11 +171,11 @@ mailscannerinstall () {
     echo 'you have made to the old versions.'
     echo
   fi
-  rpmnew=`ls /etc/MailScanner/reports/*/languages.conf.rpmnew 2>/dev/null | wc -w`
+  rpmnew=`ls /usr/share/MailScanner/reports/*/languages.conf.rpmnew 2>/dev/null | wc -w`
   if [ $rpmnew -ne 0 ]; then
     echo
     echo 'There are new versions of the'
-    echo '/etc/MailScanner/reports/.../langauges.conf files.'
+    echo '/usr/share/MailScanner/reports/.../langauges.conf files.'
     echo 'You should rename each of these over the top of the old'
     echo 'version of each file, but remember to copy any changes'
     echo 'you have made to the old versions.'

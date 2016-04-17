@@ -257,7 +257,7 @@ mailscannerinstall () {
     fi
     cp "$TNEFBIN" tnef
     echo 'I have setup tnef (which decodes Microsoft Outlook Rich Text attachments)'
-    echo 'in the /opt/MailScanner/bin directory.'
+    echo 'in the /usr/sbin directory.'
   else
     echo 'For some reason the tnef decoder did not compile properly.'
     echo 'As an alternative, in MailScanner.conf set'

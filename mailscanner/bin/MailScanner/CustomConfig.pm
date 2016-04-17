@@ -765,7 +765,7 @@ my($hostname);
 
 my $ConfFile = $ARGV[0];
 $ConfFile = $ARGV[1] if $ConfFile =~ /^-+/i;
-$ConfFile = '/opt/MailScanner/etc/MailScanner.conf' unless $ConfFile && -f $ConfFile;
+$ConfFile = '/etc/MailScanner/MailScanner.conf' unless $ConfFile && -f $ConfFile;
 
 my ($AccessDB, $Refusal, $my_mta); # Generalized here for Multiple MTA support
 $my_mta = lc(MailScanner::Config::QuickPeek($ConfFile, 'mta')) if $ConfFile &&
@@ -1645,7 +1645,7 @@ __DATA__
 #
 #
 
-#!/usr/bin/perl -U -I/usr/share/MailScanner
+#!/usr/bin/perl -U -I /usr/share/MailScanner/perl
 
 #
 #   MailScanner - SMTP E-Mail Virus Scanner
@@ -1675,7 +1675,7 @@ __DATA__
 #      SO17 1BJ
 #      United Kingdom
 #
-push @INC,"/usr/share/MailScanner","/opt/MailScanner/lib";
+push @INC,"/usr/share/MailScanner","/var/lib/MailScanner";
 use FileHandle;
 use Fcntl qw(:DEFAULT :flock);
 use Sys::Syslog;

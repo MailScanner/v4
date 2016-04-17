@@ -42,8 +42,8 @@
 # unless MailScanner actually had to be started.
 
 process=MailScanner
-msbindir=/opt/MailScanner/bin
-config=/opt/MailScanner/etc/MailScanner.conf
+msbindir=/usr/sbin
+config=/etc/MailScanner/MailScanner.conf
 
 # These seem to get put all over the shop...
 PATH=/usr/bin:/bin
@@ -119,7 +119,7 @@ if [ "x$pid" = "x" ]; then
   ulimit -n 2000 >/dev/null 2>&1
   # Restart it
   PATH=${msbindir}:$PATH
-  echo -n 'Starting MailScanner...'
+  echo -n 'Starting MailScanner ...'
   cd $msbindir
   $process $config 2>/dev/null || RETVALUE=" Failed."
   echo "$RETVALUE"

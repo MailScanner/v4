@@ -38,7 +38,7 @@
 
 # To test from the command line change to the directory you wish to
 # check and issue this command (change paths to reflect your install)
-# "/opt/MailScanner/lib/panda-wrapper /usr -nsb -eng -aex -nso -aut -cmp ."
+# "/var/lib/MailScanner/panda-wrapper /usr -nsb -eng -aex -nso -aut -cmp ."
 # Make sure your testing dir is one directory deep (don't for get the . BTW)
 # example
 # test+

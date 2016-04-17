@@ -31,7 +31,7 @@ fi
 # if /var/lock/subsys is missing
 [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
 
-[ -f /opt/MailScanner/bin/check_mailscanner ] || exit 0
+[ -f /usr/sbin/check_mailscanner ] || exit 0
 [ -f /usr/sbin/sendmail ] || exit 0
 
 # Get a string of all the PIDs of MailScanner
@@ -87,7 +87,7 @@ case "$1" in
         echo -n '         outgoing sendmail: '
 	StartOutSendmail
 	echo -n '         MailScanner:       '
-	/opt/MailScanner/bin/check_mailscanner >/dev/null
+	/usr/sbin/check_mailscanner >/dev/null
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/MailScanner
 	success

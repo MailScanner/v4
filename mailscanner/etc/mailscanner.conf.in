@@ -67,7 +67,7 @@ Queue Scan Interval = 5
 #    Example: /var/spool/mqueue.in/*
 # 3. The name of a file containing a list of directory names,
 #    which can in turn contain wildcards.
-#    Example: /opt/MailScanner/etc/mqueue.in.list.conf
+#    Example: /etc/MailScanner/mqueue.in.list.conf
 #
 Incoming Queue Dir = @mtainqueue@
 
@@ -972,7 +972,7 @@ SpamAssassin Install Prefix =
 # /etc/mail/spamassassin, and maybe others.
 # If this is set then it adds to the list of places that are searched;
 # otherwise it has no effect.
-#SpamAssassin Local Rules Dir = /opt/MailScanner/etc/mail/spamassassin
+#SpamAssassin Local Rules Dir = /etc/MailScanner/mail/spamassassin
 SpamAssassin Local Rules Dir =
 
 # The default rules are searched for here, and in prefix/share/spamassassin,

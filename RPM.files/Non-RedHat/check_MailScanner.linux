@@ -36,8 +36,8 @@
 # place.
 
 process=mailscanner
-virusdir=/opt/MailScanner/bin
-config=/opt/MailScanner/etc/mailscanner.conf
+virusdir=/usr/sbin
+config=/etc/MailScanner/mailscanner.conf
 
 pid=`/bin/ps axww |
      /bin/grep '[ ]'$virusdir/$process |

@@ -12,5 +12,5 @@ LOCKFILE=/var/lock/Sophos.update.lock
 [ -f $LOCKFILE ] && exit 0
 trap "rm -f $LOCKFILE" EXIT
 touch $LOCKFILE
-/opt/MailScanner/lib/sophos-autoupdate
+/var/lib/MailScanner/sophos-autoupdate
 exit 0

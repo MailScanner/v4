@@ -43,17 +43,17 @@
 #
 
 # Set the directory containing all the reports in the required language
-%report-dir% = /opt/MailScanner/etc/reports/en
+%report-dir% = /usr/share/MailScanner/reports/en
 
 # Configuration directory containing this file
-%etc-dir% = /opt/MailScanner/etc
+%etc-dir% = /etc/MailScanner
 
 # Rulesets directory containing your ".rules" files
-%rules-dir% = /opt/MailScanner/etc/rules
+%rules-dir% = /etc/MailScanner/rules
 
 # Configuration directory containing files related to MCP
 # (Text Content Protection)
-%mcp-dir% = /opt/MailScanner/etc/mcp
+%mcp-dir% = /etc/MailScanner/mcp
 
 #
 # System settings
@@ -98,7 +98,7 @@ Queue Scan Interval = 5
 #    Example: /var/spool/mqueue.in/*
 # 3. The name of a file containing a list of directory names,
 #    which can in turn contain wildcards.
-#    Example: /opt/MailScanner/etc/mqueue.in.list.conf
+#    Example: /etc/MailScanner/mqueue.in.list.conf
 #
 Incoming Queue Dir = /var/spool/mqueue.in
 
@@ -181,7 +181,7 @@ Deliver Unparsable TNEF = no
 # may be. It helps protect against Denial Of Service attacks in TNEF files.
 #TNEF Expander    = internal
 # This can also be the filename of a ruleset.
-TNEF Expander = /opt/MailScanner/bin/tnef --maxsize=100000000
+TNEF Expander = /usr/sbin/tnef --maxsize=100000000
 
 # The maximum length of time the TNEF Expander is allowed to run for 1 message.
 # (in seconds)
@@ -1131,7 +1131,7 @@ SpamAssassin Install Prefix =
 # /etc/mail/spamassassin, and maybe others.
 # If this is set then it adds to the list of places that are searched;
 # otherwise it has no effect.
-#SpamAssassin Local Rules Dir = /opt/MailScanner/etc/mail/spamassassin
+#SpamAssassin Local Rules Dir = /etc/MailScanner/mail/spamassassin
 SpamAssassin Local Rules Dir =
 
 # The default rules are searched for here, and in prefix/share/spamassassin,

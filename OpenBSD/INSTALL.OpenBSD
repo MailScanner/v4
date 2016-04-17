@@ -18,13 +18,13 @@ First Time Installation Instructions for OpenBSD
 3. In /etc/rc.local add:
 
 	echo -n ' sendmail'; /usr/sbin/sendmail -q15 >/dev/null 2>&1
-	echo -n ' MailScanner'; /opt/MailScanner/bin/check_mailscanner >/dev/null 2>&1
+	echo -n ' MailScanner'; /usr/sbin/check_mailscanner >/dev/null 2>&1
 
 4. Add link to sed so change to SystemsDefs.pm isn't required:
 
 	sudo ln -s /usr/bin/sed /bin/sed
 
-5. Edit /opt/MailScanner/etc/MailScanner.conf:
+5. Edit /etc/MailScanner/MailScanner.conf:
 
 	Sendmail = /usr/sbin/sendmail
 	Sendmail2 = /usr/sbin/sendmail
@@ -32,7 +32,7 @@ First Time Installation Instructions for OpenBSD
 
 6. Start MailScanner:
 
-	sudo /opt/MailScanner/bin/check_mailscanner
+	sudo /usr/sbin/check_mailscanner
     
 7. Add cron jobs as recommended by install.sh:
 
@@ -52,11 +52,11 @@ Upgrade Instructions for OpenBSD
 
 	cd /opt/MailScanner-%NEW_VERSION%/etc
 	mv MailScanner.conf MailScanner.conf.default
-	../bin/upgrade_MailScanner_conf /opt/MailScanner/etc/MailScanner.conf MailScanner.conf.default > MailScanner.conf
+	../bin/upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf MailScanner.conf.default > MailScanner.conf
     
     cd reports/%LANGUAGE%
     mv languages.conf languages.conf.default
-    ../../../bin/upgrade_languages_conf /opt/MailScanner/etc/reports/%LANGUAGE%/languages.conf languages.conf.default > languages.conf
+    ../../../bin/upgrade_languages_conf /usr/share/MailScanner/reports/%LANGUAGE%/languages.conf languages.conf.default > languages.conf
     
     # Copy any other configuration files (e.g. filename.rules.conf, rules/*, reports/%LANGUAGE%/*)
 
@@ -64,10 +64,10 @@ Upgrade Instructions for OpenBSD
 
 	sudo pkill -f MailScanner
 	sudo ln -fhs /opt/MailScanner-%NEW_VERSION% /opt/MailScanner
-	sudo /opt/MailScanner/bin/check_mailscanner
+	sudo /usr/sbin/check_mailscanner
 
 4. If problems occur after upgrading, rollback to previous working version:
 
 	sudo pkill -f MailScanner
 	sudo ln -fhs /opt/MailScanner-%OLD_VERSION% /opt/MailScanner
-	sudo /opt/MailScanner/bin/check_mailscanner
+	sudo /usr/sbin/check_mailscanner

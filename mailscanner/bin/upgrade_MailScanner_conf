@@ -75,7 +75,7 @@ If you are using the tar distribution so that the old version is in
 /opt/MailScanner and the new one is in /opt/MailScanner.new then:
 
 cd /opt/MailScanner.new/etc
-../bin/upgrade_MailScanner_conf /opt/MailScanner/etc/MailScanner.conf /opt/MailScanner.new/etc/MailScanner.conf > MailScanner.new
+../bin/upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf /opt/MailScanner.new/etc/MailScanner.conf > MailScanner.new
 mv -f MailScanner.conf MailScanner.old
 mv -f MailScanner.new  MailScanner.conf
 
@@ -91,22 +91,8 @@ EOU
     print STDERR <<EOLANG;
 Usage:
 
-RPM
-===
-If you are using the RPM distributions then try this:
-
-cd /etc/MailScanner/reports/en
+cd /usr/share/MailScanner/reports/en
 upgrade_languages_conf languages.conf languages.conf.rpmnew > languages.new
-mv -f languages.conf languages.old
-mv -f languages.new  languages.conf
-
-TAR
-===
-If you are using the tar distribution so that the old version is in
-/opt/MailScanner and the new one is in /opt/MailScanner.new then:
-
-cd /opt/MailScanner.new/etc/reports/en
-../../../bin/upgrade_languages_conf /opt/MailScanner/etc/reports/en/languages.conf /opt/MailScanner.new/etc/reports/en/languages.conf > languages.new
 mv -f languages.conf languages.old
 mv -f languages.new  languages.conf
 

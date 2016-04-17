@@ -520,7 +520,7 @@
   Many thanks to David Lee at Durham University, UK for the ideas behind
   this new system.
 3 New script "processing_messages_alert" which will be installed in /usr/sbin
-  on Linux systems and in /opt/MailScanner/bin on other systems. Also, in
+  on Linux systems and in /usr/sbin on other systems. Also, in
   Linux, this is enabled as an hourly cron job. It executes the command
   "MailScanner --processing" which prints the contents of the "messages being
   processed" database, excluding any messages which are being processed for

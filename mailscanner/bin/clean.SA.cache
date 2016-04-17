@@ -7,8 +7,7 @@ unless (eval { require "DBD/SQLite.pm" }) {
   exit 0;
 }
 
-#$cachefile = `perl -n -e 'print "$_" if chomp && s/^\s*SpamAssassin\s*Cache\s*Database\s*File\s*=\s*(\S+)/$1/i' /etc/MailScanner/MailScanner.conf`;
-$cachefile = `/opt/MailScanner/bin/Quick.Peek spamassassincachedatabasefile /etc/MailScanner/MailScanner.conf`;
+$cachefile = `/usr/sbin/Quick.Peek spamassassincachedatabasefile /etc/MailScanner/MailScanner.conf`;
 chomp $cachefile;
 $cachefile = '/var/spool/MailScanner/incoming/SpamAssassin.cache.db' unless $cachefile;
 

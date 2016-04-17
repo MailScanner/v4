@@ -1070,7 +1070,7 @@ Ignored Web Bug Filenames = spacer pixel.gif pixel.png',
     Example: /var/spool/mqueue.in/*
  3. The name of a file containing a list of directory names,
     which can in turn contain wildcards.
-    Example: /opt/MailScanner/etc/mqueue.in.list.conf
+    Example: /etc/MailScanner/mqueue.in.list.conf
 
  If you are using sendmail and have your queues split into qf, df, xf
  directories, then just specify the main directory, do not give me the
@@ -2717,7 +2717,7 @@ SpamAssassin Install Prefix = /opt/MailScanner',
  the file into mailscanner.cf in the new directory.
  If this is set then it replaces the list of places that are searched;
  otherwise it has no effect.
-SpamAssassin Local Rules Dir = /opt/MailScanner/etc/mail/spamassassin',
+SpamAssassin Local Rules Dir = /etc/MailScanner/mail/spamassassin',
     'value' => '',
   ),
   'spamassassinlocalstatedir' => 
@@ -3229,7 +3229,7 @@ SpamAssassin User State Dir = /var/spool/MailScanner/spamassassin',
  may be. It helps protect against Denial Of Service attacks in TNEF files.
  This can also be the filename of a ruleset.
 TNEF Expander  = internal',
-    'value' => ' /opt/MailScanner/bin/tnef --maxsize=100000000',
+    'value' => ' /usr/sbin/tnef --maxsize=100000000',
   ),
   'tneftimeout' => 
   array (

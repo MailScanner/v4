@@ -195,31 +195,31 @@ cp $DEVBASEDIR/mailscanner/bin/MailScanner/CustomFunctions/*.pm 	$WORK/usr/share
 
 # set correct paths
 perl -pi - $WORK/usr/share/MailScanner/perl/MailScanner/ConfigDefs.pl $WORK/usr/share/MailScanner/perl/MailScanner/CustomConfig.pm $WORK/etc/MailScanner/MailScanner.conf $WORK/etc/MailScanner/virus.scanners.conf $WORK/usr/sbin/MailScanner $WORK/usr/sbin/update_virus_scanners $WORK/usr/sbin/update_phishing_sites $WORK/usr/sbin/update_bad_phishing_sites $WORK/usr/sbin/update_bad_phishing_emails <<EOF
-s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
-s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
+s+/etc/MailScanner/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/etc/MailScanner/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
-s./opt/MailScanner/bin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
-s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
-s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
-s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
-s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./var/lib/MailScanner.;
-s./opt/MailScanner/bin./usr/sbin.;
+s./usr/sbin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
+s./usr/sbin/tnef./usr/bin/tnef.;
+s#/usr/sbin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./usr/share/MailScanner/reports./usr/share/MailScanner/reports.;
+s./etc/MailScanner/rules./etc/MailScanner/rules.;
+s./etc/MailScanner./etc/MailScanner.;
+s./var/lib/MailScanner./var/lib/MailScanner.;
+s./usr/sbin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 s+Clamd Socket = /tmp/clamd.socket+Clamd Socket = /var/run/clamav/clamd.ctl+;
 EOF
 perl -pi - $WORK/usr/sbin/check_mailscanner $WORK/usr/sbin/mailscanner_create_locks $WORK/usr/sbin/processing_messages_alert <<EOF
-s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/etc/MailScanner/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s./opt/MailScanner/var./var/run.;
-s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
-s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
-s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
-s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
-s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./var/lib/MailScanner.;
-s./opt/MailScanner/bin./usr/sbin.;
+s./usr/sbin/tnef./usr/bin/tnef.;
+s#/usr/sbin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./usr/share/MailScanner/reports./usr/share/MailScanner/reports.;
+s./etc/MailScanner/rules./etc/MailScanner/rules.;
+s./etc/MailScanner/mcp./etc/MailScanner/mcp.;
+s./etc/MailScanner./etc/MailScanner.;
+s./var/lib/MailScanner./var/lib/MailScanner.;
+s./usr/sbin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 

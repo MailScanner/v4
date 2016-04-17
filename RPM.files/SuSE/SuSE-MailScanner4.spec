@@ -46,30 +46,30 @@ dependency problems.
 
 %install
 perl -pi - bin/MailScanner/ConfigDefs.pl bin/MailScanner/CustomConfig.pm etc/MailScanner.conf etc/virus.scanners.conf bin/mailscanner bin/Sophos.install bin/clean.SA.cache bin/update_virus_scanners bin/update_phishing_sites bin/update_bad_phishing_sites <<EOF
-s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
-s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
+s+/etc/MailScanner/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/etc/MailScanner/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
-s./opt/MailScanner/bin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
-s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
-s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
-s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
-s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/share/MailScanner.;
-s./opt/MailScanner/bin./usr/share/MailScanner.;
+s./usr/sbin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
+s./usr/sbin/tnef./usr/bin/tnef.;
+s#/usr/sbin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./usr/share/MailScanner/reports./usr/share/MailScanner/reports.;
+s./etc/MailScanner/rules./etc/MailScanner/rules.;
+s./etc/MailScanner./etc/MailScanner.;
+s./var/lib/MailScanner./usr/share/MailScanner.;
+s./usr/sbin./usr/share/MailScanner.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 perl -pi - check_MailScanner bin/mailscanner_create_locks bin/processing_messages_alert <<EOF
-s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/etc/MailScanner/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s./opt/MailScanner/var./var/run.;
-s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
-s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./etc/MailScanner/reports.;
-s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
-s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
-s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./usr/share/MailScanner.;
-s./opt/MailScanner/bin./usr/sbin.;
+s./usr/sbin/tnef./usr/bin/tnef.;
+s#/usr/sbin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./usr/share/MailScanner/reports./usr/share/MailScanner/reports.;
+s./etc/MailScanner/rules./etc/MailScanner/rules.;
+s./etc/MailScanner/mcp./etc/MailScanner/mcp.;
+s./etc/MailScanner./etc/MailScanner.;
+s./var/lib/MailScanner./usr/share/MailScanner.;
+s./usr/sbin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 #gzip doc/MailScanner.8
@@ -83,22 +83,22 @@ mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man5
 #mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/man1
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/conf.d
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/de
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/en
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/cy+en
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/fr
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/es
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/nl
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/pt_br
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/dk
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/sk
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/it
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/ro
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/se
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/cz
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/hu
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/reports/ca
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/de
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/en
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/cy+en
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/fr
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/es
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/nl
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/pt_br
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/dk
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/sk
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/it
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/ro
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/se
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/cz
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/hu
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/ca
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/rules
 mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/mcp
 # mkdir -p ${RPM_BUILD_ROOT}/usr/lib/MailScanner/
@@ -204,7 +204,7 @@ for lang in en cy+en de fr es nl pt_br sk dk it ro se cz hu ca
 do
   while read f
   do
-    install etc/reports/$lang/$f ${RPM_BUILD_ROOT}/etc/MailScanner/reports/$lang
+    install etc/reports/$lang/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/$lang
   done << EOF
 deleted.content.message.txt
 deleted.filename.message.txt
@@ -503,411 +503,411 @@ exit 0
 %config(noreplace) /etc/MailScanner/mcp/mcp.spam.assassin.prefs.conf
 %config(noreplace) /etc/MailScanner/mcp/v320.pre
 
-%config(noreplace) /etc/MailScanner/reports/en/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/en/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/en/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/en/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/en/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/en/languages.conf
-%config(noreplace) /etc/MailScanner/reports/en/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/cy+en/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/cy+en/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/languages.conf
-%config(noreplace) /etc/MailScanner/reports/cy+en/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/de/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/de/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/de/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/de/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/de/languages.conf
-%config(noreplace) /etc/MailScanner/reports/de/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/fr/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/fr/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/fr/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/fr/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/fr/languages.conf
-%config(noreplace) /etc/MailScanner/reports/fr/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/es/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/es/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/es/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/es/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/es/languages.conf
-%config(noreplace) /etc/MailScanner/reports/es/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/nl/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/nl/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/nl/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/nl/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/nl/languages.conf
-%config(noreplace) /etc/MailScanner/reports/nl/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/pt_br/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/pt_br/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/languages.conf
-%config(noreplace) /etc/MailScanner/reports/pt_br/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/sk/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/sk/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/sk/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/sk/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/sk/languages.conf
-%config(noreplace) /etc/MailScanner/reports/sk/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/dk/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/dk/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/dk/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/dk/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/dk/languages.conf
-%config(noreplace) /etc/MailScanner/reports/dk/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/it/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/it/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/it/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/it/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/it/languages.conf
-%config(noreplace) /etc/MailScanner/reports/it/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/ro/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/ro/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/ro/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/ro/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/ro/languages.conf
-%config(noreplace) /etc/MailScanner/reports/ro/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/se/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/se/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/se/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/se/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/se/languages.conf
-%config(noreplace) /etc/MailScanner/reports/se/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/cz/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/cz/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/cz/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/cz/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/cz/languages.conf
-%config(noreplace) /etc/MailScanner/reports/cz/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/hu/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/hu/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/hu/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/hu/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/hu/languages.conf
-%config(noreplace) /etc/MailScanner/reports/hu/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/deleted.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/stored.content.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.content.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/deleted.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/deleted.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/disinfected.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/inline.sig.html
-%config(noreplace) /etc/MailScanner/reports/ca/inline.sig.txt
-%config(noreplace) /etc/MailScanner/reports/ca/inline.spam.warning.txt
-%config(noreplace) /etc/MailScanner/reports/ca/inline.warning.html
-%config(noreplace) /etc/MailScanner/reports/ca/inline.warning.txt
-%config(noreplace) /etc/MailScanner/reports/ca/languages.conf
-%config(noreplace) /etc/MailScanner/reports/ca/recipient.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/recipient.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/rejection.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.error.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.filename.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.spam.rbl.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.spam.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.spam.sa.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.mcp.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.virus.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/stored.filename.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/stored.virus.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/de/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/fr/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/es/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/nl/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/sk/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/dk/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/it/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/ro/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/se/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/cz/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/hu/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/ca/sender.size.report.txt
-%config(noreplace) /etc/MailScanner/reports/en/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/en/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/cy+en/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/de/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/fr/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/es/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/nl/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/pt_br/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/sk/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/dk/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/it/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/ro/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/se/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/cz/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/hu/stored.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/deleted.size.message.txt
-%config(noreplace) /etc/MailScanner/reports/ca/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/en/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/de/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/fr/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/fr/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/fr/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/es/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/es/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/es/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/nl/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/nl/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/nl/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/sk/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/sk/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/sk/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/dk/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/dk/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/dk/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/it/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/it/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/it/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/ro/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/ro/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/ro/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/se/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/se/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/se/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/cz/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/cz/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/cz/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/hu/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/hu/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/hu/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/deleted.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/stored.content.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.content.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/ca/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/inline.spam.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/ca/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/languages.conf
+%config(noreplace) /usr/share/MailScanner/reports/ca/recipient.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/recipient.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/rejection.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.mcp.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/sender.size.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cy+en/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/fr/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/es/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/nl/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/pt_br/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/sk/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/dk/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/it/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ro/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/se/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/cz/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/hu/stored.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/deleted.size.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/ca/stored.size.message.txt
 
 /etc/MailScanner/rules/EXAMPLES
 /etc/MailScanner/rules/README

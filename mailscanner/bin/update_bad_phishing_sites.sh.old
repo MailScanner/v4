@@ -43,8 +43,8 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/etc:/usr/local/bin:/usr/sfw/bin
 export PATH
 
-if [ -d /opt/MailScanner/etc ]; then
-    cd /opt/MailScanner/etc
+if [ -d /etc/MailScanner ]; then
+    cd /etc/MailScanner
 else
     logger -p mail.warn -t update.bad.phishing.sites Cannot find MailScanner configuration directory, update failed.
     echo Cannot find MailScanner configuration directory.

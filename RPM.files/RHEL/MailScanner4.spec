@@ -51,30 +51,30 @@ based Linux distributions.
 
 %install
 perl -pi - bin/MailScanner/ConfigDefs.pl bin/MailScanner/CustomConfig.pm etc/MailScanner.conf etc/virus.scanners.conf bin/mailscanner bin/clean.SA.cache bin/update_virus_scanners bin/update_phishing_sites bin/update_bad_phishing_sites <<EOF
-s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
-s+/opt/MailScanner/etc/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
+s+/etc/MailScanner/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/etc/MailScanner/virus.scanners.conf+/etc/MailScanner/virus.scanners.conf+;
 s./opt/MailScanner/var./var/run.;
-s./opt/MailScanner/bin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
-s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
-s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
-s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
-s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./var/lib/MailScanner.;
-s./opt/MailScanner/bin./usr/sbin.;
+s./usr/sbin/mailscanner_create_locks./usr/sbin/mailscanner_create_locks.;
+s./usr/sbin/tnef./usr/bin/tnef.;
+s#/usr/sbin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./usr/share/MailScanner/reports./usr/share/MailScanner/reports.;
+s./etc/MailScanner/rules./etc/MailScanner/rules.;
+s./etc/MailScanner./etc/MailScanner.;
+s./var/lib/MailScanner./var/lib/MailScanner.;
+s./usr/sbin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 perl -pi - check_MailScanner bin/mailscanner_create_locks bin/processing_messages_alert <<EOF
-s+/opt/MailScanner/etc/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
+s+/etc/MailScanner/mailscanner.conf+/etc/MailScanner/MailScanner.conf+;
 s./opt/MailScanner/var./var/run.;
-s./opt/MailScanner/bin/tnef./usr/bin/tnef.;
-s#/opt/MailScanner/bin/Quick.Peek#/usr/sbin/Quick.Peek#;
-s./opt/MailScanner/etc/reports./usr/share/MailScanner/reports.;
-s./opt/MailScanner/etc/rules./etc/MailScanner/rules.;
-s./opt/MailScanner/etc/mcp./etc/MailScanner/mcp.;
-s./opt/MailScanner/etc./etc/MailScanner.;
-s./opt/MailScanner/lib./var/lib/MailScanner.;
-s./opt/MailScanner/bin./usr/sbin.;
+s./usr/sbin/tnef./usr/bin/tnef.;
+s#/usr/sbin/Quick.Peek#/usr/sbin/Quick.Peek#;
+s./usr/share/MailScanner/reports./usr/share/MailScanner/reports.;
+s./etc/MailScanner/rules./etc/MailScanner/rules.;
+s./etc/MailScanner/mcp./etc/MailScanner/mcp.;
+s./etc/MailScanner./etc/MailScanner.;
+s./var/lib/MailScanner./var/lib/MailScanner.;
+s./usr/sbin./usr/sbin.;
 s./usr/lib/sendmail./usr/sbin/sendmail.;
 EOF
 #gzip doc/MailScanner.8

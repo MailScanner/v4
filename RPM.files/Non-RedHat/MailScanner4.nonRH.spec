@@ -44,13 +44,13 @@ mkdir -p ${RPM_BUILD_ROOT}/etc/cron.hourly
 mkdir -p ${RPM_BUILD_ROOT}/etc/cron.daily
 mkdir -p ${RPM_BUILD_ROOT}/etc/sysconfig
 mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/bin
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/bin/MailScanner
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/etc
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/etc/rules
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/etc/reports
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/etc/reports/de
-mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/etc/reports/en
+mkdir -p ${RPM_BUILD_ROOT}/usr/sbin
+mkdir -p ${RPM_BUILD_ROOT}/usr/sbin/MailScanner
+mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner
+mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/rules
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/de
+mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/en
 mkdir -p ${RPM_BUILD_ROOT}/opt/MailScanner/var
 mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner
 mkdir -p ${RPM_BUILD_ROOT}/var/spool/MailScanner/incoming
@@ -72,20 +72,20 @@ install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/Sophos.autoupdat
 gzip -c ${CVS_ROOT}/RPM.files/Non-RedHat/MailScanner.8 > ${RPM_BUILD_ROOT}/usr/share/man/man8/MailScanner.8.gz
 install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/COPYING     ${RPM_BUILD_ROOT}/opt/MailScanner
 
-# /opt/MailScanner/bin
-install -m 755 -g root -o root ${SRC_DIR}/bin/mailscanner ${RPM_BUILD_ROOT}/opt/MailScanner/bin
-install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/check_MailScanner.linux ${RPM_BUILD_ROOT}/opt/MailScanner/bin/check_MailScanner
-install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/tnef.linux ${RPM_BUILD_ROOT}/opt/MailScanner/bin/tnef
-install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/CheckModuleVersion ${RPM_BUILD_ROOT}/opt/MailScanner/bin
-install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/Sophos.install ${RPM_BUILD_ROOT}/opt/MailScanner/bin
-install -m 644 -g root -o root ${SRC_DIR}/bin/MailScanner.pm ${RPM_BUILD_ROOT}/opt/MailScanner/bin
-rm -f ${RPM_BUILD_ROOT}/opt/MailScanner/bin/check_mailscanner
-ln -sf check_MailScanner ${RPM_BUILD_ROOT}/opt/MailScanner/bin/check_mailscanner
+# /usr/sbin
+install -m 755 -g root -o root ${SRC_DIR}/bin/mailscanner ${RPM_BUILD_ROOT}/usr/sbin
+install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/check_MailScanner.linux ${RPM_BUILD_ROOT}/usr/sbin/check_MailScanner
+install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/tnef.linux ${RPM_BUILD_ROOT}/usr/sbin/tnef
+install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/CheckModuleVersion ${RPM_BUILD_ROOT}/usr/sbin
+install -m 755 -g root -o root ${CVS_ROOT}/RPM.files/Non-RedHat/Sophos.install ${RPM_BUILD_ROOT}/usr/sbin
+install -m 644 -g root -o root ${SRC_DIR}/bin/MailScanner.pm ${RPM_BUILD_ROOT}/usr/sbin
+rm -f ${RPM_BUILD_ROOT}/usr/sbin/check_mailscanner
+ln -sf check_MailScanner ${RPM_BUILD_ROOT}/usr/sbin/check_mailscanner
 
 
 while read f
 do
-  install -m 755 -g root -o root ${SRC_DIR}/etc/$f ${RPM_BUILD_ROOT}/opt/MailScanner/etc
+  install -m 755 -g root -o root ${SRC_DIR}/etc/$f ${RPM_BUILD_ROOT}/etc/MailScanner
 done << EOF
 filename.rules.conf
 mailscanner.conf
@@ -96,7 +96,7 @@ EOF
 
 while read f
 do
-  install -m 755 -g root -o root ${SRC_DIR}/etc/rules/$f ${RPM_BUILD_ROOT}/opt/MailScanner/etc/rules
+  install -m 755 -g root -o root ${SRC_DIR}/etc/rules/$f ${RPM_BUILD_ROOT}/etc/MailScanner/rules
 done << EOF
 EXAMPLES
 README
@@ -105,7 +105,7 @@ EOF
 
 while read f
 do
-  install -m 755 -g root -o root ${SRC_DIR}/etc/reports/en/$f ${RPM_BUILD_ROOT}/opt/MailScanner/etc/reports/en
+  install -m 755 -g root -o root ${SRC_DIR}/etc/reports/en/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/en
 done << EOF
 deleted.filename.message.txt
 deleted.virus.message.txt
@@ -126,7 +126,7 @@ EOF
 
 while read f
 do
-  install -m 755 -g root -o root ${SRC_DIR}/etc/reports/de/$f ${RPM_BUILD_ROOT}/opt/MailScanner/etc/reports/de
+  install -m 755 -g root -o root ${SRC_DIR}/etc/reports/de/$f ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/de
 done << EOF
 deleted.filename.message.txt
 deleted.virus.message.txt
@@ -148,7 +148,7 @@ EOF
 
 while read f
 do
-  install -m 755 -g root -o root ${SRC_DIR}/lib/$f ${RPM_BUILD_ROOT}/opt/MailScanner/lib
+  install -m 755 -g root -o root ${SRC_DIR}/lib/$f ${RPM_BUILD_ROOT}/var/lib/MailScanner
 done << EOF
 f-prot-autoupdate
 f-prot-wrapper
@@ -166,7 +166,7 @@ EOF
 
 while read f
 do
-  install -m 755 -g root -o root ${SRC_DIR}/bin/MailScanner/$f ${RPM_BUILD_ROOT}/opt/MailScanner/bin/MailScanner
+  install -m 755 -g root -o root ${SRC_DIR}/bin/MailScanner/$f ${RPM_BUILD_ROOT}/usr/sbin/MailScanner
 done << EOF
 ConfigDefs.pl
 Config.pm
@@ -270,7 +270,7 @@ echo ==== You now need to download '(or get off CD)' the latest Sophos virus
 echo ==== virus scanner. Be sure to get the version for Linux with \'libc6\'.
 echo ==== Copy this onto your system, change into the directory where you have
 echo ==== copied it, and type the command
-echo '====     /opt/MailScanner/bin/Sophos.install'
+echo '====     /usr/sbin/Sophos.install'
 echo
 echo ==== Then run the command
 echo '====     /etc/rc.d/init.d/MailScanner start'
@@ -289,7 +289,7 @@ if [ -d /usr/local/mcafee ]; then
 fi
 
 # Check to see if mailscanner.conf has been customised
-if [ -e /opt/MailScanner/etc/mailscanner.conf.rpmnew ]; then
+if [ -e /etc/MailScanner/mailscanner.conf.rpmnew ]; then
   echo '****'
   echo '**** Please look for any new options in mailscanner.conf.rpmnew'
   echo '**** and update your mailscanner.conf file appropriately.'
@@ -329,13 +329,13 @@ exit 0
 %doc /usr/share/man/man8/MailScanner.8.gz
 %doc /opt/MailScanner/COPYING
 
-/opt/MailScanner/bin/mailscanner
-/opt/MailScanner/bin/check_mailscanner
-/opt/MailScanner/bin/check_MailScanner
-/opt/MailScanner/bin/tnef
-/opt/MailScanner/bin/CheckModuleVersion
-/opt/MailScanner/bin/Sophos.install
-/opt/MailScanner/bin/MailScanner.pm
+/usr/sbin/mailscanner
+/usr/sbin/check_mailscanner
+/usr/sbin/check_MailScanner
+/usr/sbin/tnef
+/usr/sbin/CheckModuleVersion
+/usr/sbin/Sophos.install
+/usr/sbin/MailScanner.pm
 
 
 /tmp/MailScanner.perl.modules/Convert-TNEF-0.17.tar.gz
@@ -351,48 +351,48 @@ exit 0
 /tmp/MailScanner.perl.modules/mime-tools-patch2.txt
 /tmp/MailScanner.perl.modules/mime-tools-patch3.txt
 
-/opt/MailScanner/lib
-/opt/MailScanner/bin/MailScanner
+/var/lib/MailScanner
+/usr/sbin/MailScanner
 
-%config(noreplace) /opt/MailScanner/etc/filename.rules.conf
-%config(noreplace) /opt/MailScanner/etc/mailscanner.conf
-%config(noreplace) /opt/MailScanner/etc/spam.assassin.prefs.conf
-%config(noreplace) /opt/MailScanner/etc/spam.lists.conf
-%config(noreplace) /opt/MailScanner/etc/virus.scanners.conf
-/opt/MailScanner/etc/rules/EXAMPLES
-/opt/MailScanner/etc/rules/README
-%config(noreplace) /opt/MailScanner/etc/rules/spam.whitelist.rules
-%config(noreplace) /opt/MailScanner/etc/reports/en/deleted.filename.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/deleted.virus.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/disinfected.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/inline.sig.html
-%config(noreplace) /opt/MailScanner/etc/reports/en/inline.sig.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/inline.warning.html
-%config(noreplace) /opt/MailScanner/etc/reports/en/inline.warning.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/sender.error.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/sender.filename.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/sender.spam.rbl.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/sender.spam.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/sender.spam.sa.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/sender.virus.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/stored.filename.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/en/stored.virus.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/deleted.filename.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/deleted.virus.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/disinfected.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/inline.sig.html
-%config(noreplace) /opt/MailScanner/etc/reports/de/inline.sig.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/inline.warning.html
-%config(noreplace) /opt/MailScanner/etc/reports/de/inline.warning.txt
-/opt/MailScanner/etc/reports/de/README.1ST
-%config(noreplace) /opt/MailScanner/etc/reports/de/sender.error.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/sender.filename.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/sender.spam.rbl.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/sender.spam.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/sender.spam.sa.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/sender.virus.report.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/stored.filename.message.txt
-%config(noreplace) /opt/MailScanner/etc/reports/de/stored.virus.message.txt
+%config(noreplace) /etc/MailScanner/filename.rules.conf
+%config(noreplace) /etc/MailScanner/mailscanner.conf
+%config(noreplace) /etc/MailScanner/spam.assassin.prefs.conf
+%config(noreplace) /etc/MailScanner/spam.lists.conf
+%config(noreplace) /etc/MailScanner/virus.scanners.conf
+/etc/MailScanner/rules/EXAMPLES
+/etc/MailScanner/rules/README
+%config(noreplace) /etc/MailScanner/rules/spam.whitelist.rules
+%config(noreplace) /usr/share/MailScanner/reports/en/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/en/inline.warning.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/en/stored.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/deleted.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/deleted.virus.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/disinfected.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.sig.html
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.sig.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.warning.html
+%config(noreplace) /usr/share/MailScanner/reports/de/inline.warning.txt
+/usr/share/MailScanner/reports/de/README.1ST
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.error.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.filename.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.spam.rbl.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.spam.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.spam.sa.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/sender.virus.report.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/stored.filename.message.txt
+%config(noreplace) /usr/share/MailScanner/reports/de/stored.virus.message.txt
 
 
 #%doc /root/stable/mailscanner/docs

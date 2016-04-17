@@ -1,12 +1,9 @@
 #!/bin/sh
 
-SCANNERSCONF=/opt/MailScanner/etc/virus.scanners.conf
-#LOCKDIR=`perl -n -e 'print "$_" if chomp && s/^\s*Lock\s*file\s*Dir\s*=\s*([^\s#]+).*$/$1/i' /opt/MailScanner/etc/MailScanner.conf`
-#RUNASU=`perl -n -e 'print "$_" if chomp && s/^\s*Run\s*As\s*User\s*=\s*([^\s#]+).*$/$1/i' /opt/MailScanner/etc/MailScanner.conf`
-#RUNASG=`perl -n -e 'print "$_" if chomp && s/^\s*Run\s*As\s*Group\s*=\s*([^\s#]+).*$/$1/i' /opt/MailScanner/etc/MailScanner.conf`
-LOCKDIR=`/opt/MailScanner/bin/Quick.Peek lockfiledir /opt/MailScanner/etc/MailScanner.conf`
-RUNASU=`/opt/MailScanner/bin/Quick.Peek runasuser /opt/MailScanner/etc/MailScanner.conf`
-RUNASG=`/opt/MailScanner/bin/Quick.Peek runasgroup /opt/MailScanner/etc/MailScanner.conf`
+SCANNERSCONF=/etc/MailScanner/virus.scanners.conf
+LOCKDIR=`/usr/sbin/Quick.Peek lockfiledir /etc/MailScanner/MailScanner.conf`
+RUNASU=`/usr/sbin/Quick.Peek runasuser /etc/MailScanner/MailScanner.conf`
+RUNASG=`/usr/sbin/Quick.Peek runasgroup /etc/MailScanner/MailScanner.conf`
 
 Disabled=no
 if [ "x$Disabled" = "xyes" ]; then
@@ -35,8 +32,8 @@ else
   GREP=grep
 fi
 
-[ -x /opt/MailScanner/bin/mailscanner_create_locks ] && \
-/opt/MailScanner/bin/mailscanner_create_locks "$LOCKDIR" "$RUNASU" "$RUNASG"
+[ -x /usr/sbin/mailscanner_create_locks ] && \
+/usr/sbin/mailscanner_create_locks "$LOCKDIR" "$RUNASU" "$RUNASG"
 
 cat ${SCANNERSCONF} | sed -e 's/#.*$//' | ${GREP} -e -wrapper | \
 while read NAME WRAPPER PACKAGEDIR

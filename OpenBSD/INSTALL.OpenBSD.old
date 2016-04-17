@@ -29,12 +29,12 @@ First Time Installation Instructions for OpenBSD
 3. Near the top of /etc/rc.local add:
 
 	echo -n ' sendmail'; /usr/sbin/sendmail -q15 >/dev/null 2>&1
-	echo -n ' MailScanner'; /opt/MailScanner/bin/check_mailscanner >/dev/null 2>&1
+	echo -n ' MailScanner'; /usr/sbin/check_mailscanner >/dev/null 2>&1
 
 4. To root's crontab add (sudo crontab -e):
 
 	# Check the status of MailScanner every 10 minutes
-	0,10,20,30,40,50	*	*	*	*	/opt/MailScanner/bin/check_mailscanner -q
+	0,10,20,30,40,50	*	*	*	*	/usr/sbin/check_mailscanner -q
 
 5. Unpack the distribution into /opt
 
@@ -42,20 +42,20 @@ First Time Installation Instructions for OpenBSD
 	tar -xvf MailScanner-%Version%.tar
 	ln -s MailScanner-%Version% MailScanner
 
-6. Edit /opt/MailScanner/etc/MailScanner.conf:
+6. Edit /etc/MailScanner/MailScanner.conf:
 
 	Sendmail = /usr/sbin/sendmail
 	Sendmail2 = /usr/sbin/sendmail
 	TNEF Expander = internal # Or compile a version for OpenBSD
 	# Make other changes as appropriate
 
-7. Edit /opt/MailScanner/lib/MailScanner/SystemsDefs.pm:
+7. Edit /var/lib/MailScanner/MailScanner/SystemsDefs.pm:
 
 	sed lives in /usr/bin not /bin
 
 8. Start MailScanner:
 
-	sudo /opt/MailScanner/bin/check_mailscanner
+	sudo /usr/sbin/check_mailscanner
 
 
 Upgrade Instructions for OpenBSD
@@ -70,9 +70,9 @@ Upgrade Instructions for OpenBSD
 
 	cd /opt/MailScanner-%NewVersion%/etc
 	mv MailScanner.conf MailScanner.conf.default
-	../bin/upgrade_MailScanner_conf /opt/MailScanner/etc/MailScanner.conf MailScanner.conf.default > MailScanner.conf
+	../bin/upgrade_MailScanner_conf /etc/MailScanner/MailScanner.conf MailScanner.conf.default > MailScanner.conf
 	# Review changes made and update as necessary
-	diff /opt/MailScanner/etc/MailScanner.conf MailScanner.conf
+	diff /etc/MailScanner/MailScanner.conf MailScanner.conf
 
 3. Edit /opt/MailScanner-%Version%/lib/MailScanner/SystemsDefs.pm:
 

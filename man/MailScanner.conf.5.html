@@ -104,7 +104,7 @@ operating system to operating system:</p>
 <td width="11%"></td>
 <td width="89%">
 <p>FreeBSD: /usr/local/etc/MailScanner<br>
-Other: /opt/MailScanner/etc</p>
+Other: /etc/MailScanner</p>
 <!-- INDENTATION -->
 <p>Blank lines are ignored, as are leading and trailing
 spaces. Comments start at a &rsquo;#&rsquo; character and
@@ -148,7 +148,7 @@ in MailScanner.conf and its relatives.</p>
 <tr valign="top" align="left">
 <td width="22%"></td>
 <td width="78%">
-<p>Default: /opt/MailScanner/etc/reports/en<br>
+<p>Default: /usr/share/MailScanner/reports/en<br>
 Default FreeBSD: /usr/local/share/MailScanner/reports/en</p>
 <!-- INDENTATION -->
 <p>Set the directory containing all the reports in the
@@ -169,7 +169,7 @@ required language.</p>
 <tr valign="top" align="left">
 <td width="22%"></td>
 <td width="78%">
-<p>Default: /opt/MailScanner/etc<br>
+<p>Default: /etc/MailScanner<br>
 Default FreeBSD: /usr/local/etc/MailScanner</p>
 <!-- INDENTATION -->
 <p>Configuration directory containing this file</p>
@@ -189,7 +189,7 @@ Default FreeBSD: /usr/local/etc/MailScanner</p>
 <tr valign="top" align="left">
 <td width="22%"></td>
 <td width="78%">
-<p>Default: /opt/MailScanner/etc/rules<br>
+<p>Default: /etc/MailScanner/rules<br>
 Default FreeBSD: /usr/local/etc/MailScanner/rules</p>
 <!-- INDENTATION -->
 <p>Rulesets directory containing your &quot;.rules&quot;
@@ -1099,7 +1099,7 @@ troubled by the new behaviour.</p>
 <tr valign="top" align="left">
 <td width="22%"></td>
 <td width="78%">
-<p>Default: /opt/MailScanner/bin/tnef<br>
+<p>Default: /usr/sbin/tnef<br>
 Default FreeBSD: /usr/local/bin/tnef</p>
 <!-- INDENTATION -->
 <p>Full pathname giving location of the MS&minus;TNEF
@@ -6489,7 +6489,7 @@ scanners.</p>
 <td width="22%"></td>
 <td width="78%">
 <p>Default:
-/opt/MailScanner/lib/MailScanner/CustomFunctions<br>
+/var/lib/MailScanner/MailScanner/CustomFunctions<br>
 Default FreeBSD:
 /usr/local/lib/MailScanner/MailScanner/CustomFunctions</p>
 <!-- INDENTATION -->
@@ -6722,7 +6722,7 @@ rules are checked for one that matches the string
 <td width="11%"></td>
 <td width="89%">
 <p>Ruleset files should all be put in
-/opt/MailScanner/etc/rules (FreeBSD:
+/etc/MailScanner/rules (FreeBSD:
 /usr/local/etc/MailScanner/rules) and their filename should
 end in &quot;.rules&quot; wherever possible.</p>
 <!-- INDENTATION -->

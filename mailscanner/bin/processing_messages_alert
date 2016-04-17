@@ -1,13 +1,13 @@
 #!/bin/sh
 
-#noticesfrom=`perl -n -e 'print "$_" if chomp && s/^\s*Notices\s*From\s*=\s*([^\s#]+).*$/$1/' /opt/MailScanner/etc/MailScanner.conf`
-#localpostmaster=`perl -n -e 'print "$_" if chomp && s/^\s*Local\s*Postmaster\s*=\s*([^\s#]+).*$/$1/' /opt/MailScanner/etc/MailScanner.conf`
-#noticesto=`perl -n -e 'print "$_" if chomp && s/^\s*Notices\s*To\s*=\s*([^\s#]+).*$/$1/' /opt/MailScanner/etc/MailScanner.conf`
-#sendnotices=`perl -n -e 'print "$_" if chomp && s/^\s*Send\s*Notices\s*=\s*([^\s#]+).*$/$1/' /opt/MailScanner/etc/MailScanner.conf`
-noticesfrom=`/opt/MailScanner/bin/Quick.Peek noticesfrom /opt/MailScanner/etc/MailScanner.conf`
-localpostmaster=`/opt/MailScanner/bin/Quick.Peek localpostmaster /opt/MailScanner/etc/MailScanner.conf`
-noticesto=`/opt/MailScanner/bin/Quick.Peek noticesto /opt/MailScanner/etc/MailScanner.conf`
-sendnotices=`/opt/MailScanner/bin/Quick.Peek sendnotices /opt/MailScanner/etc/MailScanner.conf`
+#noticesfrom=`perl -n -e 'print "$_" if chomp && s/^\s*Notices\s*From\s*=\s*([^\s#]+).*$/$1/' /etc/MailScanner/MailScanner.conf`
+#localpostmaster=`perl -n -e 'print "$_" if chomp && s/^\s*Local\s*Postmaster\s*=\s*([^\s#]+).*$/$1/' /etc/MailScanner/MailScanner.conf`
+#noticesto=`perl -n -e 'print "$_" if chomp && s/^\s*Notices\s*To\s*=\s*([^\s#]+).*$/$1/' /etc/MailScanner/MailScanner.conf`
+#sendnotices=`perl -n -e 'print "$_" if chomp && s/^\s*Send\s*Notices\s*=\s*([^\s#]+).*$/$1/' /etc/MailScanner/MailScanner.conf`
+noticesfrom=`/usr/sbin/Quick.Peek noticesfrom /etc/MailScanner/MailScanner.conf`
+localpostmaster=`/usr/sbin/Quick.Peek localpostmaster /etc/MailScanner/MailScanner.conf`
+noticesto=`/usr/sbin/Quick.Peek noticesto /etc/MailScanner/MailScanner.conf`
+sendnotices=`/usr/sbin/Quick.Peek sendnotices /etc/MailScanner/MailScanner.conf`
 
 # Only do this if they want to send notices to postmaster at all
 if [ "x$sendnotices" = "xno" ]; then
@@ -21,7 +21,7 @@ if ( echo $noticesto | grep -q '^/' ); then
   noticesto=$localpostmaster
 fi
 
-alert=`/opt/MailScanner/bin/MailScanner --processing`
+alert=`/usr/sbin/MailScanner --processing`
 
 if [ \! "x$alert" = "x" ]; then
   #cat <<EOM

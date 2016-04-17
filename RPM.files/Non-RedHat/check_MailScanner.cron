@@ -9,5 +9,5 @@ LOCKFILE=/var/lock/check_mailscanner.lock
 [ -f $LOCKFILE ] && exit 0
 trap "rm -f $LOCKFILE" EXIT
 touch $LOCKFILE
-/opt/MailScanner/bin/check_MailScanner >/dev/null 2>&1
+/usr/sbin/check_MailScanner >/dev/null 2>&1
 exit 0

@@ -11,7 +11,7 @@ unless (eval { require "DBD/SQLite.pm" }) {
 #$cachefile = `/usr/sbin/Quick.Peek spamassassincachedatabasefile /etc/MailScanner/MailScanner.conf`;
 # Allow alternative locations for MailScanner (noel.butler@ausics.net)
 $cachefile = `/usr/sbin/Quick.Peek spamassassincachedatabasefile /etc/MailScanner/MailScanner.conf` if (-e "/etc/MailScanner/MailScanner.conf");
-$cachefile = `/opt/MailScanner/bin/Quick.Peek spamassassincachedatabasefile /opt/MailScanner/etc/MailScanner.conf` if (-e "/opt/MailScanner/etc/MailScanner.conf");
+$cachefile = `/usr/sbin/Quick.Peek spamassassincachedatabasefile /etc/MailScanner/MailScanner.conf` if (-e "/etc/MailScanner/MailScanner.conf");
 
 chomp $cachefile;
 $cachefile = '/var/spool/MailScanner/incoming/SpamAssassin.cache.db' unless $cachefile;

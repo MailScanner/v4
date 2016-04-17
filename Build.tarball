@@ -94,12 +94,12 @@ find . -type f -name '*.in' -print -exec rm -f {} \;
 
 # Add the -I to the start of the main perl script so it gets all its libs
 perl -pi - $BUILDROOT/$VERSION-$RELEASE/bin/mailscanner.sbin <<EOF
-s./usr/bin/perl$./usr/bin/perl -U -I/opt/MailScanner/lib/.;
+s./usr/bin/perl$./usr/bin/perl -U -I/var/lib/MailScanner/.;
 EOF
 
 # Set the default path to the SA cache file
 perl -pi - $BUILDROOT/$VERSION-$RELEASE/bin/analyse_SpamAssassin_cache <<EOF
-s./etc/MailScanner./opt/MailScanner/etc.;
+s./etc/MailScanner./etc/MailScanner.;
 EOF
 
 # Insert the version number we are building

@@ -12,9 +12,9 @@
 # If you are using sendmail, it will leave you with a system that is ready
 # to run, it just requires you change the organisation name. This is set at
 # the top of MailScanner.conf which you will probably find in either
-# /etc/MailScanner or /opt/MailScanner/etc. Once you are happy with it
+# /etc/MailScanner or /etc/MailScanner. Once you are happy with it
 # running, start looking at the configuration files in /etc/MailScanner or
-# /opt/MailScanner/etc.
+# /etc/MailScanner.
 #
 # If you need help and have read all the documentation and the
 # mailscanner.conf file, then join the mailing list and ask there.

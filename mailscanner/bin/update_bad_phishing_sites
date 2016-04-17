@@ -23,10 +23,8 @@
 
 # set your options here
 #
-CONFIGDIR='/opt/MailScanner/etc';
-#CONFIGDIR='/etc/MailScanner';
+CONFIGDIR='/etc/MailScanner';
 THEURL='http://phishing.mailscanner.info/phishing.bad.sites.conf';
-
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/etc:/usr/local/bin:/usr/sfw/bin
 export PATH
