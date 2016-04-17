@@ -15,7 +15,7 @@ License:     GPLv2+
 Vendor:      MailScanner Community
 Packager:    Jerry Benton <mailscanner@mailborder.com>
 URL:         http://www.mailscanner.info
-Requires:     perl >= 5.005, binutils, gcc, glibc-devel, libaio, make, man-pages, man-pages-overrides, patch, rpm, tar, time, unzip, which, zip, openssl-devel, perl(Archive::Zip), perl(bignum), perl(Carp), perl(Compress::Zlib), perl(Compress::Raw::Zlib), perl(Convert::TNEF), perl(Data::Dumper), perl(Date::Parse), perl(DBD::SQLite), perl(DBI), perl(Digest::HMAC), perl(Digest::MD5), perl(Digest::SHA1), perl(DirHandle), perl(ExtUtils::MakeMaker), perl(Fcntl), perl(File::Basename), perl(File::Copy), perl(File::Path), perl(File::Spec), perl(File::Temp), perl(FileHandle), perl(Filesys::Df), perl(Getopt::Long), perl(Inline::C), perl(IO), perl(IO::File), perl(IO::Pipe), perl(IO::Stringy), perl(HTML::Entities), perl(HTML::Parser), perl(HTML::Tagset), perl(HTML::TokeParser), perl(Mail::Field), perl(Mail::Header), perl(Mail::IMAPClient), perl(Mail::Internet), perl(Math::BigInt), perl(Math::BigRat), perl(MIME::Base64), perl(MIME::Decoder), perl(MIME::Decoder::UU), perl(MIME::Head), perl(MIME::Parser), perl(MIME::QuotedPrint), perl(MIME::Tools), perl(MIME::WordDecoder), perl(Net::CIDR), perl(Net::DNS), perl(Net::IP), perl(OLE::Storage_Lite), perl(Pod::Escapes), perl(Pod::Simple), perl(POSIX), perl(Scalar::Util), perl(Socket), perl(Storable), perl(Test::Harness), perl(Test::Pod), perl(Test::Simple), perl(Time::HiRes), perl(Time::localtime), perl(Sys::Hostname::Long), perl(Sys::SigAction), perl(Sys::Syslog)
+Requires:     perl >= 5.005, binutils, gcc, glibc-devel, libaio, make, patch, rpm, tar, time, unzip, which, zip, openssl-devel, perl(Archive::Zip), perl(bignum), perl(Carp), perl(Compress::Zlib), perl(Compress::Raw::Zlib), perl(Convert::TNEF), perl(Data::Dumper), perl(Date::Parse), perl(DBD::SQLite), perl(DBI), perl(Digest::HMAC), perl(Digest::MD5), perl(Digest::SHA1), perl(DirHandle), perl(ExtUtils::MakeMaker), perl(Fcntl), perl(File::Basename), perl(File::Copy), perl(File::Path), perl(File::Spec), perl(File::Temp), perl(FileHandle), perl(Filesys::Df), perl(Getopt::Long), perl(Inline::C), perl(IO), perl(IO::File), perl(IO::Pipe), perl(IO::Stringy), perl(HTML::Entities), perl(HTML::Parser), perl(HTML::Tagset), perl(HTML::TokeParser), perl(Mail::Field), perl(Mail::Header), perl(Mail::IMAPClient), perl(Mail::Internet), perl(Math::BigInt), perl(Math::BigRat), perl(MIME::Base64), perl(MIME::Decoder), perl(MIME::Decoder::UU), perl(MIME::Head), perl(MIME::Parser), perl(MIME::QuotedPrint), perl(MIME::Tools), perl(MIME::WordDecoder), perl(Net::CIDR), perl(Net::DNS), perl(Net::IP), perl(OLE::Storage_Lite), perl(Pod::Escapes), perl(Pod::Simple), perl(POSIX), perl(Scalar::Util), perl(Socket), perl(Storable), perl(Test::Harness), perl(Test::Pod), perl(Test::Simple), perl(Time::HiRes), perl(Time::localtime), perl(Sys::Hostname::Long), perl(Sys::SigAction), perl(Sys::Syslog)
 Provides:	  perl(MailScanner), perl(MailScanner::Antiword), perl(MailScanner::BinHex), perl(MailScanner::Config), perl(MailScanner::ConfigSQL), perl(MailScanner::CustomConfig), perl(MailScanner::FileInto), perl(MailScanner::GenericSpam), perl(MailScanner::LinksDump), perl(MailScanner::Lock), perl(MailScanner::Log), perl(MailScanner::Mail), perl(MailScanner::MCP), perl(MailScanner::MCPMessage), perl(MailScanner::Message), perl(MailScanner::MessageBatch), perl(MailScanner::Quarantine), perl(MailScanner::Queue), perl(MailScanner::RBLs), perl(MailScanner::MCPMessage), perl(MailScanner::Message), perl(MailScanner::MCP), perl(MailScanner::SA), perl(MailScanner::Sendmail), perl(MailScanner::SMDiskStore), perl(MailScanner::SweepContent), perl(MailScanner::SweepOther), perl(MailScanner::SweepViruses), perl(MailScanner::TNEF), perl(MailScanner::Unzip), perl(MailScanner::WorkArea), perl(MIME::Parser::MailScanner)
 #Source:      %{name}-%{version}-%{release}.tgz
 Source:      %{name}-%{version}.tgz
@@ -84,7 +84,7 @@ mkdir -p $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/rc.d/init.d
 mkdir -p ${RPM_BUILD_ROOT}/usr/sbin/
 mkdir -p ${RPM_BUILD_ROOT}/usr/share/man/{man8,man5}
-mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner{conf.d,rules,mcp}
+mkdir -p ${RPM_BUILD_ROOT}/etc/MailScanner/{conf.d,rules,mcp}
 mkdir -p ${RPM_BUILD_ROOT}/etc/{cron.hourly,cron.daily,sysconfig}
 mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/reports/{hu,de,se,ca,cy+en,pt_br,fr,es,en,cz,it,dk,nl,ro,sk}
 mkdir -p ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/{MailScanner,custom}
@@ -96,7 +96,7 @@ install bin/d2mbox             				${RPM_BUILD_ROOT}/usr/sbin/d2mbox
 install bin/mailscanner        				${RPM_BUILD_ROOT}/usr/sbin/MailScanner
 install bin/mailscanner_create_locks 		${RPM_BUILD_ROOT}/usr/sbin/mailscanner_create_locks
 install bin/processing_messages_alert 		${RPM_BUILD_ROOT}/usr/sbin/processing_messages_alert
-install check_MailScanner      				${RPM_BUILD_ROOT}/usr/sbin/check_mailScanner
+install check_MailScanner      				${RPM_BUILD_ROOT}/usr/sbin/check_MailScanner
 install bin/Quick.Peek         				${RPM_BUILD_ROOT}/usr/sbin/Quick.Peek
 install bin/update_virus_scanners 			${RPM_BUILD_ROOT}/usr/sbin/update_virus_scanners
 install bin/update_spamassassin 			${RPM_BUILD_ROOT}/usr/sbin/update_spamassassin
@@ -104,6 +104,7 @@ install bin/update_phishing_sites 			${RPM_BUILD_ROOT}/usr/sbin/update_phishing_
 install bin/update_bad_phishing_sites 		${RPM_BUILD_ROOT}/usr/sbin/update_bad_phishing_sites
 install bin/analyse_SpamAssassin_cache 		${RPM_BUILD_ROOT}/usr/sbin/analyse_SpamAssassin_cache
 install bin/upgrade_MailScanner_conf 		${RPM_BUILD_ROOT}/usr/sbin/upgrade_MailScanner_conf
+ln -sf upgrade_MailScanner_conf				${RPM_BUILD_ROOT}/usr/sbin/upgrade_languages_conf
 install update_spamassassin.opts.rh 		${RPM_BUILD_ROOT}/etc/sysconfig/update_spamassassin
 install MailScanner.opts.rh    				${RPM_BUILD_ROOT}/etc/sysconfig/MailScanner
 install check_MailScanner.cron 				${RPM_BUILD_ROOT}/etc/cron.hourly/check_MailScanner
@@ -255,7 +256,7 @@ vexira-autoupdate
 vexira-wrapper
 EOF
 
-install bin/MailScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/
+install bin/MailScanner.pm ${RPM_BUILD_ROOT}/usr/share/MailScanner/perl/
 
 while read f 
 do
@@ -464,13 +465,13 @@ if [ -d "/usr/lib/MailScanner" ]; then
 	rm -rf /usr/lib/MailScanner
 fi
 
-if [ "$1" -ge "1" ]; then
+#if [ "$1" -ge "1" ]; then
     # We are being upgraded or replaced, not deleted
     #echo 'To upgrade your MailScanner.conf and languages.conf files automatically, run'
     #echo '    upgrade_MailScanner_conf'
     #echo '    upgrade_languages_conf'
     #service MailScanner restart </dev/null >/dev/null 2>&1
-fi
+#fi
 exit 0
 
 %files
@@ -489,15 +490,12 @@ exit 0
 %attr(755,root,root) /usr/sbin/mailscanner_create_locks
 %attr(755,root,root) /usr/sbin/processing_messages_alert
 %attr(755,root,root) /usr/sbin/check_MailScanner
-%attr(755,root,root) /usr/sbin/check_mailscanner
-%attr(755,root,root) /usr/sbin/Sophos.install
 %attr(755,root,root) /usr/sbin/Quick.Peek
 %attr(755,root,root) /usr/sbin/update_virus_scanners
 %attr(755,root,root) /usr/sbin/update_spamassassin
 %attr(755,root,root) /usr/sbin/update_phishing_sites
 %attr(755,root,root) /usr/sbin/update_bad_phishing_sites
 %attr(755,root,root) /usr/sbin/analyse_SpamAssassin_cache
-%attr(755,root,root) /usr/sbin/analyze_SpamAssassin_cache
 %attr(755,root,root) /usr/sbin/upgrade_MailScanner_conf
 %attr(755,root,root) /usr/sbin/upgrade_languages_conf
 %attr(755,root,root) /%{_sysconfdir}/rc.d/init.d/MailScanner
@@ -1002,7 +1000,7 @@ exit 0
 %attr(755,root,root) /var/lib/MailScanner/wrapper/vexira-autoupdate
 %attr(755,root,root) /var/lib/MailScanner/wrapper/vexira-wrapper
 
-/usr/share/MailScanner/MailScanner.pm
+/usr/share/MailScanner/perl/MailScanner.pm
 
 /usr/share/MailScanner/perl/MailScanner/Antiword.pm
 /usr/share/MailScanner/perl/MailScanner/ConfigDefs.pl

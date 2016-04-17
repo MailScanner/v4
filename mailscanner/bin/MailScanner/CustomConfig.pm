@@ -1645,7 +1645,7 @@ __DATA__
 #
 #
 
-#!/usr/bin/perl -U -I/usr/share/MailScanner
+#!/usr/bin/perl -U -I/usr/share/MailScanner/perl
 
 #
 #   MailScanner - SMTP E-Mail Virus Scanner
