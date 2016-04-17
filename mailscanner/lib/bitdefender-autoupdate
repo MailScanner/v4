@@ -3,6 +3,10 @@
 #
 # **** README ****
 #
+# 12 February 2016
+# Note the update ftp is not running, the last version runs on --update well
+# modification of the binary path if not the update never works
+# 
 # 14 April 2004
 # Note from Jules: This looks awfully complicated, but it is because the
 #                  old version of the --update flag didn't work in bdc.
@@ -107,7 +111,7 @@ use IO::File;
 use Archive::Zip qw(:ERROR_CODES);
 use Sys::Syslog;
 
-my $PackageDir = shift || "/opt/bdc";
+my $PackageDir = shift || "/opt/BitDefender-scanner";
 
 $LockFile = shift || "/var/spool/MailScanner/incoming/Locks/bitdefenderBusy.lock";
 
@@ -131,7 +135,7 @@ $verbose =0;                                                  # log verbose info
 $logFile= "/var/log/bitdefender_updater.log";                 # full path to the log file
 $rotationFile = "/etc/bitdefenderRotation";                   # contains the current status
 $rotationPeriod = 6;                                          # number in days before doing cumulative seto to 0 to get always cumulative
-my $bitDefBinary = "bdc";                                     # name of the bitdefender's binary
+my $bitDefBinary = "bin/bdscan";                                     # name of the bitdefender's binary
 my $beforeFile   = "beforeupdate.txt";                        # list of viruses before update
 my $afterFile   = "afterupdate.txt";                          # list of viruses after update
 my $ignoreLines = 5;                                          # lines to be ignored in total virus defs
@@ -339,7 +343,7 @@ exit 0 ;
 ##########################################################################
 #
 #        Aggiorno il log se il parametro $loggingEnabled = 1
-#        e se Ë stato definito il parametro $logFile
+#        e se Ã‹ stato definito il parametro $logFile
 #
 #
 #        updateLog ( $message );
