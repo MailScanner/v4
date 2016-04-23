@@ -10,10 +10,15 @@
 # pidfile: /var/run/MailScanner.pid
 
 # Source function library.
-. /etc/rc.d/init.d/functions
+if [ -f /etc/rc.d/init.d/functions ] ; then
+	. /etc/rc.d/init.d/functions
+fi
 
 # Source networking configuration.
-. /etc/sysconfig/network
+if [ -f /etc/sysconfig/network ] ; then
+	. /etc/sysconfig/network
+fi
+
 
 #
 # If you are using sendmail, Exim or Postfix, please try to avoid editing

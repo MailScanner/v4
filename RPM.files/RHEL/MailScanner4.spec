@@ -106,13 +106,13 @@ install bin/analyse_SpamAssassin_cache 		${RPM_BUILD_ROOT}/usr/sbin/analyse_Spam
 install bin/upgrade_MailScanner_conf 		${RPM_BUILD_ROOT}/usr/sbin/upgrade_MailScanner_conf
 install update_spamassassin.opts.rh 		${RPM_BUILD_ROOT}/etc/sysconfig/update_spamassassin
 install MailScanner.opts.rh    				${RPM_BUILD_ROOT}/etc/sysconfig/MailScanner
-install check_MailScanner.cron 				${RPM_BUILD_ROOT}/etc/cron.hourly/check_MailScanner
-install update_virus_scanners.cron 			${RPM_BUILD_ROOT}/etc/cron.hourly/update_virus_scanners
-install processing_messages_alert.cron  	${RPM_BUILD_ROOT}/etc/cron.hourly/processing_messages_alert
-install update_phishing_sites.cron 			${RPM_BUILD_ROOT}/etc/cron.daily/update_phishing_sites
-install update_bad_phishing_sites.cron 		${RPM_BUILD_ROOT}/etc/cron.daily/update_bad_phishing_sites
-install clean.quarantine.cron  				${RPM_BUILD_ROOT}/etc/cron.daily/clean.quarantine
-install update_spamassassin.cron  			${RPM_BUILD_ROOT}/etc/cron.daily/update_spamassassin
+install cron/check_MailScanner.cron 		${RPM_BUILD_ROOT}/etc/cron.hourly/check_MailScanner
+install cron/update_virus_scanners.cron 	${RPM_BUILD_ROOT}/etc/cron.hourly/update_virus_scanners
+install cron/processing_messages_alert.cron ${RPM_BUILD_ROOT}/etc/cron.hourly/processing_messages_alert
+install cron/update_phishing_sites.cron 	${RPM_BUILD_ROOT}/etc/cron.daily/update_phishing_sites
+install cron/update_bad_phishing_sites.cron ${RPM_BUILD_ROOT}/etc/cron.daily/update_bad_phishing_sites
+install cron/clean.quarantine.cron  		${RPM_BUILD_ROOT}/etc/cron.daily/clean.quarantine
+install cron/update_spamassassin.cron  		${RPM_BUILD_ROOT}/etc/cron.daily/update_spamassassin
 install doc/MailScanner.8.gz   				${RPM_BUILD_ROOT}/usr/share/man/man8/
 install doc/MailScanner.conf.5.gz 			${RPM_BUILD_ROOT}/usr/share/man/man5/
 

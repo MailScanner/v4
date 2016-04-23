@@ -3,7 +3,7 @@
 # Written by:
 # Jerry Benton < mailscanner@mailborder.com >
 # 13 FEB 2015
-# 27 JAN 2016 - Updated
+# 18 April 2016 - Updated
 #
 # This script will build the latest RPM install 
 # package and put it in /msbuilds/rpm
@@ -88,6 +88,8 @@ fi
 
 # make working dir and subs
 mkdir -p $WORK
+mkdir -p ${WORK}/doc
+mkdir -p ${WORK}/cron
 mkdir -p ${WORK}/etc/rc.d/init.d
 mkdir -p ${WORK}/usr/sbin/
 mkdir -p ${WORK}/usr/share/man/{man8,man5}
@@ -100,18 +102,17 @@ mkdir -p ${WORK}/var/{lib/MailScanner/wrapper,spool/MailScanner/archive,spool/Ma
 
 # base
 cp $DEVBASEDIR/mailscanner/bin/check_mailscanner 				$WORK/usr/sbin/check_MailScanner
-#cp $DEVBASEDIR/RPM.files/common/check_MailScanner.cron 			$WORK/
 cp $DEVBASEDIR/Redhat.files/etc/cron.daily/mailscanner 			$WORK/etc/cron.daily/MailScanner
 cp $DEVBASEDIR/Redhat.files/etc/cron.hourly/mailscanner 		$WORK/etc/cron.hourly/MailScanner
 cp $DEVBASEDIR/Redhat.files/etc/rc.d/init.d/MailScanner			$WORK/etc/rc.d/init.d/MailScanner
 cp $DEVBASEDIR/Redhat.files/etc/sysconfig/mailscanner 			$WORK/etc/sysconfig/MailScanner
 
-cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron 		$WORK/
-cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron 		$WORK/
-cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron 	$WORK/
-cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron 			$WORK/
-cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron 		$WORK/
-cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron 	$WORK/
+cp $DEVBASEDIR/RPM.files/common/update_virus_scanners.cron 		$WORK/cron
+cp $DEVBASEDIR/RPM.files/common/update_phishing_sites.cron 		$WORK/cron
+cp $DEVBASEDIR/RPM.files/common/update_bad_phishing_sites.cron 	$WORK/cron
+cp $DEVBASEDIR/RPM.files/common/clean.quarantine.cron 			$WORK/cron
+cp $DEVBASEDIR/RPM.files/common/update_spamassassin.cron 		$WORK/cron
+cp $DEVBASEDIR/RPM.files/common/processing_messages_alert.cron 	$WORK/cron
 
 # doc dir
 cp $DEVBASEDIR/man/*[12345678] 			$WORK/doc/
