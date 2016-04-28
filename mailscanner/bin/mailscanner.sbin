@@ -1234,7 +1234,7 @@ sub WorkForHours {
     #$batch->QuarantineInfections();
 
     # Quarantine all denial-of-service attempt
-    $batch->QuarantineDenialOfService();
+    $batch->QuarantineDOS();
 
     # Quarantine all the disarmed HTML and others
     $batch->QuarantineModifiedBody();

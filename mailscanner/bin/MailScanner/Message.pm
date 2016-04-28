@@ -7793,10 +7793,16 @@ sub DeleteAllRecipients {
 sub QuarantineDOS {
     my($message) = @_;
 
+    if (MailScanner::Config::Value ('quarantinedenialofservice', $message) !~ /1/) {
+        MailScanner::Log::WarnLog('Dropping message %s as it caused MailScanner to crash several times', $message->{id});
+        last;
+    };
+
     MailScanner::Log::WarnLog('Quarantined message %s as it caused MailScanner to crash several times', $message->{id});
 
     $message->{quarantinedinfections} = 1; # Stop it quarantining it twice
     $message->{deleted} = 1;
+    $message->{denialofservice} = 1;
     $message->{abandoned} = 1;
     $message->{stillwarn} = 1;
     $message->{infected} = 1;
