@@ -2437,8 +2437,7 @@ sub Explode {
       if ($boundary eq "" || $boundary eq "\"\"" || $boundary =~ /\s$/) {
         my $cantparse = MailScanner::Config::LanguageValue($this,
                                                            'cantanalyze');
-        $this->{allreports}{""} .= "$mailscannername: $cantparse\n";
-        $this->{alltypes}{""} .= 'c';
+        $this->{cantparse} = 1;
         $this->{otherinfected}++;
         #print STDERR "Found error\n";
       }
